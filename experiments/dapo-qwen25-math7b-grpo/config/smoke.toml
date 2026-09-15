@@ -1,0 +1,46 @@
+max_steps = 2
+
+[run]
+name = "qwen25-math7b-grpo-h100-smoke"
+
+[ckpt]
+interval = 2
+keep_last = 1
+keep_interval = 2
+
+[trainer.scheduler]
+type = "linear"
+warmup_steps = 1
+decay_steps = 0
+min_lr = 0.0
+
+[orchestrator]
+batch_size = 16
+group_size = 8
+
+[orchestrator.concurrency]
+initial_inflight = 16
+min_inflight = 8
+max_inflight = 32
+
+[orchestrator.train.sampling]
+temperature = 1.0
+max_completion_tokens = 1024
+
+[orchestrator.eval]
+interval = 2
+group_size = 1
+num_examples = 4
+
+[orchestrator.eval.sampling]
+temperature = 0.0
+top_p = 1.0
+max_completion_tokens = 512
+
+[[orchestrator.eval.source]]
+name = "math500-smoke"
+env.taskset.id = "exact-math"
+env.taskset.dataset_path = "/mnt/nfs/home/mohamadzbib/projects/rl-infra/experiments/dapo-qwen25-math7b-grpo/data/eval.jsonl"
+env.taskset.benchmark = "math500"
+env.agent.harness.id = "null"
+env.agent.runtime.type = "subprocess"

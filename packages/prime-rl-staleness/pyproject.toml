@@ -1,0 +1,17 @@
+[project]
+name = "prime-rl-staleness"
+version = "0.1.0"
+description = "Custom PPO-clip loss and exact-math taskset used for PrimeRL staleness experiments"
+requires-python = ">=3.12,<3.13"
+dependencies = [
+    "prime-rl==0.9.0",
+]
+
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+py-modules = ["exact_math", "ppo_loss"]
+

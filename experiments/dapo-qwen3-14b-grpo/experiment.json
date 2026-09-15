@@ -1,0 +1,48 @@
+{
+  "name": "qwen3-14b-grpo-seed42",
+  "prime_rl_commit": "ab5de8fff44b2c4a5c85e24b6e6e3f7d57eee7b1",
+  "prime_rl_release": "v0.9.0",
+  "prime_envs_commit": "26dafdc9582576975ec576f893be7319028daf51",
+  "model": "Qwen/Qwen3-14B",
+  "model_revision": "40c069824f4251a91eefaf281ebe4c544efd3e18",
+  "generation_stop_token": "<|im_end|>",
+  "dataset": "open-r1/DAPO-Math-17k-Processed",
+  "dataset_revision": "31dd309567e3da778038cc87d868b6097a3ccf68",
+  "seed": 42,
+  "algorithm": "GRPO with exact PPO clipping",
+  "clip_epsilon": 0.2,
+  "kl_beta": 0.0,
+  "group_size": 8,
+  "train_batch_size": 64,
+  "train_gpus": 4,
+  "inference_gpus": 2,
+  "opik_version": "2.2.61",
+  "opik_workspace": "mohamad-zbib-0046",
+  "opik_project": "qwen3-14b-grpo",
+  "checkpoint_link": "/mnt/xfs/home/mohamadzbib/projects/models/qwen3-14b-grpo-seed42",
+  "checkpoint_target": "/mnt/nfs/home/mohamadzbib/projects/rl-infra/outputs/dapo-qwen3-14b-grpo/qwen3-14b-grpo-seed42",
+  "reference_experiment": "/mnt/nfs/home/mohamadzbib/projects/rl-infra/experiments/dapo-qwen25-math7b-grpo",
+  "models_dir": "/mnt/nfs/home/mohamadzbib/projects/models",
+  "base_model_directory": "Qwen3-14B-40c06982",
+  "model_family": "Qwen3 post-trained hybrid reasoning model; not a base model",
+  "prompt_template_source": "7B reference template plus Qwen3 empty-think generation prefix; same problem text and instructions",
+  "thinking_mode": "non-thinking",
+  "resource_plan": {
+    "eligible_nodes": [
+      "deep-chungus-4"
+    ],
+    "gpu_memory_gib": 40,
+    "gpus": 6,
+    "cpus": 64,
+    "memory": "384G",
+    "wall_time": "UNLIMITED"
+  },
+  "execution_profile": {
+    "name": "chungus4-40gb",
+    "optim_cpu_offload": true,
+    "reshard_after_forward": true,
+    "inference_tensor_parallel_size": 2,
+    "inference_data_parallel_size": 1,
+    "reason": "Fit the requested idle A100-40GB node; GRPO objective, optimizer hyperparameters, global batch, data, seed and update count are unchanged."
+  }
+}
