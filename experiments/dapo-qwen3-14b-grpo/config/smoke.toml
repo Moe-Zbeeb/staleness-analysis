@@ -25,7 +25,7 @@ max_inflight = 32
 
 [orchestrator.train.sampling]
 temperature = 1.0
-max_completion_tokens = 1024
+max_completion_tokens = 3072
 
 [orchestrator.eval]
 interval = 2
@@ -35,7 +35,7 @@ num_examples = 4
 [orchestrator.eval.sampling]
 temperature = 0.0
 top_p = 1.0
-max_completion_tokens = 512
+max_completion_tokens = 3072
 
 [[orchestrator.eval.source]]
 name = "math500-smoke"
