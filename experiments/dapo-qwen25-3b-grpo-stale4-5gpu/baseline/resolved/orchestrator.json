@@ -1,0 +1,990 @@
+{
+  "algo": {
+    "sampling": {
+      "source": "policy"
+    },
+    "type": "grpo",
+    "length_penalty": null
+  },
+  "model": {
+    "name": "/tmp/prime-rl-2140747/Qwen2.5-3B-3aab1f19",
+    "trust_remote_code": false,
+    "vlm": null,
+    "lora": null,
+    "client": {
+      "wait_for_ready_timeout": 1800,
+      "base_url": "http://localhost:8000/v1",
+      "api_key_var": "VLLM_API_KEY",
+      "headers": {},
+      "headers_from_env": {},
+      "skip_model_check": false,
+      "admin_base_url": [
+        "http://localhost:8100/v1"
+      ]
+    }
+  },
+  "train": {
+    "source": [
+      {
+        "env": {
+          "id": "",
+          "taskset": {
+            "id": "exact-math",
+            "task": {
+              "judges": [],
+              "stops": {},
+              "metrics": {},
+              "rewards": {},
+              "math_verify_timeout": 5
+            },
+            "system_prompt": null,
+            "dataset_path": "/mnt/nfs/home/mohamadzbib/projects/rl-infra/experiments/dapo-qwen25-3b-grpo/data/train.jsonl",
+            "benchmark": "dapo_train"
+          },
+          "timeout": {
+            "episode": null,
+            "finalize": null
+          },
+          "retries": {
+            "max_retries": 0,
+            "include": [],
+            "exclude": []
+          },
+          "max_concurrent_agents": 1,
+          "interception": {
+            "type": "elastic",
+            "multiplex": 32
+          },
+          "agent": {
+            "harness": {
+              "id": "null",
+              "env": {},
+              "forward_env": [],
+              "tool_timeout": 600.0,
+              "disabled_tools": null,
+              "skills": []
+            },
+            "runtime": {
+              "type": "subprocess"
+            },
+            "model": null,
+            "client": null,
+            "sampling": null,
+            "max_turns": null,
+            "max_input_tokens": null,
+            "max_output_tokens": null,
+            "max_total_tokens": null,
+            "timeout": {
+              "setup": null,
+              "rollout": null,
+              "finalize": null,
+              "scoring": null
+            },
+            "retries": {
+              "max_retries": 0,
+              "include": [],
+              "exclude": []
+            }
+          }
+        },
+        "serve": {
+          "pool": {
+            "type": "elastic",
+            "max_workers": null,
+            "multiplex": 128
+          },
+          "address": null,
+          "max_concurrent": null
+        },
+        "name": "dapo-math",
+        "ratio": 1.0,
+        "sampling": {
+          "temperature": 1.0,
+          "max_completion_tokens": 3072,
+          "extra_body": {
+            "top_k": -1,
+            "min_p": 0.0,
+            "return_token_ids": true
+          }
+        },
+        "group_size": 8,
+        "algo": {
+          "sampling": {
+            "source": "policy"
+          },
+          "type": "grpo",
+          "length_penalty": null
+        },
+        "curriculum": null
+      }
+    ],
+    "sampling": {
+      "temperature": 1.0,
+      "max_completion_tokens": 3072,
+      "extra_body": {}
+    },
+    "filter_zero_advantages": true
+  },
+  "tokenizer": {
+    "name": "/mnt/nfs/home/mohamadzbib/projects/rl-infra/experiments/dapo-qwen25-3b-grpo/tokenizer",
+    "trust_remote_code": false,
+    "chat_template": null
+  },
+  "renderer": {
+    "thinking_retention": null,
+    "name": "default",
+    "tool_parser": null,
+    "reasoning_parser": null
+  },
+  "eval": {
+    "source": [
+      {
+        "env": {
+          "id": "",
+          "taskset": {
+            "id": "exact-math",
+            "task": {
+              "judges": [],
+              "stops": {},
+              "metrics": {},
+              "rewards": {},
+              "math_verify_timeout": 5
+            },
+            "system_prompt": null,
+            "dataset_path": "/mnt/nfs/home/mohamadzbib/projects/rl-infra/experiments/dapo-qwen25-3b-grpo/data/eval.jsonl",
+            "benchmark": "math500"
+          },
+          "timeout": {
+            "episode": null,
+            "finalize": null
+          },
+          "retries": {
+            "max_retries": 0,
+            "include": [],
+            "exclude": []
+          },
+          "max_concurrent_agents": 1,
+          "interception": {
+            "type": "elastic",
+            "multiplex": 32
+          },
+          "agent": {
+            "harness": {
+              "id": "null",
+              "env": {},
+              "forward_env": [],
+              "tool_timeout": 600.0,
+              "disabled_tools": null,
+              "skills": []
+            },
+            "runtime": {
+              "type": "subprocess"
+            },
+            "model": null,
+            "client": null,
+            "sampling": null,
+            "max_turns": null,
+            "max_input_tokens": null,
+            "max_output_tokens": null,
+            "max_total_tokens": null,
+            "timeout": {
+              "setup": null,
+              "rollout": null,
+              "finalize": null,
+              "scoring": null
+            },
+            "retries": {
+              "max_retries": 0,
+              "include": [],
+              "exclude": []
+            }
+          }
+        },
+        "serve": {
+          "pool": {
+            "type": "elastic",
+            "max_workers": null,
+            "multiplex": 128
+          },
+          "address": null,
+          "max_concurrent": null
+        },
+        "name": "math500-pass1",
+        "ratio": 1.0,
+        "sampling": {
+          "temperature": 0.0,
+          "top_p": 1.0,
+          "top_k": null,
+          "min_p": null,
+          "max_completion_tokens": 3072,
+          "reasoning_effort": null,
+          "extra_body": {}
+        },
+        "num_examples": -1,
+        "group_size": 1,
+        "interval": 100
+      },
+      {
+        "env": {
+          "id": "",
+          "taskset": {
+            "id": "exact-math",
+            "task": {
+              "judges": [],
+              "stops": {},
+              "metrics": {},
+              "rewards": {},
+              "math_verify_timeout": 5
+            },
+            "system_prompt": null,
+            "dataset_path": "/mnt/nfs/home/mohamadzbib/projects/rl-infra/experiments/dapo-qwen25-3b-grpo/data/eval.jsonl",
+            "benchmark": "aime24"
+          },
+          "timeout": {
+            "episode": null,
+            "finalize": null
+          },
+          "retries": {
+            "max_retries": 0,
+            "include": [],
+            "exclude": []
+          },
+          "max_concurrent_agents": 1,
+          "interception": {
+            "type": "elastic",
+            "multiplex": 32
+          },
+          "agent": {
+            "harness": {
+              "id": "null",
+              "env": {},
+              "forward_env": [],
+              "tool_timeout": 600.0,
+              "disabled_tools": null,
+              "skills": []
+            },
+            "runtime": {
+              "type": "subprocess"
+            },
+            "model": null,
+            "client": null,
+            "sampling": null,
+            "max_turns": null,
+            "max_input_tokens": null,
+            "max_output_tokens": null,
+            "max_total_tokens": null,
+            "timeout": {
+              "setup": null,
+              "rollout": null,
+              "finalize": null,
+              "scoring": null
+            },
+            "retries": {
+              "max_retries": 0,
+              "include": [],
+              "exclude": []
+            }
+          }
+        },
+        "serve": {
+          "pool": {
+            "type": "elastic",
+            "max_workers": null,
+            "multiplex": 128
+          },
+          "address": null,
+          "max_concurrent": null
+        },
+        "name": "aime24-pass1",
+        "ratio": 1.0,
+        "sampling": {
+          "temperature": 0.0,
+          "top_p": 1.0,
+          "top_k": null,
+          "min_p": null,
+          "max_completion_tokens": 3072,
+          "reasoning_effort": null,
+          "extra_body": {}
+        },
+        "num_examples": -1,
+        "group_size": 1,
+        "interval": 100
+      },
+      {
+        "env": {
+          "id": "",
+          "taskset": {
+            "id": "exact-math",
+            "task": {
+              "judges": [],
+              "stops": {},
+              "metrics": {},
+              "rewards": {},
+              "math_verify_timeout": 5
+            },
+            "system_prompt": null,
+            "dataset_path": "/mnt/nfs/home/mohamadzbib/projects/rl-infra/experiments/dapo-qwen25-3b-grpo/data/eval.jsonl",
+            "benchmark": "aime25"
+          },
+          "timeout": {
+            "episode": null,
+            "finalize": null
+          },
+          "retries": {
+            "max_retries": 0,
+            "include": [],
+            "exclude": []
+          },
+          "max_concurrent_agents": 1,
+          "interception": {
+            "type": "elastic",
+            "multiplex": 32
+          },
+          "agent": {
+            "harness": {
+              "id": "null",
+              "env": {},
+              "forward_env": [],
+              "tool_timeout": 600.0,
+              "disabled_tools": null,
+              "skills": []
+            },
+            "runtime": {
+              "type": "subprocess"
+            },
+            "model": null,
+            "client": null,
+            "sampling": null,
+            "max_turns": null,
+            "max_input_tokens": null,
+            "max_output_tokens": null,
+            "max_total_tokens": null,
+            "timeout": {
+              "setup": null,
+              "rollout": null,
+              "finalize": null,
+              "scoring": null
+            },
+            "retries": {
+              "max_retries": 0,
+              "include": [],
+              "exclude": []
+            }
+          }
+        },
+        "serve": {
+          "pool": {
+            "type": "elastic",
+            "max_workers": null,
+            "multiplex": 128
+          },
+          "address": null,
+          "max_concurrent": null
+        },
+        "name": "aime25-pass1",
+        "ratio": 1.0,
+        "sampling": {
+          "temperature": 0.0,
+          "top_p": 1.0,
+          "top_k": null,
+          "min_p": null,
+          "max_completion_tokens": 3072,
+          "reasoning_effort": null,
+          "extra_body": {}
+        },
+        "num_examples": -1,
+        "group_size": 1,
+        "interval": 100
+      },
+      {
+        "env": {
+          "id": "",
+          "taskset": {
+            "id": "exact-math",
+            "task": {
+              "judges": [],
+              "stops": {},
+              "metrics": {},
+              "rewards": {},
+              "math_verify_timeout": 5
+            },
+            "system_prompt": null,
+            "dataset_path": "/mnt/nfs/home/mohamadzbib/projects/rl-infra/experiments/dapo-qwen25-3b-grpo/data/eval.jsonl",
+            "benchmark": "amc23"
+          },
+          "timeout": {
+            "episode": null,
+            "finalize": null
+          },
+          "retries": {
+            "max_retries": 0,
+            "include": [],
+            "exclude": []
+          },
+          "max_concurrent_agents": 1,
+          "interception": {
+            "type": "elastic",
+            "multiplex": 32
+          },
+          "agent": {
+            "harness": {
+              "id": "null",
+              "env": {},
+              "forward_env": [],
+              "tool_timeout": 600.0,
+              "disabled_tools": null,
+              "skills": []
+            },
+            "runtime": {
+              "type": "subprocess"
+            },
+            "model": null,
+            "client": null,
+            "sampling": null,
+            "max_turns": null,
+            "max_input_tokens": null,
+            "max_output_tokens": null,
+            "max_total_tokens": null,
+            "timeout": {
+              "setup": null,
+              "rollout": null,
+              "finalize": null,
+              "scoring": null
+            },
+            "retries": {
+              "max_retries": 0,
+              "include": [],
+              "exclude": []
+            }
+          }
+        },
+        "serve": {
+          "pool": {
+            "type": "elastic",
+            "max_workers": null,
+            "multiplex": 128
+          },
+          "address": null,
+          "max_concurrent": null
+        },
+        "name": "amc23-pass1",
+        "ratio": 1.0,
+        "sampling": {
+          "temperature": 0.0,
+          "top_p": 1.0,
+          "top_k": null,
+          "min_p": null,
+          "max_completion_tokens": 3072,
+          "reasoning_effort": null,
+          "extra_body": {}
+        },
+        "num_examples": -1,
+        "group_size": 1,
+        "interval": 100
+      },
+      {
+        "env": {
+          "id": "",
+          "taskset": {
+            "id": "exact-math",
+            "task": {
+              "judges": [],
+              "stops": {},
+              "metrics": {},
+              "rewards": {},
+              "math_verify_timeout": 5
+            },
+            "system_prompt": null,
+            "dataset_path": "/mnt/nfs/home/mohamadzbib/projects/rl-infra/experiments/dapo-qwen25-3b-grpo/data/eval.jsonl",
+            "benchmark": "minerva_math"
+          },
+          "timeout": {
+            "episode": null,
+            "finalize": null
+          },
+          "retries": {
+            "max_retries": 0,
+            "include": [],
+            "exclude": []
+          },
+          "max_concurrent_agents": 1,
+          "interception": {
+            "type": "elastic",
+            "multiplex": 32
+          },
+          "agent": {
+            "harness": {
+              "id": "null",
+              "env": {},
+              "forward_env": [],
+              "tool_timeout": 600.0,
+              "disabled_tools": null,
+              "skills": []
+            },
+            "runtime": {
+              "type": "subprocess"
+            },
+            "model": null,
+            "client": null,
+            "sampling": null,
+            "max_turns": null,
+            "max_input_tokens": null,
+            "max_output_tokens": null,
+            "max_total_tokens": null,
+            "timeout": {
+              "setup": null,
+              "rollout": null,
+              "finalize": null,
+              "scoring": null
+            },
+            "retries": {
+              "max_retries": 0,
+              "include": [],
+              "exclude": []
+            }
+          }
+        },
+        "serve": {
+          "pool": {
+            "type": "elastic",
+            "max_workers": null,
+            "multiplex": 128
+          },
+          "address": null,
+          "max_concurrent": null
+        },
+        "name": "minerva-pass1",
+        "ratio": 1.0,
+        "sampling": {
+          "temperature": 0.0,
+          "top_p": 1.0,
+          "top_k": null,
+          "min_p": null,
+          "max_completion_tokens": 2048,
+          "reasoning_effort": null,
+          "extra_body": {}
+        },
+        "num_examples": -1,
+        "group_size": 1,
+        "interval": 1000
+      },
+      {
+        "env": {
+          "id": "",
+          "taskset": {
+            "id": "exact-math",
+            "task": {
+              "judges": [],
+              "stops": {},
+              "metrics": {},
+              "rewards": {},
+              "math_verify_timeout": 5
+            },
+            "system_prompt": null,
+            "dataset_path": "/mnt/nfs/home/mohamadzbib/projects/rl-infra/experiments/dapo-qwen25-3b-grpo/data/eval.jsonl",
+            "benchmark": "olympiadbench"
+          },
+          "timeout": {
+            "episode": null,
+            "finalize": null
+          },
+          "retries": {
+            "max_retries": 0,
+            "include": [],
+            "exclude": []
+          },
+          "max_concurrent_agents": 1,
+          "interception": {
+            "type": "elastic",
+            "multiplex": 32
+          },
+          "agent": {
+            "harness": {
+              "id": "null",
+              "env": {},
+              "forward_env": [],
+              "tool_timeout": 600.0,
+              "disabled_tools": null,
+              "skills": []
+            },
+            "runtime": {
+              "type": "subprocess"
+            },
+            "model": null,
+            "client": null,
+            "sampling": null,
+            "max_turns": null,
+            "max_input_tokens": null,
+            "max_output_tokens": null,
+            "max_total_tokens": null,
+            "timeout": {
+              "setup": null,
+              "rollout": null,
+              "finalize": null,
+              "scoring": null
+            },
+            "retries": {
+              "max_retries": 0,
+              "include": [],
+              "exclude": []
+            }
+          }
+        },
+        "serve": {
+          "pool": {
+            "type": "elastic",
+            "max_workers": null,
+            "multiplex": 128
+          },
+          "address": null,
+          "max_concurrent": null
+        },
+        "name": "olympiadbench-pass1",
+        "ratio": 1.0,
+        "sampling": {
+          "temperature": 0.0,
+          "top_p": 1.0,
+          "top_k": null,
+          "min_p": null,
+          "max_completion_tokens": 2048,
+          "reasoning_effort": null,
+          "extra_body": {}
+        },
+        "num_examples": -1,
+        "group_size": 1,
+        "interval": 1000
+      },
+      {
+        "env": {
+          "id": "",
+          "taskset": {
+            "id": "exact-math",
+            "task": {
+              "judges": [],
+              "stops": {},
+              "metrics": {},
+              "rewards": {},
+              "math_verify_timeout": 5
+            },
+            "system_prompt": null,
+            "dataset_path": "/mnt/nfs/home/mohamadzbib/projects/rl-infra/experiments/dapo-qwen25-3b-grpo/data/eval.jsonl",
+            "benchmark": "aime24"
+          },
+          "timeout": {
+            "episode": null,
+            "finalize": null
+          },
+          "retries": {
+            "max_retries": 0,
+            "include": [],
+            "exclude": []
+          },
+          "max_concurrent_agents": 1,
+          "interception": {
+            "type": "elastic",
+            "multiplex": 32
+          },
+          "agent": {
+            "harness": {
+              "id": "null",
+              "env": {},
+              "forward_env": [],
+              "tool_timeout": 600.0,
+              "disabled_tools": null,
+              "skills": []
+            },
+            "runtime": {
+              "type": "subprocess"
+            },
+            "model": null,
+            "client": null,
+            "sampling": null,
+            "max_turns": null,
+            "max_input_tokens": null,
+            "max_output_tokens": null,
+            "max_total_tokens": null,
+            "timeout": {
+              "setup": null,
+              "rollout": null,
+              "finalize": null,
+              "scoring": null
+            },
+            "retries": {
+              "max_retries": 0,
+              "include": [],
+              "exclude": []
+            }
+          }
+        },
+        "serve": {
+          "pool": {
+            "type": "elastic",
+            "max_workers": null,
+            "multiplex": 128
+          },
+          "address": null,
+          "max_concurrent": null
+        },
+        "name": "aime24-sampled",
+        "ratio": 1.0,
+        "sampling": {
+          "temperature": 0.6,
+          "top_p": 1.0,
+          "top_k": null,
+          "min_p": null,
+          "max_completion_tokens": 3072,
+          "reasoning_effort": null,
+          "extra_body": {}
+        },
+        "num_examples": -1,
+        "group_size": 8,
+        "interval": 1000
+      },
+      {
+        "env": {
+          "id": "",
+          "taskset": {
+            "id": "exact-math",
+            "task": {
+              "judges": [],
+              "stops": {},
+              "metrics": {},
+              "rewards": {},
+              "math_verify_timeout": 5
+            },
+            "system_prompt": null,
+            "dataset_path": "/mnt/nfs/home/mohamadzbib/projects/rl-infra/experiments/dapo-qwen25-3b-grpo/data/eval.jsonl",
+            "benchmark": "aime25"
+          },
+          "timeout": {
+            "episode": null,
+            "finalize": null
+          },
+          "retries": {
+            "max_retries": 0,
+            "include": [],
+            "exclude": []
+          },
+          "max_concurrent_agents": 1,
+          "interception": {
+            "type": "elastic",
+            "multiplex": 32
+          },
+          "agent": {
+            "harness": {
+              "id": "null",
+              "env": {},
+              "forward_env": [],
+              "tool_timeout": 600.0,
+              "disabled_tools": null,
+              "skills": []
+            },
+            "runtime": {
+              "type": "subprocess"
+            },
+            "model": null,
+            "client": null,
+            "sampling": null,
+            "max_turns": null,
+            "max_input_tokens": null,
+            "max_output_tokens": null,
+            "max_total_tokens": null,
+            "timeout": {
+              "setup": null,
+              "rollout": null,
+              "finalize": null,
+              "scoring": null
+            },
+            "retries": {
+              "max_retries": 0,
+              "include": [],
+              "exclude": []
+            }
+          }
+        },
+        "serve": {
+          "pool": {
+            "type": "elastic",
+            "max_workers": null,
+            "multiplex": 128
+          },
+          "address": null,
+          "max_concurrent": null
+        },
+        "name": "aime25-sampled",
+        "ratio": 1.0,
+        "sampling": {
+          "temperature": 0.6,
+          "top_p": 1.0,
+          "top_k": null,
+          "min_p": null,
+          "max_completion_tokens": 3072,
+          "reasoning_effort": null,
+          "extra_body": {}
+        },
+        "num_examples": -1,
+        "group_size": 8,
+        "interval": 1000
+      },
+      {
+        "env": {
+          "id": "",
+          "taskset": {
+            "id": "exact-math",
+            "task": {
+              "judges": [],
+              "stops": {},
+              "metrics": {},
+              "rewards": {},
+              "math_verify_timeout": 5
+            },
+            "system_prompt": null,
+            "dataset_path": "/mnt/nfs/home/mohamadzbib/projects/rl-infra/experiments/dapo-qwen25-3b-grpo/data/eval.jsonl",
+            "benchmark": "aime26"
+          },
+          "timeout": {
+            "episode": null,
+            "finalize": null
+          },
+          "retries": {
+            "max_retries": 0,
+            "include": [],
+            "exclude": []
+          },
+          "max_concurrent_agents": 1,
+          "interception": {
+            "type": "elastic",
+            "multiplex": 32
+          },
+          "agent": {
+            "harness": {
+              "id": "null",
+              "env": {},
+              "forward_env": [],
+              "tool_timeout": 600.0,
+              "disabled_tools": null,
+              "skills": []
+            },
+            "runtime": {
+              "type": "subprocess"
+            },
+            "model": null,
+            "client": null,
+            "sampling": null,
+            "max_turns": null,
+            "max_input_tokens": null,
+            "max_output_tokens": null,
+            "max_total_tokens": null,
+            "timeout": {
+              "setup": null,
+              "rollout": null,
+              "finalize": null,
+              "scoring": null
+            },
+            "retries": {
+              "max_retries": 0,
+              "include": [],
+              "exclude": []
+            }
+          }
+        },
+        "serve": {
+          "pool": {
+            "type": "elastic",
+            "max_workers": null,
+            "multiplex": 128
+          },
+          "address": null,
+          "max_concurrent": null
+        },
+        "name": "aime26-sampled",
+        "ratio": 1.0,
+        "sampling": {
+          "temperature": 0.6,
+          "top_p": 1.0,
+          "top_k": null,
+          "min_p": null,
+          "max_completion_tokens": 3072,
+          "reasoning_effort": null,
+          "extra_body": {}
+        },
+        "num_examples": -1,
+        "group_size": 8,
+        "interval": 1000
+      }
+    ],
+    "sampling": {
+      "temperature": 0.0,
+      "top_p": 1.0,
+      "top_k": null,
+      "min_p": null,
+      "max_completion_tokens": 3072,
+      "reasoning_effort": null,
+      "extra_body": {}
+    },
+    "num_examples": -1,
+    "group_size": 1,
+    "interval": 100,
+    "skip_first_step": false,
+    "retrigger_on_resume": true
+  },
+  "log": {
+    "level": "info",
+    "vf_level": "info",
+    "json_logging": false,
+    "log_data": false,
+    "interval": 10.0
+  },
+  "env_vars": {
+    "HOME": "/tmp/prime-rl-2140747/verifier-home",
+    "UV_CACHE_DIR": "/tmp/prime-rl-2140747/verifier-uv"
+  },
+  "monitors": {
+    "wandb": null,
+    "file": {
+      "path": "metrics.jsonl"
+    },
+    "prime": null
+  },
+  "collect_inference_metrics": true,
+  "inference_metrics_roles": null,
+  "ckpt": {
+    "interval": 25,
+    "wait_for_weights_timeout": null,
+    "keep_last": 4,
+    "keep_interval": 100,
+    "skip_progress": false
+  },
+  "resume": null,
+  "weight_broadcast": {
+    "timeout": 1800,
+    "host": "localhost",
+    "port": 29501,
+    "inference_world_size": 3,
+    "type": "nccl",
+    "quantize_in_weight_transfer": false
+  },
+  "rollout_transport": {
+    "type": "zmq",
+    "host": "localhost",
+    "port": 5555,
+    "hwm": 10
+  },
+  "output_dir": "/mnt/nfs/home/mohamadzbib/projects/rl-infra/outputs/dapo-qwen25-3b-grpo/qwen25-3b-grpo-seed42",
+  "tasks_per_minute": null,
+  "env_server_base_port": 5000,
+  "batch_size": 64,
+  "token_batch_size": null,
+  "concurrency": {
+    "initial_inflight": 64,
+    "min_inflight": 16,
+    "max_inflight": 128
+  },
+  "group_size": 8,
+  "seq_len": 4096,
+  "num_train_workers": 4,
+  "pad_to_multiple_of": 1,
+  "max_steps": 1000,
+  "max_off_policy_steps": 2,
+  "heartbeat": null
+}

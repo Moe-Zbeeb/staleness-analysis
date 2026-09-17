@@ -18,7 +18,9 @@ Last verified September 17, 2026. These are recorded milestones; live progress i
 | [1.5B cap 6](experiments/dapo-qwen25-math15b-grpo-stale6-3gpu/README.md) | Smoke passed; production started | 2 + 1 |
 | [1.5B cap 8](experiments/dapo-qwen25-math15b-grpo-stale8-5gpu/README.md) | Five-GPU health check passed; smoke started at normal priority | 3 + 2 |
 
-The three-GPU cap-8 snapshot records the superseded setup; the active arm uses five GPUs and separate network ports for concurrent operation with cap 6. Cap 4 and cap 6 use a different topology from the historical 3+2 cap-2 baseline, so staleness is not the only difference in those comparisons.
+| [3B cap 4](experiments/dapo-qwen25-3b-grpo-stale4-5gpu/README.md) | Submitted and allocated on deep-chungus-7 at normal priority; startup validation in progress | 3 + 2 |
+
+The three-GPU cap-8 snapshot records the superseded setup; the active arm uses five GPUs and separate network ports for concurrent operation with cap 6. Cap 4 and cap 6 use a different topology from the historical 3+2 cap-2 baseline, so staleness is not the only difference in those comparisons. The 3B cap-4 arm also changes topology from its historical 4+3 baseline to 3+2.
 
 The [four-model readiness audit](docs/staleness-sweep-readiness-audit.md) records the earlier feasibility assessment and remaining requirements for extending the sweep to all models. The [zero-staleness tooling](experiments/staleness-zero/README.md) is retained as an unlaunched reference outside the current sweep. Original baseline smoke launchers retain historical allocation settings; consult the readiness audit before reusing them with the final production configurations.
 
