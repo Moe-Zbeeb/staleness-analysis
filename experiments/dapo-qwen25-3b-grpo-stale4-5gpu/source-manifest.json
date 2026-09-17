@@ -21,7 +21,7 @@
   "scripts/prepare_data.py": "c65f7ea7e0e89aa3158d96dbd9d71251662d1d5dc16e66f774137607286b7881",
   "scripts/prepare_job.sh": "0099ed2443d81681d817f001475f39716333b6dd76468a13f7c7c649c2f4b445",
   "scripts/run_job.sh": "46c9af034e0e8b9a8e74f5aa23b5e09abf4f7305caadce8141e53a5c948cbc4f",
-  "scripts/smoke_job.sh": "03b86ac63143c5ae52bb9a31c8392c7edc1c7bc702f42a32c23bf7b31e2d0f6a",
+  "scripts/smoke_job.sh": "dfb25f0bd156ad3c5f31df1d1150d7a93781b301e087da1d3e95f7d0c529a918",
   "scripts/staleness_guard.py": "2b05b7e76eabe084d94f66752bb9b1fae18ec64889c5de10d05a2afe4328e29f",
   "scripts/train_job.sh": "f4436250931a47b99f9dc50376e23e90ae5d7e0d17f79071521b1828cf34eed4",
   "scripts/validate_experiment.py": "5da0b71655487e2fd3842b72483786fc1fa05c6d6cb7e489b2f28bcad81f0e1b"

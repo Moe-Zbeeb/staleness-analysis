@@ -14,9 +14,6 @@ export NCCL_DEBUG_SUBSYS=INIT,GRAPH,ENV
 test "$(git -C "$RL_INFRA/repos/prime-rl" rev-parse HEAD)" = ab5de8fff44b2c4a5c85e24b6e6e3f7d57eee7b1
 test -z "$(git -C "$RL_INFRA/repos/prime-rl" status --porcelain)"
 bash "$EXPERIMENT_ROOT/scripts/prepare_job.sh"
-nvidia-smi topo -m
-nvidia-smi topo -p2p r
-nvidia-smi topo -p2p w
 df -h /dev/shm
 printenv NCCL_P2P_DISABLE NCCL_SHM_DISABLE NCCL_DEBUG NCCL_DEBUG_SUBSYS
 uv run --no-sync python -c 'import torch; print(torch.__version__, torch.version.cuda, torch.cuda.nccl.version())'
