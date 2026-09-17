@@ -1,0 +1,205 @@
+max_steps = 1000
+seq_len = 4096
+output_dir = "/mnt/nfs/home/mohamadzbib/projects/rl-infra/outputs/dapo-qwen25-math15b-grpo-stale4-3gpu"
+dashboard = false
+
+[run]
+name = "qwen25-math15b-grpo-seed42-stale4-3gpu"
+
+[model]
+name = "/mnt/nfs/home/mohamadzbib/projects/models/Qwen2.5-Math-1.5B-4a83ca6e"
+
+[tokenizer]
+name = "/mnt/nfs/home/mohamadzbib/projects/rl-infra/experiments/dapo-qwen25-math15b-grpo-stale4-3gpu/tokenizer"
+
+[deployment]
+type = "single_node"
+gpus_per_node = 3
+num_train_gpus = 2
+num_infer_gpus = 1
+
+[weight_broadcast]
+type = "nccl"
+timeout = 1800
+
+[ckpt]
+interval = 25
+keep_last = 4
+keep_interval = 100
+
+[env_vars]
+PYTHONPATH = "/mnt/nfs/home/mohamadzbib/projects/rl-infra/experiments/dapo-qwen25-math15b-grpo-stale4-3gpu/python"
+HF_HUB_OFFLINE = "1"
+HF_DATASETS_OFFLINE = "1"
+TOKENIZERS_PARALLELISM = "false"
+NCCL_P2P_DISABLE = "1"
+NCCL_SHM_DISABLE = "0"
+
+[trainer.model]
+impl = "hf"
+attn = "flash_attention_2"
+optim_cpu_offload = false
+reshard_after_forward = false
+ac_offloading = "None"
+
+[trainer.model.ac]
+mode = "full"
+freq = 1
+
+[trainer.optim]
+type = "adamw"
+lr = 1e-6
+weight_decay = 0.01
+max_norm = 1.0
+
+[trainer.scheduler]
+type = "linear"
+warmup_steps = 30
+decay_steps = 0
+min_lr = 0.0
+
+[trainer.loss]
+type = "custom"
+import_path = "ppo_loss.ppo_clip_loss"
+
+[trainer.loss.kwargs]
+clip_eps = 0.2
+
+[orchestrator]
+batch_size = 64
+group_size = 8
+max_off_policy_steps = 4
+
+[orchestrator.concurrency]
+initial_inflight = 64
+min_inflight = 16
+max_inflight = 128
+
+[orchestrator.algo]
+type = "grpo"
+
+[orchestrator.renderer]
+name = "default"
+
+[orchestrator.train.sampling]
+temperature = 1.0
+max_completion_tokens = 3072
+
+[[orchestrator.train.source]]
+name = "dapo-math"
+env.taskset.id = "exact-math"
+env.taskset.dataset_path = "/mnt/nfs/home/mohamadzbib/projects/rl-infra/experiments/dapo-qwen25-math15b-grpo-stale4-3gpu/data/train.jsonl"
+env.taskset.benchmark = "dapo_train"
+env.agent.harness.id = "null"
+env.agent.runtime.type = "subprocess"
+
+[orchestrator.eval]
+interval = 100
+group_size = 1
+num_examples = -1
+retrigger_on_resume = true
+
+[orchestrator.eval.sampling]
+temperature = 0.0
+top_p = 1.0
+max_completion_tokens = 3072
+
+[[orchestrator.eval.source]]
+name = "math500-pass1"
+env.taskset.id = "exact-math"
+env.taskset.dataset_path = "/mnt/nfs/home/mohamadzbib/projects/rl-infra/experiments/dapo-qwen25-math15b-grpo-stale4-3gpu/data/eval.jsonl"
+env.taskset.benchmark = "math500"
+env.agent.harness.id = "null"
+env.agent.runtime.type = "subprocess"
+
+[[orchestrator.eval.source]]
+name = "aime24-pass1"
+env.taskset.id = "exact-math"
+env.taskset.dataset_path = "/mnt/nfs/home/mohamadzbib/projects/rl-infra/experiments/dapo-qwen25-math15b-grpo-stale4-3gpu/data/eval.jsonl"
+env.taskset.benchmark = "aime24"
+env.agent.harness.id = "null"
+env.agent.runtime.type = "subprocess"
+
+[[orchestrator.eval.source]]
+name = "aime25-pass1"
+env.taskset.id = "exact-math"
+env.taskset.dataset_path = "/mnt/nfs/home/mohamadzbib/projects/rl-infra/experiments/dapo-qwen25-math15b-grpo-stale4-3gpu/data/eval.jsonl"
+env.taskset.benchmark = "aime25"
+env.agent.harness.id = "null"
+env.agent.runtime.type = "subprocess"
+
+[[orchestrator.eval.source]]
+name = "amc23-pass1"
+env.taskset.id = "exact-math"
+env.taskset.dataset_path = "/mnt/nfs/home/mohamadzbib/projects/rl-infra/experiments/dapo-qwen25-math15b-grpo-stale4-3gpu/data/eval.jsonl"
+env.taskset.benchmark = "amc23"
+env.agent.harness.id = "null"
+env.agent.runtime.type = "subprocess"
+
+[[orchestrator.eval.source]]
+name = "minerva-pass1"
+interval = 1000
+sampling.max_completion_tokens = 2048
+env.taskset.id = "exact-math"
+env.taskset.dataset_path = "/mnt/nfs/home/mohamadzbib/projects/rl-infra/experiments/dapo-qwen25-math15b-grpo-stale4-3gpu/data/eval.jsonl"
+env.taskset.benchmark = "minerva_math"
+env.agent.harness.id = "null"
+env.agent.runtime.type = "subprocess"
+
+[[orchestrator.eval.source]]
+name = "olympiadbench-pass1"
+interval = 1000
+sampling.max_completion_tokens = 2048
+env.taskset.id = "exact-math"
+env.taskset.dataset_path = "/mnt/nfs/home/mohamadzbib/projects/rl-infra/experiments/dapo-qwen25-math15b-grpo-stale4-3gpu/data/eval.jsonl"
+env.taskset.benchmark = "olympiadbench"
+env.agent.harness.id = "null"
+env.agent.runtime.type = "subprocess"
+
+[[orchestrator.eval.source]]
+name = "aime24-sampled"
+interval = 1000
+group_size = 8
+sampling.temperature = 0.6
+sampling.max_completion_tokens = 3072
+env.taskset.id = "exact-math"
+env.taskset.dataset_path = "/mnt/nfs/home/mohamadzbib/projects/rl-infra/experiments/dapo-qwen25-math15b-grpo-stale4-3gpu/data/eval.jsonl"
+env.taskset.benchmark = "aime24"
+env.agent.harness.id = "null"
+env.agent.runtime.type = "subprocess"
+
+[[orchestrator.eval.source]]
+name = "aime25-sampled"
+interval = 1000
+group_size = 8
+sampling.temperature = 0.6
+sampling.max_completion_tokens = 3072
+env.taskset.id = "exact-math"
+env.taskset.dataset_path = "/mnt/nfs/home/mohamadzbib/projects/rl-infra/experiments/dapo-qwen25-math15b-grpo-stale4-3gpu/data/eval.jsonl"
+env.taskset.benchmark = "aime25"
+env.agent.harness.id = "null"
+env.agent.runtime.type = "subprocess"
+
+[[orchestrator.eval.source]]
+name = "aime26-sampled"
+interval = 1000
+group_size = 8
+sampling.temperature = 0.6
+sampling.max_completion_tokens = 3072
+env.taskset.id = "exact-math"
+env.taskset.dataset_path = "/mnt/nfs/home/mohamadzbib/projects/rl-infra/experiments/dapo-qwen25-math15b-grpo-stale4-3gpu/data/eval.jsonl"
+env.taskset.benchmark = "aime26"
+env.agent.harness.id = "null"
+env.agent.runtime.type = "subprocess"
+
+[inference.vllm]
+dtype = "bfloat16"
+tensor_parallel_size = 1
+data_parallel_size = 1
+max_model_len = 4096
+gpu_memory_utilization = 0.90
+enable_prefix_caching = true
+seed = 42
+
+[monitors.file]
+path = "metrics.jsonl"

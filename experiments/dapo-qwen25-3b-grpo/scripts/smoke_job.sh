@@ -21,7 +21,7 @@ df -h /dev/shm
 printenv NCCL_P2P_DISABLE NCCL_SHM_DISABLE NCCL_DEBUG NCCL_DEBUG_SUBSYS
 uv run --no-sync python -c 'import torch; print(torch.__version__, torch.version.cuda, torch.cuda.nccl.version())'
 nvidia-smi --query-gpu=index,name,uuid,memory.total,temperature.gpu,power.draw --format=csv
-uv run --no-sync torchrun --standalone --nproc-per-node=6 "$EXPERIMENT_ROOT/scripts/health_probe.py"
+uv run --no-sync torchrun --standalone --nproc-per-node=9 "$EXPERIMENT_ROOT/scripts/health_probe.py"
 NODE_CACHE=${SLURM_TMPDIR:-/tmp/prime-rl-$SLURM_JOB_ID}
 RUNTIME_MODEL="$NODE_CACHE/Qwen2.5-3B-3aab1f19"
 VERIFIER_HOME="$NODE_CACHE/verifier-home"
@@ -39,8 +39,8 @@ if ! test -s "$RUNTIME_MODEL/.stage-complete"; then
 fi
 test -s "$RUNTIME_MODEL/model.safetensors.index.json"
 PRIME_VISIBLE_DEVICES=${CUDA_VISIBLE_DEVICES:?}
-if test "$PRIME_VISIBLE_DEVICES" = 0,1,2,3,4,5; then
-    PRIME_VISIBLE_DEVICES=4,5,0,1,2,3
+if test "$PRIME_VISIBLE_DEVICES" = 0,1,2,3,4,5,6,7,8; then
+    PRIME_VISIBLE_DEVICES=6,7,8,0,1,2,3,4,5
 fi
 printf 'CUDA_VISIBLE_DEVICES=%s\n' "$CUDA_VISIBLE_DEVICES"
 printf 'SLURM_JOB_GPUS=%s\n' "${SLURM_JOB_GPUS:-unset}"

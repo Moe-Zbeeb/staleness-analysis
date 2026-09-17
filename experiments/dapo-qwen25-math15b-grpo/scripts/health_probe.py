@@ -23,7 +23,7 @@ def main() -> None:
     passed = bool(
         torch.isfinite(value)
         and torch.isfinite(right.grad).all()
-        and signal.item() == 21.0
+        and signal.item() == dist.get_world_size() * (dist.get_world_size() + 1) / 2
     )
     result = torch.tensor([int(passed)], device="cuda")
     dist.all_reduce(result, op=dist.ReduceOp.MIN)

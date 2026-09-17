@@ -1,0 +1,14 @@
+{
+  "captured_at": "2026-09-16T15:15:10.465709+00:00",
+  "baseline_root": "/mnt/nfs/home/mohamadzbib/projects/rl-infra/experiments/dapo-qwen25-math15b-grpo",
+  "baseline_run": "/mnt/nfs/home/mohamadzbib/projects/rl-infra/outputs/dapo-qwen25-math15b-grpo/qwen25-math15b-grpo-seed42",
+  "run_dir": "/mnt/nfs/home/mohamadzbib/projects/rl-infra/outputs/dapo-qwen25-math15b-grpo-stale0/qwen25-math15b-grpo-seed42-stale0",
+  "observer_dir": "/mnt/nfs/home/mohamadzbib/projects/rl-infra/outputs/dapo-qwen25-math15b-grpo-stale0-observer/qwen25-math15b-grpo-seed42-stale0",
+  "path_replacements": {
+    "/mnt/nfs/home/mohamadzbib/projects/rl-infra/experiments/dapo-qwen25-math15b-grpo": "/mnt/nfs/home/mohamadzbib/projects/rl-infra/experiments/dapo-qwen25-math15b-grpo-stale0",
+    "/mnt/nfs/home/mohamadzbib/projects/rl-infra/outputs/dapo-qwen25-math15b-grpo": "/mnt/nfs/home/mohamadzbib/projects/rl-infra/outputs/dapo-qwen25-math15b-grpo-stale0",
+    "qwen25-math15b-grpo-seed42": "qwen25-math15b-grpo-seed42-stale0"
+  },
+  "reference_topology_adjustments": {},
+  "historical_limit": "Reference is the latest resolved baseline configuration; restart and scheduling histories can still affect asynchronous sample order."
+}

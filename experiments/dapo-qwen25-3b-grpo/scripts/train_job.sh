@@ -140,7 +140,7 @@ if test "$TRAINING_FINISHED" = false; then
         ln -s "$RUN_DIR" "$MODEL_LINK"
     fi
     nvidia-smi --query-gpu=index,name,uuid,memory.total,temperature.gpu,power.draw --format=csv
-    run_guarded uv run --no-sync torchrun --standalone --nproc-per-node=6 "$EXPERIMENT_ROOT/scripts/health_probe.py"
+    run_guarded uv run --no-sync torchrun --standalone --nproc-per-node=7 "$EXPERIMENT_ROOT/scripts/health_probe.py"
     if ! test -s "$RUNTIME_MODEL/.stage-complete"; then
         run_guarded cp -a "$MODEL_SOURCE/." "$RUNTIME_MODEL/"
         printf 'complete\n' > "$RUNTIME_MODEL/.stage-complete"
@@ -150,9 +150,9 @@ fi
 rm -f "$STOP_FILE" "$READY_FILE"
 ARGS=(uv run --no-sync rl @ "$EXPERIMENT_ROOT/config/main.toml" --model.name "$RUNTIME_MODEL" --orchestrator.env-vars "$ORCHESTRATOR_ENV")
 PRIME_VISIBLE_DEVICES=${CUDA_VISIBLE_DEVICES:?}
-if test "$PRIME_VISIBLE_DEVICES" = 0,1,2,3,4,5; then
-    PRIME_VISIBLE_DEVICES=4,5,0,1,2,3
-fi
+IFS=, read -r -a GPU_IDS <<< "$PRIME_VISIBLE_DEVICES"
+test "${#GPU_IDS[@]}" -eq 7
+PRIME_VISIBLE_DEVICES="${GPU_IDS[4]},${GPU_IDS[5]},${GPU_IDS[6]},${GPU_IDS[0]},${GPU_IDS[1]},${GPU_IDS[2]},${GPU_IDS[3]}"
 printf 'CUDA_VISIBLE_DEVICES=%s\n' "$CUDA_VISIBLE_DEVICES"
 printf 'SLURM_JOB_GPUS=%s\n' "${SLURM_JOB_GPUS:-unset}"
 printf 'PRIME_VISIBLE_DEVICES=%s\n' "$PRIME_VISIBLE_DEVICES"

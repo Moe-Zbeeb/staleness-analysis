@@ -1,0 +1,31 @@
+{
+  "captured_at": "2026-09-16T15:15:10.465709+00:00",
+  "baseline_root": "/mnt/nfs/home/mohamadzbib/projects/rl-infra/experiments/dapo-qwen25-math7b-grpo",
+  "baseline_run": "/mnt/nfs/home/mohamadzbib/projects/rl-infra/outputs/dapo-qwen25-math7b-grpo/qwen25-math7b-grpo-seed42",
+  "run_dir": "/mnt/nfs/home/mohamadzbib/projects/rl-infra/outputs/dapo-qwen25-math7b-grpo-stale0/qwen25-math7b-grpo-seed42-stale0",
+  "observer_dir": "/mnt/nfs/home/mohamadzbib/projects/rl-infra/outputs/dapo-qwen25-math7b-grpo-stale0-observer/qwen25-math7b-grpo-seed42-stale0",
+  "path_replacements": {
+    "/mnt/nfs/home/mohamadzbib/projects/rl-infra/experiments/dapo-qwen25-math7b-grpo": "/mnt/nfs/home/mohamadzbib/projects/rl-infra/experiments/dapo-qwen25-math7b-grpo-stale0",
+    "/mnt/nfs/home/mohamadzbib/projects/rl-infra/outputs/dapo-qwen25-math7b-grpo": "/mnt/nfs/home/mohamadzbib/projects/rl-infra/outputs/dapo-qwen25-math7b-grpo-stale0",
+    "qwen25-math7b-grpo-seed42": "qwen25-math7b-grpo-seed42-stale0"
+  },
+  "reference_topology_adjustments": {
+    "deployment.gpus_per_node": [
+      6,
+      9
+    ],
+    "deployment.num_train_gpus": [
+      4,
+      8
+    ],
+    "deployment.num_infer_gpus": [
+      2,
+      1
+    ],
+    "inference.vllm.data_parallel_size": [
+      2,
+      1
+    ]
+  },
+  "historical_limit": "The 7B baseline resumed at step 975 with this final 8+1 topology; earlier updates used 4+2. This is not a constant-topology historical control."
+}

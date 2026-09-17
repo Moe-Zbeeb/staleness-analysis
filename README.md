@@ -4,12 +4,32 @@ This repository preserves the PrimeRL extensions and complete experiment configu
 
 The repository does not vendor PrimeRL. The validated runtime is pinned to PrimeRL `v0.9.0` at commit `ab5de8fff44b2c4a5c85e24b6e6e3f7d57eee7b1`.
 
+The current study is the [staleness-cap sweep at 4, 6, and 8](docs/staleness-cap-sweep.md), compared with cap 2. The repository preserves each arm's source, configuration, baseline references, and source hashes.
+
+## Experiment status
+
+Last verified September 17, 2026. These are recorded milestones; live progress is available through Slurm and Comet/Opik.
+
+| Experiment | Recorded status | Trainer + inference GPUs |
+| --- | --- | --- |
+| Original 1.5B / 3B / 7B | Final step-1000 checkpoints verified | See each experiment's provenance |
+| Original 14B | Production running; step 151 and paired checkpoint 150 verified | 7 + 2 |
+| [1.5B cap 4](experiments/dapo-qwen25-math15b-grpo-stale4-3gpu/README.md) | Completed 1,000 updates | 2 + 1 |
+| [1.5B cap 6](experiments/dapo-qwen25-math15b-grpo-stale6-3gpu/README.md) | Smoke passed; production started | 2 + 1 |
+| [1.5B cap 8](experiments/dapo-qwen25-math15b-grpo-stale8-5gpu/README.md) | Five-GPU health check passed; smoke started at normal priority | 3 + 2 |
+
+The three-GPU cap-8 snapshot records the superseded setup; the active arm uses five GPUs and separate network ports for concurrent operation with cap 6. Cap 4 and cap 6 use a different topology from the historical 3+2 cap-2 baseline, so staleness is not the only difference in those comparisons.
+
+The [four-model readiness audit](docs/staleness-sweep-readiness-audit.md) records the earlier feasibility assessment and remaining requirements for extending the sweep to all models. The [zero-staleness tooling](experiments/staleness-zero/README.md) is retained as an unlaunched reference outside the current sweep. Original baseline smoke launchers retain historical allocation settings; consult the readiness audit before reusing them with the final production configurations.
+
+The [post-training benchmark protocol](docs/post-training-benchmark-sweep.md) covers starting-versus-final checkpoint comparisons, additional competition datasets, repeated sampling, and token-budget diagnostics. Evaluation jobs wait for all four original production runs to finish.
+
 ## Contents
 
 ```text
 packages/prime-rl-staleness/  Installable custom loss and exact-math taskset
 packages/prime-opik-observer/ Isolated Opik 2.2.61 telemetry environment
-experiments/                  Four complete source/configuration snapshots
+experiments/                  Baseline and staleness-arm source/configuration snapshots
 docs/objective.md             Exact loss and staleness semantics
 docs/prime-rl-integration.md  PrimeRL package and configuration procedure
 docs/experiment-matrix.md     Models, topology, and file inventory
@@ -45,3 +65,4 @@ The loss uses global action-token normalization. It has no reward-standard-devia
 
 The experiment snapshots retain the original cluster paths and resource topology as provenance. No credentials, model weights, datasets, generated outputs, job-state files, or checkpoints are committed. Runtime credentials must remain in external mode-`600` files.
 
+GitHub updates are deliberate source snapshots. Cluster jobs run independently from their frozen deployed files; a push does not deploy changes or restart training. Models and datasets are published through Hugging Face, while live metrics are sent to Comet/Opik. Generated submission receipts, validation outputs, and mutable job-state files stay outside Git; references to those files in frozen experiment guides refer to the cluster or local audit copy.

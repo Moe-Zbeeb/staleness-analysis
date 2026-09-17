@@ -1,0 +1,99 @@
+{
+  "dapo_audited_overlap_drops": 55,
+  "dapo_automatic_overlap_drops": 112,
+  "dapo_conflicting_duplicate_groups": 5,
+  "dapo_conflicting_duplicate_rows": 10,
+  "dapo_duplicate_drops": 213,
+  "dapo_kept": 17005,
+  "dapo_length_drops": 8,
+  "dapo_loaded": 17398,
+  "dapo_overlap_drops": 167,
+  "dataset_revisions": {
+    "aime24": "2fe88a2f1091d5048c0f36abc874fb997b3dd99a",
+    "aime25": "a6ad95f611d72cf628a80b58bd0432ef6638f958",
+    "aime26": "10b4e45b7a503075d4da8a0d57916a4f06ce6bd2",
+    "dapo": "31dd309567e3da778038cc87d868b6097a3ccf68",
+    "intellect_math": "0c6d5c96f64bb8981220d8a280a8f998a8b1642f",
+    "math500": "6e4ed1a2a79af7d8630a6b768ec859cb5af4d3be"
+  },
+  "eval_counts": {
+    "aime24": 30,
+    "aime25": 30,
+    "aime26": 30,
+    "amc23": 40,
+    "math500": 500,
+    "minerva_math": 272,
+    "olympiadbench": 675
+  },
+  "eval_length_drops": {},
+  "hashes": {
+    "eval.jsonl": "e5ca246222e1e97cc33234e6cfe15f20224439db7445d9409e8ddb1c8bdd9da1",
+    "removed_conflicting_duplicates.jsonl": "e2faea0c1bad07fd0a508b7f0ec1e3581f3a98f527c8356dc035483a99861b62",
+    "removed_overlaps.jsonl": "6ec4fa7f92a076d38871c38de9af60585d0be3872b17276fd4ec9cbb7652697d",
+    "train.jsonl": "73a7a2bf1e4683ceb3bb8551b5804eaf0211c6eb23b63592ffed8c20cefa150c"
+  },
+  "input_hashes": {
+    "config/data_exclusions.json": "75ffc1c6e068b4efe2ad32f09cc6ce41b12e169a099f88f3bf9e9f1e8247ddb8",
+    "config/main.toml": "0ffda2523f80c42900a52d8391a492fe3e33f39756ed26a9772a3b78187e542b",
+    "config/smoke.toml": "7530dc3e339c7ce24546c09697581795193123870ec83a3234cb2beba3b77cf6",
+    "experiment.json": "9c4d928b13867b78c74cc2e0afeb1c3e3d3b3a258a83e8b665c2f558caf2f87d",
+    "observer/pyproject.toml": "02fe61ab319cb4d7c94d1d414e51bde863b7c855762f78775b9d9c86dc6dd1ce",
+    "observer/uv.lock": "bf92a88fbad8bb8ba9b5552a86a38e8dc1bc0d2da01bb50ad175eea9a689ba1f",
+    "python/exact_math.py": "43d86f8ba5b399d7b489a3bb52341b95d472a8f98278486cbd2ef8cea03285f2",
+    "python/ppo_loss.py": "a753e60ab0679f021e918cc652f41c8b6cc86e2e713ab95b74028347c7f2f399",
+    "scripts/health_probe.py": "2897165e8d5ce92b0c1fc80b517aab385c942bd23f84638688159c7bf331d678",
+    "scripts/opik_bridge.py": "a3aa26baa75c30fab56d661c91fa79bd55e6cfa2511fb29ecca50decd0acebe0",
+    "scripts/prepare_data.py": "cc5bbada982498de358004a6c982d109203162a605b69a5bfdfd01a17a1d962b",
+    "scripts/prepare_job.sh": "9bde9ff7e0516c1128f40d1233bb453cee8b609ba84ef5e31100c56b0fd657a6",
+    "scripts/prepare_model.py": "3dca0b4044fd6b3ecc0b5387188865f906462c18ea1b9bfeac8b54140c0b640a",
+    "scripts/setup_opik_job.sh": "f48aa78f2b270ea32910231d740c411d1d6b0b4e3e64ef2c3ac5805a54152141",
+    "scripts/smoke_job.sh": "03975ddc374bc3f78b1b7dabefdeab8a88e61be1275bc3179f3f01c28e7ec5a8",
+    "scripts/train_job.sh": "49bb43a6cdba9fdb9008f045f341210359bd957758e1cdd2f1dc82147cae1168",
+    "scripts/validate_experiment.py": "a3f2cdf98311ef18a29abef995722fdcb4ec8123239bed1c9227fac4af3a9fd1"
+  },
+  "model": "/mnt/nfs/home/mohamadzbib/projects/models/Qwen3-14B-40c06982",
+  "model_hashes": {
+    "MODEL_INFO.json": "656d51ffd10fe42335de466486088dca0f787a2db6bb182cde3c2c7db92d68c4",
+    "config.json": "e73c3664ca09b10a673fef0c22e8a6b456201d49bd4713c9691f775720e8857a",
+    "generation_config.json": "2325da0f15bb848e018c5ae071b7943332e9f871d6b60e2ed22ca97d4cb993d2",
+    "merges.txt": "8831e4f1a044471340f7c0a83d7bd71306a5b867e95fd870f74d0c5308a904d5",
+    "model-00001-of-00008.safetensors": "e942bdbdf08857d16a8fef7d1dae9fceabeb4e84def6043485fe2f6f085dab0e",
+    "model-00002-of-00008.safetensors": "f7c9c6eee628f5ad831d2d1d292e120505e5fcadeb38f88b4d3c4cb86306ccf9",
+    "model-00003-of-00008.safetensors": "dfb8c5df9404b41ad6ae74e8b6b367135f017b4467b884cf71b17c71954f18a9",
+    "model-00004-of-00008.safetensors": "eab286fec759e3e59ab228621aefa0fef14ed56039e06f959e67257d5af7604d",
+    "model-00005-of-00008.safetensors": "97f0dc2992e59da95c466eff6f4fd0c8335843bbc36ed5c913a6f5150748c0e6",
+    "model-00006-of-00008.safetensors": "9e8e76a013cd5e253865b792991e0b410f869b136b3c500079b531b09198e99e",
+    "model-00007-of-00008.safetensors": "0aee70ee6e91dc00d818804fb47f124d13ee4ad5b4a64553e09dbf9391cd5750",
+    "model-00008-of-00008.safetensors": "0d6b92296e326d39bbbaeb32c3ec454ac606da843d4c8ffa8edf010b62b8c9e0",
+    "model.safetensors.index.json": "62d7ad35757bae5e7baa452cb1483178b7daa50e869e923226b8da10871f7ebc",
+    "tokenizer.json": "aeb13307a71acd8fe81861d94ad54ab689df773318809eed3cbe794b4492dae4",
+    "tokenizer_config.json": "d5d09f07b48c3086c508b30d1c9114bd1189145b74e982a265350c923acd8101",
+    "vocab.json": "ca10d7e9fb3ed18575dd1e277a2579c16d108e32f27439684afa0e10b1440910"
+  },
+  "observer_archive": "/mnt/nfs/home/mohamadzbib/projects/rl-infra/artifacts/opik-2.2.61-py312.tar",
+  "observer_archive_sha256": "dc40ffabe16d433f9e0d7634a73653d9aaf778b97bea382ccab7a5c4748e2a4d",
+  "prompt_token_limits": {
+    "long_eval": 2048,
+    "standard_eval": 1024,
+    "train": 1024
+  },
+  "reference_data": {
+    "directory": "/mnt/nfs/home/mohamadzbib/projects/rl-infra/experiments/dapo-qwen25-math7b-grpo/data",
+    "hashes": {
+      "eval.jsonl": "43bb74fc302566b1916fbbddd7d26d3806f5d98edfbc08059eca70a452d06ad4",
+      "removed_conflicting_duplicates.jsonl": "e2faea0c1bad07fd0a508b7f0ec1e3581f3a98f527c8356dc035483a99861b62",
+      "removed_overlaps.jsonl": "6ec4fa7f92a076d38871c38de9af60585d0be3872b17276fd4ec9cbb7652697d",
+      "train.jsonl": "285a7b92a3b5a8efee80bda7506764f7ffd42a195303bc9cb77c399927a2b2c3"
+    },
+    "manifest_sha256": "331ef6244e4e2b37977ea8d652961d670505aeadfc4f1864de7a01e4ed924468"
+  },
+  "seed": 42,
+  "tokenizer": "/mnt/nfs/home/mohamadzbib/projects/rl-infra/experiments/dapo-qwen3-14b-grpo/tokenizer",
+  "tokenizer_eos_token": "<|im_end|>",
+  "tokenizer_eos_token_id": 151645,
+  "tokenizer_hashes": {
+    "chat_template.jinja": "d685ca3f13d7439154ba93440cff5b5a7d50f798b0f49af1597b6fed9ce0d02a",
+    "tokenizer.json": "be75606093db2094d7cd20f3c2f385c212750648bd6ea4fb2bf507a6a4c55506",
+    "tokenizer_config.json": "1cc816812993bff176eb4f7495433b736f06fba9b6e7b05cac7b4a1780650c95"
+  }
+}

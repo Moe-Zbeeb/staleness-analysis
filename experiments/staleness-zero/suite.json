@@ -1,0 +1,44 @@
+{
+  "prepared_at": "2026-09-16T15:15:10.465709+00:00",
+  "baseline_max_staleness": 2,
+  "treatment_max_staleness": 0,
+  "status": "source-prepared-gpu-smoke-pending",
+  "experiments": [
+    {
+      "experiment": "dapo-qwen25-3b-grpo-stale0",
+      "model": "Qwen/Qwen2.5-3B",
+      "run": "qwen25-3b-grpo-seed42-stale0",
+      "trainer_gpus": 4,
+      "inference_gpus": 3,
+      "total_gpus": 7,
+      "source_sha256": "e464fbfbb5041462989b55a486b539df7c079822849907e0d25cc2cdd354ac87"
+    },
+    {
+      "experiment": "dapo-qwen25-math15b-grpo-stale0",
+      "model": "Qwen/Qwen2.5-Math-1.5B",
+      "run": "qwen25-math15b-grpo-seed42-stale0",
+      "trainer_gpus": 3,
+      "inference_gpus": 2,
+      "total_gpus": 5,
+      "source_sha256": "e3e1bbcda0cfad407a99553d0848fec6797976fbdef0b718f468e04b5c02d579"
+    },
+    {
+      "experiment": "dapo-qwen25-math7b-grpo-stale0",
+      "model": "Qwen/Qwen2.5-Math-7B",
+      "run": "qwen25-math7b-grpo-seed42-stale0",
+      "trainer_gpus": 8,
+      "inference_gpus": 1,
+      "total_gpus": 9,
+      "source_sha256": "afcb616fea0ec87170e5c3793071335c0e8317fcfb9ddd77bc542f3058571da5"
+    },
+    {
+      "experiment": "dapo-qwen3-14b-grpo-stale0",
+      "model": "Qwen/Qwen3-14B",
+      "run": "qwen3-14b-grpo-seed42-stale0",
+      "trainer_gpus": 7,
+      "inference_gpus": 2,
+      "total_gpus": 9,
+      "source_sha256": "27051145b1287912a5d9607a9372f1e9404c7b9c2dfaf4f221d145cee3cbdbfa"
+    }
+  ]
+}

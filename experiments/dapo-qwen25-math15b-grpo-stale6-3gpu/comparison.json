@@ -1,0 +1,22 @@
+{
+  "captured_at": "2026-09-16T15:15:10.465709+00:00",
+  "baseline_root": "/mnt/nfs/home/mohamadzbib/projects/rl-infra/experiments/dapo-qwen25-math15b-grpo",
+  "baseline_run": "/mnt/nfs/home/mohamadzbib/projects/rl-infra/outputs/dapo-qwen25-math15b-grpo/qwen25-math15b-grpo-seed42",
+  "run_dir": "/mnt/nfs/home/mohamadzbib/projects/rl-infra/outputs/dapo-qwen25-math15b-grpo-stale6-3gpu/qwen25-math15b-grpo-seed42-stale6-3gpu",
+  "observer_dir": "/mnt/nfs/home/mohamadzbib/projects/rl-infra/outputs/dapo-qwen25-math15b-grpo-stale6-3gpu-observer/qwen25-math15b-grpo-seed42-stale6-3gpu",
+  "path_replacements": {
+    "/mnt/nfs/home/mohamadzbib/projects/rl-infra/experiments/dapo-qwen25-math15b-grpo": "/mnt/nfs/home/mohamadzbib/projects/rl-infra/experiments/dapo-qwen25-math15b-grpo-stale6-3gpu",
+    "/mnt/nfs/home/mohamadzbib/projects/rl-infra/outputs/dapo-qwen25-math15b-grpo": "/mnt/nfs/home/mohamadzbib/projects/rl-infra/outputs/dapo-qwen25-math15b-grpo-stale6-3gpu",
+    "qwen25-math15b-grpo-seed42": "qwen25-math15b-grpo-seed42-stale6-3gpu"
+  },
+  "reference_topology_adjustments": {},
+  "historical_limit": "The historical cap-2 baseline used 3 trainer plus 2 inference GPUs. This run uses 2 plus 1 on a shared node; staleness is not the only changed execution condition.",
+  "treatment_cap": 6,
+  "smoke_steps": 25,
+  "allowed_setting_changes": {
+    "deployment.gpus_per_node": 3,
+    "deployment.num_train_gpus": 2,
+    "deployment.num_infer_gpus": 1,
+    "inference.vllm.data_parallel_size": 1
+  }
+}

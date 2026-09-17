@@ -15,3 +15,10 @@ artifacts/
 *.env
 *.key
 *.pem
+validation/
+dry-run/
+submission.json
+submission-*.json
+replacement.json
+jobs.json
+/experiments/staleness-zero/verification.json
