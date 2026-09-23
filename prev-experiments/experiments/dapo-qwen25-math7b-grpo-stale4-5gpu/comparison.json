@@ -1,0 +1,53 @@
+{
+  "captured_at": "2026-09-16T15:15:10.465709+00:00",
+  "baseline_root": "/mnt/nfs/home/mohamadzbib/projects/rl-infra/experiments/dapo-qwen25-math7b-grpo",
+  "baseline_run": "/mnt/nfs/home/mohamadzbib/projects/rl-infra/outputs/dapo-qwen25-math7b-grpo/qwen25-math7b-grpo-seed42",
+  "run_dir": "/mnt/nfs/home/mohamadzbib/projects/rl-infra/outputs/dapo-qwen25-math7b-grpo-stale4-5gpu/qwen25-math7b-grpo-seed42-stale4-5gpu",
+  "observer_dir": "/mnt/nfs/home/mohamadzbib/projects/rl-infra/outputs/dapo-qwen25-math7b-grpo-stale4-5gpu-observer/qwen25-math7b-grpo-seed42-stale4-5gpu",
+  "path_replacements": {
+    "/mnt/nfs/home/mohamadzbib/projects/rl-infra/experiments/dapo-qwen25-math7b-grpo": "/mnt/nfs/home/mohamadzbib/projects/rl-infra/experiments/dapo-qwen25-math7b-grpo-stale4-5gpu",
+    "/mnt/nfs/home/mohamadzbib/projects/rl-infra/outputs/dapo-qwen25-math7b-grpo": "/mnt/nfs/home/mohamadzbib/projects/rl-infra/outputs/dapo-qwen25-math7b-grpo-stale4-5gpu",
+    "qwen25-math7b-grpo-seed42": "qwen25-math7b-grpo-seed42-stale4-5gpu"
+  },
+  "reference_topology_adjustments": {
+    "deployment.gpus_per_node": [
+      6,
+      9
+    ],
+    "deployment.num_train_gpus": [
+      4,
+      8
+    ],
+    "deployment.num_infer_gpus": [
+      2,
+      1
+    ],
+    "inference.vllm.data_parallel_size": [
+      2,
+      1
+    ]
+  },
+  "historical_limit": "Historical cap-2 baseline used 4 trainer + 2 inference GPUs and resumed at step 975 with 8 + 1. This cap-4 run uses 4 + 1 on a shared node. Topology and shared-node execution are additional comparison differences.",
+  "treatment_cap": 4,
+  "smoke_steps": 25,
+  "allowed_setting_changes": {
+    "deployment.gpus_per_node": 5,
+    "deployment.num_infer_gpus": 1,
+    "inference.vllm.data_parallel_size": 1,
+    "weight_broadcast.port": 29744,
+    "orchestrator.env_server_base_port": 5740,
+    "inference.vllm.data_parallel_rpc_port": 14774,
+    "rollout_transport": {
+      "type": "zmq",
+      "port": 6474
+    },
+    "inference.server": {
+      "port": 8474
+    },
+    "orchestrator.model": {
+      "client": {
+        "base_url": "http://localhost:8474/v1"
+      }
+    }
+  }
+}

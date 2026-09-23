@@ -1,0 +1,38 @@
+{
+  "created_at": "2026-09-19T12:30:36.181287+00:00",
+  "authorization": "Recover 3B staleness cap6 alongside 7B staleness cap4 at normal priority on deep-chungus-10. Continue this 7B run from its valid paired checkpoint with four trainer GPUs and one inference GPU; allow up to 7,200 seconds for trainer startup weights while restoring the existing optimizer, scheduler and progress.",
+  "previous_failed_job": "2141895",
+  "caps": {
+    "4": {
+      "experiment_root": "/mnt/nfs/home/mohamadzbib/projects/rl-infra/experiments/dapo-qwen25-math7b-grpo-stale4-5gpu",
+      "run_dir": "/mnt/nfs/home/mohamadzbib/projects/rl-infra/outputs/dapo-qwen25-math7b-grpo-stale4-5gpu/qwen25-math7b-grpo-seed42-stale4-5gpu",
+      "resume_step": 225,
+      "evidence_dir": "evidence/stale4",
+      "source_sha256": "23bac478489812f972b419f6b01a5a375521b8088bffc9b6a722fb1a7054e7b8",
+      "data_sha256": "73afcc50c0b07eec405a88d576344f01b0060a2d32f486bf804c15bfd45dcc15",
+      "guard_sha256": "2b05b7e76eabe084d94f66752bb9b1fae18ec64889c5de10d05a2afe4328e29f",
+      "metadata_sha256": "b0eead4d167aad3bf95892074b7d24c1b4a35ca859fcc5f3875405ea2bcb4059",
+      "progress_sha256": "afb787af4fa5384e864e603511147de77393e91d561551abbbdc35268b61c560",
+      "evidence_hashes": {
+        "checkpoint/orchestrator/progress.pt": "afb787af4fa5384e864e603511147de77393e91d561551abbbdc35268b61c560",
+        "checkpoint/trainer/.metadata": "b0eead4d167aad3bf95892074b7d24c1b4a35ca859fcc5f3875405ea2bcb4059",
+        "checkpoint-files.json": "0f5fc3d0ff850eef816afaacaefc89f1fd46bc1c039265b7cd61d07e6dc32e9d",
+        "original-resolved/inference.json": "3c3c89d97312d93493a863a74c1af78cb5c4844bbdaa5f90ed1a701604ad8ba8",
+        "original-resolved/orchestrator.json": "52ce199ce98db63271edf52e9ecbbf7ba1e4d77231c93f2222cf10b46c1ababe",
+        "original-resolved/trainer.json": "0e2f7f33923cfaa315572b91e97254c5aab7177e30f9202ed35464e80c0166cb"
+      }
+    }
+  },
+  "eligible_nodes": [
+    "deep-chungus-10"
+  ],
+  "gpu_count": 5,
+  "trainer_gpus": 4,
+  "inference_gpus": 1,
+  "minimum_gpu_memory_gib": 75,
+  "replaces_pending_job": "2142029",
+  "previous_recovery_package": "staleness-analysis/recoveries/7b-stale4-five-gpu-20260919",
+  "previous_package_manifest_sha256": "929e10f92f3746c5ce546da41371da181f8ab7042f4c79bbac69fc6a9ac5610c",
+  "overlay_sha256": "cb73a50f95b2be4861d8911b6e2828a051a96c74c74ac99227ab5fc6bdc41866",
+  "startup_weight_wait_timeout_seconds": 7200
+}

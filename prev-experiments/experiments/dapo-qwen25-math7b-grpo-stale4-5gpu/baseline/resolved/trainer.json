@@ -1,0 +1,135 @@
+{
+  "model": {
+    "name": "/tmp/prime-rl-2141262/Qwen2.5-Math-7B-b101308f",
+    "trust_remote_code": false,
+    "vlm": null,
+    "conversion_dir": null,
+    "seq_len": 4096,
+    "attn": "flash_attention_2",
+    "compile": {
+      "fullgraph": false
+    },
+    "ac": {
+      "mode": "full",
+      "freq": 1,
+      "targets": [
+        "norm"
+      ]
+    },
+    "ac_offloading": null,
+    "fsdp_cpu_offload": false,
+    "optim_cpu_offload": false,
+    "full_offload": null,
+    "reshard_after_forward": false,
+    "dp_replicate": 1,
+    "ep": "auto",
+    "ep_comm_backend": "torch",
+    "deepep_num_sms": 20,
+    "deepep_token_chunk_size": null,
+    "cp": 1,
+    "cp_style": "ring",
+    "impl": "hf",
+    "optimization_dtype": "float32",
+    "reduce_dtype": "float32",
+    "moe_router_dtype": "float32",
+    "moe_use_grouped_mm": true,
+    "moe_fused_kernel": false,
+    "quantization": null,
+    "index_cache": null,
+    "freeze_moe_router": false,
+    "lora": null,
+    "debug": {
+      "num_layers": null,
+      "random_init": false,
+      "force_balanced_routing": false
+    },
+    "fused_lm_head_token_chunk_size": 8192
+  },
+  "tokenizer": {
+    "name": "/mnt/nfs/home/mohamadzbib/projects/rl-infra/experiments/dapo-qwen25-math7b-grpo/tokenizer",
+    "trust_remote_code": false,
+    "chat_template": null
+  },
+  "data": {
+    "fake": null
+  },
+  "loss": {
+    "type": "custom",
+    "import_path": "ppo_loss.ppo_clip_loss",
+    "kwargs": {
+      "clip_eps": 0.2
+    }
+  },
+  "optim": {
+    "lr": 1e-06,
+    "weight_decay": 0.01,
+    "max_norm": 1.0,
+    "type": "adamw",
+    "betas1": 0.9,
+    "betas2": 0.999
+  },
+  "scheduler": {
+    "type": "linear",
+    "warmup_steps": 30,
+    "decay_steps": 0,
+    "min_lr": 0.0
+  },
+  "ckpt": {
+    "output_dir": null,
+    "interval": 25,
+    "keep_last": 4,
+    "keep_interval": 100,
+    "skip_progress": false,
+    "skip_scheduler": false,
+    "skip_dataloader": false,
+    "skip_optimizer": false
+  },
+  "resume": {
+    "step": 975,
+    "dir": null
+  },
+  "weight_broadcast": {
+    "timeout": 1800,
+    "host": "localhost",
+    "port": 29501,
+    "inference_world_size": 1,
+    "type": "nccl",
+    "quantize_in_weight_transfer": false
+  },
+  "rollout_transport": {
+    "type": "zmq",
+    "host": "localhost",
+    "port": 5555,
+    "hwm": 10
+  },
+  "log": {
+    "level": "info",
+    "vf_level": "info",
+    "json_logging": false,
+    "log_data": false,
+    "interval": 10.0,
+    "ranks_filter": [
+      0
+    ]
+  },
+  "monitors": {
+    "wandb": null,
+    "file": {
+      "path": "metrics.jsonl"
+    }
+  },
+  "output_dir": "/mnt/nfs/home/mohamadzbib/projects/rl-infra/outputs/dapo-qwen25-math7b-grpo/qwen25-math7b-grpo-seed42",
+  "matmul_precision": "high",
+  "max_steps": 1000,
+  "enable_router_replay": false,
+  "memory_profiler_path": null,
+  "gc": {
+    "interval": 50
+  },
+  "trace_path": null,
+  "dist_timeout_seconds": 3600,
+  "heartbeat": null,
+  "metrics_server": null,
+  "enable_token_export": false,
+  "env_vars": {}
+}

@@ -1,0 +1,18 @@
+{
+  "created_at": "2026-09-19T16:22:02.400885+00:00",
+  "base_prime_commit": "ab5de8fff44b2c4a5c85e24b6e6e3f7d57eee7b1",
+  "baseline_local_snapshot": "tmp/cap-sweep-audit-20260916/pinned",
+  "original_manifest_sha256": "064c3ffd6b784cf2088c5ccc77d4213792ae9366fbafca2ad78f106a4e436bbf",
+  "runtime_manifest_sha256": "dd60a44d4b682c1bf50524a45c2923bf795d56f13a477cef5154d35ecfb31dd3",
+  "original_clients_sha256": "a2d117b78b34c638cc19f3a92e8ec166634a23120319a14ae51ea570afa9fcc7",
+  "patched_clients_sha256": "67d3e7b18d37f3a859dfa1a809b5980a9eee689c16bffe3d1e6b7ca0a8983cd3",
+  "helper_sha256": "50e33f9b03e8b472ceb41f4eb84bb7e374bcbcc751b44b09251c85a654be43f5",
+  "changed_files": [
+    "src/prime_rl/orchestrator/clients.py"
+  ],
+  "read_timeout_seconds": 3600,
+  "update_attempts": 1,
+  "resume_only_after_confirmed_update": true,
+  "configuration_changes_beyond_existing_startup_overlay": [],
+  "shared_prime_repository_modified": false
+}

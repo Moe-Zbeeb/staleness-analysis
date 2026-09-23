@@ -1,0 +1,36 @@
+{
+  "purpose": "Five-GPU normal-priority continuation of cap8 on deep-chungus-11 from checkpoint100.",
+  "checkpoint_source_package": "7b-six-gpu-20260919",
+  "checkpoint_source_manifest_sha256": "81382a61bb3d8d1684bf686dc51b2845377190aee3042b07a505022b00dd6ee1",
+  "launcher_source_package": "7b-stale6-native-cvd-20260920",
+  "launcher_source_manifest_sha256": "59afd9fc8bc01fceb8788f50f99a8411f3502dea0c1e5e34f1c06299693b9038",
+  "initial_checkpoint": 100,
+  "original_experiment_modified": false,
+  "original_source_manifest_sha256": "c2473d921af7653116a4dae9e749651334c6a4f6b4ec7f11f0f76f4914a5d682",
+  "original_data_manifest_sha256": "32392d4e5bce51c76d83dcb57b611f0fea093b1f0dc9ceb9fe27165a32aea700",
+  "topology": {
+    "original": {
+      "trainer": 4,
+      "inference": 4
+    },
+    "continuation": {
+      "trainer": 4,
+      "inference": 1
+    }
+  },
+  "native_cuda_assignment": "Original Slurm visible selectors are preserved. Hardware UUID, occupancy, BF16 and five-rank NCCL checks are required within the actual node11 allocation.",
+  "regression_fixture": "native-cvd-probe-2142074.json was collected on node9 and is used solely as an observed CUDA/device-minor mismatch regression fixture, not as node11 hardware verification.",
+  "changes_from_launcher_parent": [
+    "cap6 run paths and identity replaced with cap8",
+    "host constraint changed from node9 to node11",
+    "cap8 checkpoint and manifest evidence substituted",
+    "old pending job2141992 will be replaced after new submission verification"
+  ],
+  "node11_memory_preflight": {
+    "diagnostic_job": "2142078",
+    "available_gib": 49.16518020629883,
+    "node_anonymous_gib": 902.711841583252,
+    "dominant_user": "frankzydou",
+    "training_submission_requires": "Wait for the confirmed memory-consuming job to end; check at least384 GiB available host RAM again inside the actual allocation before starting."
+  }
+}

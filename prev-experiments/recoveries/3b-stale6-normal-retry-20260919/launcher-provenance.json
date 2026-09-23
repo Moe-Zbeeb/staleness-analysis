@@ -1,0 +1,9 @@
+{
+  "original": "staleness-analysis/experiments/dapo-qwen25-3b-grpo-stale6-4gpu-tp2/scripts/train_job.sh",
+  "original_sha256": "6daa9e9a11a367f528fdf2224763ca975a7fa94cf0d657b53b3dcdd52d9cdeb3",
+  "launcher": "train-stale6.sh",
+  "launcher_sha256": "1db3ce9059fee622d8e5fa7631c4d68f77a5cf195e244cdb89d2149cb180e03f",
+  "previous_recovery_launcher": "3b-stale6-three-gpu-20260919/train-stale6.sh",
+  "previous_recovery_launcher_sha256": "bce2f690b3fa6c49ed4e749dcf4e533e2f878c52fb0705582e9d479a7ec26c3d",
+  "change": "Recovery package path changes; the launch sequence and same-arm resume step remain unchanged. The overlay raises only the startup publication wait from the default 1200 seconds to 7200 seconds relative to the previous three-GPU recovery."
+}

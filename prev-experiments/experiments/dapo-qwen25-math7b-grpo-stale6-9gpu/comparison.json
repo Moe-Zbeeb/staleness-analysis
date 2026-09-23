@@ -1,0 +1,54 @@
+{
+  "captured_at": "2026-09-16T15:15:10.465709+00:00",
+  "baseline_root": "/mnt/nfs/home/mohamadzbib/projects/rl-infra/experiments/dapo-qwen25-math7b-grpo",
+  "baseline_run": "/mnt/nfs/home/mohamadzbib/projects/rl-infra/outputs/dapo-qwen25-math7b-grpo/qwen25-math7b-grpo-seed42",
+  "run_dir": "/mnt/nfs/home/mohamadzbib/projects/rl-infra/outputs/dapo-qwen25-math7b-grpo-stale6-9gpu/qwen25-math7b-grpo-seed42-stale6-9gpu",
+  "observer_dir": "/mnt/nfs/home/mohamadzbib/projects/rl-infra/outputs/dapo-qwen25-math7b-grpo-stale6-9gpu-observer/qwen25-math7b-grpo-seed42-stale6-9gpu",
+  "path_replacements": {
+    "/mnt/nfs/home/mohamadzbib/projects/rl-infra/experiments/dapo-qwen25-math7b-grpo": "/mnt/nfs/home/mohamadzbib/projects/rl-infra/experiments/dapo-qwen25-math7b-grpo-stale6-9gpu",
+    "/mnt/nfs/home/mohamadzbib/projects/rl-infra/outputs/dapo-qwen25-math7b-grpo": "/mnt/nfs/home/mohamadzbib/projects/rl-infra/outputs/dapo-qwen25-math7b-grpo-stale6-9gpu",
+    "qwen25-math7b-grpo-seed42": "qwen25-math7b-grpo-seed42-stale6-9gpu"
+  },
+  "reference_topology_adjustments": {
+    "deployment.gpus_per_node": [
+      6,
+      9
+    ],
+    "deployment.num_train_gpus": [
+      4,
+      8
+    ],
+    "deployment.num_infer_gpus": [
+      2,
+      1
+    ],
+    "inference.vllm.data_parallel_size": [
+      2,
+      1
+    ]
+  },
+  "historical_limit": "Historical cap-2 baseline used 4 trainer + 2 inference GPUs and resumed at step 975 with 8 + 1. This fresh cap-6 run uses 8 + 1 on a full node. Training topology also differs from the original baseline and the cap-4 run.",
+  "treatment_cap": 6,
+  "smoke_steps": 25,
+  "allowed_setting_changes": {
+    "deployment.gpus_per_node": 9,
+    "deployment.num_infer_gpus": 1,
+    "inference.vllm.data_parallel_size": 1,
+    "weight_broadcast.port": 29746,
+    "orchestrator.env_server_base_port": 5760,
+    "inference.vllm.data_parallel_rpc_port": 14776,
+    "rollout_transport": {
+      "type": "zmq",
+      "port": 6476
+    },
+    "inference.server": {
+      "port": 8476
+    },
+    "orchestrator.model": {
+      "client": {
+        "base_url": "http://localhost:8476/v1"
+      }
+    },
+    "deployment.num_train_gpus": 8
+  }
+}

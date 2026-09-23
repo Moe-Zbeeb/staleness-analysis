@@ -1,0 +1,7 @@
+[deployment]
+gpus_per_node = 6
+num_train_gpus = 4
+num_infer_gpus = 2
+
+[inference.vllm]
+data_parallel_size = 2

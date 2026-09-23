@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "files": {
+    "evaluation/README.md": "8e53e8ef8e291e72040c9e3ed7fa7d6dc0131004ddf1f4380725493c972eea4d",
+    "evaluation/benchmarks.json": "2dbb24b3d4db7cb64612613a2273680f94bdb219e35968266e4a301fb622502b",
+    "evaluation/cpu-validation-20260919.json": "c01e66490352219a8e0d7f5319dc21d23b474014dd72d6c289c0a001d2dfa36d",
+    "evaluation/launches/15b-math-20260919/README.md": "1ab64db5b7e6cc50104c1ef2b8eeeb63260b83aba49be8b407da17262deb280d",
+    "evaluation/launches/15b-math-20260919/dispatch.py": "f88c425ec701d5c92619f05cb18c690808de6eb295a486a331351aa676274661",
+    "evaluation/launches/15b-math-20260919/evaluate_job.sh": "5bc8d9e2df1f658021268deb53029b1433d38032be8a71486713dabdae2bfb89",
+    "evaluation/launches/15b-math-20260919/prepare_job.sh": "861a4bbc8d29361d3561ea331993374ba1d1db40577ff0543b3b4217f502c362",
+    "evaluation/launches/15b-math-20260919/test_dispatch.py": "1330ef7b94ff3ef3805232e081546c25f4c3a37a5b35c003dbe3ef49b173905f",
+    "evaluation/math_sweep/__init__.py": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+    "evaluation/math_sweep/core.py": "6726b84da04dd21275b3fb3e9484f698d2ba3be86e44dc0de17ee9924a07a974",
+    "evaluation/math_sweep/data.py": "9671a64a4610b922eb48dec36787b1082012e9827bcbc80b4d8c52160973a169",
+    "evaluation/math_sweep/prepare.py": "adb37552350ac205f0dd7737885768602147fc483ea787b62efa2aebe55d43ab",
+    "evaluation/math_sweep/runner.py": "76b11352a5ee77eec0693b4f7eb166cde94a7d0708cd9666b4a0400e9de10b06",
+    "evaluation/math_sweep/scoring.py": "d039b20e3767b2442280e092676831e24ab76a08f88727797a976571fde6d264",
+    "evaluation/math_sweep/test_core.py": "c34f0f0cb5ba7fb0320032cf2c4a9d3134df59e69e8277f9ffd1ab11f1b43efb",
+    "evaluation/math_sweep/test_data.py": "37e65d1e6b62ca1895fb67fb9290a8a7edac58a78ee10e6f1e08cee89eb5463a",
+    "evaluation/math_sweep/test_prepare.py": "70e4ee88a1c0d7f3613a489c3dc77e61d10f8c4b4f1f5ceca2e13f94cb720c94",
+    "evaluation/math_sweep/test_record_validation.py": "bb51e13b7ff8e1a963751ce1e9481db1644d4bdf1425df3c997781ca51858a1f",
+    "evaluation/math_sweep/test_report.py": "8c1df4f92dda0ae69010012ece37b9c4c821038d6c2858cbd73d3292b845ccb0",
+    "evaluation/math_sweep/test_runner.py": "a637b97f753213a8e1bcc2e1ab4fd22a92c5d32cc6a49d8587a14caf67bfa4b8",
+    "evaluation/math_sweep/test_scoring.py": "98c56fab8054d0d344f1dde09b8d7d1b071e0a4b22c1354ddc23bfb4f6e3d538",
+    "evaluation/models.json": "97e11c48709f29d14bc6f5b7912faf9b6af8ff626f3ebc2cc01dd2ea28a46096",
+    "evaluation/profiles.json": "3135cadf3a4c9c266e602327ac1ab577a39313b7eb7ea1956206cc9e76e91c81",
+    "evaluation/sweep.py": "a7be34aa886d00bdbc0dece7dddb2f8e15128b50ab81e66177ba4bb99a547281",
+    "packages/prime-rl-staleness/src/exact_math.py": "43d86f8ba5b399d7b489a3bb52341b95d472a8f98278486cbd2ef8cea03285f2"
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "original_source_manifest_sha256": "c7794f9212c5bfc957f8c94e3a95af231371ddb1a31e62033db1b73b03ef4ebe",
+  "files": {
+    "README.md": "d11a1008040fcd867ff23d9160c9d0de14bafe60feb80a13c01567adfce0b32b",
+    "evaluate_job.sh": "d44fd56e385a78ce02b7bdcbf3b05f534b081f8ca9db7e0a7f1e889d3a97f9d2",
+    "gpu_devices.py": "c84ea95c082becdf8e1b4675996d166f508d61759c593141b51d57cc717af4c4",
+    "newdispatcher.py": "d8eba7855c5c0d1cb58fa1aed94856cbaf5302e0bac02904b0f7e29834e1c764",
+    "report.py": "b6e32c2abdf82bc5a79d992f9669b3d872233644ef699e348d9083bd476b041e",
+    "report_job.sh": "64c9b0f764a5b8da81979585fd110f4f0841b71b400a805024857b05d215eb8c",
+    "test_gpu_devices.py": "e5b457bb399bc992c21f066216f0cf3089e1a3fe98a17b9adacc755b1ad55250",
+    "test_newdispatcher.py": "29c71a6c168446744c06ee5bc552816047206420be95441fde6525c987d3acca"
+  }
+}

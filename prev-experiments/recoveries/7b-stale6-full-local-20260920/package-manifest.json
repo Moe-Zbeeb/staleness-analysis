@@ -1,0 +1,17 @@
+{
+  "evidence/stale6/checkpoint/orchestrator/progress.pt": "6f8047a4a29e2ccc33106ff4fad887c9f75e6205d546d78e168169aa33a3268d",
+  "evidence/stale6/checkpoint/trainer/.metadata": "b5e05bcd55766c42fc6bfa292778c7691def62ebef8719e64ee62b6ef63725b2",
+  "evidence/stale6/checkpoint-files.json": "26c134df8cbc89300b7a1e0753d458617a91311662a179a38883911d9fe65082",
+  "evidence/stale6/original-resolved/inference.json": "cf8d9b6d625886b4643336f4bcbc52631bf3b018919c5392fbf4303222ddbec4",
+  "evidence/stale6/original-resolved/orchestrator.json": "05b07ef13d83e61498d1e1443a53eb9348f5c281dd9efd7ffce8cfa565939d19",
+  "evidence/stale6/original-resolved/trainer.json": "dcb84761cad15ee4f276167ef720aecc5150bf89eab27d13fb4477a7c2827ad7",
+  "gpu_devices.py": "a494597e6ee07b7cdfc7e413be039839ed65f1239fda0caeeb541c6811f379ba",
+  "guard.py": "6741371264ccaaac50326b49449378d1e93ccda1f48acc652828a6a985c06f71",
+  "health_probe.py": "4c29af5a80950db0a21d00cd0ece9cec67212cb37a5b42298650d28263d4a06b",
+  "host_memory.py": "257210df17f7e8cee77bc3371c13cfd3213a762cfb6bcf9a40ec91f07cabe3aa",
+  "overlay.toml": "cb73a50f95b2be4861d8911b6e2828a051a96c74c74ac99227ab5fc6bdc41866",
+  "spec.json": "ced023c8aa6fcee6cea4cec3f1b76e488042c459c7e245042658722b47c5f0cc",
+  "test_gpu_devices.py": "78a27e0e0be9dcb5fe10ea93356130b954f63061d1f86215e1ef2673dcb8ea21",
+  "train-stale6.sh": "7b905b2fe6a12e912dd93a59ce572c02a849ecc6985776dfa8692e4426e9e7c2",
+  "validate_plan.py": "a336141a985b67fbf5d3bd3f3753d0d944c380ff0c5180b8f25e564479f2d4b1"
+}

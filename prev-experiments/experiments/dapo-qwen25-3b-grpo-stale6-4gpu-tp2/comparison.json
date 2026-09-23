@@ -1,0 +1,40 @@
+{
+  "captured_at": "2026-09-16T15:15:10.465709+00:00",
+  "baseline_root": "/mnt/nfs/home/mohamadzbib/projects/rl-infra/experiments/dapo-qwen25-3b-grpo",
+  "baseline_run": "/mnt/nfs/home/mohamadzbib/projects/rl-infra/outputs/dapo-qwen25-3b-grpo/qwen25-3b-grpo-seed42",
+  "run_dir": "/mnt/nfs/home/mohamadzbib/projects/rl-infra/outputs/dapo-qwen25-3b-grpo-stale6-4gpu-tp2/qwen25-3b-grpo-seed42-stale6-4gpu-tp2",
+  "observer_dir": "/mnt/nfs/home/mohamadzbib/projects/rl-infra/outputs/dapo-qwen25-3b-grpo-stale6-4gpu-tp2-observer/qwen25-3b-grpo-seed42-stale6-4gpu-tp2",
+  "path_replacements": {
+    "/mnt/nfs/home/mohamadzbib/projects/rl-infra/experiments/dapo-qwen25-3b-grpo": "/mnt/nfs/home/mohamadzbib/projects/rl-infra/experiments/dapo-qwen25-3b-grpo-stale6-4gpu-tp2",
+    "/mnt/nfs/home/mohamadzbib/projects/rl-infra/outputs/dapo-qwen25-3b-grpo": "/mnt/nfs/home/mohamadzbib/projects/rl-infra/outputs/dapo-qwen25-3b-grpo-stale6-4gpu-tp2",
+    "qwen25-3b-grpo-seed42": "qwen25-3b-grpo-seed42-stale6-4gpu-tp2"
+  },
+  "reference_topology_adjustments": {},
+  "historical_limit": "Cap6 retry after job 2141854 failed before training. Two trainer GPUs and inference TP2/DP1/API1; topology differs from historical cap2.",
+  "treatment_cap": 6,
+  "smoke_steps": 25,
+  "allowed_setting_changes": {
+    "deployment.gpus_per_node": 4,
+    "deployment.num_train_gpus": 2,
+    "deployment.num_infer_gpus": 2,
+    "inference.vllm.data_parallel_size": 1,
+    "weight_broadcast.port": 29736,
+    "orchestrator.env_server_base_port": 5600,
+    "inference.vllm.data_parallel_rpc_port": 14766,
+    "rollout_transport": {
+      "type": "zmq",
+      "port": 6466
+    },
+    "inference.server": {
+      "port": 8606
+    },
+    "orchestrator.model": {
+      "client": {
+        "base_url": "http://localhost:8606/v1"
+      }
+    },
+    "inference.backend_port": 8706,
+    "inference.vllm.tensor_parallel_size": 2,
+    "inference.vllm.api_server_count": 1
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "6": {
+    "original": "staleness-analysis/experiments/dapo-qwen25-math7b-grpo-stale6-8h100/scripts/train_job.sh",
+    "original_sha256": "81fd2119584e60680b0c002a4b9dd28237caba7a810f4a1f6df8e83c2250d69c",
+    "launcher": "train-stale6.sh",
+    "launcher_sha256": "afbaf634508fa69b8a4d71ab82b3524da943ab86afabff564f38b2e7fcd9c0ff"
+  },
+  "8": {
+    "original": "staleness-analysis/experiments/dapo-qwen25-math7b-grpo-stale8-8h100/scripts/train_job.sh",
+    "original_sha256": "02e315f82a236d602f1bbca02fe6e47fbc7b772a587c02496ad7b9d5c99ccca4",
+    "launcher": "train-stale8.sh",
+    "launcher_sha256": "4da008f51cf04277d3664354b25deb727b04813de1be83fe311e4d8b474c39ae"
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "evidence/stale6/checkpoint/orchestrator/progress.pt": "ff10ceaffab9b843d24e0d6bf3ade735a5aaffa7788b34b1adf7e4aee79b6d89",
+  "evidence/stale6/checkpoint/trainer/.metadata": "527ba554ecb816ca6feffb8abd4fae203c9f9a5a0ab92cebd13707a9ca008178",
+  "evidence/stale6/checkpoint-files.json": "7cd6b8dcfeafb0409fef093e3dc91f37a05396cb783902b24fb225b40e9014ae",
+  "evidence/stale6/original-resolved/inference.json": "368689c3a822bf9757c3ad3d4dc25653799cc8041826bc2fd032def5e03d642f",
+  "evidence/stale6/original-resolved/orchestrator.json": "0327b48a7b449dd8275e7991c0638a01c721162296b22b4f1484c6057420b476",
+  "evidence/stale6/original-resolved/trainer.json": "410585062a18b2a9f94e797196065ace7c74b7a5b6f8f566f100f5811c922ffc",
+  "gpu_devices.py": "d6c36faae7f59f66f06efea31519f1876a5511c11b42ce36bd751eba12082fab",
+  "gres-reviewed.conf": "1a5c2624ff52be8400be632e1aed6f61b75399446b91d9eb249d19ac38307732",
+  "guard.py": "8ece74593a44f3424185dd9e70906af108d53ebc439cbe18caf6fa4b2f7f5c1d",
+  "health_probe.py": "9209cee7ecc686b1d5ff4cee9237254e8c22cd2a17373bae04574903c68f9353",
+  "launcher-provenance.json": "463259a7cdb12607705a4b3e75912b6551fd5e08f39f033b09784098576d5f7e",
+  "overlay.toml": "e75c2102a8df26ef39874e1b1b72fd4344ed2b284ccd99b3fe8cb2ff201aaa10",
+  "spec.json": "247ef5e432c5081d9890c9c759dace7e05f217529d7662b88136ba3dd62555c5",
+  "train-stale6.sh": "bce2f690b3fa6c49ed4e749dcf4e533e2f878c52fb0705582e9d479a7ec26c3d",
+  "validate_job.sh": "78b141240222f0c537f82f07e101e9b541cf7243906420b3a715fe8cf44170ca",
+  "validate_plan.py": "8f121bb7e0020cabb4076f74d7c70c1c904292491767aadd385b05f777bbe124"
+}

@@ -1,0 +1,11 @@
+{
+  "schema_version": 1,
+  "files": {
+    "README.md": "0d9d07bac71dc225533b6fee861dc7dc7bd87da10b7426997af63c639296b672",
+    "evaluate_job.sh": "7bbeae7f708d7c81c1be6dadd63220c041ea4d137e2c00d100160b3d2a5e7935",
+    "resume.py": "7c70286db740963a4d0233cfe1c515cb175b9be13c36c34e09c87b534a8345d5",
+    "submit.py": "22eb97d66581397d6a5a0bbddf09a3b1d07c443db9be19695246322e1eccd674",
+    "test_resume.py": "ad1f6791027ff088ce39d34073c2109c78dbbf5dcbb8500dd6af9e18b73c8e9e",
+    "test_submission.py": "eab992e3f935c0fe8f46d6aa7dd1d0b85c697fca8bd24d2de0eb5b3f8eeaf11e"
+  }
+}

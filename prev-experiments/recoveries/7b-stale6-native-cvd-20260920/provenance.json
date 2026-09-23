@@ -1,0 +1,26 @@
+{
+  "base_package_manifest_sha256": "81382a61bb3d8d1684bf686dc51b2845377190aee3042b07a505022b00dd6ee1",
+  "mapping_source_manifest_sha256": "0bd3e9f6d022ff2ab1a0c0126deedb57388434f2da28eb28633dec59a438ef5b",
+  "frozen_experiment_files_changed": false,
+  "trainer_world_size": 4,
+  "old_inference_replicas": 2,
+  "new_inference_replicas": 1,
+  "initial_checkpoint": 125,
+  "model_cap": 6,
+  "startup_validation": "CPU resolved-config and checkpoint-state validation followed by allocated GPU identity, occupancy and five-rank BF16/NCCL checks before model staging",
+  "copied_mapping_and_health_files": {
+    "gpu_devices.py": "4fcef82706e1058ce3ce6a31bba2ee612a6edcb95ab9ef9352a09bc77f133795",
+    "health_probe.py": "4c29af5a80950db0a21d00cd0ece9cec67212cb37a5b42298650d28263d4a06b"
+  },
+  "device_correction": {
+    "parent_manifest_sha256": "fad6d69cd79c91436476bcda15bc0a3683eb9ed77d6a191881574571359ea695",
+    "cause": "The previous launcher reinterpreted Slurm CUDA ordinals as Linux device-file minors, replacing one idle assigned GPU with an occupied GPU.",
+    "verification_job": "2142074",
+    "verified_native_cuda_visible_devices": "0,1,2,3,4",
+    "verified_all_five_idle": true,
+    "slurm_task_plugin": "task/affinity",
+    "slurm_proctrack_type": "proctrack/linuxproc",
+    "source": "https://slurm.schedmd.com/gres.html#GPU_Management",
+    "training_hyperparameters_changed": false
+  }
+}

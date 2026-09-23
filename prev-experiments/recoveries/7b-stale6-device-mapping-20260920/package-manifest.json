@@ -1,0 +1,7 @@
+{
+  "gpu_devices.py": "ddf463398fb64ece114ccf4aaa48e84fab0af96859b61069b78c2a10cefbb374",
+  "train-stale6.sh": "2f5733ec0d14e4fcac7336cdb4f927027a139bbd9b0f9d523e4f79b480fe14cd",
+  "verify_package.py": "63bf3097406db58b3b771f5f1669bb1eb0e25362d595a748db87161b08b1aa35",
+  "provenance.json": "575d8a70b5c850d9916f8ab1dd2c2ac67a1cbf4010694fe18a7c05f5dfbfa0e6",
+  "test_gpu_devices.py": "461085d433d9cd29a00852c382bf9f45b711cd149f5d3db3f3771ed35faabcd8"
+}

@@ -1,0 +1,22 @@
+max_steps = 25
+
+[run]
+name = "qwen25-math7b-grpo-seed42-stale8-8h100-smoke"
+
+[ckpt]
+interval = 25
+keep_last = 1
+keep_interval = 25
+
+[orchestrator.eval]
+interval = 25
+group_size = 1
+num_examples = 4
+
+[[orchestrator.eval.source]]
+name = "math500-smoke"
+env.taskset.id = "exact-math"
+env.taskset.dataset_path = "/mnt/nfs/home/mohamadzbib/projects/rl-infra/experiments/dapo-qwen25-math7b-grpo-stale8-8h100/data/eval.jsonl"
+env.taskset.benchmark = "math500"
+env.agent.harness.id = "null"
+env.agent.runtime.type = "subprocess"

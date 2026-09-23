@@ -1,0 +1,197 @@
+{
+  "schema_version": 1,
+  "seed": 42,
+  "stop_token_ids": [
+    151643,
+    151645
+  ],
+  "hardware": {
+    "gpu_name_contains": "A100",
+    "minimum_memory_gib": 37
+  },
+  "engine": {
+    "dtype": "bfloat16",
+    "tensor_parallel_size": 1,
+    "gpu_memory_utilization": 0.85,
+    "max_num_seqs": 16,
+    "max_num_batched_tokens": 8192,
+    "enforce_eager": true,
+    "enable_chunked_prefill": true,
+    "enable_prefix_caching": false,
+    "generation_config": "vllm"
+  },
+  "profiles": [
+    {
+      "id": "greedy-native",
+      "default": true,
+      "mode": "nonthinking",
+      "context_kind": "native",
+      "benchmarks": [
+        "math500",
+        "amc23",
+        "aime24",
+        "aime25",
+        "aime26",
+        "minerva_math",
+        "olympiadbench",
+        "hmmt_feb_2025",
+        "hmmt_nov_2025",
+        "hmmt_feb_2026",
+        "brumo_2025",
+        "cmimc_2025"
+      ],
+      "budgets": [
+        3072
+      ],
+      "budgets_by_benchmark": {
+        "minerva_math": [
+          2048
+        ],
+        "olympiadbench": [
+          2048
+        ]
+      },
+      "samples": 1,
+      "temperature": 0.0,
+      "top_p": 1.0,
+      "top_k": -1
+    },
+    {
+      "id": "sampled-native",
+      "default": true,
+      "mode": "nonthinking",
+      "context_kind": "native",
+      "benchmarks": [
+        "aime24",
+        "aime25",
+        "aime26",
+        "hmmt_feb_2025",
+        "hmmt_nov_2025",
+        "hmmt_feb_2026",
+        "brumo_2025",
+        "cmimc_2025"
+      ],
+      "budgets": [
+        3072
+      ],
+      "budgets_by_benchmark": {
+        "aime24": [
+          1024,
+          2048,
+          3072
+        ],
+        "aime25": [
+          1024,
+          2048,
+          3072
+        ],
+        "aime26": [
+          1024,
+          2048,
+          3072
+        ],
+        "hmmt_feb_2026": [
+          1024,
+          2048,
+          3072
+        ]
+      },
+      "samples": 16,
+      "temperature": 0.6,
+      "top_p": 1.0,
+      "top_k": -1
+    },
+    {
+      "id": "qwen3-long-nonthinking",
+      "default": false,
+      "mode": "nonthinking",
+      "context_kind": "native",
+      "families": [
+        "qwen3-14b"
+      ],
+      "benchmarks": [
+        "aime24",
+        "aime25",
+        "aime26",
+        "hmmt_feb_2026"
+      ],
+      "budgets": [
+        8192,
+        16384
+      ],
+      "samples": 16,
+      "temperature": 0.6,
+      "top_p": 1.0,
+      "top_k": -1
+    },
+    {
+      "id": "qwen3-long-thinking",
+      "default": false,
+      "mode": "thinking",
+      "context_kind": "native",
+      "families": [
+        "qwen3-14b"
+      ],
+      "benchmarks": [
+        "aime24",
+        "aime25",
+        "aime26",
+        "hmmt_feb_2026"
+      ],
+      "budgets": [
+        8192,
+        16384
+      ],
+      "samples": 16,
+      "temperature": 0.6,
+      "top_p": 0.95,
+      "top_k": 20
+    },
+    {
+      "id": "15b-extension-greedy",
+      "default": false,
+      "mode": "nonthinking",
+      "context_kind": "unscaled_extrapolation",
+      "context": 9216,
+      "families": [
+        "qwen25-math-1.5b"
+      ],
+      "benchmarks": [
+        "aime24",
+        "aime25",
+        "aime26"
+      ],
+      "budgets": [
+        3072,
+        8192
+      ],
+      "samples": 1,
+      "temperature": 0.0,
+      "top_p": 1.0,
+      "top_k": -1
+    },
+    {
+      "id": "15b-extension-sampled",
+      "default": false,
+      "mode": "nonthinking",
+      "context_kind": "unscaled_extrapolation",
+      "context": 9216,
+      "families": [
+        "qwen25-math-1.5b"
+      ],
+      "benchmarks": [
+        "aime24",
+        "aime25",
+        "aime26"
+      ],
+      "budgets": [
+        3072,
+        8192
+      ],
+      "samples": 16,
+      "temperature": 0.6,
+      "top_p": 1.0,
+      "top_k": -1
+    }
+  ]
+}

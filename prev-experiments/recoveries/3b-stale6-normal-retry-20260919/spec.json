@@ -1,0 +1,37 @@
+{
+  "created_at": "2026-09-19T12:30:06.219702+00:00",
+  "authorization": "Recover the existing Qwen2.5-3B staleness <=6 run on three GPUs of deep-chungus-10 at normal priority, alongside the requested 7B run. Resume full trainer, optimizer, scheduler and orchestrator state from step 775. Preserve the previous two-trainer, one-inference topology and increase only the orchestrator startup wait to 7200 seconds.",
+  "caps": {
+    "6": {
+      "experiment_root": "/mnt/nfs/home/mohamadzbib/projects/rl-infra/experiments/dapo-qwen25-3b-grpo-stale6-4gpu-tp2",
+      "run_dir": "/mnt/nfs/home/mohamadzbib/projects/rl-infra/outputs/dapo-qwen25-3b-grpo-stale6-4gpu-tp2/qwen25-3b-grpo-seed42-stale6-4gpu-tp2",
+      "resume_step": 775,
+      "evidence_dir": "evidence/stale6",
+      "source_sha256": "cbd27323390ea2e6c9176cd6e0d7186ae54ffe126a1da18bc321d6d863742e92",
+      "data_sha256": "d5e2b591d2153b44924eaf63788dbe1f18149c32df5cffdca384957f6116d169",
+      "guard_sha256": "d6cc3d88daba125cf1ef4e1a6715a430446a66c33830d41be67671bec08b33e9",
+      "metadata_sha256": "527ba554ecb816ca6feffb8abd4fae203c9f9a5a0ab92cebd13707a9ca008178",
+      "progress_sha256": "ff10ceaffab9b843d24e0d6bf3ade735a5aaffa7788b34b1adf7e4aee79b6d89",
+      "evidence_hashes": {
+        "checkpoint/orchestrator/progress.pt": "ff10ceaffab9b843d24e0d6bf3ade735a5aaffa7788b34b1adf7e4aee79b6d89",
+        "checkpoint/trainer/.metadata": "527ba554ecb816ca6feffb8abd4fae203c9f9a5a0ab92cebd13707a9ca008178",
+        "checkpoint-files.json": "7cd6b8dcfeafb0409fef093e3dc91f37a05396cb783902b24fb225b40e9014ae",
+        "original-resolved/inference.json": "368689c3a822bf9757c3ad3d4dc25653799cc8041826bc2fd032def5e03d642f",
+        "original-resolved/orchestrator.json": "0327b48a7b449dd8275e7991c0638a01c721162296b22b4f1484c6057420b476",
+        "original-resolved/trainer.json": "410585062a18b2a9f94e797196065ace7c74b7a5b6f8f566f100f5811c922ffc"
+      }
+    }
+  },
+  "eligible_nodes": [
+    "deep-chungus-10"
+  ],
+  "gpu_count": 3,
+  "trainer_gpus": 2,
+  "inference_gpus": 1,
+  "minimum_gpu_memory_gib": 75,
+  "overlay_sha256": "76c547c41fcd9e556791b6acef948910fa5fdc26b94fb92405802b94f36c2b90",
+  "failed_job": "2142027",
+  "previous_recovery": "3b-stale6-three-gpu-20260919",
+  "qos": "normal",
+  "startup_wait_timeout_seconds": 7200
+}

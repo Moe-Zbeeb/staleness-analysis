@@ -1,0 +1,6 @@
+{
+  "original": "staleness-analysis/experiments/dapo-qwen25-3b-grpo-stale6-4gpu-tp2/scripts/train_job.sh",
+  "original_sha256": "6daa9e9a11a367f528fdf2224763ca975a7fa94cf0d657b53b3dcdd52d9cdeb3",
+  "launcher": "train-stale6.sh",
+  "launcher_sha256": "bce2f690b3fa6c49ed4e749dcf4e533e2f878c52fb0705582e9d479a7ec26c3d"
+}

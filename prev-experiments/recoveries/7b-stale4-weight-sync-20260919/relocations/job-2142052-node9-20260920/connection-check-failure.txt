@@ -1,0 +1,1 @@
+The subsequent read-only SSH check exited 255 after the destination password prompt: Connection closed by UNKNOWN port 65535. No AUDIT_BEGIN marker or remote report was returned. Failure stage: connection to submission host through the jump proxy; cause is undetermined. No further connection attempts were made. This is not evidence that the Slurm job stopped.

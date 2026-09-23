@@ -1,0 +1,12 @@
+{
+  "schema_version": 1,
+  "files": {
+    "allocation.py": "8a7d7991fe14c93fe9e2cc194732e95244867a29b868a8d142a0478c5078afcd",
+    "evaluate_job.sh": "f992c87b193a99ea96437d511ee4a036987f90204a2086cdc84b47b42516f887",
+    "full_node.py": "09daa124c22b8c66c15a6cd93249a8d77c1e859b66a213f952b732e8f7e7411f",
+    "gpu_probe.py": "68eb21fbed65229a2b3764a411ff9a8b86c22fa5a488de874db302eb51ba7cd3",
+    "native_devices.py": "1d42199a7ac927cda340250161e47fa0d7ae3d1c8d41505db5257be4dbf46c67",
+    "submit.py": "38869ea126c86265d7fc54af1bfca7461a5d49db462fd7237ddfc87e3178154f",
+    "test_full_node.py": "119610b8ea458d4952e0aa7da82dca3927345af4e8d63bcbcf3922b85b08063c"
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "base_recovery_root": "/mnt/nfs/home/mohamadzbib/projects/rl-infra/recoveries/7b-six-gpu-20260919",
+  "base_package_manifest_sha256": "81382a61bb3d8d1684bf686dc51b2845377190aee3042b07a505022b00dd6ee1",
+  "base_validation_sha256": "6f3aa22638b11b69197aab80fab80fcbce1dd79b338e398ab8319260c072b2b8",
+  "base_launcher_sha256": "afbaf634508fa69b8a4d71ab82b3524da943ab86afabff564f38b2e7fcd9c0ff",
+  "mapping_source_package": "7b-stale4-weight-sync-20260919",
+  "mapping_source_sha256": "4fcef82706e1058ce3ce6a31bba2ee612a6edcb95ab9ef9352a09bc77f133795",
+  "changes": [
+    {
+      "before": "source \"$RL_INFRA/env.sh\" prime-rl\n",
+      "after": "source \"$RL_INFRA/env.sh\" prime-rl\nGPU_RECOVERY_ROOT=/mnt/nfs/home/mohamadzbib/projects/rl-infra/recoveries/7b-stale6-device-mapping-20260920\nuv run --no-sync python \"$GPU_RECOVERY_ROOT/verify_package.py\"\nprintf 'GPU mapping recovery startup job=%s restart=%s node=%s\\n' \"$SLURM_JOB_ID\" \"${SLURM_RESTART_COUNT:-0}\" \"$(hostname)\"\n"
+    },
+    {
+      "before": "    timeout -k 10 30 nvidia-smi -i \"$CUDA_VISIBLE_DEVICES\" --query-gpu=index,name,uuid,memory.total,temperature.gpu,power.draw --format=csv\n",
+      "after": "    GPU_MAPPING=\"$GPU_RECOVERY_ROOT/validation/gpu-mapping-$ATTEMPT_ID.json\"\n    export CUDA_DEVICE_ORDER=PCI_BUS_ID\n    run_guarded uv run --no-sync python \"$GPU_RECOVERY_ROOT/gpu_devices.py\" prepare --gres-config /usr/local/etc/gres.conf --expected-gres-sha256 1a5c2624ff52be8400be632e1aed6f61b75399446b91d9eb249d19ac38307732 --output \"$GPU_MAPPING\"\n    CUDA_VISIBLE_DEVICES=$(uv run --no-sync python -c 'import json,sys; print(json.load(open(sys.argv[1]))[\"cuda_visible_devices\"])' \"$GPU_MAPPING\")\n    export CUDA_VISIBLE_DEVICES\n"
+    }
+  ],
+  "gpu_layout": {
+    "total": 6,
+    "trainer": 4,
+    "inference": 2
+  },
+  "initial_resume_step": 125,
+  "scope": "Correct Slurm device-file to CUDA ordinal mapping and require empty allocated A100/H100 GPUs. Keep the validated six-GPU training overlay, original runtime, checkpoint handling and Comet project unchanged."
+}

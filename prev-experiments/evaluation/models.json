@@ -1,0 +1,348 @@
+{
+  "schema_version": 1,
+  "families": {
+    "qwen25-math-1.5b": {
+      "name": "Qwen2.5-Math-1.5B",
+      "base_repo": "Qwen/Qwen2.5-Math-1.5B",
+      "base_revision": "4a83ca6e4526a4f2da3aa259ec36c259f66b2ab2",
+      "native_context": 4096,
+      "tokenizer": {
+        "path": "experiments/dapo-qwen25-math15b-grpo/tokenizer",
+        "file_sha256": {
+          "chat_template.jinja": "c564d12c9977b8942423753b0c409a11f50142508ced170e9fe1c2f5b803cf70",
+          "tokenizer.json": "3fd169731d2cbde95e10bf356d66d5997fd885dd8dbb6fb4684da3f23b2585d8",
+          "tokenizer_config.json": "1cc816812993bff176eb4f7495433b736f06fba9b6e7b05cac7b4a1780650c95"
+        },
+        "eos_token_id": 151645,
+        "evidence": [
+          "experiments/dapo-qwen25-math15b-grpo-stale0/baseline/manifest.json",
+          "experiments/dapo-qwen25-math15b-grpo/scripts/prepare_data.py"
+        ]
+      },
+      "context_notes": "Qwen2.5 Math pretrained model. Native total context is 4096 tokens; 8192-token output experiments require an explicitly labeled context-extension profile."
+    },
+    "qwen25-3b": {
+      "name": "Qwen2.5-3B",
+      "base_repo": "Qwen/Qwen2.5-3B",
+      "base_revision": "3aab1f1954e9cc14eb9509a215f9e5ca08227a9b",
+      "native_context": 32768,
+      "tokenizer": {
+        "path": "experiments/dapo-qwen25-3b-grpo/tokenizer",
+        "file_sha256": {
+          "chat_template.jinja": "c564d12c9977b8942423753b0c409a11f50142508ced170e9fe1c2f5b803cf70",
+          "tokenizer.json": "3fd169731d2cbde95e10bf356d66d5997fd885dd8dbb6fb4684da3f23b2585d8",
+          "tokenizer_config.json": "1cc816812993bff176eb4f7495433b736f06fba9b6e7b05cac7b4a1780650c95"
+        },
+        "eos_token_id": 151645,
+        "evidence": [
+          "experiments/dapo-qwen25-3b-grpo-stale0/baseline/manifest.json",
+          "experiments/dapo-qwen25-3b-grpo/scripts/prepare_data.py"
+        ]
+      },
+      "context_notes": "Qwen2.5 general pretrained base model, not Math or Instruct. Use the frozen production tokenizer and prompt serialization for both base and trained checkpoints."
+    },
+    "qwen25-math-7b": {
+      "name": "Qwen2.5-Math-7B",
+      "base_repo": "Qwen/Qwen2.5-Math-7B",
+      "base_revision": "b101308fe89651ea5ce025f25317fea6fc07e96e",
+      "native_context": 4096,
+      "tokenizer": {
+        "path": "experiments/dapo-qwen25-math7b-grpo/tokenizer",
+        "file_sha256": {
+          "chat_template.jinja": "c564d12c9977b8942423753b0c409a11f50142508ced170e9fe1c2f5b803cf70",
+          "tokenizer.json": "3fd169731d2cbde95e10bf356d66d5997fd885dd8dbb6fb4684da3f23b2585d8",
+          "tokenizer_config.json": "1cc816812993bff176eb4f7495433b736f06fba9b6e7b05cac7b4a1780650c95"
+        },
+        "eos_token_id": 151645,
+        "evidence": [
+          "experiments/dapo-qwen25-math7b-grpo-stale0/baseline/manifest.json",
+          "experiments/dapo-qwen25-math7b-grpo/scripts/prepare_data.py"
+        ]
+      },
+      "context_notes": "Qwen2.5 Math pretrained model. Native total context is 4096 tokens; longer output experiments require an explicitly labeled context-extension profile."
+    },
+    "qwen3-14b": {
+      "name": "Qwen3-14B",
+      "base_repo": "Qwen/Qwen3-14B",
+      "base_revision": "40c069824f4251a91eefaf281ebe4c544efd3e18",
+      "native_context": 32768,
+      "tokenizer": {
+        "path": "experiments/dapo-qwen3-14b-grpo/tokenizer",
+        "file_sha256": {
+          "chat_template.jinja": "d685ca3f13d7439154ba93440cff5b5a7d50f798b0f49af1597b6fed9ce0d02a",
+          "tokenizer.json": "be75606093db2094d7cd20f3c2f385c212750648bd6ea4fb2bf507a6a4c55506",
+          "tokenizer_config.json": "1cc816812993bff176eb4f7495433b736f06fba9b6e7b05cac7b4a1780650c95"
+        },
+        "eos_token_id": 151645,
+        "evidence": [
+          "experiments/dapo-qwen3-14b-grpo-stale0/baseline/manifest.json",
+          "experiments/dapo-qwen3-14b-grpo/scripts/prepare_data.py"
+        ]
+      },
+      "context_notes": "Qwen3 post-trained hybrid reasoning model; base denotes the starting checkpoint, not a pretrained base-family model. The frozen production template selects non-thinking mode. 32768 is a conservative evaluation context ceiling; validate runtime capacity and report any separate thinking-mode profile."
+    }
+  },
+  "models": [
+    {
+      "id": "qwen25-math-1.5b-base",
+      "family": "qwen25-math-1.5b",
+      "staleness": null,
+      "checkpoint_step": 0,
+      "repo_id": "Qwen/Qwen2.5-Math-1.5B",
+      "revision": "4a83ca6e4526a4f2da3aa259ec36c259f66b2ab2",
+      "status": "pinned",
+      "evidence": [
+        "experiments/dapo-qwen25-math15b-grpo/experiment.json"
+      ]
+    },
+    {
+      "id": "qwen25-math-1.5b-staleness-2",
+      "family": "qwen25-math-1.5b",
+      "staleness": 2,
+      "checkpoint_step": 1000,
+      "repo_id": "zbeeb/Qwen2.5-Math-1.5B-GRPO-Staleness-2",
+      "revision": "5fac908846a1b35592edd668a502dde65d7a4964",
+      "status": "pinned",
+      "evidence": [
+        "../prime-workspace/experiments/staleness-grpo-release/rename-public-verification.json",
+        "../prime-workspace/experiments/cedar-grpo-release/public-verification.json",
+        "../prime-workspace/experiments/cedar-grpo-release/assets/qwen25-math15b/evaluation-results.json"
+      ]
+    },
+    {
+      "id": "qwen25-math-1.5b-staleness-4",
+      "family": "qwen25-math-1.5b",
+      "staleness": 4,
+      "checkpoint_step": 1000,
+      "repo_id": "zbeeb/Qwen2.5-Math-1.5B-GRPO-Staleness-4",
+      "revision": "5f0c1ff0a0cea89d2fd6380290e53f87d669d45b",
+      "status": "pinned",
+      "evidence": [
+        "../prime-workspace/experiments/staleness-grpo-release/public-verification.json",
+        "../prime-workspace/experiments/staleness-grpo-release/final-evaluation-verification.json"
+      ]
+    },
+    {
+      "id": "qwen25-math-1.5b-staleness-6",
+      "family": "qwen25-math-1.5b",
+      "staleness": 6,
+      "checkpoint_step": 1000,
+      "repo_id": "zbeeb/Qwen2.5-Math-1.5B-GRPO-Staleness-6",
+      "revision": "93d341814289748bca4e7830796d0a867dbcf141",
+      "status": "pinned",
+      "evidence": [
+        "../prime-workspace/experiments/staleness-grpo-release-20260918/publication-receipt.json",
+        "../prime-workspace/experiments/staleness-grpo-release-20260918/validation/qwen25-math15b-staleness6.json"
+      ]
+    },
+    {
+      "id": "qwen25-math-1.5b-staleness-8",
+      "family": "qwen25-math-1.5b",
+      "staleness": 8,
+      "checkpoint_step": 1000,
+      "repo_id": "zbeeb/Qwen2.5-Math-1.5B-GRPO-Staleness-8",
+      "revision": "38c526838eee6c452066af7676ac1b6c59a04125",
+      "status": "pinned",
+      "evidence": [
+        "../prime-workspace/experiments/staleness-grpo-release-20260918/publication-receipt.json",
+        "../prime-workspace/experiments/staleness-grpo-release-20260918/validation/qwen25-math15b-staleness8.json"
+      ]
+    },
+    {
+      "id": "qwen25-3b-base",
+      "family": "qwen25-3b",
+      "staleness": null,
+      "checkpoint_step": 0,
+      "repo_id": "Qwen/Qwen2.5-3B",
+      "revision": "3aab1f1954e9cc14eb9509a215f9e5ca08227a9b",
+      "status": "pinned",
+      "evidence": [
+        "experiments/dapo-qwen25-3b-grpo/experiment.json"
+      ]
+    },
+    {
+      "id": "qwen25-3b-staleness-2",
+      "family": "qwen25-3b",
+      "staleness": 2,
+      "checkpoint_step": 1000,
+      "repo_id": "zbeeb/Qwen2.5-3B-GRPO-Staleness-2",
+      "revision": "3fa0f0f6772304327b15f5a59619e79fe868b834",
+      "status": "pinned",
+      "evidence": [
+        "../prime-workspace/experiments/staleness-grpo-release/rename-public-verification.json",
+        "../prime-workspace/experiments/cedar-grpo-release/public-verification.json",
+        "../prime-workspace/experiments/cedar-grpo-release/assets/qwen25-3b/evaluation-results.json"
+      ]
+    },
+    {
+      "id": "qwen25-3b-staleness-4",
+      "family": "qwen25-3b",
+      "staleness": 4,
+      "checkpoint_step": 1000,
+      "repo_id": "zbeeb/Qwen2.5-3B-GRPO-Staleness-4",
+      "revision": "fda75b9b3a468e8513e01e6043b14575af4ea053",
+      "status": "pinned",
+      "evidence": [
+        "../prime-workspace/experiments/staleness-grpo-release-20260918/publication-receipt.json",
+        "../prime-workspace/experiments/staleness-grpo-release-20260918/validation/qwen25-3b-staleness4.json"
+      ]
+    },
+    {
+      "id": "qwen25-3b-staleness-6",
+      "family": "qwen25-3b",
+      "staleness": 6,
+      "checkpoint_step": 1000,
+      "repo_id": "zbeeb/Qwen2.5-3B-GRPO-Staleness-6",
+      "revision": "cfc1ce2e2924f86c3a62a3320c928e4f44f88759",
+      "status": "pinned",
+      "evidence": [
+        "experiments/dapo-qwen25-3b-grpo-stale6-4gpu-tp2/experiment.json",
+        "recoveries/3b-stale6-normal-retry-20260919/spec.json",
+        "docs/3b6-7b4-chungus10-normal-retry-20260919.md",
+        "docs/qwen3b-staleness6-hf-release-20260920.md"
+      ]
+    },
+    {
+      "id": "qwen25-3b-staleness-8",
+      "family": "qwen25-3b",
+      "staleness": 8,
+      "checkpoint_step": 1000,
+      "repo_id": "zbeeb/Qwen2.5-3B-GRPO-Staleness-8",
+      "revision": "42366582c633b1ab7e5e8df78d7fc18ab2c47870",
+      "status": "pinned",
+      "evidence": [
+        "../prime-workspace/experiments/staleness-grpo-release-3b8-20260919/publication-receipt.json",
+        "../prime-workspace/experiments/staleness-grpo-release-3b8-20260919/validation/qwen25-3b-staleness8.json"
+      ]
+    },
+    {
+      "id": "qwen25-math-7b-base",
+      "family": "qwen25-math-7b",
+      "staleness": null,
+      "checkpoint_step": 0,
+      "repo_id": "Qwen/Qwen2.5-Math-7B",
+      "revision": "b101308fe89651ea5ce025f25317fea6fc07e96e",
+      "status": "pinned",
+      "evidence": [
+        "experiments/dapo-qwen25-math7b-grpo/experiment.json"
+      ]
+    },
+    {
+      "id": "qwen25-math-7b-staleness-2",
+      "family": "qwen25-math-7b",
+      "staleness": 2,
+      "checkpoint_step": 1000,
+      "repo_id": "zbeeb/Qwen2.5-Math-7B-GRPO-Staleness-2",
+      "revision": "66a22164f1d49fe06327064c37e80012fa9217e2",
+      "status": "pinned",
+      "evidence": [
+        "../prime-workspace/experiments/staleness-grpo-release/rename-public-verification.json",
+        "../prime-workspace/experiments/cedar-grpo-release/public-verification.json",
+        "../prime-workspace/experiments/cedar-grpo-release/assets/qwen25-math7b/evaluation-results.json"
+      ]
+    },
+    {
+      "id": "qwen25-math-7b-staleness-4",
+      "family": "qwen25-math-7b",
+      "staleness": 4,
+      "checkpoint_step": 1000,
+      "repo_id": null,
+      "revision": null,
+      "status": "awaiting_final",
+      "evidence": [
+        "experiments/dapo-qwen25-math7b-grpo-stale4-5gpu/experiment.json",
+        "recoveries/7b-stale4-normal-retry-20260919/spec.json",
+        "docs/3b6-7b4-chungus10-normal-retry-20260919.md"
+      ]
+    },
+    {
+      "id": "qwen25-math-7b-staleness-6",
+      "family": "qwen25-math-7b",
+      "staleness": 6,
+      "checkpoint_step": 1000,
+      "repo_id": null,
+      "revision": null,
+      "status": "awaiting_final",
+      "evidence": [
+        "experiments/dapo-qwen25-math7b-grpo-stale6-8h100/experiment.json",
+        "recoveries/7b-six-gpu-20260919/spec.json",
+        "../tmp/7b6-two-node-feasibility-20260919/inspect.raw.json"
+      ]
+    },
+    {
+      "id": "qwen25-math-7b-staleness-8",
+      "family": "qwen25-math-7b",
+      "staleness": 8,
+      "checkpoint_step": 1000,
+      "repo_id": null,
+      "revision": null,
+      "status": "awaiting_final",
+      "evidence": [
+        "experiments/dapo-qwen25-math7b-grpo-stale8-8h100/experiment.json",
+        "recoveries/7b-six-gpu-20260919/spec.json",
+        "../tmp/7b6-two-node-feasibility-20260919/inspect.raw.json"
+      ]
+    },
+    {
+      "id": "qwen3-14b-base",
+      "family": "qwen3-14b",
+      "staleness": null,
+      "checkpoint_step": 0,
+      "repo_id": "Qwen/Qwen3-14B",
+      "revision": "40c069824f4251a91eefaf281ebe4c544efd3e18",
+      "status": "pinned",
+      "evidence": [
+        "experiments/dapo-qwen3-14b-grpo/experiment.json"
+      ]
+    },
+    {
+      "id": "qwen3-14b-staleness-2",
+      "family": "qwen3-14b",
+      "staleness": 2,
+      "checkpoint_step": 1000,
+      "repo_id": null,
+      "revision": null,
+      "status": "awaiting_final",
+      "evidence": [
+        "experiments/dapo-qwen3-14b-grpo/experiment.json",
+        "../tmp/7b6-two-node-feasibility-20260919/inspect.raw.json"
+      ]
+    },
+    {
+      "id": "qwen3-14b-staleness-4",
+      "family": "qwen3-14b",
+      "staleness": 4,
+      "checkpoint_step": 1000,
+      "repo_id": null,
+      "revision": null,
+      "status": "awaiting_final",
+      "evidence": [
+        "docs/staleness-cap-sweep.md"
+      ]
+    },
+    {
+      "id": "qwen3-14b-staleness-6",
+      "family": "qwen3-14b",
+      "staleness": 6,
+      "checkpoint_step": 1000,
+      "repo_id": null,
+      "revision": null,
+      "status": "awaiting_final",
+      "evidence": [
+        "docs/staleness-cap-sweep.md"
+      ]
+    },
+    {
+      "id": "qwen3-14b-staleness-8",
+      "family": "qwen3-14b",
+      "staleness": 8,
+      "checkpoint_step": 1000,
+      "repo_id": null,
+      "revision": null,
+      "status": "awaiting_final",
+      "evidence": [
+        "docs/staleness-cap-sweep.md"
+      ]
+    }
+  ]
+}

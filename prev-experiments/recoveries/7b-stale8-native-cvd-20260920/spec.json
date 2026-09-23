@@ -1,0 +1,37 @@
+{
+  "authorization": "Continue 7B staleness<=8 on the available GPUs of deep-chungus-11, retaining the previously authorized normal priority. Preserve four trainer ranks and checkpoint100 state; use one inference replica on the five-GPU allocation.",
+  "caps": {
+    "8": {
+      "data_sha256": "32392d4e5bce51c76d83dcb57b611f0fea093b1f0dc9ceb9fe27165a32aea700",
+      "evidence_dir": "evidence/stale8",
+      "evidence_hashes": {
+        "checkpoint-files.json": "ee4e851f18a64777a5737ee45748e48642e9148ff527adbb3eab20aed4373962",
+        "checkpoint/orchestrator/progress.pt": "eddf351af91eeec9892f4cd05d7b3d51e48e87ef81cab94e45a08852cfe8d8d4",
+        "checkpoint/trainer/.metadata": "8926e668a9f62be60e034d493d10c54cd182262a5cafb6793ec9516fbbcc48a8",
+        "original-resolved/inference.json": "42c098fd5cc9a57d87bd1eb6cb1390d9c00fa7f726592ebbefbcc728661590a1",
+        "original-resolved/orchestrator.json": "bb0ce7ff578a1efd5d225c64d3d4a32bf3fad1153ba3a5f6a03d1cadda7b5394",
+        "original-resolved/trainer.json": "6391c5f704c2baf2a849b4263065978ed625dc180085cc5abfbef4585340d115"
+      },
+      "experiment_root": "/mnt/nfs/home/mohamadzbib/projects/rl-infra/experiments/dapo-qwen25-math7b-grpo-stale8-8h100",
+      "guard_sha256": "16c96872a87bb46fcbb8379089ea9150ff451a339f8b022fb42298a524e6ad0f",
+      "metadata_sha256": "8926e668a9f62be60e034d493d10c54cd182262a5cafb6793ec9516fbbcc48a8",
+      "progress_sha256": "eddf351af91eeec9892f4cd05d7b3d51e48e87ef81cab94e45a08852cfe8d8d4",
+      "resume_step": 100,
+      "run_dir": "/mnt/nfs/home/mohamadzbib/projects/rl-infra/outputs/dapo-qwen25-math7b-grpo-stale8-8h100/qwen25-math7b-grpo-seed42-stale8-8h100",
+      "source_sha256": "c2473d921af7653116a4dae9e749651334c6a4f6b4ec7f11f0f76f4914a5d682"
+    }
+  },
+  "created_at": "2026-09-20",
+  "eligible_nodes": [
+    "deep-chungus-11"
+  ],
+  "gpu_count": 5,
+  "trainer_gpus": 4,
+  "inference_gpus": 1,
+  "minimum_gpu_memory_gib": 75,
+  "old_pending_job": "2141992",
+  "overlay_sha256": "98ab25eb851f41c0a54ef192a03ccdc86552f86a36426ceec649a05f84fe45f1",
+  "parent_package_manifest_sha256": "81382a61bb3d8d1684bf686dc51b2845377190aee3042b07a505022b00dd6ee1",
+  "native_launcher_parent_manifest_sha256": "59afd9fc8bc01fceb8788f50f99a8411f3502dea0c1e5e34f1c06299693b9038",
+  "device_assignment": "Preserve original Slurm CUDA_VISIBLE_DEVICES and verify its visible UUIDs. Do not translate device-file minor numbers into CUDA selectors."
+}

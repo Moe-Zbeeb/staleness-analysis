@@ -1,0 +1,12 @@
+{
+  "original": "staleness-analysis/experiments/dapo-qwen25-math7b-grpo-stale4-5gpu/scripts/train_job.sh",
+  "original_sha256": "f183395488a20b2c1942fdca09422c27930d78fdea8b20bfdefc4eb381d45e9e",
+  "launcher": "train-stale4.sh",
+  "launcher_sha256": "bbdc3ba07d100218feb20526b8f06b10d50f47d31f92983a007d8896605792c9",
+  "previous_recovery": "7b-stale4-normal-retry-20260919",
+  "startup_weight_wait_timeout_seconds": 7200,
+  "runtime_provenance_sha256": "969f5e9dca7f205ba53c92dce124fef8efbb04832a02eda37977faaacaebfa22",
+  "runtime_source_root": "prime-rl-source",
+  "shared_prime_repository_modified": false,
+  "runtime_guard_sha256": "d190938a1f6955f81e95ee94bf7a1735aaa853cf07a42fe6482608204ee93d37"
+}

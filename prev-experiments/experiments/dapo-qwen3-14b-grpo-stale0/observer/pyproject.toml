@@ -1,0 +1,8 @@
+[project]
+name = "prime-opik-observer"
+version = "0.1.0"
+requires-python = ">=3.12,<3.13"
+dependencies = ["opik==2.2.61"]
+
+[tool.uv]
+package = false

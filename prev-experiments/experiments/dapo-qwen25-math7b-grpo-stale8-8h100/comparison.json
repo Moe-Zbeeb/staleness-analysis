@@ -1,0 +1,54 @@
+{
+  "captured_at": "2026-09-16T15:15:10.465709+00:00",
+  "baseline_root": "/mnt/nfs/home/mohamadzbib/projects/rl-infra/experiments/dapo-qwen25-math7b-grpo",
+  "baseline_run": "/mnt/nfs/home/mohamadzbib/projects/rl-infra/outputs/dapo-qwen25-math7b-grpo/qwen25-math7b-grpo-seed42",
+  "run_dir": "/mnt/nfs/home/mohamadzbib/projects/rl-infra/outputs/dapo-qwen25-math7b-grpo-stale8-8h100/qwen25-math7b-grpo-seed42-stale8-8h100",
+  "observer_dir": "/mnt/nfs/home/mohamadzbib/projects/rl-infra/outputs/dapo-qwen25-math7b-grpo-stale8-8h100-observer/qwen25-math7b-grpo-seed42-stale8-8h100",
+  "path_replacements": {
+    "/mnt/nfs/home/mohamadzbib/projects/rl-infra/experiments/dapo-qwen25-math7b-grpo": "/mnt/nfs/home/mohamadzbib/projects/rl-infra/experiments/dapo-qwen25-math7b-grpo-stale8-8h100",
+    "/mnt/nfs/home/mohamadzbib/projects/rl-infra/outputs/dapo-qwen25-math7b-grpo": "/mnt/nfs/home/mohamadzbib/projects/rl-infra/outputs/dapo-qwen25-math7b-grpo-stale8-8h100",
+    "qwen25-math7b-grpo-seed42": "qwen25-math7b-grpo-seed42-stale8-8h100"
+  },
+  "reference_topology_adjustments": {
+    "deployment.gpus_per_node": [
+      6,
+      9
+    ],
+    "deployment.num_train_gpus": [
+      4,
+      8
+    ],
+    "deployment.num_infer_gpus": [
+      2,
+      1
+    ],
+    "inference.vllm.data_parallel_size": [
+      2,
+      1
+    ]
+  },
+  "historical_limit": "Fresh cap-8 run on all eight H100 GPUs: 4 trainer + 4 inference. The original cap-2 baseline used A100 GPUs with 4+2 and later 8+1; cap-4 uses 4+1 A100. Hardware and execution topology are additional comparison differences. Same H100 topology as the separate cap-6 run.",
+  "treatment_cap": 8,
+  "smoke_steps": 25,
+  "allowed_setting_changes": {
+    "deployment.gpus_per_node": 8,
+    "deployment.num_infer_gpus": 4,
+    "inference.vllm.data_parallel_size": 4,
+    "weight_broadcast.port": 29748,
+    "orchestrator.env_server_base_port": 5780,
+    "inference.vllm.data_parallel_rpc_port": 14778,
+    "rollout_transport": {
+      "type": "zmq",
+      "port": 6478
+    },
+    "inference.server": {
+      "port": 8478
+    },
+    "orchestrator.model": {
+      "client": {
+        "base_url": "http://localhost:8478/v1"
+      }
+    },
+    "deployment.num_train_gpus": 4
+  }
+}

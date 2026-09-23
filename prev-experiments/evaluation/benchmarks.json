@@ -1,0 +1,390 @@
+{
+  "schema_version": 1,
+  "retained_source": {
+    "path": "experiments/dapo-qwen25-math7b-grpo-stale6-8h100/data/eval.jsonl",
+    "sha256": "43bb74fc302566b1916fbbddd7d26d3806f5d98edfbc08059eca70a452d06ad4",
+    "count": 1577,
+    "evidence_path": "experiments/dapo-qwen25-math7b-grpo-stale6-8h100/baseline/manifest.json"
+  },
+  "training_source": {
+    "path": "experiments/dapo-qwen25-math7b-grpo-stale6-8h100/data/train.jsonl",
+    "sha256": "285a7b92a3b5a8efee80bda7506764f7ffd42a195303bc9cb77c399927a2b2c3",
+    "count": 17005,
+    "repo_id": "open-r1/DAPO-Math-17k-Processed",
+    "revision": "31dd309567e3da778038cc87d868b6097a3ccf68",
+    "config": "all",
+    "split": "train",
+    "evidence_path": "experiments/dapo-qwen25-math7b-grpo-stale6-8h100/baseline/manifest.json"
+  },
+  "benchmarks": [
+    {
+      "id": "math500",
+      "repo_id": "HuggingFaceH4/MATH-500",
+      "revision": "6e4ed1a2a79af7d8630a6b768ec859cb5af4d3be",
+      "split": "test",
+      "expected_count": 500,
+      "source": "retained",
+      "fields": {
+        "prompt": "prompt",
+        "answers": "answers",
+        "source_id": "source_id"
+      },
+      "answer_kind": "math",
+      "license": null,
+      "upstream_files": [
+        "test.jsonl"
+      ],
+      "upstream_fields": {
+        "prompt": "problem",
+        "answers": "answer",
+        "source_id": "unique_id"
+      },
+      "notes": [
+        "Use the manifest-bound retained rows. License is absent from the pinned publisher card."
+      ]
+    },
+    {
+      "id": "amc23",
+      "repo_id": "PrimeIntellect-ai/INTELLECT-MATH",
+      "revision": "0c6d5c96f64bb8981220d8a280a8f998a8b1642f",
+      "split": "test",
+      "expected_count": 40,
+      "source": "retained",
+      "fields": {
+        "prompt": "prompt",
+        "answers": "answers",
+        "source_id": "source_id"
+      },
+      "answer_kind": "math",
+      "license": null,
+      "upstream_files": [
+        "rl-and-evals/eval/data/AI-MO/aimo-validation-amc/aimo-validation-amc.jsonl"
+      ],
+      "upstream_fields": {
+        "prompt": "question",
+        "answers": "answer",
+        "source_id": "url"
+      },
+      "upstream_file_sha256": "f4d4c28866b1b7dee913538f5bf9760b69532fe0c25eb1b765905546bd61846e",
+      "notes": [
+        "GitHub repository commit, not a Hugging Face dataset revision. Retained subset filters the 83-row upstream file to URLs containing 2023_AMC, yielding 40 rows. Integral float golds were converted to integer strings. Dataset-specific license was not established from the frozen source; do not infer it from repository code licensing."
+      ]
+    },
+    {
+      "id": "aime24",
+      "repo_id": "HuggingFaceH4/aime_2024",
+      "revision": "2fe88a2f1091d5048c0f36abc874fb997b3dd99a",
+      "split": "train",
+      "expected_count": 30,
+      "source": "retained",
+      "fields": {
+        "prompt": "prompt",
+        "answers": "answers",
+        "source_id": "source_id"
+      },
+      "answer_kind": "aime_integer",
+      "license": null,
+      "upstream_files": [
+        "data/train-00000-of-00001.parquet"
+      ],
+      "upstream_fields": {
+        "prompt": "problem",
+        "answers": "answer",
+        "source_id": "id"
+      },
+      "notes": [
+        "Use retained rows. Publisher answer type is string. License is absent from the pinned publisher card."
+      ]
+    },
+    {
+      "id": "aime25",
+      "repo_id": "opencompass/AIME2025",
+      "revision": "a6ad95f611d72cf628a80b58bd0432ef6638f958",
+      "split": "test",
+      "expected_count": 30,
+      "source": "retained",
+      "fields": {
+        "prompt": "prompt",
+        "answers": "answers",
+        "source_id": "source_id"
+      },
+      "answer_kind": "aime_integer",
+      "license": "mit",
+      "upstream_configs": [
+        "AIME2025-I",
+        "AIME2025-II"
+      ],
+      "upstream_files": [
+        "aime2025-I.jsonl",
+        "aime2025-II.jsonl"
+      ],
+      "upstream_fields": {
+        "prompt": "question",
+        "answers": "answer",
+        "source_id": "config plus zero-based row index"
+      },
+      "notes": [
+        "Retained rows concatenate AIME2025-I and AIME2025-II. Source identifiers are AIME2025-I-{index} and AIME2025-II-{index}."
+      ]
+    },
+    {
+      "id": "aime26",
+      "repo_id": "MathArena/aime_2026",
+      "revision": "10b4e45b7a503075d4da8a0d57916a4f06ce6bd2",
+      "split": "train",
+      "expected_count": 30,
+      "source": "retained",
+      "fields": {
+        "prompt": "prompt",
+        "answers": "answers",
+        "source_id": "source_id"
+      },
+      "answer_kind": "aime_integer",
+      "license": "cc-by-nc-sa-4.0",
+      "upstream_files": [
+        "data/train-00000-of-00001.parquet"
+      ],
+      "upstream_fields": {
+        "prompt": "problem",
+        "answers": "answer",
+        "source_id": "problem_idx"
+      },
+      "notes": [
+        "Preserve the frozen revision. Publisher main has subsequently changed. Pinned answer and problem_idx fields are int64; frozen golds are strings."
+      ]
+    },
+    {
+      "id": "minerva_math",
+      "repo_id": "PrimeIntellect-ai/INTELLECT-MATH",
+      "revision": "0c6d5c96f64bb8981220d8a280a8f998a8b1642f",
+      "split": "test",
+      "expected_count": 272,
+      "source": "retained",
+      "fields": {
+        "prompt": "prompt",
+        "answers": "answers",
+        "source_id": "source_id"
+      },
+      "answer_kind": "math",
+      "license": null,
+      "upstream_files": [
+        "rl-and-evals/eval/data/minerva_math/test.jsonl"
+      ],
+      "upstream_fields": {
+        "prompt": "problem",
+        "answers": "last balanced boxed answer in solution",
+        "source_id": "idx"
+      },
+      "upstream_file_sha256": "0e656b430d3a0a1dab6aa853f453ba3805e28e2cabe4fc72486a897cc09d8ba2",
+      "notes": [
+        "GitHub repository commit. Frozen golds were extracted from the last balanced boxed answer in solution. Units, decimal scientific quantities and symbolic answers require math grading. Dataset-specific license was not established from the frozen source."
+      ]
+    },
+    {
+      "id": "olympiadbench",
+      "repo_id": "PrimeIntellect-ai/INTELLECT-MATH",
+      "revision": "0c6d5c96f64bb8981220d8a280a8f998a8b1642f",
+      "split": "test",
+      "expected_count": 675,
+      "source": "retained",
+      "fields": {
+        "prompt": "prompt",
+        "answers": "answers",
+        "source_id": "source_id"
+      },
+      "answer_kind": "math",
+      "license": null,
+      "upstream_files": [
+        "rl-and-evals/eval/data/olympiadbench/test.jsonl"
+      ],
+      "upstream_fields": {
+        "prompt": "question",
+        "answers": "final_answer",
+        "source_id": "id"
+      },
+      "upstream_file_sha256": "bb8c1e38a16ea9eacb77530315a674d883f267fbff79183effc53681b4fcc416",
+      "notes": [
+        "GitHub repository commit. Text final-answer subset, not proof grading. All 675 upstream final_answer arrays have one string, including composite answers. Answer types: 572 Numerical, 64 Expression, 33 Tuple, 6 Interval; 94 rows have is_multiple_answer=true. Preserve composite gold strings rather than splitting into alternative answers. Dataset-specific license was not established from the frozen source."
+      ]
+    },
+    {
+      "id": "hmmt_feb_2025",
+      "repo_id": "MathArena/hmmt_feb_2025",
+      "revision": "6fdc4277120810ff75aa22d2d5489b91f7a262a1",
+      "split": "train",
+      "config": "default",
+      "expected_count": 30,
+      "source": "huggingface",
+      "fields": {
+        "prompt": "problem",
+        "answers": "answer",
+        "source_id": "problem_idx"
+      },
+      "answer_kind": "math",
+      "license": "cc-by-nc-sa-4.0",
+      "files": [
+        "data/train-00000-of-00001.parquet"
+      ],
+      "file_sha256": {
+        "data/train-00000-of-00001.parquet": "ccca64d248b89dc0765e40b893fe4ebeab242226a4336027d95d256886a3d5f2"
+      },
+      "schema": {
+        "problem_idx": "int64",
+        "problem": "string",
+        "answer": "string",
+        "problem_type": "list[string]"
+      },
+      "notes": [
+        "ID10 gold is a comma-separated pair of roots; both are required. ID17 contains a factorial. Answers include negative values, fractions and radicals."
+      ]
+    },
+    {
+      "id": "hmmt_nov_2025",
+      "repo_id": "MathArena/hmmt_nov_2025",
+      "revision": "118dbfb45c4c9467c672268ed55166642897aa46",
+      "split": "train",
+      "config": "default",
+      "expected_count": 30,
+      "source": "huggingface",
+      "fields": {
+        "prompt": "problem",
+        "answers": "answer",
+        "source_id": "problem_idx"
+      },
+      "answer_kind": "math",
+      "license": "cc-by-nc-sa-4.0",
+      "files": [
+        "data/train-00000-of-00001.parquet"
+      ],
+      "file_sha256": {
+        "data/train-00000-of-00001.parquet": "87ef3faaae0367b51bfa966d948106a507f39058a197e311f74fa5a65c8fe552"
+      },
+      "schema": {
+        "problem_idx": "int64",
+        "problem": "string",
+        "answer": "string"
+      },
+      "notes": [
+        "No problem_type column. Answers include slash fractions, decimals, pi and radicals."
+      ]
+    },
+    {
+      "id": "hmmt_feb_2026",
+      "repo_id": "MathArena/hmmt_feb_2026",
+      "revision": "02fba4f74d8e68e73e66a02d540fd979c05c274c",
+      "split": "train",
+      "config": "default",
+      "expected_count": 33,
+      "source": "huggingface",
+      "fields": {
+        "prompt": "problem",
+        "answers": "answer",
+        "source_id": "problem_idx"
+      },
+      "answer_kind": "math",
+      "license": "cc-by-nc-sa-4.0",
+      "files": [
+        "data/train-00000-of-00001.parquet"
+      ],
+      "file_sha256": {
+        "data/train-00000-of-00001.parquet": "e5fcff6b1c2262841c0c37bf6d7b42529f284528d5f0d5c45c52e8bf0654a916"
+      },
+      "schema": {
+        "problem_idx": "int64",
+        "problem": "string",
+        "answer": "string",
+        "problem_type": "list[string]"
+      },
+      "notes": [
+        "Publisher parquet and competition config both contain 33 problems, IDs1-33. IDs31-33 ask for proofs but this evaluation grades only final answers. ID27 gold includes a degree symbol. Answers also include rational exponents and very large powers."
+      ]
+    },
+    {
+      "id": "brumo_2025",
+      "repo_id": "MathArena/brumo_2025",
+      "revision": "6de9bc0987f5710c6376ee980e1483dbeb55cfda",
+      "split": "train",
+      "config": "default",
+      "expected_count": 30,
+      "source": "huggingface",
+      "fields": {
+        "prompt": "problem",
+        "answers": "answer",
+        "source_id": "problem_idx"
+      },
+      "answer_kind": "math",
+      "license": "cc-by-nc-sa-4.0",
+      "files": [
+        "data/train-00000-of-00001.parquet"
+      ],
+      "file_sha256": {
+        "data/train-00000-of-00001.parquet": "ef510deea34c5b6d165c06d020acede1c1031eb91d90336cb4d615d9e55ba391"
+      },
+      "schema": {
+        "problem_idx": "int64",
+        "problem": "string",
+        "answer": "string",
+        "problem_type": "list[string]"
+      },
+      "notes": [
+        "ID23 gold is a comma-separated list of four roots, including complex values. All roots are required; do not split this string into independent acceptable alternatives."
+      ]
+    },
+    {
+      "id": "cmimc_2025",
+      "repo_id": "MathArena/cmimc_2025",
+      "revision": "8f27517ce4ad1d05e023c0e7eca4344754ba2a04",
+      "split": "train",
+      "config": "default",
+      "expected_count": 40,
+      "source": "huggingface",
+      "fields": {
+        "prompt": "problem",
+        "answers": "answer",
+        "source_id": "problem_idx"
+      },
+      "answer_kind": "math",
+      "license": "cc-by-nc-sa-4.0",
+      "files": [
+        "data/train-00000-of-00001.parquet"
+      ],
+      "file_sha256": {
+        "data/train-00000-of-00001.parquet": "7f290e5564265e57b0fe91c72bde2f1a06ca147148b7787084c54a0354abfcce"
+      },
+      "schema": {
+        "problem_idx": "int64",
+        "problem": "string",
+        "answer": "string",
+        "problem_type": "list[string]"
+      },
+      "notes": [
+        "Answers include decimal 9.94, fractions, radicals and the large symbolic power 2024^{4046}. ID40 explicitly requests an a^b answer. Preserve ASCII diagram text in ID32. Publisher prompt has an extra Final answer heading; the sweep must retain its frozen common prompt for model comparisons."
+      ]
+    }
+  ],
+  "evidence": {
+    "checked_date": "2026-09-19",
+    "path_base": "staleness-analysis repository root, corresponding to the cluster rl-infra root",
+    "retained_files": "Data files are cluster-resident; exact hashes and counts are taken from the immutable local baseline manifest. Preparation must verify actual bytes and counts before use.",
+    "retained_source_code": "experiments/dapo-qwen25-math7b-grpo-stale6-8h100/scripts/prepare_data.py",
+    "publisher_api": "https://huggingface.co/api/datasets/{repo_id}/revision/{revision}",
+    "publisher_files": "https://huggingface.co/datasets/{repo_id}/resolve/{revision}/{file}",
+    "github_source": "https://github.com/PrimeIntellect-ai/INTELLECT-MATH/tree/0c6d5c96f64bb8981220d8a280a8f998a8b1642f",
+    "matharena_grader_repo": "https://github.com/eth-sri/matharena",
+    "matharena_grader_revision": "b89f2f0ad64ced464d2944f08c3c0aaeaa0df64b",
+    "matharena_grader_file": "src/matharena/parser.py",
+    "new_parquet_verification": "All five pinned files were fetched and decoded in memory; actual row counts, unique contiguous IDs, schema, gold answers and SHA256 were inspected. No overlap claims are made before comparison against the manifest-bound training rows."
+  },
+  "grading_notes": [
+    "Retained benchmark names and rows must remain unchanged for continuity. Keep complete answer-list strings intact; the frozen environment treats separate entries of answers as alternatives.",
+    "The existing terminal-answer parser is stricter than MathArena: publisher strict_parsing=false permits the last boxed/fboxed answer anywhere and falls back to the final integer. Preserve the strict frozen parser for continuity, and report a separate publisher-compatible diagnostic if used.",
+    "Validate correct and incorrect fraction, radical, factorial, huge-power, complex-root-list, set, ordered-tuple, interval-endpoint, scientific-notation and degree-symbol fixtures. Verify complete unordered root lists and reject proper subsets; do not infer this behavior merely from numeric grading success.",
+    "MathArena parser supports unordered plain answer lists and sets but ordered tuples and interval endpoint semantics. Its numeric comparison uses absolute or relative tolerance 1e-10. Pin a grader implementation rather than assuming equivalence with verifiers.v1.verify_boxed_math_answer.",
+    "All results are final-answer correctness. Proof-requesting problems are not proof-graded."
+  ],
+  "overlap_notes": [
+    "Recheck all added rows against the actual 17005 manifest-bound training rows, not raw DAPO or the old overlap exclusion list. Keep exact, normalized and near-duplicate reports with row identifiers and decisions.",
+    "The previous overlap detector uses normalized 5-token shingles, candidate threshold max(2,floor(0.25*train_shingle_count)), then containment with length ratio >=0.72, Jaccard >=0.65 or SequenceMatcher >=0.90 (sequence computed when Jaccard>=0.35). Review borderline and parameter-altered matches; a threshold hit is evidence to inspect, not proof of semantic identity.",
+    "Exclude confirmed training overlaps from added held-out results and record unfiltered counts and exclusions. Check cross-benchmark duplicate rows separately when computing aggregate scores. Existing seven benchmarks were used in regular training evaluations, so label them continuity benchmarks rather than previously unseen validation."
+  ]
+}

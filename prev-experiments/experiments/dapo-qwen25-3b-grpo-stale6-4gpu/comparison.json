@@ -1,0 +1,38 @@
+{
+  "captured_at": "2026-09-16T15:15:10.465709+00:00",
+  "baseline_root": "/mnt/nfs/home/mohamadzbib/projects/rl-infra/experiments/dapo-qwen25-3b-grpo",
+  "baseline_run": "/mnt/nfs/home/mohamadzbib/projects/rl-infra/outputs/dapo-qwen25-3b-grpo/qwen25-3b-grpo-seed42",
+  "run_dir": "/mnt/nfs/home/mohamadzbib/projects/rl-infra/outputs/dapo-qwen25-3b-grpo-stale6-4gpu/qwen25-3b-grpo-seed42-stale6-4gpu",
+  "observer_dir": "/mnt/nfs/home/mohamadzbib/projects/rl-infra/outputs/dapo-qwen25-3b-grpo-stale6-4gpu-observer/qwen25-3b-grpo-seed42-stale6-4gpu",
+  "path_replacements": {
+    "/mnt/nfs/home/mohamadzbib/projects/rl-infra/experiments/dapo-qwen25-3b-grpo": "/mnt/nfs/home/mohamadzbib/projects/rl-infra/experiments/dapo-qwen25-3b-grpo-stale6-4gpu",
+    "/mnt/nfs/home/mohamadzbib/projects/rl-infra/outputs/dapo-qwen25-3b-grpo": "/mnt/nfs/home/mohamadzbib/projects/rl-infra/outputs/dapo-qwen25-3b-grpo-stale6-4gpu",
+    "qwen25-3b-grpo-seed42": "qwen25-3b-grpo-seed42-stale6-4gpu"
+  },
+  "reference_topology_adjustments": {},
+  "historical_limit": "Historical cap-2 used 4 trainer and 3 inference GPUs; this cap-6 run uses 2 trainer and 2 inference GPUs on a shared node. Topology and placement also differ.",
+  "treatment_cap": 6,
+  "smoke_steps": 25,
+  "allowed_setting_changes": {
+    "deployment.gpus_per_node": 4,
+    "deployment.num_train_gpus": 2,
+    "deployment.num_infer_gpus": 2,
+    "inference.vllm.data_parallel_size": 2,
+    "weight_broadcast.port": 29736,
+    "orchestrator.env_server_base_port": 5600,
+    "inference.vllm.data_parallel_rpc_port": 14766,
+    "rollout_transport": {
+      "type": "zmq",
+      "port": 6466
+    },
+    "inference.server": {
+      "port": 8606
+    },
+    "orchestrator.model": {
+      "client": {
+        "base_url": "http://localhost:8606/v1"
+      }
+    },
+    "inference.backend_port": 8706
+  }
+}

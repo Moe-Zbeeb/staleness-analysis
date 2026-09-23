@@ -1,0 +1,40 @@
+{
+  "authorization": "User requested resuming 7B staleness <=6 on the full deep-chungus-9 node with Comet disabled. Retain the prior normal-priority authorization for this run.",
+  "caps": {
+    "6": {
+      "data_sha256": "15de7faf057da17928a625d05ddc7ea8f8c1485e7de20cdafd8a6030a5f6de68",
+      "evidence_dir": "evidence/stale6",
+      "evidence_hashes": {
+        "checkpoint-files.json": "26c134df8cbc89300b7a1e0753d458617a91311662a179a38883911d9fe65082",
+        "checkpoint/orchestrator/progress.pt": "6f8047a4a29e2ccc33106ff4fad887c9f75e6205d546d78e168169aa33a3268d",
+        "checkpoint/trainer/.metadata": "b5e05bcd55766c42fc6bfa292778c7691def62ebef8719e64ee62b6ef63725b2",
+        "original-resolved/inference.json": "cf8d9b6d625886b4643336f4bcbc52631bf3b018919c5392fbf4303222ddbec4",
+        "original-resolved/orchestrator.json": "05b07ef13d83e61498d1e1443a53eb9348f5c281dd9efd7ffce8cfa565939d19",
+        "original-resolved/trainer.json": "dcb84761cad15ee4f276167ef720aecc5150bf89eab27d13fb4477a7c2827ad7"
+      },
+      "experiment_root": "/mnt/nfs/home/mohamadzbib/projects/rl-infra/experiments/dapo-qwen25-math7b-grpo-stale6-8h100",
+      "guard_sha256": "d6cc3d88daba125cf1ef4e1a6715a430446a66c33830d41be67671bec08b33e9",
+      "metadata_sha256": "b5e05bcd55766c42fc6bfa292778c7691def62ebef8719e64ee62b6ef63725b2",
+      "progress_sha256": "6f8047a4a29e2ccc33106ff4fad887c9f75e6205d546d78e168169aa33a3268d",
+      "resume_step": 125,
+      "run_dir": "/mnt/nfs/home/mohamadzbib/projects/rl-infra/outputs/dapo-qwen25-math7b-grpo-stale6-8h100/qwen25-math7b-grpo-seed42-stale6-8h100",
+      "source_sha256": "326cb17a9225e3aa8c29b17343ca72f7f5a79172ffbc15306d3421b751fd98cf"
+    }
+  },
+  "created_at": "2026-09-20",
+  "eligible_nodes": [
+    "deep-chungus-9"
+  ],
+  "gpu_count": 8,
+  "inference_gpus": 4,
+  "minimum_gpu_memory_gib": 75,
+  "old_pending_job": null,
+  "overlay_sha256": "cb73a50f95b2be4861d8911b6e2828a051a96c74c74ac99227ab5fc6bdc41866",
+  "trainer_gpus": 4,
+  "parent_package_manifest_sha256": "81382a61bb3d8d1684bf686dc51b2845377190aee3042b07a505022b00dd6ee1",
+  "parent_manifest_sha256": "59afd9fc8bc01fceb8788f50f99a8411f3502dea0c1e5e34f1c06299693b9038",
+  "device_assignment": "Preserve original Slurm CUDA_VISIBLE_DEVICES; validate only those visible device UUIDs. Do not translate Linux device minor numbers into selectors.",
+  "failed_job": "2142075",
+  "comet_enabled": false,
+  "startup_weight_wait_seconds": 7200
+}
