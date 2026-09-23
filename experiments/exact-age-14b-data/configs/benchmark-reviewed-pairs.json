@@ -1,0 +1,704 @@
+[
+  {
+    "normalized_prompt_sha256": "15729d970b094d1db303bc80333fa8f259156dc23fa2b9a3580dc606697c6774",
+    "benchmark_id": "math500:115",
+    "decision": "distinct_variant",
+    "reason": "Different mathematical parameters, expressions, requested quantity, or literal word; inspected side by side."
+  },
+  {
+    "normalized_prompt_sha256": "4d6ad274fd742fe959bcf11a8d9a534138bc0143bbf9f2a0c5312ddf3e7b1c3c",
+    "benchmark_id": "olympiadbench:28",
+    "decision": "exclude_overlap",
+    "reason": "Same benchmark problem despite source numbering, mathematical layout, equation labels, appended material, or text corruption."
+  },
+  {
+    "normalized_prompt_sha256": "5f8e391a8dec0db97cf5dedabc6c51639c0cad4eba33fd0a5a281ea12c9ea8c7",
+    "benchmark_id": "gaokao:162",
+    "decision": "exclude_overlap",
+    "reason": "Same benchmark problem despite source numbering, mathematical layout, equation labels, appended material, or text corruption."
+  },
+  {
+    "normalized_prompt_sha256": "34745f3ac80945ac71fad623d08412919e614b7370c5c83a0f9cc1a9cababa3b",
+    "benchmark_id": "math500:0",
+    "decision": "distinct_variant",
+    "reason": "Different mathematical parameters, expressions, requested quantity, or literal word; inspected side by side."
+  },
+  {
+    "normalized_prompt_sha256": "37a7ada544980eac3cfbb085fd62ab23b217cd0733caef006f09fec34a1b934b",
+    "benchmark_id": "math500:115",
+    "decision": "distinct_variant",
+    "reason": "Different mathematical parameters, expressions, requested quantity, or literal word; inspected side by side."
+  },
+  {
+    "normalized_prompt_sha256": "def03554a8a539eb76e786f2b5e070d9815f1868173f91a5178fe22fc58b4e65",
+    "benchmark_id": "math500:45",
+    "decision": "distinct_variant",
+    "reason": "Different mathematical parameters, expressions, requested quantity, or literal word; inspected side by side."
+  },
+  {
+    "normalized_prompt_sha256": "b7a6d132684657f994a9f82bf826ed0f366496fb502f19a6321ee055a1109195",
+    "benchmark_id": "math500:0",
+    "decision": "distinct_variant",
+    "reason": "Different mathematical parameters, expressions, requested quantity, or literal word; inspected side by side."
+  },
+  {
+    "normalized_prompt_sha256": "737b77737be9114a5a09fc0ce22d763e2a5f1b430cd258bae3507d4570a2c723",
+    "benchmark_id": "math500:115",
+    "decision": "distinct_variant",
+    "reason": "Different mathematical parameters, expressions, requested quantity, or literal word; inspected side by side."
+  },
+  {
+    "normalized_prompt_sha256": "c8fa8bd08303c3d76cc99017d141f0da535bf3da443b7233cea8691938b960b0",
+    "benchmark_id": "math500:63",
+    "decision": "distinct_variant",
+    "reason": "Different mathematical parameters, expressions, requested quantity, or literal word; inspected side by side."
+  },
+  {
+    "normalized_prompt_sha256": "3a8d8e4b51798045604aee87be45ff47eba514cfc4efbd1dcaa9f1ebe2e6bee8",
+    "benchmark_id": "olympiadbench:23",
+    "decision": "exclude_overlap",
+    "reason": "Same benchmark problem despite source numbering, mathematical layout, equation labels, appended material, or text corruption."
+  },
+  {
+    "normalized_prompt_sha256": "91894d404ff68c72c4b6c065d55ab7e7d40fbcedc0fe3c724dd05e455def1672",
+    "benchmark_id": "olympiadbench:102",
+    "decision": "exclude_overlap",
+    "reason": "Same benchmark problem despite source numbering, mathematical layout, equation labels, appended material, or text corruption."
+  },
+  {
+    "normalized_prompt_sha256": "b44311dc25377e815c5a0b8958da0ef537265e64ecd347ade092bdcdbde3d8ca",
+    "benchmark_id": "math500:183",
+    "decision": "distinct_variant",
+    "reason": "Different mathematical parameters, expressions, requested quantity, or literal word; inspected side by side."
+  },
+  {
+    "normalized_prompt_sha256": "922172838f0f3277a96230c42772518ee5f29d02ebc56bc196bf34fc81faa6f6",
+    "benchmark_id": "math500:226",
+    "decision": "distinct_variant",
+    "reason": "Different mathematical parameters, expressions, requested quantity, or literal word; inspected side by side."
+  },
+  {
+    "normalized_prompt_sha256": "ca078171416c801bd8e57b0065e9260514ec4aaedc438041146f36e24e249d53",
+    "benchmark_id": "olympiadbench:106",
+    "decision": "exclude_overlap",
+    "reason": "Same benchmark problem despite source numbering, mathematical layout, equation labels, appended material, or text corruption."
+  },
+  {
+    "normalized_prompt_sha256": "7315803469c977976bd448af09f7d1daf3346955ca8e9e1a948bfaee21946026",
+    "benchmark_id": "olympiadbench:19",
+    "decision": "exclude_overlap",
+    "reason": "Same benchmark problem despite source numbering, mathematical layout, equation labels, appended material, or text corruption."
+  },
+  {
+    "normalized_prompt_sha256": "6a7a0d36816ab2955dc43437a6e0ccd073b2e5bac9d1cbfbbf3fb66fc9582c26",
+    "benchmark_id": "gaokao:164",
+    "decision": "exclude_overlap",
+    "reason": "Same benchmark problem despite source numbering, mathematical layout, equation labels, appended material, or text corruption."
+  },
+  {
+    "normalized_prompt_sha256": "dbb4d236db7e5454995affcdd9dd039caa20f9aaa504160304087299fb92f0ba",
+    "benchmark_id": "math500:115",
+    "decision": "distinct_variant",
+    "reason": "Different mathematical parameters, expressions, requested quantity, or literal word; inspected side by side."
+  },
+  {
+    "normalized_prompt_sha256": "5ec86da0e908cddccbed733fd1cef8ba0d00f2ab72950d6ea938ae4e54239808",
+    "benchmark_id": "math500:115",
+    "decision": "distinct_variant",
+    "reason": "Different mathematical parameters, expressions, requested quantity, or literal word; inspected side by side."
+  },
+  {
+    "normalized_prompt_sha256": "09c69e247ce492169ff23c7ab612f919631053333da850e5b50849b2d92b72b2",
+    "benchmark_id": "math500:53",
+    "decision": "distinct_variant",
+    "reason": "Different mathematical parameters, expressions, requested quantity, or literal word; inspected side by side."
+  },
+  {
+    "normalized_prompt_sha256": "52b4cd79a188b44f2a9ba08d4ef9b441510a4e1066f1b99135edefa6f0ce02c1",
+    "benchmark_id": "olympiadbench:35",
+    "decision": "exclude_overlap",
+    "reason": "Same benchmark problem despite source numbering, mathematical layout, equation labels, appended material, or text corruption."
+  },
+  {
+    "normalized_prompt_sha256": "59dbe3e6b5cb3be30d754fff0557b226c61bf795b6c378102ea5f29b0e3cbb23",
+    "benchmark_id": "olympiadbench:40",
+    "decision": "exclude_overlap",
+    "reason": "Same benchmark problem despite source numbering, mathematical layout, equation labels, appended material, or text corruption."
+  },
+  {
+    "normalized_prompt_sha256": "e4667a9da7ad0085fbc7f6da112681bc5b85441f6aa7d2bacb0dd42a76b065da",
+    "benchmark_id": "olympiadbench:103",
+    "decision": "exclude_overlap",
+    "reason": "Same benchmark problem despite source numbering, mathematical layout, equation labels, appended material, or text corruption."
+  },
+  {
+    "normalized_prompt_sha256": "a737ca30499d8e7b42451695084b5bd253c2176c0cd45f5151764768770a2861",
+    "benchmark_id": "math500:122",
+    "decision": "distinct_variant",
+    "reason": "Different mathematical parameters, expressions, requested quantity, or literal word; inspected side by side."
+  },
+  {
+    "normalized_prompt_sha256": "091b57b3d86d69d6297b6dff6924e6a2df71903f22cc5211d88d44ff8f8b9d39",
+    "benchmark_id": "olympiadbench:15",
+    "decision": "exclude_overlap",
+    "reason": "Same benchmark problem despite source numbering, mathematical layout, equation labels, appended material, or text corruption."
+  },
+  {
+    "normalized_prompt_sha256": "a9d8508b0867ae2136db4a77eda0874683c2b22cd6697a6af58b41f427668e8c",
+    "benchmark_id": "olympiadbench:46",
+    "decision": "exclude_overlap",
+    "reason": "Same benchmark problem despite source numbering, mathematical layout, equation labels, appended material, or text corruption."
+  },
+  {
+    "normalized_prompt_sha256": "3fa8080bd5b41d8bcf8186b61144798c9047c69ea9f2d4e45c04783f3b3775a5",
+    "benchmark_id": "math500:46",
+    "decision": "distinct_variant",
+    "reason": "Different mathematical parameters, expressions, requested quantity, or literal word; inspected side by side."
+  },
+  {
+    "normalized_prompt_sha256": "a86d55b095ad0b1b561f2a81f535ba91ad7a58844d2f851a59ff5a7ad0fa6609",
+    "benchmark_id": "olympiadbench:93",
+    "decision": "exclude_overlap",
+    "reason": "Same benchmark problem despite source numbering, mathematical layout, equation labels, appended material, or text corruption."
+  },
+  {
+    "normalized_prompt_sha256": "ae1cbdae5d67b1a98ccca7dc23fe26824e7a10f11dd5dd9cf3911fdc7660a0d5",
+    "benchmark_id": "math500:319",
+    "decision": "distinct_variant",
+    "reason": "Different mathematical parameters, expressions, requested quantity, or literal word; inspected side by side."
+  },
+  {
+    "normalized_prompt_sha256": "18c0ce7ab57a12c6dc340f777384f1259c6f3b9b9fed02dbcbd58b690c8ad1c4",
+    "benchmark_id": "math500:61",
+    "decision": "distinct_variant",
+    "reason": "Different mathematical parameters, expressions, requested quantity, or literal word; inspected side by side."
+  },
+  {
+    "normalized_prompt_sha256": "332fbcc7ced22900361857e23ea34cb04855b42da30cebd09021ea8c8dd89901",
+    "benchmark_id": "olympiadbench:96",
+    "decision": "exclude_overlap",
+    "reason": "Same benchmark problem despite source numbering, mathematical layout, equation labels, appended material, or text corruption."
+  },
+  {
+    "normalized_prompt_sha256": "57eb34109516e0d3594e905b26539a6a24b9a7a262cb68dd5433b6ecc2ab85e0",
+    "benchmark_id": "math500:147",
+    "decision": "distinct_variant",
+    "reason": "Different mathematical parameters, expressions, requested quantity, or literal word; inspected side by side."
+  },
+  {
+    "normalized_prompt_sha256": "e00a5b552463610a10b5bd6fdab57ac031a4cac92600504a72022fe68c90bd31",
+    "benchmark_id": "olympiadbench:85",
+    "decision": "exclude_overlap",
+    "reason": "Same benchmark problem despite source numbering, mathematical layout, equation labels, appended material, or text corruption."
+  },
+  {
+    "normalized_prompt_sha256": "074ec8f706b767bdc41f2e6e3af97fddc45a9e1fb3d596057dd633ded9862872",
+    "benchmark_id": "math500:408",
+    "decision": "distinct_variant",
+    "reason": "Different mathematical parameters, expressions, requested quantity, or literal word; inspected side by side."
+  },
+  {
+    "normalized_prompt_sha256": "8c8119190aa16152819d6d8a4752094cdbd01f91d966a1583f536611b6ecd05e",
+    "benchmark_id": "math500:0",
+    "decision": "distinct_variant",
+    "reason": "Different mathematical parameters, expressions, requested quantity, or literal word; inspected side by side."
+  },
+  {
+    "normalized_prompt_sha256": "c7d20981a6058523eeab99041b306a4af02c3ddbf5af872a01769d3da933ed30",
+    "benchmark_id": "olympiadbench:11",
+    "decision": "exclude_overlap",
+    "reason": "Same benchmark problem despite source numbering, mathematical layout, equation labels, appended material, or text corruption."
+  },
+  {
+    "normalized_prompt_sha256": "ee259de8c19ca81d4934331da709ef2ffcfb1f0a03bb99489feddcbca56038a9",
+    "benchmark_id": "olympiadbench:57",
+    "decision": "exclude_overlap",
+    "reason": "Same benchmark problem despite source numbering, mathematical layout, equation labels, appended material, or text corruption."
+  },
+  {
+    "normalized_prompt_sha256": "bd8050afb5351766d0294ffbfade76b9bc66a0526ddcbc6feff3b17117ad63c1",
+    "benchmark_id": "olympiadbench:107",
+    "decision": "exclude_overlap",
+    "reason": "Same benchmark problem despite source numbering, mathematical layout, equation labels, appended material, or text corruption."
+  },
+  {
+    "normalized_prompt_sha256": "19ed2e2ae8b8cfc49f3567deb55d283706b4f2b7e8f3b35a5671281d3611569a",
+    "benchmark_id": "math500:155",
+    "decision": "distinct_variant",
+    "reason": "Different mathematical parameters, expressions, requested quantity, or literal word; inspected side by side."
+  },
+  {
+    "normalized_prompt_sha256": "61aa3b82f4c84cfa18559e5dcfdfc828f37613d36648aec0c2130c737c61106e",
+    "benchmark_id": "math500:134",
+    "decision": "distinct_variant",
+    "reason": "Different mathematical parameters, expressions, requested quantity, or literal word; inspected side by side."
+  },
+  {
+    "normalized_prompt_sha256": "5bad04bab4092188b4a1c43bb0c5b37162f30db853cbcf19e9d488145b69704d",
+    "benchmark_id": "olympiadbench:50",
+    "decision": "exclude_overlap",
+    "reason": "Same benchmark problem despite source numbering, mathematical layout, equation labels, appended material, or text corruption."
+  },
+  {
+    "normalized_prompt_sha256": "4973018aa2e839a3f4c482fda4a6ec007684662a7e67f11d87bd574f520292f8",
+    "benchmark_id": "olympiadbench:54",
+    "decision": "exclude_overlap",
+    "reason": "Same benchmark problem despite source numbering, mathematical layout, equation labels, appended material, or text corruption."
+  },
+  {
+    "normalized_prompt_sha256": "8d6b4f60aa00563885a84fcf57441458e99c0a66095dbf2ea6e0df6b71e0750e",
+    "benchmark_id": "math500:115",
+    "decision": "distinct_variant",
+    "reason": "Different mathematical parameters, expressions, requested quantity, or literal word; inspected side by side."
+  },
+  {
+    "normalized_prompt_sha256": "6a62826ee4cb9822faceceef1ecb759b9cc5bb8573b4a6021e0b56b50fcf339f",
+    "benchmark_id": "olympiadbench:46",
+    "decision": "exclude_overlap",
+    "reason": "Same benchmark problem despite source numbering, mathematical layout, equation labels, appended material, or text corruption."
+  },
+  {
+    "normalized_prompt_sha256": "a15c51c286923c5c17fde3d6d1676dfe6775622054744d69fd9b5688cccf1c52",
+    "benchmark_id": "math500:28",
+    "decision": "distinct_variant",
+    "reason": "Different mathematical parameters, expressions, requested quantity, or literal word; inspected side by side."
+  },
+  {
+    "normalized_prompt_sha256": "b59dfaf5acf0f079f6e04227d39ddcf304506c8af406ba139269687f0cfd4894",
+    "benchmark_id": "math500:115",
+    "decision": "distinct_variant",
+    "reason": "Different mathematical parameters, expressions, requested quantity, or literal word; inspected side by side."
+  },
+  {
+    "normalized_prompt_sha256": "ede79f836ed5c0f693f1dc3c28f3337b8622c8d0edb5d95003dd9e04d41e4bc8",
+    "benchmark_id": "olympiadbench:44",
+    "decision": "exclude_overlap",
+    "reason": "Same benchmark problem despite source numbering, mathematical layout, equation labels, appended material, or text corruption."
+  },
+  {
+    "normalized_prompt_sha256": "0c788d9a7d76b3a5a829fab5a0e39d2458b0ecf8215661c10fd694b761f35cbf",
+    "benchmark_id": "olympiadbench:98",
+    "decision": "exclude_overlap",
+    "reason": "Same benchmark problem despite source numbering, mathematical layout, equation labels, appended material, or text corruption."
+  },
+  {
+    "normalized_prompt_sha256": "9853e5052f98f075130299789c1565ea216f186b2fb51347e4b715e6c0e08ad0",
+    "benchmark_id": "math500:492",
+    "decision": "distinct_variant",
+    "reason": "Different mathematical parameters, expressions, requested quantity, or literal word; inspected side by side."
+  },
+  {
+    "normalized_prompt_sha256": "f6369a9fbb4071f54a8bfeb55f00b977076f1a04f016028c771f6412a862f5b5",
+    "benchmark_id": "olympiadbench:106",
+    "decision": "exclude_overlap",
+    "reason": "Same benchmark problem despite source numbering, mathematical layout, equation labels, appended material, or text corruption."
+  },
+  {
+    "normalized_prompt_sha256": "39df3546db8613ba5d9bdbd38119e7541d12ec0d3251b04a8987b2d0eb8b4df8",
+    "benchmark_id": "math500:456",
+    "decision": "distinct_variant",
+    "reason": "Different mathematical parameters, expressions, requested quantity, or literal word; inspected side by side."
+  },
+  {
+    "normalized_prompt_sha256": "c223a00e0699917038148ecbfbb49f4bbe046ef0c31682a30857dc16227ce48c",
+    "benchmark_id": "olympiadbench:27",
+    "decision": "exclude_overlap",
+    "reason": "Same benchmark problem despite source numbering, mathematical layout, equation labels, appended material, or text corruption."
+  },
+  {
+    "normalized_prompt_sha256": "a5a671296cf3d62bd15471eb56e3ae784e9d8e461f296d23447282b702007915",
+    "benchmark_id": "olympiadbench:36",
+    "decision": "exclude_overlap",
+    "reason": "Same benchmark problem despite source numbering, mathematical layout, equation labels, appended material, or text corruption."
+  },
+  {
+    "normalized_prompt_sha256": "9ed56e4d5266d5cb5b710693c3385b0d9c836af46cef08cd582c2ec18517a0b5",
+    "benchmark_id": "math500:115",
+    "decision": "distinct_variant",
+    "reason": "Different mathematical parameters, expressions, requested quantity, or literal word; inspected side by side."
+  },
+  {
+    "normalized_prompt_sha256": "4988b5a54029fc6102659e74f4b1584ef0d28af34ed1dcdeadd2ab27b322e3e1",
+    "benchmark_id": "math500:115",
+    "decision": "distinct_variant",
+    "reason": "Different mathematical parameters, expressions, requested quantity, or literal word; inspected side by side."
+  },
+  {
+    "normalized_prompt_sha256": "a60970b91b75aad9f46ad91fad54aead223ca86d9f11c9f4f55204f22fc43ecd",
+    "benchmark_id": "math500:155",
+    "decision": "distinct_variant",
+    "reason": "Different mathematical parameters, expressions, requested quantity, or literal word; inspected side by side."
+  },
+  {
+    "normalized_prompt_sha256": "06277e1bc71bc5942278d03f268ec8bbc6e2b3787339dd8c7549090e517a16a2",
+    "benchmark_id": "olympiadbench:48",
+    "decision": "exclude_overlap",
+    "reason": "Same benchmark problem despite source numbering, mathematical layout, equation labels, appended material, or text corruption."
+  },
+  {
+    "normalized_prompt_sha256": "0702990b8aea19e5fb57f7364b636d982d2023bbbd64213279ae971c31961433",
+    "benchmark_id": "math500:431",
+    "decision": "distinct_variant",
+    "reason": "Different mathematical parameters, expressions, requested quantity, or literal word; inspected side by side."
+  },
+  {
+    "normalized_prompt_sha256": "59616896de57045a70d73a172c38b2966d4b6a65a25a55092ede6dbe642bb2dc",
+    "benchmark_id": "math500:115",
+    "decision": "distinct_variant",
+    "reason": "Different mathematical parameters, expressions, requested quantity, or literal word; inspected side by side."
+  },
+  {
+    "normalized_prompt_sha256": "d216671400a135d64694f3f5a8b7676cf19110c461bb138c886a90c74508cf7b",
+    "benchmark_id": "olympiadbench:46",
+    "decision": "exclude_overlap",
+    "reason": "Same benchmark problem despite source numbering, mathematical layout, equation labels, appended material, or text corruption."
+  },
+  {
+    "normalized_prompt_sha256": "f66c08ce967d1f3eeec25b7497973c8125fe8f6da666fe3bb1c9276bd6269e9b",
+    "benchmark_id": "olympiadbench:12",
+    "decision": "exclude_overlap",
+    "reason": "Same benchmark problem despite source numbering, mathematical layout, equation labels, appended material, or text corruption."
+  },
+  {
+    "normalized_prompt_sha256": "c10224794940db6e01ce157f37fa6cd70d8f1e5802ed3f7ae5bfbe978087739d",
+    "benchmark_id": "olympiadbench:15",
+    "decision": "exclude_overlap",
+    "reason": "Same benchmark problem despite source numbering, mathematical layout, equation labels, appended material, or text corruption."
+  },
+  {
+    "normalized_prompt_sha256": "44a67aef7957a3a9b17e683731374fad716505ba064419c3bef991db7597518a",
+    "benchmark_id": "olympiadbench:102",
+    "decision": "exclude_overlap",
+    "reason": "Same benchmark problem despite source numbering, mathematical layout, equation labels, appended material, or text corruption."
+  },
+  {
+    "normalized_prompt_sha256": "1e7104e58262ecf344336f83f3c4bde8d41c0840aba8406ffaf0b051c2508d56",
+    "benchmark_id": "olympiadbench:31",
+    "decision": "exclude_overlap",
+    "reason": "Same benchmark problem despite source numbering, mathematical layout, equation labels, appended material, or text corruption."
+  },
+  {
+    "normalized_prompt_sha256": "916893ff1cdff3ef0461b2b63406b2d1fb134ec1678e2b4cc2f2db8d7a4c5381",
+    "benchmark_id": "math500:255",
+    "decision": "distinct_variant",
+    "reason": "Different mathematical parameters, expressions, requested quantity, or literal word; inspected side by side."
+  },
+  {
+    "normalized_prompt_sha256": "e428b4216f032a520ccb705dd609c9c24bc784829c0d3ac4a579d24d037a9000",
+    "benchmark_id": "olympiadbench:461",
+    "decision": "distinct_variant",
+    "reason": "Different mathematical parameters, expressions, requested quantity, or literal word; inspected side by side."
+  },
+  {
+    "normalized_prompt_sha256": "5cd51702e6897e336bcc6158856d8a5cbf93c1e277740756b94461277922521d",
+    "benchmark_id": "olympiadbench:22",
+    "decision": "exclude_overlap",
+    "reason": "Same benchmark problem despite source numbering, mathematical layout, equation labels, appended material, or text corruption."
+  },
+  {
+    "normalized_prompt_sha256": "8ccea6994dd2c03f6f0e5cf2b8b27ff82fb2d9102ad96e74898e4dd9ce8d43fa",
+    "benchmark_id": "math500:0",
+    "decision": "distinct_variant",
+    "reason": "Different mathematical parameters, expressions, requested quantity, or literal word; inspected side by side."
+  },
+  {
+    "normalized_prompt_sha256": "56219cbd0d9486c0aaee721d59475bd31818487d55c023686910eb751d82d7f5",
+    "benchmark_id": "math500:87",
+    "decision": "distinct_variant",
+    "reason": "Different mathematical parameters, expressions, requested quantity, or literal word; inspected side by side."
+  },
+  {
+    "normalized_prompt_sha256": "60d3945b256e662818f35bfb03423d53b5c6aab1415056c1fc85ea457b2cc094",
+    "benchmark_id": "olympiadbench:32",
+    "decision": "exclude_overlap",
+    "reason": "Same benchmark problem despite source numbering, mathematical layout, equation labels, appended material, or text corruption."
+  },
+  {
+    "normalized_prompt_sha256": "8b234319701e5712b9b5c672905e4d0ce5df11b6a678be5fdba2bf63998bd1e5",
+    "benchmark_id": "math500:206",
+    "decision": "distinct_variant",
+    "reason": "Different mathematical parameters, expressions, requested quantity, or literal word; inspected side by side."
+  },
+  {
+    "normalized_prompt_sha256": "9be6335b9b3b268840771db636ed83810a8d820708156e7a693ca293f740e95c",
+    "benchmark_id": "math500:268",
+    "decision": "distinct_variant",
+    "reason": "Different mathematical parameters, expressions, requested quantity, or literal word; inspected side by side."
+  },
+  {
+    "normalized_prompt_sha256": "b8de6ff9138f8c4da8a2bc86f51b992c70650738991f34a1a362f08d7e54db3d",
+    "benchmark_id": "math500:193",
+    "decision": "distinct_variant",
+    "reason": "Different mathematical parameters, expressions, requested quantity, or literal word; inspected side by side."
+  },
+  {
+    "normalized_prompt_sha256": "58e066c101fddc5b2dc4a9d03364b39edf45881e9db625d85a7b1b67a6bc0348",
+    "benchmark_id": "math500:46",
+    "decision": "distinct_variant",
+    "reason": "Different mathematical parameters, expressions, requested quantity, or literal word; inspected side by side."
+  },
+  {
+    "normalized_prompt_sha256": "8be315d004b1442ec5c85618b0426ddf0425049fab1469dea3bd70076ca90a15",
+    "benchmark_id": "olympiadbench:46",
+    "decision": "exclude_overlap",
+    "reason": "Same benchmark problem despite source numbering, mathematical layout, equation labels, appended material, or text corruption."
+  },
+  {
+    "normalized_prompt_sha256": "cfb5104c46db9c19fd2800ab22ffe980634f31faf64714539a185872b4670a8f",
+    "benchmark_id": "math500:255",
+    "decision": "distinct_variant",
+    "reason": "Different mathematical parameters, expressions, requested quantity, or literal word; inspected side by side."
+  },
+  {
+    "normalized_prompt_sha256": "2392a6979855e7614f9c2c55793535be12017949369738f708a80d54c55bd231",
+    "benchmark_id": "math500:255",
+    "decision": "distinct_variant",
+    "reason": "Different mathematical parameters, expressions, requested quantity, or literal word; inspected side by side."
+  },
+  {
+    "normalized_prompt_sha256": "a7d0f006f61c380caa08d7ba56a0a23cc5b0ea19de2979aaa6b080afc997c509",
+    "benchmark_id": "math500:115",
+    "decision": "distinct_variant",
+    "reason": "Different mathematical parameters, expressions, requested quantity, or literal word; inspected side by side."
+  },
+  {
+    "normalized_prompt_sha256": "f44576984f084d0d1a2ccad695ecf41cde529aa8b122c4b7e02401dc395b6ac2",
+    "benchmark_id": "math500:155",
+    "decision": "distinct_variant",
+    "reason": "Different mathematical parameters, expressions, requested quantity, or literal word; inspected side by side."
+  },
+  {
+    "normalized_prompt_sha256": "bec280c6a283ddc5b656a58343351a4e89e9f0861187fc1b7b619c64ff6fe3fb",
+    "benchmark_id": "math500:0",
+    "decision": "distinct_variant",
+    "reason": "Different mathematical parameters, expressions, requested quantity, or literal word; inspected side by side."
+  },
+  {
+    "normalized_prompt_sha256": "2f3f75a901cc9eba688090a9621ba51abd4a1e315dbee88c6b79163e8167ee31",
+    "benchmark_id": "olympiadbench:70",
+    "decision": "exclude_overlap",
+    "reason": "Same benchmark problem despite source numbering, mathematical layout, equation labels, appended material, or text corruption."
+  },
+  {
+    "normalized_prompt_sha256": "8e3d549a4b53f17be4e114015b7a69fc5c604ed61daba84b9c5b07c82dacdb1a",
+    "benchmark_id": "gaokao:325",
+    "decision": "exclude_overlap",
+    "reason": "Same benchmark problem despite source numbering, mathematical layout, equation labels, appended material, or text corruption."
+  },
+  {
+    "normalized_prompt_sha256": "2547dd8cca74649c476220b0dd8db91065627eb90252959706aefee4b419cce2",
+    "benchmark_id": "olympiadbench:23",
+    "decision": "exclude_overlap",
+    "reason": "Same benchmark problem despite source numbering, mathematical layout, equation labels, appended material, or text corruption."
+  },
+  {
+    "normalized_prompt_sha256": "7ea9a2b4c3ad1ce59c831c9614d5de5d10fc0fff364731f3ba015984f7b7c460",
+    "benchmark_id": "olympiadbench:82",
+    "decision": "exclude_overlap",
+    "reason": "Same benchmark problem despite source numbering, mathematical layout, equation labels, appended material, or text corruption."
+  },
+  {
+    "normalized_prompt_sha256": "d3f0845f567112438f0581e23c12ec8f2957bcfa20c6de021307603ab3100141",
+    "benchmark_id": "math500:115",
+    "decision": "distinct_variant",
+    "reason": "Different mathematical parameters, expressions, requested quantity, or literal word; inspected side by side."
+  },
+  {
+    "normalized_prompt_sha256": "07e9821cede4f98cf178c083beed68ea6a0c3331980f6a4eb428ec324944c243",
+    "benchmark_id": "olympiadbench:26",
+    "decision": "exclude_overlap",
+    "reason": "Same benchmark problem despite source numbering, mathematical layout, equation labels, appended material, or text corruption."
+  },
+  {
+    "normalized_prompt_sha256": "a88c5b97dedab7f254c76bfaccd6d6f33c347ae4f704db3b94b95c7f7fc47c10",
+    "benchmark_id": "math500:308",
+    "decision": "exclude_overlap",
+    "reason": "Same benchmark problem despite source numbering, mathematical layout, equation labels, appended material, or text corruption."
+  },
+  {
+    "normalized_prompt_sha256": "5f8ba5b8747a170411bba327b2779aac52d746d94e4725163c1e71ce4e624d2f",
+    "benchmark_id": "olympiadbench:48",
+    "decision": "exclude_overlap",
+    "reason": "Same benchmark problem despite source numbering, mathematical layout, equation labels, appended material, or text corruption."
+  },
+  {
+    "normalized_prompt_sha256": "3c9931377fde2e8f747d236f82ea18395eeb685e6b6ea6e50f9b16a8281f564c",
+    "benchmark_id": "math500:115",
+    "decision": "distinct_variant",
+    "reason": "Different mathematical parameters, expressions, requested quantity, or literal word; inspected side by side."
+  },
+  {
+    "normalized_prompt_sha256": "ba451cbb7d31751c4cbe37d62ecc6a67ca212e4ee1206409f38b4ae1296174b1",
+    "benchmark_id": "gaokao:167",
+    "decision": "exclude_overlap",
+    "reason": "Same benchmark problem despite source numbering, mathematical layout, equation labels, appended material, or text corruption."
+  },
+  {
+    "normalized_prompt_sha256": "7ad429fe4ead7e79e6bcd71435ce913411feb9c08440bb112b9a59a5acd8d184",
+    "benchmark_id": "math500:446",
+    "decision": "distinct_variant",
+    "reason": "Different mathematical parameters, expressions, requested quantity, or literal word; inspected side by side."
+  },
+  {
+    "normalized_prompt_sha256": "711a46dac3cceb93bb5725990138401faa26ded342522ea205f69c5ee53ca970",
+    "benchmark_id": "math500:226",
+    "decision": "distinct_variant",
+    "reason": "Different mathematical parameters, expressions, requested quantity, or literal word; inspected side by side."
+  },
+  {
+    "normalized_prompt_sha256": "8808e5e455b4ab2f187fe334e1611b135bbf20d0d904ae4878cb34102bfc8c77",
+    "benchmark_id": "math500:183",
+    "decision": "distinct_variant",
+    "reason": "Different mathematical parameters, expressions, requested quantity, or literal word; inspected side by side."
+  },
+  {
+    "normalized_prompt_sha256": "ac41953caa7400f32d4893cfa8dfd0dfe58fedf14b7e0af9cdd9c5df7ca12719",
+    "benchmark_id": "olympiadbench:51",
+    "decision": "exclude_overlap",
+    "reason": "Same benchmark problem despite source numbering, mathematical layout, equation labels, appended material, or text corruption."
+  },
+  {
+    "normalized_prompt_sha256": "24d48219c639984158aee37c126775334506f28ad0da98e0187716c9559f7b88",
+    "benchmark_id": "math500:155",
+    "decision": "distinct_variant",
+    "reason": "Different mathematical parameters, expressions, requested quantity, or literal word; inspected side by side."
+  },
+  {
+    "normalized_prompt_sha256": "e85f2412797db083143da6477d84eb573a33c014891261b456e8153ac4ff3542",
+    "benchmark_id": "olympiadbench:81",
+    "decision": "exclude_overlap",
+    "reason": "Same benchmark problem despite source numbering, mathematical layout, equation labels, appended material, or text corruption."
+  },
+  {
+    "normalized_prompt_sha256": "470694f8e7bb0543000f2e6f777aa6af841060f091931df450f707ab464321fa",
+    "benchmark_id": "olympiadbench:92",
+    "decision": "exclude_overlap",
+    "reason": "Same benchmark problem despite source numbering, mathematical layout, equation labels, appended material, or text corruption."
+  },
+  {
+    "normalized_prompt_sha256": "37075b285dac802a3ae08698c6b93fce95bb2b6e291e2bb6197421a1ad6e2ab7",
+    "benchmark_id": "olympiadbench:36",
+    "decision": "exclude_overlap",
+    "reason": "Same benchmark problem despite source numbering, mathematical layout, equation labels, appended material, or text corruption."
+  },
+  {
+    "normalized_prompt_sha256": "693a573cab01b85ca6f632c9564d9c07d7ff8d40e5028ac866b691d0315b7172",
+    "benchmark_id": "math500:115",
+    "decision": "distinct_variant",
+    "reason": "Different mathematical parameters, expressions, requested quantity, or literal word; inspected side by side."
+  },
+  {
+    "normalized_prompt_sha256": "971028b1119f7b7aa9236bf7502311eb078a8fb9471d5bd51ca52708c5064dc2",
+    "benchmark_id": "math500:231",
+    "decision": "distinct_variant",
+    "reason": "Different mathematical parameters, expressions, requested quantity, or literal word; inspected side by side."
+  },
+  {
+    "normalized_prompt_sha256": "b8248740feafec74bb1258d24fe3f025c47932413385462e7f2a8432fb30b892",
+    "benchmark_id": "math500:370",
+    "decision": "distinct_variant",
+    "reason": "Different mathematical parameters, expressions, requested quantity, or literal word; inspected side by side."
+  },
+  {
+    "normalized_prompt_sha256": "59d4af7e2adbd68e33fb50c71c67def25ed685ad2f7d4bed7e11d26b60c9ae6f",
+    "benchmark_id": "math500:226",
+    "decision": "distinct_variant",
+    "reason": "Different mathematical parameters, expressions, requested quantity, or literal word; inspected side by side."
+  },
+  {
+    "normalized_prompt_sha256": "0e636d4ea95419980fb797e3a7ccecaec7e8acd4515e5516daf5f4cd4861ae4e",
+    "benchmark_id": "math500:275",
+    "decision": "distinct_variant",
+    "reason": "Different mathematical parameters, expressions, requested quantity, or literal word; inspected side by side."
+  },
+  {
+    "normalized_prompt_sha256": "8ab62c3f4058b03c695f427c531100b531b3ed9dc7a84c11625d51f3e8171f10",
+    "benchmark_id": "math500:255",
+    "decision": "distinct_variant",
+    "reason": "Different mathematical parameters, expressions, requested quantity, or literal word; inspected side by side."
+  },
+  {
+    "normalized_prompt_sha256": "bd4e4cd8e242f0be7b0d1abf8a0457a3461942319246910df269c5c5c34a7028",
+    "benchmark_id": "math500:424",
+    "decision": "distinct_variant",
+    "reason": "Different mathematical parameters, expressions, requested quantity, or literal word; inspected side by side."
+  },
+  {
+    "normalized_prompt_sha256": "1129a15ef26c73373feda31adb7047dd661ae64d8341c47908b4492af1472628",
+    "benchmark_id": "olympiadbench:114",
+    "decision": "exclude_overlap",
+    "reason": "Same benchmark problem despite source numbering, mathematical layout, equation labels, appended material, or text corruption."
+  },
+  {
+    "normalized_prompt_sha256": "fb6c2ff41fec976b144eee3e4410240cda162864cbff70b79a55c2253b89f417",
+    "benchmark_id": "olympiadbench:75",
+    "decision": "exclude_overlap",
+    "reason": "Same benchmark problem despite source numbering, mathematical layout, equation labels, appended material, or text corruption."
+  },
+  {
+    "normalized_prompt_sha256": "a624c9d08790b1cfb5ed6eabee89a435765607fa850f0712d54bcfe6e55b409b",
+    "benchmark_id": "math500:272",
+    "decision": "distinct_variant",
+    "reason": "Different mathematical parameters, expressions, requested quantity, or literal word; inspected side by side."
+  },
+  {
+    "normalized_prompt_sha256": "bf96f7a8708a54528073adfad3a66815b01e19e153ed900ca5cfcc20f2c72783",
+    "benchmark_id": "olympiadbench:66",
+    "decision": "exclude_overlap",
+    "reason": "Same benchmark problem despite source numbering, mathematical layout, equation labels, appended material, or text corruption."
+  },
+  {
+    "normalized_prompt_sha256": "24ce5afca0bf6bebe9c072060abdda0cf364b41f13169bd8ced22ebbac3c22bf",
+    "benchmark_id": "olympiadbench:95",
+    "decision": "exclude_overlap",
+    "reason": "Same benchmark problem despite source numbering, mathematical layout, equation labels, appended material, or text corruption."
+  },
+  {
+    "normalized_prompt_sha256": "01456a6c5b8e709d8288f8d185cf6f0b3dfa4225d7564cf63c21b0d286880888",
+    "benchmark_id": "math500:174",
+    "decision": "distinct_variant",
+    "reason": "Different mathematical parameters, expressions, requested quantity, or literal word; inspected side by side."
+  },
+  {
+    "normalized_prompt_sha256": "00832d528dc1bbed32bda7275c040c91d43fbfb75f643bc867c2e9b8bc38d347",
+    "benchmark_id": "olympiadbench:13",
+    "decision": "exclude_overlap",
+    "reason": "Same benchmark problem despite source numbering, mathematical layout, equation labels, appended material, or text corruption."
+  },
+  {
+    "normalized_prompt_sha256": "bb89b457b694456b333da9f5790767977e8eaa3b82b81482e6b26ba06ee76534",
+    "benchmark_id": "math500:226",
+    "decision": "distinct_variant",
+    "reason": "Different mathematical parameters, expressions, requested quantity, or literal word; inspected side by side."
+  },
+  {
+    "normalized_prompt_sha256": "acf66cd2092b88489d688509b338eeac3fa9ba4851c91138519cf7db13ea9656",
+    "benchmark_id": "math500:95",
+    "decision": "distinct_variant",
+    "reason": "Different mathematical parameters, expressions, requested quantity, or literal word; inspected side by side."
+  },
+  {
+    "normalized_prompt_sha256": "f801b4265952dcc42f183e6007bcb65251a69a25f28f1d165a586e2b5f564d6d",
+    "benchmark_id": "olympiadbench:458",
+    "decision": "distinct_variant",
+    "reason": "Different mathematical parameters, expressions, requested quantity, or literal word; inspected side by side."
+  },
+  {
+    "normalized_prompt_sha256": "421ecb3cab5e3e585fa86b75217e19d995ea3468748a42880ce5d7f3e6b68357",
+    "benchmark_id": "math500:8",
+    "decision": "distinct_variant",
+    "reason": "Different mathematical parameters, expressions, requested quantity, or literal word; inspected side by side."
+  },
+  {
+    "normalized_prompt_sha256": "80019720e75f6da0c3b5b846c6644910e05e104907c17ed5403d72a64dc0365b",
+    "benchmark_id": "math500:93",
+    "decision": "distinct_variant",
+    "reason": "Different mathematical parameters, expressions, requested quantity, or literal word; inspected side by side."
+  },
+  {
+    "normalized_prompt_sha256": "e3cf9b502db9ad1889d8a6fc3a07ed715503201170e062f3d416e999eff099fc",
+    "benchmark_id": "math500:255",
+    "decision": "distinct_variant",
+    "reason": "Different mathematical parameters, expressions, requested quantity, or literal word; inspected side by side."
+  }
+]

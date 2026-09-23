@@ -1,0 +1,198 @@
+{
+  "rules": {
+    "normalization": "NFKC, layout whitespace, leading question numbering, math delimiters and sizing commands; preserve mathematical numbers and operators",
+    "near_duplicate": {
+      "minhash_permutations": 128,
+      "minhash_seed": 42,
+      "candidate_jaccard": 0.8,
+      "confirmed_jaccard": 0.9,
+      "confirmed_character_similarity": 0.95,
+      "require_identical_numeric_operator_signature": true
+    },
+    "benchmark_screen": {
+      "shingle_width": 5,
+      "jaccard": 0.65,
+      "character_similarity": 0.9,
+      "containment": 0.95,
+      "minimum_length_ratio_for_containment": 0.5,
+      "reviewed_pair_exceptions": "configs/benchmark-reviewed-pairs.json",
+      "policy": "Conservative lexical overlap exclusion with inspected distinct-parameter exceptions"
+    },
+    "answer_conflicts": "Quarantine the entire duplicate cluster when ordered reference answers cannot be established equivalent; cross-source conflicts affect only merged output",
+    "verifiability": "Reference-parser compatibility and numeric-answer coverage, not independently proven label correctness or measured model-output grading accuracy",
+    "split": "Unsplit cleaned pools; benchmark sets are separate. Make group-aware train/validation splits before training.",
+    "prompt_leakage": "Quarantine groups with explicit Answer/Solution section markers; conservative suspected leakage, not a semantic proof."
+  },
+  "benchmark_counts": {
+    "math500": 500,
+    "aime24": 30,
+    "aime25": 30,
+    "aime26": 30,
+    "amc23": 40,
+    "amc24": 45,
+    "minerva_math": 272,
+    "olympiadbench": 674,
+    "gaokao": 385
+  },
+  "versions": {
+    "skywork": {
+      "raw_profile": {
+        "raw_rows": 119112,
+        "non_math_rows": 14057,
+        "math_rows": 105055,
+        "rows_with_reference_answer": 105045,
+        "requires_image_or_diagram_rendering": 1498,
+        "missing_reference_answer": 10,
+        "valid_before_deduplication": 103547
+      },
+      "raw_valid_source_counts": {
+        "train-math-numinamath1.5_olympiads": 39791,
+        "train-math-deepscaler": 37357,
+        "train-math-numinamath1.5_aops_forum": 13551,
+        "train-math-still3": 2833,
+        "train-math-numinamath1.5_cn_contest": 6166,
+        "train-math-numinamath1.5_amc_aime": 926,
+        "train-math-numinamath1.5_olympiads_ref": 404,
+        "train-math-aime19832023": 737,
+        "train-math-omnimath": 869,
+        "train-math-numinamath1.5_inequalities": 621,
+        "train-math-numinamath1.5_number_theory": 292
+      },
+      "deduplication": {
+        "input_rows": 103547,
+        "duplicate_clusters": 3235,
+        "redundant_rows": 3686,
+        "answer_conflict_rows_quarantined": 396,
+        "unique_rows_after_conflicts": 99707
+      },
+      "benchmark_overlap_unique_rows_removed": 150,
+      "clean_rows": 99337,
+      "reference_parseable_rows": 97809,
+      "verifiability_counts": {
+        "all_reference_components_parse": 97809,
+        "any_reference_component_parses": 97809,
+        "label_correctness_independently_verified": 0,
+        "plain_numeric_reference": 56529,
+        "reference_present": 99337
+      },
+      "verifiability_percent": {
+        "all_reference_components_parse": 98.4618,
+        "any_reference_component_parses": 98.4618,
+        "label_correctness_independently_verified": 0.0,
+        "plain_numeric_reference": 56.9063,
+        "reference_present": 100.0
+      },
+      "source_counts": {
+        "train-math-numinamath1.5_olympiads": 38823,
+        "train-math-deepscaler": 35834,
+        "train-math-numinamath1.5_aops_forum": 12729,
+        "train-math-still3": 2673,
+        "train-math-numinamath1.5_cn_contest": 6024,
+        "train-math-numinamath1.5_amc_aime": 831,
+        "train-math-numinamath1.5_olympiads_ref": 326,
+        "train-math-aime19832023": 388,
+        "train-math-omnimath": 818,
+        "train-math-numinamath1.5_inequalities": 600,
+        "train-math-numinamath1.5_number_theory": 291
+      },
+      "sha256_clean_jsonl": "f3a25cee67db02a3333892223fd05c266b808603db728238cc8516e82506d69e",
+      "suspected_prompt_leakage_unique_rows_removed": 220,
+      "raw_suspected_prompt_leakage_rows": 227
+    },
+    "deepscaler": {
+      "raw_profile": {
+        "raw_rows": 40315,
+        "math_rows": 40315,
+        "rows_with_reference_answer": 40309,
+        "requires_image_or_diagram_rendering": 975,
+        "missing_reference_answer": 6,
+        "valid_before_deduplication": 39334
+      },
+      "raw_valid_source_counts": {
+        "deepscaler": 39334
+      },
+      "deduplication": {
+        "input_rows": 39334,
+        "duplicate_clusters": 991,
+        "redundant_rows": 1340,
+        "answer_conflict_rows_quarantined": 564,
+        "unique_rows_after_conflicts": 37830
+      },
+      "benchmark_overlap_unique_rows_removed": 33,
+      "clean_rows": 37784,
+      "reference_parseable_rows": 37713,
+      "verifiability_counts": {
+        "all_reference_components_parse": 37713,
+        "any_reference_component_parses": 37713,
+        "label_correctness_independently_verified": 0,
+        "plain_numeric_reference": 23636,
+        "reference_present": 37784
+      },
+      "verifiability_percent": {
+        "all_reference_components_parse": 99.8121,
+        "any_reference_component_parses": 99.8121,
+        "label_correctness_independently_verified": 0.0,
+        "plain_numeric_reference": 62.5556,
+        "reference_present": 100.0
+      },
+      "source_counts": {
+        "deepscaler": 37784
+      },
+      "sha256_clean_jsonl": "58f37e8bf22eb36ded1266927955ec70b4af93c4a63d3f85a5b4eedd1133464f",
+      "suspected_prompt_leakage_unique_rows_removed": 13,
+      "raw_suspected_prompt_leakage_rows": 13
+    },
+    "merged": {
+      "deduplication": {
+        "input_rows": 137121,
+        "duplicate_clusters": 36648,
+        "redundant_rows": 36648,
+        "answer_conflict_rows_quarantined": 2,
+        "unique_rows_after_conflicts": 100472
+      },
+      "rows_with_both_dataset_memberships": 36647,
+      "clean_rows": 100472,
+      "reference_parseable_rows": 98941,
+      "verifiability_counts": {
+        "all_reference_components_parse": 98941,
+        "any_reference_component_parses": 98941,
+        "label_correctness_independently_verified": 0,
+        "plain_numeric_reference": 57230,
+        "reference_present": 100472
+      },
+      "verifiability_percent": {
+        "all_reference_components_parse": 98.4762,
+        "any_reference_component_parses": 98.4762,
+        "label_correctness_independently_verified": 0.0,
+        "plain_numeric_reference": 56.9611,
+        "reference_present": 100.0
+      },
+      "source_counts": {
+        "train-math-numinamath1.5_olympiads": 38823,
+        "train-math-deepscaler": 35834,
+        "train-math-numinamath1.5_aops_forum": 12729,
+        "train-math-still3": 2673,
+        "train-math-numinamath1.5_cn_contest": 6024,
+        "train-math-numinamath1.5_amc_aime": 831,
+        "train-math-numinamath1.5_olympiads_ref": 326,
+        "train-math-aime19832023": 388,
+        "train-math-omnimath": 817,
+        "train-math-numinamath1.5_inequalities": 600,
+        "train-math-numinamath1.5_number_theory": 291,
+        "deepscaler": 1136
+      },
+      "sha256_clean_jsonl": "6be927858dd9f15edfef2902c22d4748c8f31ba61c62caecd3a22129a62abdef"
+    }
+  },
+  "sources_lock_sha256": "d5437da4746475f54811fcc2db06537150117ba1ebd4d6fe194019e2e791bae3",
+  "validation": {
+    "unique_normalized_prompts": true,
+    "no_detected_benchmark_overlap_under_declared_rules": true,
+    "all_clean_rows_have_reference_answers": true,
+    "standalone_versions_processed_independently": true,
+    "semantic_paraphrase_contamination_exhaustively_excluded": false,
+    "training_launched": false,
+    "no_detected_explicit_answer_solution_sections": true
+  },
+  "pipeline_note": "Final output uses conservative lexical benchmark screening with inspected distinct-variant pair exceptions. Prior screening iterations are archived. No numeric/uppercase-equality gate remains."
+}

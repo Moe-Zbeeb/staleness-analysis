@@ -1,0 +1,165 @@
+[
+  {
+    "key": "qwen3-14b",
+    "repo_type": "model",
+    "repo_id": "Qwen/Qwen3-14B",
+    "revision": "40c069824f4251a91eefaf281ebe4c544efd3e18",
+    "files": [
+      ".gitattributes",
+      "LICENSE",
+      "README.md",
+      "config.json",
+      "generation_config.json",
+      "merges.txt",
+      "model-00001-of-00008.safetensors",
+      "model-00002-of-00008.safetensors",
+      "model-00003-of-00008.safetensors",
+      "model-00004-of-00008.safetensors",
+      "model-00005-of-00008.safetensors",
+      "model-00006-of-00008.safetensors",
+      "model-00007-of-00008.safetensors",
+      "model-00008-of-00008.safetensors",
+      "model.safetensors.index.json",
+      "tokenizer.json",
+      "tokenizer_config.json",
+      "vocab.json"
+    ]
+  },
+  {
+    "key": "deepseek-r1-distill-qwen-14b",
+    "repo_type": "model",
+    "repo_id": "deepseek-ai/DeepSeek-R1-Distill-Qwen-14B",
+    "revision": "1df8507178afcc1bef68cd8c393f61a886323761",
+    "files": [
+      ".gitattributes",
+      "LICENSE",
+      "README.md",
+      "config.json",
+      "figures/benchmark.jpg",
+      "generation_config.json",
+      "model-00001-of-000004.safetensors",
+      "model-00002-of-000004.safetensors",
+      "model-00003-of-000004.safetensors",
+      "model-00004-of-000004.safetensors",
+      "model.safetensors.index.json",
+      "tokenizer.json",
+      "tokenizer_config.json"
+    ]
+  },
+  {
+    "key": "skywork",
+    "repo_type": "dataset",
+    "repo_id": "Skywork/Skywork-OR1-RL-Data",
+    "revision": "1cdedc52e0e2db85fdf252f9be682e63a5a38c33",
+    "files": [
+      ".gitattributes",
+      "README.md",
+      "data/code-00000-of-00003.parquet",
+      "data/code-00001-of-00003.parquet",
+      "data/code-00002-of-00003.parquet",
+      "data/math-00000-of-00001.parquet"
+    ]
+  },
+  {
+    "key": "deepscaler",
+    "repo_type": "dataset",
+    "repo_id": "agentica-org/DeepScaleR-Preview-Dataset",
+    "revision": "b6ae8c60f5c1f2b594e2140b91c49c9ad0949e29",
+    "files": [
+      ".gitattributes",
+      "README.md",
+      "deepscaler.json"
+    ]
+  },
+  {
+    "key": "math500",
+    "repo_type": "dataset",
+    "repo_id": "HuggingFaceH4/MATH-500",
+    "revision": "6e4ed1a2a79af7d8630a6b768ec859cb5af4d3be",
+    "files": [
+      ".gitattributes",
+      "README.md",
+      "eval.yaml",
+      "test.jsonl"
+    ]
+  },
+  {
+    "key": "aime24",
+    "repo_type": "dataset",
+    "repo_id": "HuggingFaceH4/aime_2024",
+    "revision": "2fe88a2f1091d5048c0f36abc874fb997b3dd99a",
+    "files": [
+      ".gitattributes",
+      "README.md",
+      "data/train-00000-of-00001.parquet"
+    ]
+  },
+  {
+    "key": "aime25",
+    "repo_type": "dataset",
+    "repo_id": "opencompass/AIME2025",
+    "revision": "a6ad95f611d72cf628a80b58bd0432ef6638f958",
+    "files": [
+      ".gitattributes",
+      "README.md",
+      "aime2025-I.jsonl",
+      "aime2025-II.jsonl"
+    ]
+  },
+  {
+    "key": "aime26",
+    "repo_type": "dataset",
+    "repo_id": "MathArena/aime_2026",
+    "revision": "d2de22f3c656b4f56cf8981212186377d1e23bc3",
+    "files": [
+      ".gitattributes",
+      "README.md",
+      "data/train-00000-of-00001.parquet",
+      "eval.yaml"
+    ]
+  },
+  {
+    "key": "amc23",
+    "repo_type": "dataset",
+    "repo_id": "math-ai/amc23",
+    "revision": "80815d37005feb82cd7f8fbc6901d5d3eff43057",
+    "files": [
+      ".gitattributes",
+      "README.md",
+      "test-00000-of-00001.parquet"
+    ]
+  },
+  {
+    "key": "amc24",
+    "repo_type": "dataset",
+    "repo_id": "rawsh/2024_AMC12",
+    "revision": "47b35303156a75cdfc6fcca694db66905d5b2033",
+    "files": [
+      ".gitattributes",
+      "README.md",
+      "amc12-2024.jsonl"
+    ]
+  },
+  {
+    "key": "minerva_math",
+    "repo_type": "dataset",
+    "repo_id": "math-ai/minervamath",
+    "revision": "ee46ddc498933b1977577953250ca5c66be64f96",
+    "files": [
+      ".gitattributes",
+      "README.md",
+      "test.jsonl"
+    ]
+  },
+  {
+    "key": "olympiadbench",
+    "repo_type": "dataset",
+    "repo_id": "math-ai/olympiadbench",
+    "revision": "4faaf1e6ec17d11a4218a9bf4c049ecaf954dd84",
+    "files": [
+      ".gitattributes",
+      "README.md",
+      "test.parquet"
+    ]
+  }
+]

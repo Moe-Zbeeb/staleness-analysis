@@ -1,0 +1,22 @@
+{
+  "namespace": "zbeeb",
+  "private": false,
+  "collection_title": "Exact-Age RL: Verifiable Math Data",
+  "collection_description": "Independently deduplicated Skywork and DeepScaleR math datasets, plus a cross-deduplicated merge. Only Math-Verify parser-compatible references are published.",
+  "github_repository": "Moe-Zbeeb/staleness-analysis",
+  "github_directory": "experiments/exact-age-14b-data",
+  "datasets": {
+    "skywork": {
+      "repo_id": "zbeeb/Skywork-OR1-Math-Verifiable-Dedup",
+      "expected_rows": 97809
+    },
+    "deepscaler": {
+      "repo_id": "zbeeb/DeepScaleR-Verifiable-Dedup",
+      "expected_rows": 37713
+    },
+    "merged": {
+      "repo_id": "zbeeb/Skywork-DeepScaleR-Merged-Verifiable-Dedup",
+      "expected_rows": 98941
+    }
+  }
+}
