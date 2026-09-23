@@ -1,0 +1,221 @@
+{
+  "status": "completed",
+  "created_at": "2026-09-23T14:57:34.798846+00:00",
+  "publication_collection": "https://huggingface.co/collections/zbeeb/exact-age-rl-verifiable-math-data-6ab3e8574e1dc838b4df4b99",
+  "targets": [
+    {
+      "path": "cache/huggingface/hub/.locks/datasets--zbeeb--DeepScaleR-Verifiable-Dedup",
+      "file_count": 4,
+      "bytes": 0
+    },
+    {
+      "path": "cache/huggingface/hub/.locks/datasets--zbeeb--Skywork-DeepScaleR-Merged-Verifiable-Dedup",
+      "file_count": 4,
+      "bytes": 0
+    },
+    {
+      "path": "cache/huggingface/hub/.locks/datasets--zbeeb--Skywork-OR1-Math-Verifiable-Dedup",
+      "file_count": 4,
+      "bytes": 0
+    },
+    {
+      "path": "cache/huggingface/hub/datasets--zbeeb--DeepScaleR-Verifiable-Dedup",
+      "file_count": 4,
+      "bytes": 14473
+    },
+    {
+      "path": "cache/huggingface/hub/datasets--zbeeb--Skywork-DeepScaleR-Merged-Verifiable-Dedup",
+      "file_count": 4,
+      "bytes": 15095
+    },
+    {
+      "path": "cache/huggingface/hub/datasets--zbeeb--Skywork-OR1-Math-Verifiable-Dedup",
+      "file_count": 4,
+      "bytes": 15607
+    },
+    {
+      "path": "data/benchmarks",
+      "file_count": 2,
+      "bytes": 1089854
+    },
+    {
+      "path": "data/processed/deepscaler/clean.jsonl",
+      "file_count": 1,
+      "bytes": 42078645
+    },
+    {
+      "path": "data/processed/deepscaler/clean.parquet",
+      "file_count": 1,
+      "bytes": 8772029
+    },
+    {
+      "path": "data/processed/deepscaler/reference_parseable.jsonl",
+      "file_count": 1,
+      "bytes": 41995583
+    },
+    {
+      "path": "data/processed/merged/clean.jsonl",
+      "file_count": 1,
+      "bytes": 142072947
+    },
+    {
+      "path": "data/processed/merged/clean.parquet",
+      "file_count": 1,
+      "bytes": 27921425
+    },
+    {
+      "path": "data/processed/merged/reference_parseable.jsonl",
+      "file_count": 1,
+      "bytes": 139793734
+    },
+    {
+      "path": "data/processed/skywork/clean.jsonl",
+      "file_count": 1,
+      "bytes": 135811730
+    },
+    {
+      "path": "data/processed/skywork/clean.parquet",
+      "file_count": 1,
+      "bytes": 27405272
+    },
+    {
+      "path": "data/processed/skywork/reference_parseable.jsonl",
+      "file_count": 1,
+      "bytes": 133544875
+    },
+    {
+      "path": "data/quarantine",
+      "file_count": 5,
+      "bytes": 3558655
+    },
+    {
+      "path": "data/raw",
+      "file_count": 88,
+      "bytes": 846019783
+    },
+    {
+      "path": "reports/deepscaler-benchmark-overlap.jsonl",
+      "file_count": 1,
+      "bytes": 25678
+    },
+    {
+      "path": "reports/deepscaler-duplicate-receipts.jsonl",
+      "file_count": 1,
+      "bytes": 487307
+    },
+    {
+      "path": "reports/deepscaler-restored-benchmark-variants.jsonl",
+      "file_count": 1,
+      "bytes": 38211
+    },
+    {
+      "path": "reports/deepscaler-unparseable-references.jsonl",
+      "file_count": 1,
+      "bytes": 83062
+    },
+    {
+      "path": "reports/initial-screen-audit/deepscaler-benchmark-overlap.jsonl",
+      "file_count": 1,
+      "bytes": 63745
+    },
+    {
+      "path": "reports/initial-screen-audit/skywork-benchmark-overlap.jsonl",
+      "file_count": 1,
+      "bytes": 216107
+    },
+    {
+      "path": "reports/merged-duplicate-receipts.jsonl",
+      "file_count": 1,
+      "bytes": 13254501
+    },
+    {
+      "path": "reports/merged-unparseable-references.jsonl",
+      "file_count": 1,
+      "bytes": 2279213
+    },
+    {
+      "path": "reports/parameter-screen-audit/deepscaler-benchmark-overlap.jsonl",
+      "file_count": 1,
+      "bytes": 22773
+    },
+    {
+      "path": "reports/parameter-screen-audit/deepscaler-duplicate-receipts.jsonl",
+      "file_count": 1,
+      "bytes": 487307
+    },
+    {
+      "path": "reports/parameter-screen-audit/deepscaler-restored-benchmark-variants.jsonl",
+      "file_count": 1,
+      "bytes": 38211
+    },
+    {
+      "path": "reports/parameter-screen-audit/deepscaler-unparseable-references.jsonl",
+      "file_count": 1,
+      "bytes": 83062
+    },
+    {
+      "path": "reports/parameter-screen-audit/merged-duplicate-receipts.jsonl",
+      "file_count": 1,
+      "bytes": 13260239
+    },
+    {
+      "path": "reports/parameter-screen-audit/merged-unparseable-references.jsonl",
+      "file_count": 1,
+      "bytes": 2283524
+    },
+    {
+      "path": "reports/parameter-screen-audit/skywork-benchmark-overlap.jsonl",
+      "file_count": 1,
+      "bytes": 111961
+    },
+    {
+      "path": "reports/parameter-screen-audit/skywork-duplicate-receipts.jsonl",
+      "file_count": 1,
+      "bytes": 1965957
+    },
+    {
+      "path": "reports/parameter-screen-audit/skywork-restored-benchmark-variants.jsonl",
+      "file_count": 1,
+      "bytes": 79852
+    },
+    {
+      "path": "reports/parameter-screen-audit/skywork-unparseable-references.jsonl",
+      "file_count": 1,
+      "bytes": 2271166
+    },
+    {
+      "path": "reports/skywork-benchmark-overlap.jsonl",
+      "file_count": 1,
+      "bytes": 157736
+    },
+    {
+      "path": "reports/skywork-duplicate-receipts.jsonl",
+      "file_count": 1,
+      "bytes": 1965957
+    },
+    {
+      "path": "reports/skywork-restored-benchmark-variants.jsonl",
+      "file_count": 1,
+      "bytes": 79852
+    },
+    {
+      "path": "reports/skywork-unparseable-references.jsonl",
+      "file_count": 1,
+      "bytes": 2266855
+    }
+  ],
+  "bytes_removed": 1591631983,
+  "preserved": [
+    "release",
+    "models",
+    "source code",
+    "aggregate reports and manifests"
+  ],
+  "deleted_targets": 40,
+  "retained_rows": {
+    "skywork": 97809,
+    "deepscaler": 37713,
+    "merged": 98941
+  },
+  "model_indexes_unchanged": true
+}

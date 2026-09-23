@@ -1,5 +1,7 @@
 # Exact-age RL math data
 
+[Hugging Face collection](https://huggingface.co/collections/zbeeb/exact-age-rl-verifiable-math-data-6ab3e8574e1dc838b4df4b99)
+
 Three public releases contain only parser-compatible references:
 
 | Version | Questions | Hugging Face |
@@ -38,3 +40,9 @@ To publish the validated exports with an authorized Hugging Face token:
 The release configuration fixes the account, repository names, visibility, and new collection title. The publisher checks the account, restricts the file list, records commits, verifies public file metadata/hashes, and confirms collection membership. Credentials are read through Hugging Face's standard authentication mechanism, never embedded in source.
 
 `refine_benchmark_screen.py` and `finalize_screen.py` preserve the one-time audit correction code used for the initial preparation. The regular rebuild entry point is `prepare.py`. For portability, public acquisition omits the original machine-specific weight-reuse path, and benchmark exception keys are stored as hashes; the mathematical cleaning rules are unchanged.
+
+## Cluster retention
+
+The user requested deletion of raw, rejected, benchmark, and unfiltered dataset files after public upload verification. `scripts/cleanup_local_datasets.py --root PROJECT --execute` implements that bounded cleanup, checks the publication receipt and retained Parquet hashes, preserves models and aggregate reports, and exposes the retained pools at `data/processed/<version>/train.parquet`. Without `--execute`, it only writes a deletion plan. Three cleanup tests cover preservation, incomplete-publication refusal, and symlink handling.
+
+[Publication and cleanup status](reports/RELEASE-STATUS.md) records the completed release and retention checks.
