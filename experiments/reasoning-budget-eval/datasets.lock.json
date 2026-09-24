@@ -1,0 +1,31 @@
+{
+  "datasets": {
+    "skywork": {
+      "repo_id": "zbeeb/Skywork-OR1-Math-Verifiable-Dedup",
+      "commit": "eba55e556b08e5080cdec4b7130838a8c1e514ba",
+      "rows": 97809,
+      "url": "https://huggingface.co/datasets/zbeeb/Skywork-OR1-Math-Verifiable-Dedup",
+      "status": "published_and_verified",
+      "parquet_sha256": "5ecf06420318cbdd055d08f6cd3bca7b89fbf57cbbc605747c8a01c2acc8e0c1"
+    },
+    "deepscaler": {
+      "repo_id": "zbeeb/DeepScaleR-Verifiable-Dedup",
+      "commit": "debec4f6cc837fce13351c6c5bfddfdda1027549",
+      "rows": 37713,
+      "url": "https://huggingface.co/datasets/zbeeb/DeepScaleR-Verifiable-Dedup",
+      "status": "published_and_verified",
+      "parquet_sha256": "ebaf012ab811d4569e1409438daedac04bb671569d52a47bfb2d512ea784b0ff"
+    },
+    "merged": {
+      "repo_id": "zbeeb/Skywork-DeepScaleR-Merged-Verifiable-Dedup",
+      "commit": "a6fbe5660c32caaf871d5be1e4a8a34771b5c9d3",
+      "rows": 98941,
+      "url": "https://huggingface.co/datasets/zbeeb/Skywork-DeepScaleR-Merged-Verifiable-Dedup",
+      "status": "published_and_verified",
+      "parquet_sha256": "13c1d92087c27ff18d422f77c3725e0eb04aec36c056e5e6479460713ba7c389"
+    }
+  },
+  "collection_slug": "zbeeb/exact-age-rl-verifiable-math-data-6ab3e8574e1dc838b4df4b99",
+  "collection_url": "https://huggingface.co/collections/zbeeb/exact-age-rl-verifiable-math-data-6ab3e8574e1dc838b4df4b99",
+  "status": "published_and_verified"
+}

@@ -1,0 +1,17 @@
+{
+  "python": "3.12",
+  "preparation": {
+    "transformers": "4.57.1",
+    "pyarrow": "21.0.0",
+    "math-verify": "0.8.0"
+  },
+  "generation_observed": {
+    "torch": "2.11.0+cu128",
+    "vllm": "0.26.0",
+    "transformers": "5.6.2"
+  },
+  "grading": {
+    "math-verify": "0.8.0"
+  },
+  "note": "Observed experiment versions, not a complete GPU dependency lock. Use a compatible existing CUDA/vLLM environment and run tokenizer and GPU gates. No GPU environment is installed automatically."
+}
