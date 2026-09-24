@@ -25,3 +25,7 @@ Add new experiment code and configurations at the repository root as their requi
 ## Prepared math datasets
 
 [Exact-age RL math data](experiments/exact-age-14b-data/README.md) contains the preparation and publication code for independently deduplicated Skywork and DeepScaleR datasets and their cross-deduplicated merge. Only parser-compatible references are published on Hugging Face.
+
+## Reasoning model evaluation
+
+[Five-model reasoning budget evaluation](experiments/reasoning-budget-eval/README.md) contains the 256-question-per-dataset evaluation on cleaned Skywork and DeepScaleR, with 4K/8K/12K generation budgets, native tokenizers, strict final-answer grading, manual-review support, and resumable full-node Slurm execution.

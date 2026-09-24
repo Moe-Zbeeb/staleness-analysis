@@ -1,0 +1,12 @@
+spec.json
+manifest.json
+preparation.json
+validation.json
+tokenizer-validation.json
+inputs/
+outputs/
+reports/
+*.log
+.slurm/
+model-validation.json
+.venv*/

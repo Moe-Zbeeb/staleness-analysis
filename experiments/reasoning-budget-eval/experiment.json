@@ -1,0 +1,546 @@
+{
+  "name": "reasoning-rollouts-20260923",
+  "datasets": [
+    "skywork",
+    "deepscaler"
+  ],
+  "sample_size": 256,
+  "seed": 42,
+  "budgets": [
+    4096,
+    8192,
+    12288
+  ],
+  "models": [
+    {
+      "repo_id": "deepseek-ai/DeepSeek-R1-Distill-Qwen-14B",
+      "revision": "1df8507178afcc1bef68cd8c393f61a886323761",
+      "files": [
+        {
+          "name": "LICENSE",
+          "size": 1064,
+          "sha256": null,
+          "git_blob": "d42fae903e9fa07f3e8edb0db00a8d905ba49560"
+        },
+        {
+          "name": "README.md",
+          "size": 15994,
+          "sha256": null,
+          "git_blob": "1ae2b2ccda9cb58fb4179e30c1798b6e75980618"
+        },
+        {
+          "name": "config.json",
+          "size": 664,
+          "sha256": null,
+          "git_blob": "83bba6e26639fb152bd0077977cf6ea8312b42a9"
+        },
+        {
+          "name": "generation_config.json",
+          "size": 181,
+          "sha256": null,
+          "git_blob": "052ab54633116a634da950ab483233c4ace0aa82"
+        },
+        {
+          "name": "model-00001-of-000004.safetensors",
+          "size": 8714116464,
+          "sha256": "9a080ebff55b277c0e106f19e4496a88b9f5db4059ea0a6b8ea7d9bb3ad4d0ca",
+          "git_blob": "02ee5349e6fc44287f29590d9a7bf3fa87ef5bac"
+        },
+        {
+          "name": "model-00002-of-000004.safetensors",
+          "size": 8667059663,
+          "sha256": "b8bc983706e8db5b270c319be58762f53c6222e0c6cd785c6fd8fd33c2e783e8",
+          "git_blob": "34c56e89d56874eb88ec4452c977026ac5dadb63"
+        },
+        {
+          "name": "model-00003-of-000004.safetensors",
+          "size": 8667059711,
+          "sha256": "557341a00d5c2a75c24e03961d0e716571517d39c70a040633180d9edcbfe285",
+          "git_blob": "e82de2de07c643bad9957d5475d79a3a27cfb516"
+        },
+        {
+          "name": "model-00004-of-000004.safetensors",
+          "size": 3491898034,
+          "sha256": "6ba8a9c8251b8f6c6beef7325102665f22b17c1f52ef76eaaa938bfeab1bd18c",
+          "git_blob": "0c32635399e9d1b07318063b1fbd89c9d41d7dc0"
+        },
+        {
+          "name": "model.safetensors.index.json",
+          "size": 48050,
+          "sha256": null,
+          "git_blob": "fd0607be948e8dc54df251858b06a62d422da432"
+        },
+        {
+          "name": "tokenizer.json",
+          "size": 7031660,
+          "sha256": null,
+          "git_blob": "a34650995da6939a945c330eadb0687147ac3ef8"
+        },
+        {
+          "name": "tokenizer_config.json",
+          "size": 3071,
+          "sha256": null,
+          "git_blob": "9967ff32d94b21c94dc7e2b3bcbea295a46cde50"
+        }
+      ],
+      "tag": "deepseek",
+      "sampling": {
+        "temperature": 0.6,
+        "top_p": 0.95,
+        "top_k": -1
+      }
+    },
+    {
+      "repo_id": "Qwen/Qwen3-14B",
+      "revision": "40c069824f4251a91eefaf281ebe4c544efd3e18",
+      "files": [
+        {
+          "name": "LICENSE",
+          "size": 11343,
+          "sha256": null,
+          "git_blob": "6634c8cc3133b3848ec74b9f275acaaa1ea618ab"
+        },
+        {
+          "name": "README.md",
+          "size": 16670,
+          "sha256": null,
+          "git_blob": "3f1eaf4222cee3d84fdb3c6611afd7ff3a11dd8c"
+        },
+        {
+          "name": "config.json",
+          "size": 728,
+          "sha256": null,
+          "git_blob": "37e7491082573462e8545299cdf6938e8b684e31"
+        },
+        {
+          "name": "generation_config.json",
+          "size": 239,
+          "sha256": null,
+          "git_blob": "20a8a9156fc8c3f25295ca067f61fdf120d517c5"
+        },
+        {
+          "name": "merges.txt",
+          "size": 1671853,
+          "sha256": null,
+          "git_blob": "31349551d90c7606f325fe0f11bbb8bd5fa0d7c7"
+        },
+        {
+          "name": "model-00001-of-00008.safetensors",
+          "size": 3841788544,
+          "sha256": "e942bdbdf08857d16a8fef7d1dae9fceabeb4e84def6043485fe2f6f085dab0e",
+          "git_blob": "bf075349c5631d4d123b5195773e80be845006f4"
+        },
+        {
+          "name": "model-00002-of-00008.safetensors",
+          "size": 3963750816,
+          "sha256": "f7c9c6eee628f5ad831d2d1d292e120505e5fcadeb38f88b4d3c4cb86306ccf9",
+          "git_blob": "80454a641cc55f0c7a8aa99afaa8df7461b54136"
+        },
+        {
+          "name": "model-00003-of-00008.safetensors",
+          "size": 3963750880,
+          "sha256": "dfb8c5df9404b41ad6ae74e8b6b367135f017b4467b884cf71b17c71954f18a9",
+          "git_blob": "b722023749ee7b6e1af203484157a25974de13aa"
+        },
+        {
+          "name": "model-00004-of-00008.safetensors",
+          "size": 3963750880,
+          "sha256": "eab286fec759e3e59ab228621aefa0fef14ed56039e06f959e67257d5af7604d",
+          "git_blob": "c1ba8959e0fe9ff5cf2e587c57f867a4b2098ceb"
+        },
+        {
+          "name": "model-00005-of-00008.safetensors",
+          "size": 3963750880,
+          "sha256": "97f0dc2992e59da95c466eff6f4fd0c8335843bbc36ed5c913a6f5150748c0e6",
+          "git_blob": "ff4ce681764b7859d25310530107736afcc8f191"
+        },
+        {
+          "name": "model-00006-of-00008.safetensors",
+          "size": 3963750880,
+          "sha256": "9e8e76a013cd5e253865b792991e0b410f869b136b3c500079b531b09198e99e",
+          "git_blob": "34f3d88dbf75c08240a5eca7fb4b584fc25f0cae"
+        },
+        {
+          "name": "model-00007-of-00008.safetensors",
+          "size": 3963750880,
+          "sha256": "0aee70ee6e91dc00d818804fb47f124d13ee4ad5b4a64553e09dbf9391cd5750",
+          "git_blob": "40045b81cfaa9f875328b98e65e09ab22b3140a8"
+        },
+        {
+          "name": "model-00008-of-00008.safetensors",
+          "size": 1912371880,
+          "sha256": "0d6b92296e326d39bbbaeb32c3ec454ac606da843d4c8ffa8edf010b62b8c9e0",
+          "git_blob": "535e13b3d8e05d5fcf16f0388f696ef1ef5d099c"
+        },
+        {
+          "name": "model.safetensors.index.json",
+          "size": 36514,
+          "sha256": null,
+          "git_blob": "b4d92f9fec7ec78a89aaf1cf9d740ffc69cb9aac"
+        },
+        {
+          "name": "tokenizer.json",
+          "size": 11422654,
+          "sha256": "aeb13307a71acd8fe81861d94ad54ab689df773318809eed3cbe794b4492dae4",
+          "git_blob": "cd71f61a15a522601badb3dc960d800d9cb3766c"
+        },
+        {
+          "name": "tokenizer_config.json",
+          "size": 9732,
+          "sha256": null,
+          "git_blob": "417d038a63fa3de29cfde265caedae14d1a58d92"
+        },
+        {
+          "name": "vocab.json",
+          "size": 2776833,
+          "sha256": null,
+          "git_blob": "4783fe10ac3adce15ac8f358ef5462739852c569"
+        }
+      ],
+      "tag": "qwen3",
+      "sampling": {
+        "temperature": 0.6,
+        "top_p": 0.95,
+        "top_k": 20
+      }
+    },
+    {
+      "repo_id": "nvidia/AceReason-Nemotron-14B",
+      "revision": "b244ed5578b03df25c49c7d1e7bc30fbcf8a63b5",
+      "files": [
+        {
+          "name": "README.md",
+          "size": 8024,
+          "sha256": null,
+          "git_blob": "9f9d1ed2b25c36d5f6caaab4f4712a9b247ec692"
+        },
+        {
+          "name": "README_EVALUATION.md",
+          "size": 7983,
+          "sha256": null,
+          "git_blob": "19e2dc2b26b4939cbd2880d8afc1255081ea3e07"
+        },
+        {
+          "name": "config.json",
+          "size": 712,
+          "sha256": null,
+          "git_blob": "4772add29a9dde4ff8387195621a59eb51df7a06"
+        },
+        {
+          "name": "generation_config.json",
+          "size": 147,
+          "sha256": null,
+          "git_blob": "0acdab67619ec76e2a1bf8ea6bafe4f2bd8bc698"
+        },
+        {
+          "name": "model-00001-of-00006.safetensors",
+          "size": 4986211280,
+          "sha256": "e322e1e9498cee8d18b0c04f592ee221a54344e6137cb3c948a603b807e37217",
+          "git_blob": "1901807c422da0409b78d806a165d13cf40583a5"
+        },
+        {
+          "name": "model-00002-of-00006.safetensors",
+          "size": 4954847344,
+          "sha256": "fa4520787b14831eab69fcb517f2f24893ff79ece41972de1cfcabf786f89ad4",
+          "git_blob": "bfe2e9b4317e43799ef243f07f8e4ba067073420"
+        },
+        {
+          "name": "model-00003-of-00006.safetensors",
+          "size": 4954847392,
+          "sha256": "c3716bd5b77888fbe5f838b742b0146005bc19ae82adfb6db4a21e0ca7ea1b72",
+          "git_blob": "b6f77c78f82945484b09619764411a39149fe231"
+        },
+        {
+          "name": "model-00004-of-00006.safetensors",
+          "size": 4954847392,
+          "sha256": "6211c78217e6d8fdfcc81db8edea3737519a1a8984d15d0c3639ce312447f731",
+          "git_blob": "08dd59878af5ef38aee039ee9868910fd76eedb4"
+        },
+        {
+          "name": "model-00005-of-00006.safetensors",
+          "size": 4954847392,
+          "sha256": "7c260cbd5fd753270f75a0cea6e2f5f52b2d7bbf28bd019755ca2639e129166f",
+          "git_blob": "7a30e965a09d30bfcf52cb3c8c86ffc0f87861dc"
+        },
+        {
+          "name": "model-00006-of-00006.safetensors",
+          "size": 4734533160,
+          "sha256": "c175ad433d94c2a121424e9fb4ceb35a273cdbd7510716268d5790cd39a4c301",
+          "git_blob": "f1969038c4f4bf1a7cb0569babae319704856127"
+        },
+        {
+          "name": "model.safetensors.index.json",
+          "size": 47472,
+          "sha256": null,
+          "git_blob": "0e9b53532550dfddbf42730aeeb499a3bb7a707f"
+        },
+        {
+          "name": "special_tokens_map.json",
+          "size": 485,
+          "sha256": null,
+          "git_blob": "1d385d62cf08bca35254547902b792c243656ec1"
+        },
+        {
+          "name": "tokenizer.json",
+          "size": 11422778,
+          "sha256": "e20ddafc659ba90242154b55275402edeca0715e5dbb30f56815a4ce081f4893",
+          "git_blob": "1a2db243e47cbc113f6b2ddcc388aeeb8fe1a94c"
+        },
+        {
+          "name": "tokenizer_config.json",
+          "size": 6768,
+          "sha256": null,
+          "git_blob": "ef6e98c3e0446cad00c5e6fb6bf2f5bbaf2eb0bd"
+        }
+      ],
+      "tag": "acereason",
+      "sampling": {
+        "temperature": 0.6,
+        "top_p": 0.95,
+        "top_k": -1
+      }
+    },
+    {
+      "repo_id": "nvidia/OpenReasoning-Nemotron-14B",
+      "revision": "9e2805b596a173b5ef2f6d50c6fd9622135d2057",
+      "files": [
+        {
+          "name": "BIAS.md",
+          "size": 509,
+          "sha256": null,
+          "git_blob": "a4dc4ce1fc9000578548a1c4ce438535af4d48fa"
+        },
+        {
+          "name": "EXPLAINABILITY.md",
+          "size": 2208,
+          "sha256": null,
+          "git_blob": "a948c0f3e8a8118a7a4cc2a975d10b2cba209b9a"
+        },
+        {
+          "name": "PRIVACY.md",
+          "size": 1274,
+          "sha256": null,
+          "git_blob": "c65b7d633d7fba7244ae28c6e0f397d0a378774b"
+        },
+        {
+          "name": "README.md",
+          "size": 13647,
+          "sha256": null,
+          "git_blob": "337759ec3895cb34c43b945a44ea1566dd70ac54"
+        },
+        {
+          "name": "SAFETY.md",
+          "size": 658,
+          "sha256": null,
+          "git_blob": "8eede37484df369988a673b945fdf3a7a57a85d6"
+        },
+        {
+          "name": "added_tokens.json",
+          "size": 605,
+          "sha256": null,
+          "git_blob": "482ced4679301bf287ebb310bdd1790eb4514232"
+        },
+        {
+          "name": "config.json",
+          "size": 742,
+          "sha256": null,
+          "git_blob": "1cdb53ff63831bd225c8550f436227d6f95bbc0a"
+        },
+        {
+          "name": "generation_config.json",
+          "size": 121,
+          "sha256": null,
+          "git_blob": "b307b19e4ec57c9bcf11f8342f33b21929c2bd77"
+        },
+        {
+          "name": "merges.txt",
+          "size": 1671853,
+          "sha256": null,
+          "git_blob": "31349551d90c7606f325fe0f11bbb8bd5fa0d7c7"
+        },
+        {
+          "name": "model-00001-of-00003.safetensors",
+          "size": 9941058640,
+          "sha256": "7bb855504d85ce5d8708d53916fcfadbdecd6a0c47c667960142d62b998d4844",
+          "git_blob": "1dc992c69014cf6bf13086556e9fd3f60659b7e6"
+        },
+        {
+          "name": "model-00002-of-00003.safetensors",
+          "size": 9909694792,
+          "sha256": "9f9ac66e3e1537ad212e02b43565e5974a4acf3c0ab2b86154953b4b1b6cd5af",
+          "git_blob": "0cf6ed748dfa00dccd4662c20562e87d999ea653"
+        },
+        {
+          "name": "model-00003-of-00003.safetensors",
+          "size": 9689380560,
+          "sha256": "41f8ea22b534d3390660ab7778e23ca663b610ec27ef51900b4f78f572cac04b",
+          "git_blob": "56d35d9ee12d65f891d81d3db43852006a6a73b7"
+        },
+        {
+          "name": "model.safetensors.index.json",
+          "size": 47472,
+          "sha256": null,
+          "git_blob": "224029cbc191ff8a20c85af097e1fd5cf67140fc"
+        },
+        {
+          "name": "special_tokens_map.json",
+          "size": 616,
+          "sha256": null,
+          "git_blob": "17305b3603dfb19ccc0f658ec2cd2cd3adff4a58"
+        },
+        {
+          "name": "tokenizer.json",
+          "size": 11421896,
+          "sha256": "9c5ae00e602b8860cbd784ba82a8aa14e8feecec692e7076590d014d7b7fdafa",
+          "git_blob": "51ebb3ba93988c73bbd83a3c163a14343fbc5b06"
+        },
+        {
+          "name": "tokenizer_config.json",
+          "size": 5266,
+          "sha256": null,
+          "git_blob": "6db75f9fa4f39d9551d9963923ba3d3330762a34"
+        },
+        {
+          "name": "vocab.json",
+          "size": 2776833,
+          "sha256": null,
+          "git_blob": "4783fe10ac3adce15ac8f358ef5462739852c569"
+        }
+      ],
+      "tag": "openreasoning",
+      "sampling": {
+        "temperature": 0.6,
+        "top_p": 0.95,
+        "top_k": -1
+      }
+    },
+    {
+      "repo_id": "microsoft/Phi-4-reasoning-plus",
+      "revision": "69baf8528e1bcf05f475034d9e5dd32875ed125f",
+      "files": [
+        {
+          "name": "CODE_OF_CONDUCT.md",
+          "size": 453,
+          "sha256": null,
+          "git_blob": "c72a5749c52ac97bca71c672ef5295d303d22b05"
+        },
+        {
+          "name": "LICENSE",
+          "size": 1105,
+          "sha256": null,
+          "git_blob": "700edcc5f42c4816520bc554926ad7e0d9e613d7"
+        },
+        {
+          "name": "README.md",
+          "size": 20928,
+          "sha256": null,
+          "git_blob": "2267c0f34861de87c7de22479ad6376c7c241908"
+        },
+        {
+          "name": "SECURITY.md",
+          "size": 2697,
+          "sha256": null,
+          "git_blob": "6b906d43bc2057e6a832c3236897b2e514d6e1e7"
+        },
+        {
+          "name": "config.json",
+          "size": 796,
+          "sha256": null,
+          "git_blob": "2e02e6d85b0d12b97a86486b48da9582789a84a5"
+        },
+        {
+          "name": "data_summary_card.md",
+          "size": 4159,
+          "sha256": null,
+          "git_blob": "705665c6e257d615cc9988d767ba83918fb94d25"
+        },
+        {
+          "name": "generation_config.json",
+          "size": 222,
+          "sha256": null,
+          "git_blob": "649fd15bb5ed715022d23f3d7fe9167aa438d179"
+        },
+        {
+          "name": "model-00001-of-00006.safetensors",
+          "size": 4933656472,
+          "sha256": "b09018075f60c9973c2bc200fc9b3c8bee57a18f934b50991d39803102bc8d5e",
+          "git_blob": "263e661b3f24ce08b682bde706efdf9baf61931f"
+        },
+        {
+          "name": "model-00002-of-00006.safetensors",
+          "size": 4954690712,
+          "sha256": "6a9bd9a40dd1a6b4c0763b02ce06ad9ac40d0859cf139996bb5d284f01f7b762",
+          "git_blob": "858aa8827543a2d6c092a8d1ec595bdc832014ec"
+        },
+        {
+          "name": "model-00003-of-00006.safetensors",
+          "size": 4902241352,
+          "sha256": "8007f9bc69a70ccc3b28e9b559e65ca9fcb80df36d1d25c0e17649cb73c51270",
+          "git_blob": "6d49e4555d586fae5608dff04da390b21828a227"
+        },
+        {
+          "name": "model-00004-of-00006.safetensors",
+          "size": 4771169120,
+          "sha256": "fc08d90365b09dcb4b354a5edfe587cc337309e3148231a7b2b745c8c9b599a7",
+          "git_blob": "2a74f544f8681cc4e1eefae96845400aaf88ef92"
+        },
+        {
+          "name": "model-00005-of-00006.safetensors",
+          "size": 4771169120,
+          "sha256": "b63d22c644e379be5c300bde6b9701496750589b8555d36285110465cdc0ea7b",
+          "git_blob": "389430f282361e54e804f483f76572e1a898b036"
+        },
+        {
+          "name": "model-00006-of-00006.safetensors",
+          "size": 4986116216,
+          "sha256": "071cc0603e240c02a17c5d2f5c7ce8d28f658f30f99e95cc68039023e452ff7b",
+          "git_blob": "a5260c84d8d135140e319e0506789280a3b72ac2"
+        },
+        {
+          "name": "model.safetensors.index.json",
+          "size": 20364,
+          "sha256": null,
+          "git_blob": "d9c4e28d4f7cc72949fdc86940c8a67583750436"
+        },
+        {
+          "name": "special_tokens_map.json",
+          "size": 431,
+          "sha256": null,
+          "git_blob": "27191d3f9dbc836d4dc18eec8f6a5d07e1deb309"
+        },
+        {
+          "name": "tokenizer.json",
+          "size": 7153070,
+          "sha256": null,
+          "git_blob": "44e48a4d87380f0810e3896f39a9315e1e259e4a"
+        },
+        {
+          "name": "tokenizer_config.json",
+          "size": 18985,
+          "sha256": null,
+          "git_blob": "cbe31b763ce812bdf37e486044fca80949bc7982"
+        },
+        {
+          "name": "vocab.json",
+          "size": 1612628,
+          "sha256": null,
+          "git_blob": "a3bc034f6adc81ad7c7b63b3d89867275a705be2"
+        }
+      ],
+      "tag": "phi4",
+      "sampling": {
+        "temperature": 0.8,
+        "top_p": 0.95,
+        "top_k": 50
+      }
+    }
+  ],
+  "replicas": 8,
+  "batch_size": 16,
+  "instruction": "Please reason step by step, and put your final answer within \\boxed{}. For questions with multiple parts, provide all requested answers in their original order.",
+  "sampling_policy": "One fresh generation at each budget, same per-question seed across budgets; native templates; model-specific sampling settings.",
+  "scoring_policy": "Evaluate final answers after </think>; unfinished reasoning without a final section is incorrect. Multiple reference components are required together in order, never OR alternatives.",
+  "manual_review_reference_keys": [
+    "skywork:5290832cd0c7231a0db741bd94c2fe85f2ee804aacc9d26c518ce62a3080c21e"
+  ]
+}
