@@ -8,6 +8,8 @@ The old training grader accepted `(1997,0)` versus `{1997,0}` and `A` versus `a`
 
 The grader remains our package's adapter around pinned Math-Verify and latex2sympy. Official PrimeRL and Verifiers files are unchanged. It does not import the teammate's evaluator.
 
+Grading errors matter for the staleness study: they change binary rewards, group-centered advantages and the fraction of tokens with zero direct GRPO signal. Unsupported output formats could occur at different rates as the policy changes. Keep one frozen reward policy across compared lag values and report unsupported/extraction outcomes alongside rewards; their counts alone do not establish accuracy.
+
 ## Snag-list findings
 
 | Items | Evidence in this code | Remaining limit |
@@ -28,7 +30,7 @@ The grader remains our package's adapter around pinned Math-Verify and latex2sym
 
 ## Dataset and run identity
 
-Preparation was rerun on all 37,713 rows. The corrected manifest accepts 37,703 and excludes the same 10 question IDs; retained IDs and inclusion flags exactly match the prior manifest. Its SHA-256 is `2815cfdbe90623acfbdc2c581b5de9f473f168ee1351d152a6b3b903dec93176`. This confirms selection stability, not correctness of every reference.
+Preparation was rerun on all 37,713 rows. The corrected manifest accepts 37,703 and excludes the same 10 question IDs; retained IDs and inclusion flags exactly match the prior manifest. Its canonical manifest identity is `2815cfdbe90623acfbdc2c581b5de9f473f168ee1351d152a6b3b903dec93176`; the JSON file SHA-256 is `ffd6ecf40730cd78a6eb00125e1269afe76a3bce32a6df57d8459522e4c00c8c`. This confirms selection stability, not correctness of every reference.
 
 The cluster uses new `assets/train-manifest-v2.json` and a fresh output directory. The stopped run and old manifest remain intact; its rewards, partial optimizer work and queued rollouts are not reused. Reward identity is frozen before launch and included in the source/data contract.
 

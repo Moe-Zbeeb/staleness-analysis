@@ -22,12 +22,20 @@ All changes are in this repository's adapter. Official PrimeRL remains pinned an
 Paths below are beneath `/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study` unless specified otherwise.
 
 - Release: `releases/correctness-v2-20260926`.
-- Manifest: `assets/train-manifest-v2.json`, SHA-256 `2815cfdbe90623acfbdc2c581b5de9f473f168ee1351d152a6b3b903dec93176`.
+- Manifest: `assets/train-manifest-v2.json`, canonical identity `2815cfdbe90623acfbdc2c581b5de9f473f168ee1351d152a6b3b903dec93176`.
 - Output: `outputs/exact256-80gb-seed42-v2`.
 - Metric mirror: `/mnt/xfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/metrics/exact256-80gb-seed42-v2`.
 - Runboard: [hosted dashboard](https://runboard-cloudflare.mbz02.workers.dev), project `staleness-analysis`.
 
-The launch receipt will record source commit, job ID, allocation, startup checks and Runboard identity. The intended allocation is one exclusive eight-A100-80GB node, 128 CPU slots, all node memory, account `grad-students`, partition/QoS `high-priority`, 14-day requested limit and no automatic requeue. This is a limit, not a runtime estimate.
+Job **2144963** was submitted and started on September 26, 2026, at **17:35:51 UTC**, on `deep-chungus-11`. Scheduler and CUDA receipts confirm one exclusive eight-A100-80GB PCIe node, 128 CPU slots, all node memory, account `grad-students`, partition/QoS `high-priority`, 14-day limit and no automatic requeue. Inference uses devices 0–3 and training uses 4–7. The time limit is not a runtime estimate.
+
+The launch directory is `launches/exact256-v2-seed42-20260926T173508Z`; its timestamp records preparation start. It preserves the batch script, frozen configuration, deployment and scheduler receipts, GPU health result, JUnit test report, preflight and Slurm logs. `prepared-runs/exact256-80gb-seed42-v2/SUBMISSION.json` points to it. Source commit is `5ad56dedbd4bfd3a4e3bb2f39ac4e56d0de274d8`; package SHA-256 is `30755021cac742fb1437c437149a1a1013c408fb3945c9d37cdc0af8284442c3`. Later documentation commits do not change the running source snapshot.
+
+All **170 tests passed** on the allocated node in 30.85 seconds, including the CUDA token-mask regression. All eight GPU ranks passed NCCL all-reduce (sum 36), BF16 backward, Flash Attention backward and vLLM RMSNorm checks. Asset preflight accepts 37,703 questions with the corrected manifest identity; its longest retained prompt is 793 tokens.
+
+Runboard registered `d729172f680449f7a9194d0f8c69d799` with name `exact256-80gb-seed42-v2` in project `staleness-analysis`; the hosted API confirms it is running. Source/data/runtime identity is `37a783d0688a010649dc6414860b5d39ca71ea086c6ef11f509923ea0fe222a4`; configuration identity is `cdea779e98127f8a1ded93c8f8d7e61ac1b0b2ea876ac98af929a7ecbd20a60d`.
+
+At **17:41:21 UTC**, startup weight synchronization had completed and the first bootstrap cohort was generating and grading: 86 responses started, 22 completed, and no complete 512-response cohort or optimizer update yet. XFS already contained the configuration, source identity, grading and metric journals. The [timestamped startup evidence](../../diagnostics/runs/exact256-v2-2144963.json) records this observation; it is not a live status report. Full-size update throughput and full-queue memory remain unmeasured.
 
 The preceding readiness run proves small-cohort updates and recovery on the older source. It does not certify this changed source, production-scale training time, full 256-cohort RAM use or checkpoint I/O. New startup results must be recorded separately.
 
