@@ -2,7 +2,7 @@
 
 Reviewed 2026-09-26 against study commit `039936f3c5938b8ef9c4ee8b52fae45051ece43f` and official PrimeRL `ab5de8fff44b2c4a5c85e24b6e6e3f7d57eee7b1`. The subject is DeepSeek-R1-Distill-Qwen-14B on the pinned cleaned DeepScaleR release. Each requested run has one exact integer lag; this document does not schedule a sweep.
 
-Source links were updated for the subsequent module organization. The scientific behavior audited here is unchanged; see the [layout and integration notes](upstream-integration.md#upgrades-and-layout-migration).
+Source links were updated for the subsequent module organization, which preserved scientific behavior; see the [layout and integration notes](upstream-integration.md#upgrades-and-layout-migration). A later baseline change on 2026-09-26 disabled weight decay (`0.01` to `0.0`) to remove parameter shrinkage independent of the GRPO loss gradient. The baseline table below reflects that change. Exact-age scheduling and the loss are unchanged; earlier cluster receipts describe the previous recipe.
 
 **The key distinction is between rollout age, policy difference, and learning quality.** Exact age makes an experiment interpretable, but does not establish that the model tolerates that age. No training or model generation was started for this audit, and there is no measured maximum tolerable lag for this model yet.
 
@@ -104,14 +104,14 @@ Evidence: [queue][queue], [controller][controller], [configuration][config], [re
 | --- | --- | --- |
 | Initial model/revision | Pinned DeepSeek R1 distilled Qwen 14B | Prior reasoning ability and entropy affect task difficulty and useful signal; conclusions are model-specific |
 | Learning rate/schedule | `1e-6`; 30-update ramp; then constant | Changes movement across the lag window; log LR actually used |
-| AdamW state | Betas `0.9, 0.999`; epsilon `1e-8`; decay `0.01` | Momentum, second moments and decay influence movement beyond the current batch; preserve on resume |
+| AdamW state | Betas `0.9, 0.999`; epsilon `1e-8`; decay `0` | Momentum and second moments influence movement beyond the current batch; preserve on resume. Decoupled weight decay is disabled |
 | Gradient norm cap | `1.0` | Changes update size and direction when rare contributions dominate; measure how often active |
 | Prompts per update | 64 | Changes task diversity and gradient variance; keep distinct from response count |
 | Responses per prompt | 8 | Changes group-baseline estimation, mixed-success probability and generated-token cost |
 | Advantage normalization | Reward minus group mean; no standard-deviation division | Changes prompt weighting and gradient scale; population/sample standardization are supported alternatives, not interchangeable defaults |
 | Clipping | Symmetric epsilon `0.2` | Determines which sign/ratio combinations stop contributing; larger or asymmetric intervals change the algorithm |
 | Loss reduction | Global valid-token mean | Long responses supply more token terms; total length changes the denominator; not equal weighting per response or a fixed-length denominator |
-| Zero-advantage groups | Retained, including in token denominator | Reduces effective signal; an all-zero policy gradient can still be followed by Adam momentum/decay movement |
+| Zero-advantage groups | Retained, including in token denominator | Reduces effective signal; an all-zero policy gradient can still be followed by movement from existing Adam momentum |
 | Reference KL/entropy bonus | No reference KL; no entropy bonus | No such regularizer currently constrains drift; adding one changes the comparison |
 | Training scope | Full model; FP32 optimization/reduction, BF16 compute | LoRA, quantization or different reduction precision would define a different recipe |
 | Output length | 8,192 generated-token cap | Changes reachable reasoning, truncation, token weighting and time; track the distribution, not just the cap |

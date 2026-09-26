@@ -24,7 +24,7 @@ def baseline(lag, profile="80gb", max_steps=1000, seed=42, root=None):
         lr_warmup_steps=30,
         lr_decay_steps=0,
         min_learning_rate=0.0,
-        weight_decay=0.01,
+        weight_decay=0.0,
         adam_beta1=0.9,
         adam_beta2=0.999,
         adam_epsilon=1e-8,

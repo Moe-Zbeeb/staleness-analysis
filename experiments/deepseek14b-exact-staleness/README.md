@@ -51,9 +51,11 @@ Generation uses frozen current inference weights and queues its original respons
 
 The `init` command writes a complete configuration. Its defaults are 64 prompts × 8 responses = 512 responses per update, a 2,048-token rendered-prompt cap, 8,192 response tokens, seed 42, and 1,000 total updates. Sampling uses temperature 1, top-p 1, disabled top-k/min-p, and neutral penalties.
 
-The loss is clipped GRPO with epsilon 0.2, reward-minus-group-mean advantages without standard-deviation normalization, and a global token mean. Reference KL and entropy coefficients are zero. Zero-advantage groups remain in the denominator. An all-zero cohort still executes AdamW; momentum and weight decay may move the policy.
+The loss is clipped GRPO with epsilon 0.2, reward-minus-group-mean advantages without standard-deviation normalization, and a global token mean. Reference KL and entropy coefficients are zero. Zero-advantage groups remain in the denominator. An all-zero cohort still executes AdamW; existing optimizer momentum may move the policy even with weight decay disabled.
 
-AdamW uses LR 1e-6, betas 0.9/0.999, epsilon 1e-8, weight decay 0.01 and gradient norm clipping at 1. LR warms up over 30 optimizer updates, then remains constant. This LR warm-up is distinct from the k-update bootstrap. Full-model training uses BF16 compute, FP32 optimization/reduction, activation checkpointing, and no quantization. Compilation and prefix caching are initially disabled.
+AdamW uses LR 1e-6, betas 0.9/0.999, epsilon 1e-8, weight decay 0 and gradient norm clipping at 1. Disabling weight decay removes parameter shrinkage independent of the GRPO loss gradient; the exact-age queue and GRPO objective are unchanged. LR warms up over 30 optimizer updates, then remains constant. This LR warm-up is distinct from the k-update bootstrap. Full-model training uses BF16 compute, FP32 optimization/reduction, activation checkpointing, and no quantization. Compilation and prefix caching are initially disabled.
+
+The baseline and configuration template previously used weight decay 0.01. Existing run JSON files retain their explicit settings: set `weight_decay` to `0.0` and rebuild resolved configs before a new run, or create a new configuration with `init`. This is a scientific configuration change, so it must not be applied while resuming an older recipe. The cluster deployment and its historical validation receipts predate this change.
 
 | Profile | Trainer / inference GPUs | Request concurrency | Active sequences per inference replica | Activation CPU offload |
 |---|---:|---:|---:|---|
