@@ -73,6 +73,7 @@ def resolve(study, resume=None):
                 "scheduler": scheduler,
             },
             "orchestrator": {
+                "eval": None,
                 "model": {"client": {"base_url": f"http://127.0.0.1:{study.inference_port}/v1"}},
                 "renderer": {"name": "default"},
                 "batch_size": study.response_batch_size,

@@ -28,7 +28,7 @@
   "prompt_instruction": "Please reason step by step, and put your final answer within \\boxed{}.",
   "truncated_reward": "grade_final",
   "seed": 42,
-  "checkpoint_interval": 25,
+  "checkpoint_interval": 100,
   "checkpoint_keep_last": 4,
   "checkpoint_keep_interval": 100,
   "trainer_gpus": 4,

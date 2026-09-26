@@ -115,7 +115,13 @@ Each run copies the authored source into `output/source` and executes children f
 
 ## Recovery and evidence
 
-Checkpoints occur every 25 updates and at completion. A checkpoint becomes complete after trainer state, every trainer rank's RNG state, sampler progress and the pending queue have been saved. Component manifests bind metadata/sampler/RNG contents and trainer shard sizes. They do not checksum every large tensor shard. Retention removes only completed checkpoints from this run, keeping the last four and every 100th update.
+Checkpoints occur every 100 completed optimizer updates and at completion, including an off-interval final update. The update count includes bootstrap. Every 100-step checkpoint is retained; retention also keeps the last four completed checkpoints, including the final checkpoint. A default 1,000-update run therefore keeps steps 100, 200, ..., 1,000.
+
+With the default cluster root, checkpoints are written directly to NFS at `/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/outputs/<run-name>/checkpoints/step_<N>/`. NFS is shared disk storage. Changing `output_dir` or the `init --root` argument changes this destination. Saving is synchronous and can pause progress while NFS writes finish; it does not add optimizer updates or change rollout age.
+
+A checkpoint becomes complete after trainer state, every trainer rank's RNG state, sampler progress and the pending queue have been saved. Trainer state includes sharded model weights, optimizer state and scheduler state. Component manifests bind metadata/sampler/RNG contents and trainer shard sizes. They do not checksum every large tensor shard. These are distributed recovery checkpoints, not standalone Hugging Face model exports.
+
+Intermediate evaluation is explicitly disabled. The saved milestones are available for a separate evaluation workflow after training; no evaluation job is automatically launched. Existing run JSON files retain their old interval: set `checkpoint_interval` and `checkpoint_keep_interval` to `100` and rebuild resolved configs before a new run, or use `init` for a new configuration. The earlier cluster deployment has not received these changes.
 
 For resume, copy the same scientific configuration and change only `output_dir` to a new directory:
 

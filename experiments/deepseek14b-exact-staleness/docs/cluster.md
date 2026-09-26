@@ -31,6 +31,10 @@ Setup and diagnostics never invoke `deepseek-study run`. No study training has b
 
 `deepseek-study init` writes a configuration; `build` resolves official PrimeRL settings; `check` verifies assets. These commands do not start training. `run` starts training and must only be invoked when authorized, inside the matching Slurm allocation.
 
+The current recipe writes full recovery checkpoints every 100 completed optimizer updates and at completion. Under the default root, the shared NFS destination is `/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/outputs/<run-name>/checkpoints/step_<N>/`. All 100-step milestones and the final checkpoint are retained. Writes are synchronous; this is shared disk storage, not CPU or GPU memory offload. Intermediate evaluation is disabled, and saved checkpoints can be evaluated separately later. A separate loading/export workflow is needed for evaluation; these sharded recovery checkpoints are not standalone Hugging Face model directories.
+
+The deployment receipts above predate the organized source, zero-weight-decay baseline and 100-update save interval. Deploy the current package and regenerate run configs before using this recipe on the cluster.
+
 For an authorized GPU job, inspect current node topology, then request exactly one full node with `--exclusive`, its full GPU count, and explicit account, partition and QoS. The verified class is `--account=grad-students --partition=high-priority --qos=high-priority`. Constrain placement to nodes with exactly the requested count. When several candidates are eligible, exclude incompatible nodes; Slurm `--nodelist` requests every listed node rather than choosing one candidate. Preserve Slurm's actual `CUDA_VISIBLE_DEVICES` mapping.
 
 Future runs retain immutable source snapshots and require a new output directory. Full 14B end-to-end training, live model-weight transfer, full-context memory fit and actual checkpoint/resume execution still require separately authorized validation. Successful hardware diagnostics do not establish those properties.
