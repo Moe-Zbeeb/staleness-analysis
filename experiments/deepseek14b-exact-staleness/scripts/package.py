@@ -22,7 +22,7 @@ def main():
             for path in (root / name).rglob("*")
             if path.is_file() and "__pycache__" not in path.parts and path.suffix != ".pyc"
         )
-    for name in ("prepared-data-exclusions.json", "prepared-data-summary.json"):
+    for name in ("prepared-data-exclusions.json", "prepared-data-summary.json", "cluster-validation.json"):
         selected.append(root / "diagnostics" / name)
     prepared = root / "assets/train-manifest.json"
     if prepared.is_file():

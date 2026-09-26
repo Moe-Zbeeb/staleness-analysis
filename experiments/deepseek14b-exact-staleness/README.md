@@ -2,7 +2,7 @@
 
 One run at a time, with the exact nonnegative integer `k` you request. This package composes official PrimeRL v0.9.0 at `ab5de8fff44b2c4a5c85e24b6e6e3f7d57eee7b1`; it does not import the teammate fork or edit upstream files.
 
-**Status:** implemented and locally validated, including preparation of the full pinned dataset. Distributed GPU execution, NCCL weight transfer and GPU memory fit are not yet validated. Cluster SSH access has been restored; Linux deployment and GPU validation are tracked separately. There is no launched training job or automatic sweep.
+**Status:** deployed on the cluster; all 103 tests passed locally and on Linux. Runtime checks passed on eight A100 80GB GPUs for NCCL, BF16 backward, Flash Attention backward and vLLM RMSNorm. Full 14B training, live model-weight transfer, memory fit and training/resume execution remain unverified. No study training has been launched. See [validation evidence](diagnostics/cluster-validation.json).
 
 ## Review and organization
 

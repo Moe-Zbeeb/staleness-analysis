@@ -37,9 +37,9 @@ The initial k updates are explicitly on-policy, not exact-k. The default 1,000-u
 
 ## Validation and limits
 
-The local suite passed 103 tests before publication preparation. It covers scheduling across multiple k values and horizons, queue recovery, duplicate/version rejection, official packing and transport serialization, GRPO gradients and masking, grading timeouts, data contracts, tokenizer parity, source snapshots, checkpoint integrity and configuration resolution.
+The suite passed all 103 tests locally and on the cluster (preparation job `2144915`). It covers scheduling across multiple k values and horizons, queue recovery, duplicate/version rejection, official packing and transport serialization, GRPO gradients and masking, grading timeouts, data contracts, tokenizer parity, source snapshots, checkpoint integrity and configuration resolution.
 
-Cluster preparation independently runs this suite against the pinned Linux environment and verifies the existing model files. The GPU health check tests NCCL, BF16 and Flash Attention backward and native extension loading; it does not load or train the 14B model. Consult [cluster operations](cluster.md) for current evidence locations.
+Cluster preparation verified all 11 pinned model files and five native-tokenizer probes. GPU diagnostic `2144920` passed on eight A100 80GB GPUs: NCCL all-reduce returned 36 on every rank, BF16 and Flash Attention backward passed, and vLLM RMSNorm matched its Torch reference. The diagnostic does not load or train the 14B model. See [validation evidence](../diagnostics/cluster-validation.json) and [cluster operations](cluster.md).
 
 These checks do not establish end-to-end distributed training correctness, live NCCL model-weight transfer, full-context GPU memory fit, or actual training checkpoint/resume success. Those require a separately authorized training diagnostic. No study training has been launched.
 

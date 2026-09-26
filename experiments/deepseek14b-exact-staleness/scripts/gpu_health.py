@@ -45,7 +45,12 @@ def main():
         if not all(torch.isfinite(value.grad).all().item() for value in attention_inputs):
             raise RuntimeError("Flash Attention backward produced nonfinite gradients")
         importlib.import_module("vllm")
-        importlib.import_module("vllm._C")
+        importlib.import_module("vllm._C_stable_libtorch")
+        normalized = torch.empty_like(inputs)
+        weight = torch.ones(128, device="cuda", dtype=torch.bfloat16)
+        torch.ops._C.rms_norm(normalized, inputs, weight, 1e-6)
+        reference = inputs.float() * torch.rsqrt(inputs.float().square().mean(-1, keepdim=True) + 1e-6)
+        torch.testing.assert_close(normalized.float(), reference, rtol=0.02, atol=0.01)
         properties = torch.cuda.get_device_properties(local_rank)
         hardware = {
             "rank": local_rank,
@@ -56,6 +61,7 @@ def main():
             "all_reduce": signal.item(),
             "bf16_backward": True,
             "flash_attention_backward": True,
+            "vllm_rms_norm": True,
         }
         gathered = [None] * world
         dist.all_gather_object(gathered, hardware)
