@@ -1,6 +1,7 @@
 import argparse
 import os
 import subprocess
+import tomllib
 from pathlib import Path
 
 PIN = "ab5de8fff44b2c4a5c85e24b6e6e3f7d57eee7b1"
@@ -62,6 +63,9 @@ def main():
     python = str(vendor / ".venv" / "bin" / "python")
     if not args.gpu:
         run("uv", "pip", "install", "--python", python, "torch==2.11.0", "prometheus-client==0.25.0")
+    dependencies = tomllib.loads((root / "pyproject.toml").read_text())["project"]["dependencies"]
+    runboard = next(requirement for requirement in dependencies if requirement.startswith("runboard @ "))
+    run("uv", "pip", "install", "--python", python, "--no-deps", runboard)
     run("uv", "pip", "install", "--python", python, "--no-deps", "-e", str(root))
     print(f"Ready: {vendor / '.venv' / 'bin' / 'deepseek-study'}")
 

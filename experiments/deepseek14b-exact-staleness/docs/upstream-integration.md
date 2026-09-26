@@ -15,6 +15,8 @@
 
 The unused prime-kernels submodule remains uninitialized. No teammate fork is imported. Installation uses `uv sync --frozen`; the bootstrap and runtime constants must agree on the PrimeRL commit. Local source verification during this organization pass found the expected commit, lock digest, submodule revisions and no tracked changes.
 
+The study additionally installs [Runboard](https://github.com/Moe-Zbeeb/runboard) from commit `379e67646391347f50f9e72f1e0226e62c52644f` (version 0.2.0), as a direct dependency in the study's `pyproject.toml`. Bootstrap installs it with `--no-deps` after PrimeRL's frozen sync, without modifying the upstream lockfile or either library's source. Run identity captures the installed Runboard version; the source snapshot binds the exact dependency requirement. This new dependency and tracking source change require matching source/runtime identities on resume.
+
 `runtime/launcher.py::verify_upstream` checks the checkout, submodule state and where the key Python packages were imported from. The run identity records the upstream lockfile and runtime versions. This is a pinned integration, not a promise that a future PrimeRL release will work unchanged.
 
 ## Customization inventory
@@ -31,10 +33,13 @@ The unused prime-kernels submodule remains uninitialized. No teammate fork is im
 | [runtime/checkpoints.py](../src/deepseek_study/runtime/checkpoints.py) | Official trainer/orchestrator checkpoint output | Commits queue/state metadata and prunes only completed study bundles | No |
 | [deepseek_deepscaler/](../src/deepseek_deepscaler/) | Verifiers `Taskset`, `Task`, reward API | Adds the cleaned DeepScaleR taskset and strict math grader | No |
 | [dataset/assets.py](../src/deepseek_study/dataset/assets.py) | Transformers tokenizer loading and Renderers | Creates a separate model view with `tokenizer_class=TokenizersBackend`; verifies native token/template parity | No; only generated tokenizer metadata changes |
+| [tracking/runboard.py](../src/deepseek_study/tracking/runboard.py) | PrimeRL file-monitor JSONL; Runboard `Run` and saved connection discovery | A separate observer forwards scalar trainer/study metrics and checkpoint completion events; no new trainer callback | No |
 
 The official trainer owns model loading, FSDP, forward/backward, token normalization, accumulation, AdamW, scheduling and weight publication. The study does not patch their implementations. It does change the data supplied to them and the configured objective, so “unmodified library source” must not be interpreted as “all default PrimeRL behavior.”
 
 The custom controller does not run the stock evaluation loop. Adding evaluation settings to an upstream config alone is not an implemented evaluator for this study.
+
+Runboard does not change this boundary. Intermediate evaluation remains disabled, and checkpoint files stay on NFS. Its separate process is excluded from the launcher's training-failure checks and receives final status after training-service shutdown. See the [Runboard guide](runboard.md) for clocks, delivery limits and configuration.
 
 ## Upgrades and layout migration
 

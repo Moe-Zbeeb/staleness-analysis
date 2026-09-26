@@ -19,6 +19,9 @@ def main():
     init.add_argument("--root", type=Path)
     audit_parser = commands.add_parser("audit")
     audit_parser.add_argument("directory", type=Path)
+    tracking = commands.add_parser("track")
+    tracking.add_argument("directory", type=Path)
+    tracking.add_argument("--once", action="store_true")
     prepare = commands.add_parser("prepare")
     prepare.add_argument("--model", type=Path, required=True)
     prepare.add_argument("--dataset", type=Path, required=True)
@@ -48,6 +51,11 @@ def main():
         return
     if args.command == "schema":
         print(json.dumps(StudyConfig.model_json_schema(), indent=2))
+        return
+    if args.command == "track":
+        from deepseek_study.tracking.runboard import observe
+
+        print(json.dumps(observe(args.directory, once=args.once), indent=2))
         return
     if args.command == "prepare":
         from deepseek_study.dataset.assets import prepare

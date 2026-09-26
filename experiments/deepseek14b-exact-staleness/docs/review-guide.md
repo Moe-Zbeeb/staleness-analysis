@@ -39,7 +39,7 @@ The initial k updates are explicitly on-policy, not exact-k. The default 1,000-u
 
 ## Validation and limits
 
-The organized layout passed all 103 tests locally. The preceding layout passed the same suite on the cluster (preparation job `2144915`); that receipt is not a rerun of the organized source. The suite covers scheduling across multiple k values and horizons, queue recovery, duplicate/version rejection, official packing and transport serialization, GRPO gradients and masking, grading timeouts, data contracts, tokenizer parity, source snapshots, checkpoint integrity and configuration resolution.
+The current package passed all 113 tests locally, including ten Runboard integration checks. The preceding cluster deployment passed 103 tests (preparation job `2144915`); that receipt is not a rerun of the current source. The suite covers scheduling across multiple k values and horizons, queue recovery, duplicate/version rejection, official packing and transport serialization, GRPO gradients and masking, grading timeouts, data contracts, tokenizer parity, source snapshots, checkpoint integrity and configuration resolution. Runboard checks cover file/HTTP delivery, metric clocks, outage spooling, the observer subprocess and failure isolation; see the [integration guide](runboard.md).
 
 Cluster preparation verified all 11 pinned model files and five native-tokenizer probes. GPU diagnostic `2144920` passed on eight A100 80GB GPUs: NCCL all-reduce returned 36 on every rank, BF16 and Flash Attention backward passed, and vLLM RMSNorm matched its Torch reference. The diagnostic does not load or train the 14B model. See [validation evidence](../diagnostics/cluster-validation.json) and [cluster operations](cluster.md).
 

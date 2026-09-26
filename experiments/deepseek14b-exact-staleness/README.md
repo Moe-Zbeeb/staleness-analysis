@@ -2,7 +2,7 @@
 
 One run at a time, with the exact nonnegative integer `k` you request. This package composes official PrimeRL v0.9.0 at `ab5de8fff44b2c4a5c85e24b6e6e3f7d57eee7b1`; it does not import the teammate fork or edit upstream files.
 
-**Status:** the organized package passes all 103 tests locally. The earlier deployed layout passed the same suite on Linux, plus checks on eight A100 80GB GPUs for NCCL, BF16 backward, Flash Attention backward and vLLM RMSNorm. Those cluster receipts describe the earlier deployment, not a new test of this layout. Full 14B training, live model-weight transfer, memory fit and training/resume execution remain unverified. No study training has been launched. See [validation evidence](diagnostics/cluster-validation.json).
+**Status:** the current package passes all 113 tests locally, including ten Runboard integration checks. The earlier deployed layout passed 103 tests on Linux, plus checks on eight A100 80GB GPUs for NCCL, BF16 backward, Flash Attention backward and vLLM RMSNorm. Those cluster receipts describe the earlier deployment, not a new test of this layout or Runboard delivery. Full 14B training, live model-weight transfer, memory fit and training/resume execution remain unverified. No study training has been launched. See [validation evidence](diagnostics/cluster-validation.json).
 
 ## Review and organization
 
@@ -17,6 +17,7 @@ Start with the [architecture](docs/architecture.md) for the directory tree and e
 | Exact-age cohorts and audit | [rollouts/](src/deepseek_study/rollouts/) | Changing generation, queueing or consumption |
 | Assets, preparation and grading | [dataset/](src/deepseek_study/dataset/) | Working on the dataset or reward policy |
 | PrimeRL configuration, processes and recovery | [runtime/](src/deepseek_study/runtime/) | Working on the library integration or checkpoint lifecycle |
+| Runboard metrics and dashboard delivery | [tracking/](src/deepseek_study/tracking/) | Observing existing logs without changing training |
 | Taskset plugin | [deepseek_deepscaler/](src/deepseek_deepscaler/) | Connecting prepared questions and rewards to Verifiers |
 | Installation and health checks | [scripts/](scripts/) | Preparing dependencies, packaging or checking hardware |
 | Tests and evidence | [tests/](tests/), [diagnostics/](diagnostics/) | Reviewing validated behavior and limits |
@@ -35,7 +36,7 @@ The [integration guide](docs/upstream-integration.md) lists every customization,
 
 ## Source-layout update
 
-Implementation files now live under four concern-specific subpackages. The `deepseek-study` command, configuration fields, taskset name, scientific defaults and training algorithm are unchanged. Both hardware profiles resolve identically to the previous layout except for the custom loss import path, now `deepseek_study.learning.loss.clipped_grpo`. Advantage, loss, queue and reward implementation files retain their previous bytes; the grader identity and prepared dataset manifest are unchanged.
+The original module reorganization moved implementation files into four concern-specific subpackages without changing scientific behavior; `tracking/` now adds the Runboard observer. The original reorganization changed the resolved custom-loss import path to `deepseek_study.learning.loss.clipped_grpo`. Advantage, loss, queue and reward implementation files retain their previous bytes; the grader identity and prepared dataset manifest are unchanged. Subsequent baseline changes to weight decay and checkpoint cadence are described below. Runboard adds the `track` command and a pinned dependency while preserving the scientific recipe.
 
 Regenerate resolved configs from the study JSON using `deepseek-study build`; do not reuse old resolved files with the flat loss import path. Source fingerprints and pickled module paths changed, so old source snapshots/checkpoints require their original code. Use a fresh source deployment for this layout; do not overlay it onto an old source tree and leave obsolete modules behind. [Upgrade and deployment notes](docs/upstream-integration.md#upgrades-and-layout-migration).
 
@@ -132,9 +133,17 @@ vendor/prime-rl/.venv/bin/deepseek-study audit /absolute/path/to/new-run
 
 Changed source, runtime identity, data or configuration is rejected. The original GPU layout is required; cross-layout optimizer/RNG resharding is not enabled. Queued responses are preserved exactly and trainer RNG is restored. Future inference is not guaranteed bitwise identical after restart because the complete vLLM RNG state is not restored. Only load trusted project checkpoints.
 
-`updates.jsonl` records versions, exact age, bootstrap status, original question/response IDs, reward, zero-advantage fraction and queue accounting. `generations.jsonl` records generation time and provenance. `grading.jsonl` records extraction/comparison reasons and retry information. `rollouts/*.msgpack` preserves full training token/log-probability payloads; failed episodes are written under `failures/`. Official trainer metrics and process logs remain local. No external tracking is enabled.
+`updates.jsonl` records versions, exact age, bootstrap status, original question/response IDs, reward, zero-advantage fraction and queue accounting. `generations.jsonl` records generation time and provenance. `grading.jsonl` records extraction/comparison reasons and retry information. `rollouts/*.msgpack` preserves full training token/log-probability payloads; failed episodes are written under `failures/`. Original trainer metrics and process logs remain local. The Runboard observer forwards numeric metrics and run metadata to a configured backend, or stores dashboard data locally when no backend is configured; it does not upload rollout text or checkpoint files.
 
 The benchmark suite from the teammate note is not bundled or automatically run: its frozen benchmark artifacts and audited exclusions were not supplied. Training metrics are not benchmark evaluation results.
+
+## Runboard dashboard
+
+The launcher automatically starts one separate Runboard observer. It reads existing trainer/study logs and completed-checkpoint markers, then reports staleness, consumed-rollout reward, queue size, generation timing, trainer loss/ratio/optimizer metrics and checkpoint milestones. It does not run evaluation or change the training algorithm. Observer failure does not fail training.
+
+Bootstrap installs Runboard from pinned commit `379e67646391347f50f9e72f1e0226e62c52644f`. The observer uses your configured Runboard endpoint or `RUNBOARD_DIR`; without either, it writes to `<output_dir>/tracking/runboard-runs`, on NFS with the default output path. Credentials remain in Runboard's saved connection or environment. `RUNBOARD_PROJECT` selects the dashboard project; `DEEPSEEK_STUDY_RUNBOARD=0` disables the observer.
+
+See the [Runboard guide](docs/runboard.md) for setup, exact metric meanings, outage handling and importing completed logs with `deepseek-study track <run-directory> --once`. The integration is tested locally, including authenticated HTTP delivery, but has not been deployed or verified against a live cluster backend.
 
 ## Local validation and portable package
 

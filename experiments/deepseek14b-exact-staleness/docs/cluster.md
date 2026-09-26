@@ -35,6 +35,8 @@ The current recipe writes full recovery checkpoints every 100 completed optimize
 
 The deployment receipts above predate the organized source, zero-weight-decay baseline and 100-update save interval. Deploy the current package and regenerate run configs before using this recipe on the cluster.
 
+They also predate the [Runboard integration](runboard.md). Bootstrap now installs the pinned Runboard client. The launcher starts a CPU-only metrics observer automatically; use a saved Runboard connection or the job's `RUNBOARD_SERVER`/`RUNBOARD_TOKEN`, or set `RUNBOARD_DIR` to shared storage. Without a configured destination, dashboard files remain under the run's `tracking/runboard-runs` directory on NFS. No dashboard server, tunnel, backend deployment or training job is started by installation. Live cluster delivery still requires validation against the configured backend.
+
 For an authorized GPU job, inspect current node topology, then request exactly one full node with `--exclusive`, its full GPU count, and explicit account, partition and QoS. The verified class is `--account=grad-students --partition=high-priority --qos=high-priority`. Constrain placement to nodes with exactly the requested count. When several candidates are eligible, exclude incompatible nodes; Slurm `--nodelist` requests every listed node rather than choosing one candidate. Preserve Slurm's actual `CUDA_VISIBLE_DEVICES` mapping.
 
 Future runs retain immutable source snapshots and require a new output directory. Full 14B end-to-end training, live model-weight transfer, full-context memory fit and actual checkpoint/resume execution still require separately authorized validation. Successful hardware diagnostics do not establish those properties.

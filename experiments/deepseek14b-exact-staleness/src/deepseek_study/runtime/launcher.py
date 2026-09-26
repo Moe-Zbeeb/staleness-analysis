@@ -124,7 +124,27 @@ def launch(study, root, resume=None):
                 args, env={**base_env, **env}, stdout=stream, stderr=subprocess.STDOUT, start_new_session=True
             )
 
+    run_status = "crashed"
+    observer_warned = False
     try:
+        if os.environ.get("DEEPSEEK_STUDY_RUNBOARD", "1") != "0":
+            try:
+                start(
+                    "runboard",
+                    [
+                        sys.executable,
+                        "-m",
+                        "deepseek_study.tracking.runboard",
+                        str(output),
+                        "--parent-pid",
+                        str(os.getpid()),
+                    ],
+                    {"CUDA_VISIBLE_DEVICES": "", "RANK": "0", "LOCAL_RANK": "0"},
+                )
+            except Exception as error:
+                print(
+                    f"Runboard observer could not start ({type(error).__name__}); training continues", file=sys.stderr
+                )
         start(
             "inference",
             [sys.executable, "-m", "prime_rl.entrypoints.inference", "@", str(config_dir / "inference.json")],
@@ -173,18 +193,28 @@ def launch(study, root, resume=None):
         while True:
             status = {name: process.poll() for name, process in processes.items()}
             for name, code in status.items():
+                if name == "runboard":
+                    if code is not None and not observer_warned:
+                        print("Runboard observer exited; training continues. See logs/runboard.log", file=sys.stderr)
+                        observer_warned = True
+                    continue
                 if code is not None and (code != 0 or name not in {"controller", "trainer"}):
                     raise RuntimeError(f"{name} exited with status {code}; see {logs / (name + '.log')}")
             if status["controller"] == 0:
                 if not (output / "study-complete.json").is_file():
                     raise RuntimeError("Controller exited without a successful completion marker")
                 if status["trainer"] == 0:
+                    run_status = "finished"
                     break
                 trainer_exit_deadline = trainer_exit_deadline or time.monotonic() + study.timeout_seconds
                 if time.monotonic() > trainer_exit_deadline:
                     raise RuntimeError("Trainer failed to exit after the controller completed")
             time.sleep(1)
+    except KeyboardInterrupt:
+        run_status = "killed"
+        raise
     finally:
+        observer = processes.pop("runboard", None)
         for process in processes.values():
             try:
                 os.killpg(process.pid, signal.SIGTERM)
@@ -202,5 +232,19 @@ def launch(study, root, resume=None):
             except ProcessLookupError:
                 pass
             process.wait()
+        try:
+            checkpoints.atomic_write(output / "run-status.json", json.dumps({"status": run_status}).encode())
+        except Exception as error:
+            print(f"Could not record launcher status ({type(error).__name__})", file=sys.stderr)
+        if observer is not None:
+            try:
+                observer.wait(timeout=20)
+            except subprocess.TimeoutExpired:
+                try:
+                    os.killpg(observer.pid, signal.SIGKILL)
+                except ProcessLookupError:
+                    pass
+                observer.wait()
+                print("Runboard observer exceeded shutdown deadline; original logs remain available", file=sys.stderr)
         signal.signal(signal.SIGTERM, previous_term)
     return output

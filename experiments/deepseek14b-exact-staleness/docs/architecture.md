@@ -23,6 +23,8 @@ deepseek14b-exact-staleness/
 │   │   │   ├── rewards.py
 │   │   │   ├── grading.py
 │   │   │   └── worker.py
+│   │   ├── tracking/
+│   │   │   └── runboard.py
 │   │   └── runtime/
 │   │       ├── build.py
 │   │       ├── launcher.py
@@ -57,6 +59,7 @@ Each subpackage also has an empty `__init__.py`. `vendor/`, `assets/`, `outputs/
 | `runtime/launcher.py` | Preflight, source snapshot, process startup and shutdown | Only the `run` command starts training |
 | `runtime/trainer.py`, `trainer_state.py` | Trainer entry point, seed setup and RNG checkpoint adapter | Official trainer still performs forward/backward and optimizer steps |
 | `runtime/checkpoints.py`, `identity.py` | Atomic state bundles, retention and immutable source/runtime identity | Recovery requires the same scientific/source identity |
+| `tracking/runboard.py` | Runboard observer, metric mapping and saved-log imports | Reads journals and completion markers in a separate CPU process; does not call training or evaluation |
 
 ## Execution flow
 
@@ -83,6 +86,8 @@ flowchart TD
 Generation of a future cohort can overlap the current update. Inference weights change only after that cohort finishes. Every consumed cohort causes one optimizer update after all packed microbatches accumulate. The first `k` updates are labeled on-policy bootstrap; subsequent cohorts have exact age `k`. The tail drains without unused generation.
 
 The controller composes the official dispatcher, sink, packer, transports and watcher. It does not start the automatic newest-weight watcher or the stock orchestrator training/evaluation loop. See [imported-library integration](upstream-integration.md) for the exact boundaries and runtime override.
+
+The launcher also starts a Runboard observer from the source snapshot. Existing file-monitor metrics, study journals and completed-checkpoint markers feed this process; its failure does not fail training. Runboard performs delivery in its own sender thread. The launcher records terminal status after stopping training services, then allows a bounded observer drain. See [tracking behavior and metric clocks](runboard.md).
 
 ## Read and change in this order
 

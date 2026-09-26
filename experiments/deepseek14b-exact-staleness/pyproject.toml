@@ -6,13 +6,19 @@ build-backend = "hatchling.build"
 name = "deepseek-staleness-study"
 version = "0.1.0"
 requires-python = ">=3.12,<3.13"
-dependencies = ["prime-rl==0.9.0"]
+dependencies = [
+    "prime-rl==0.9.0",
+    "runboard @ git+https://github.com/Moe-Zbeeb/runboard.git@379e67646391347f50f9e72f1e0226e62c52644f",
+]
 
 [project.scripts]
 deepseek-study = "deepseek_study.cli:main"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/deepseek_study", "src/deepseek_deepscaler"]
+
+[tool.hatch.metadata]
+allow-direct-references = true
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
