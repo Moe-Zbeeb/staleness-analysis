@@ -59,13 +59,15 @@ Raw results, health and exact environment settings are in [the transport matrix 
 | Shared memory, Simple protocol | 114.75 ms | 225.76 ms |
 | Shared memory, Simple, eight CTAs | 114.57 ms | 224.90 ms |
 
-The four-rank group improved by 4.57× and 4.85× with shared memory. Forcing Simple or eight CTAs did not add a useful benefit there. The simultaneous five-rank group improved less: 1.18× for the all-gather and 2.76× for the reduce-scatter with automatic protocol. Placement and group size matter; neither result is an end-to-end production speedup. The next model comparison changes only the two local-transport disable flags.
+The four-rank group improved by 4.57× and 4.85× with shared memory. Forcing Simple or eight CTAs did not add a useful benefit there. The simultaneous five-rank group improved less: 1.18× for the all-gather and 2.76× for the reduce-scatter with automatic protocol. Both groups ran concurrently and shared host/network resources. Their contention can differ from production, where only one four-rank learner group trains. Placement, group size and concurrency matter; neither result is an end-to-end production speedup. The next model comparison changes only the two local-transport disable flags.
 
 ## Corrected model replay
 
 The first replay harness accidentally set `PYTORCH_CUDA_ALLOC_CONF=expandable_segments:False` and `OMP_NUM_THREADS=4`. Production's pinned PrimeRL launcher sets expandable segments to `True` and OMP threads to `1`. The first replay's third update failed trying to allocate 2.90 GiB with 2.62 GiB free and 4.98 GiB reserved but unallocated. Allocator mismatch and profiling retention are possible contributors, not a proven diagnosis of the failure.
 
 The corrected runner imports the same pinned `DEFAULT_COMMON_ENV_VARS` and `DEFAULT_TRAINER_ENV_VARS` as production, records the effective environment per rank, and makes tracing opt-in. Job `2144987` runs an untraced comparison on all nine A100 40GB GPUs on `deep-chungus-4`, with three disposable updates per candidate and a one-hour allocation limit. Account `grad-students`, partition `low-priority`, QoS `normal`, 96 CPUs, all node memory and exclusive allocation were verified. Its health checks passed on every GPU. Model results are pending.
+
+Weight-transfer job `2144997` is queued after the replay. It assigns four GPUs to inference-side probes and five to trainer-side probes, covering the complete spare node. The broadcast communicator has the same five members as production: one trainer sender and four inference receivers. It tests both transports with each side's real allocator setting. This small-tensor compatibility probe does not load the model or establish the full four-trainer/four-inference production memory fit.
 
 The production run, its environment and imported library source are unchanged. Its four-rank A100 80GB topology still requires its own validation before deployment.
 
@@ -76,6 +78,8 @@ The production run, its environment and imported library source are unchanged. I
 | [profile_node.py](../scripts/profile_node.py) | Full-allocation health check, transport microbenchmarks and bounded archive replay; separate output directories; no production checkpoint or policy publication |
 | [profile_collectives.py](../scripts/profile_collectives.py) | BF16/FP32 all-gather and reduce-scatter at 16, 64 and 256 MiB, three warmups and twelve repetitions; rank-wise correctness checks and group-maximum latency |
 | [profile_trainer.py](../scripts/profile_trainer.py) | Same model/configured GRPO on saved microbatches, phase timers, one optional CPU/CUDA trace and unchanged token diagnostics |
+| [compare_profile_replays.py](../scripts/compare_profile_replays.py) | Requires complete optimizer-step receipts and identical grids/configs, compares archived inputs and model outputs, and reports timings, gradient norms and clipping-mask differences |
+| [weight_transfer_probe.py](../scripts/weight_transfer_probe.py) | Bounded Torch/vLLM broadcast compatibility test with separate trainer/inference GPU visibility and allocator settings |
 | [profile_logging.py](../scripts/profile_logging.py) | Compression and write/fsync timing using actual token archives, with exact column-by-column round-trip verification |
 | [profile_transport_matrix.py](../scripts/profile_transport_matrix.py) | Full-node health and bounded network/shared-memory, automatic/Simple protocol and CTA comparisons, with large tensors and explicit rank groups |
 
@@ -107,4 +111,4 @@ Corrected replay: `/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-stu
 
 User-authorized SSH/Duo reconnection succeeded and collected the initial job's final failure and complete matrix results. The corrected replay is running separately from production.
 
-Local validation passed Ruff and Python compilation for the profiling tools. The earlier GRPO, queue and paper-metric suites passed 54 tests with one CUDA-only skip; an instrumented AdamW/linear-scheduler smoke check also passed. The new matrix passed actual GPU correctness checks for all five configurations and both rank groups. These checks do not establish model-level or production-level equivalence.
+Local validation passed Ruff and Python compilation for the profiling tools. The earlier GRPO, queue and paper-metric suites passed 54 tests with one CUDA-only skip; an instrumented AdamW/linear-scheduler smoke check also passed. The replay comparator also passed local smoke checks for equal outputs, modified inputs/outputs/masks and rejection of mismatched grids. The new matrix passed actual GPU correctness checks for all five configurations and both rank groups. These checks do not establish model-level or production-level equivalence.

@@ -124,6 +124,28 @@
     "production_completed_updates": 4,
     "production_update4_learner_seconds": 2607.41356139211,
     "effective_submission": "sbatch --parsable --account=grad-students --partition=low-priority --qos=normal --exclude=deep-chungus-[1-3,6-11],deep-gpu-[10-11] --nodes=1 --ntasks=1 --cpus-per-task=96 --gres=gpu:a100:9 --exclusive --mem=0 --time=01:00:00 --no-requeue --job-name=staleness-replay-v2 --output=/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/profiling/20260927-replay-v2/slurm-%j.log /mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/profiling/20260927-replay-v2/replay-v2.sh",
-    "health_passed_all_gpus": true
+    "health_passed_all_gpus": true,
+    "bridge": {
+      "job_id": 2144997,
+      "state": "PENDING",
+      "reason": "Dependency",
+      "dependency": "afterany:2144987",
+      "account": "grad-students",
+      "partition": "low-priority",
+      "qos": "normal",
+      "gpus": 9,
+      "cpus": 96,
+      "exclusive": true,
+      "inference_gpus": 4,
+      "trainer_gpus": 5,
+      "time_limit_seconds": 600,
+      "full_model_loaded": false,
+      "expected_bridge_members": 5,
+      "scripts_sha256": {
+        "gpu_health.py": "63332e7544288328722aa7197368d271460a6bdf9e6624749c6fd4deb87e4838",
+        "weight_transfer_probe.py": "ae777ab9d5026137d9102341ea96bf21c7a568d1950b88aeb84c12327cb1bf7c"
+      },
+      "effective_submission": "sbatch --parsable --dependency=afterany:2144987 --account=grad-students --partition=low-priority --qos=normal --exclude=deep-chungus-[1-3,6-11],deep-gpu-[10-11] --nodes=1 --ntasks=1 --cpus-per-task=96 --gres=gpu:a100:9 --exclusive --mem=0 --time=00:10:00 --no-requeue --job-name=staleness-bridge-check --output=/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/profiling/20260927-bridge/slurm-%j.log /mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/profiling/20260927-bridge/bridge.sh"
+    }
   }
 }
