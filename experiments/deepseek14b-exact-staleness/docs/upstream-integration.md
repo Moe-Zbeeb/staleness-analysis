@@ -2,6 +2,14 @@
 
 **Official dependency source files are unchanged.** The study imports a pinned upstream checkout and implements experiment-specific behavior in `src/`. Some integration points use internal APIs, and two trainer factories is temporarily replaced in memory. This page makes those distinctions explicit.
 
+## NCCL startup on PCIe nodes
+
+The launcher calls PrimeRL's `disable_nccl_p2p_if_unavailable` before spawning the trainer and inference processes. It records the resulting `NCCL_P2P_DISABLE` and `NCCL_SHM_DISABLE` values in `run.json`. Explicit paired environment overrides retain the upstream helper's behavior. No upstream source is edited.
+
+The first live 14B diagnostic, job `2144957` on eight A100 80 GB PCIe GPUs, loaded the model but failed during initialization of the separate trainer-to-inference NCCL communicator, before any optimizer update. Isolated probe `2144958` reproduced the late-initialization failure with `Message truncated: received 512 bytes instead of 256`. Both socket-only and peer/shared-memory transports passed when selected before the initial process groups were created. The study therefore applies the existing topology-based fallback at process startup, rather than allowing processes to change transport settings after their initial NCCL groups exist.
+
+`scripts/weight_transfer_probe.py` reproduces the four-trainer/four-inference device split and tests the five-party weight-transfer communicator, without loading model weights. `scripts/readiness.py` checks the corrected startup order before its bounded three-update 14B test and checkpoint recovery. The GRPO objective, data, exact-age queue and model precision are unchanged by this communication fix.
+
 ## Pinned source
 
 | Dependency | Revision |
@@ -24,6 +32,7 @@ The study additionally installs [Runboard](https://github.com/Moe-Zbeeb/runboard
 | Study code | Imported interface | What the study changes | Upstream file edited? |
 | --- | --- | --- | --- |
 | [runtime/build.py](../src/deepseek_study/runtime/build.py) | `RLConfig`, `write_subconfigs` | Resolves the study recipe into trainer/orchestrator/inference configs | No |
+| [runtime/launcher.py](../src/deepseek_study/runtime/launcher.py) | `disable_nccl_p2p_if_unavailable` | Applies the upstream topology-based NCCL transport choice before child processes create communicators | No |
 | [learning/loss.py](../src/deepseek_study/learning/loss.py) | Custom loss import hook, `LossOutputs` | Uses the explicit clipped GRPO surrogate instead of PrimeRL's default loss | No |
 | [learning/advantages.py](../src/deepseek_study/learning/advantages.py) | `Algorithm`, `iter_trainable_traces`, `assign_advantages` | Computes the selected group-advantage normalization; installed on the study's environment instances | No |
 | [rollouts/controller.py](../src/deepseek_study/rollouts/controller.py) | `Orchestrator`, dispatcher, `StandardSampler`, training sink, packer, transport | Replaces the dispatcher instance's source with a finite source and drives a complete-cohort loop | No |

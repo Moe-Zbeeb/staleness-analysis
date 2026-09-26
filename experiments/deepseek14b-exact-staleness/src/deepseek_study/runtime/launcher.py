@@ -38,7 +38,10 @@ def verify_upstream(root):
 
 
 def launch(study, root, resume=None):
+    from prime_rl.utils.nccl import disable_nccl_p2p_if_unavailable
+
     verify_upstream(root)
+    disable_nccl_p2p_if_unavailable()
     preflight = validate_prepared(study)
     identity = capture(root, study)
     starting_step = 0
@@ -93,6 +96,9 @@ def launch(study, root, resume=None):
                 "config_sha256": study.fingerprint(),
                 "identity_sha256": identity["sha256"],
                 "hardware": hardware,
+                "nccl_transport": {
+                    key: os.environ.get(key) for key in ("NCCL_P2P_DISABLE", "NCCL_SHM_DISABLE")
+                },
             },
             indent=2,
         ).encode(),

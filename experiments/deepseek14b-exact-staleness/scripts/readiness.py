@@ -101,6 +101,13 @@ def main():
         if any("A100" not in item["name"] or item["bytes"] < 79_000_000_000 for item in hardware["devices"]):
             raise RuntimeError("Readiness requires eight A100 80 GB GPUs")
         report["hardware"] = hardware
+        execute(
+            [
+                sys.executable, "-m", "torch.distributed.run", "--standalone", "--nproc-per-node=8",
+                str(root / "scripts/weight_transfer_probe.py"), "--transport", "startup",
+            ],
+            directory, "weight-transport", 300,
+        )
         changes = {
             "lag": 1,
             "max_steps": 3,

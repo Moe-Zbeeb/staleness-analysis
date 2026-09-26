@@ -6,7 +6,7 @@ from datetime import timedelta
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--transport", choices=["upstream", "socket", "peer"], required=True)
+    parser.add_argument("--transport", choices=["upstream", "startup", "socket", "peer"], required=True)
     args = parser.parse_args()
     rank = int(os.environ["LOCAL_RANK"])
     allocated = os.environ["CUDA_VISIBLE_DEVICES"].split(",")
@@ -18,7 +18,7 @@ def main():
     os.environ["NCCL_DEBUG"] = "INFO"
     os.environ["NCCL_DEBUG_SUBSYS"] = "INIT,ENV,GRAPH"
     os.environ["PYTORCH_CUDA_ALLOC_CONF"] = "expandable_segments:" + ("False" if rank < 4 else "True")
-    if args.transport != "upstream":
+    if args.transport in {"socket", "peer"}:
         value = "1" if args.transport == "socket" else "0"
         os.environ["NCCL_P2P_DISABLE"] = value
         os.environ["NCCL_SHM_DISABLE"] = value
@@ -31,6 +31,8 @@ def main():
     if torch.cuda.device_count() != 4:
         raise ValueError("Each side of the weight-transfer probe must see exactly four GPUs")
     torch.cuda.set_device(device)
+    if args.transport == "startup":
+        disable_nccl_p2p_if_unavailable()
     dist.init_process_group("gloo", timeout=timedelta(seconds=90))
     for members in ([0], [1], [2], [3], [4, 5, 6, 7]):
         group = dist.new_group(members, backend="nccl", timeout=timedelta(seconds=60))
