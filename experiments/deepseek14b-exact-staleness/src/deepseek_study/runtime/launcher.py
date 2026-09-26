@@ -37,11 +37,15 @@ def verify_upstream(root):
             raise ValueError(f"Python imported {name} from another installation")
 
 
-def launch(study, root, resume=None):
+def configure_nccl_transport():
     from prime_rl.utils.nccl import disable_nccl_p2p_if_unavailable
 
-    verify_upstream(root)
     disable_nccl_p2p_if_unavailable()
+
+
+def launch(study, root, resume=None):
+    verify_upstream(root)
+    configure_nccl_transport()
     preflight = validate_prepared(study)
     identity = capture(root, study)
     starting_step = 0

@@ -234,6 +234,14 @@ def test_launcher_observer_failure_does_not_fail_training(study, tmp_path, monke
     import torch
     from deepseek_study.runtime import launcher
 
+    def configure_transport():
+        monkeypatch.setenv("NCCL_P2P_DISABLE", "1")
+        monkeypatch.setenv("NCCL_SHM_DISABLE", "1")
+
+    monkeypatch.delenv("NCCL_P2P_DISABLE", raising=False)
+    monkeypatch.delenv("NCCL_SHM_DISABLE", raising=False)
+    monkeypatch.setattr(launcher, "configure_nccl_transport", configure_transport)
+
     monkeypatch.setattr(launcher, "verify_upstream", lambda root: None)
     monkeypatch.setattr(launcher, "validate_prepared", lambda study: {})
     monkeypatch.setattr(launcher, "capture", lambda root, study: {"sha256": "source", "runtime": {"vllm": "test"}})
@@ -251,6 +259,8 @@ def test_launcher_observer_failure_does_not_fail_training(study, tmp_path, monke
         pid = 12345
 
         def __init__(self, args, **kwargs):
+            assert kwargs["env"]["NCCL_P2P_DISABLE"] == "1"
+            assert kwargs["env"]["NCCL_SHM_DISABLE"] == "1"
             self.code = None
             if "deepseek_study.tracking.runboard" in args:
                 self.code = 1
