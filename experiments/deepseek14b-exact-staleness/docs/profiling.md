@@ -26,7 +26,7 @@ At these early rates, an illustrative estimate is about 12.9 days for bootstrap 
 | Production communication | `run.json` selects `NCCL_P2P_DISABLE=1`, `NCCL_SHM_DISABLE=1`; topology is PCIe, four learner GPUs in one NUMA domain | Disabling the local transports forces a network path, which can be IB/RoCE or TCP. The original description of this setting as necessarily socket-only was incorrect. |
 | Production inference capacity | Each vLLM replica reports 236,048 KV-cache tokens, approximately 23 full 10,240-token sequences; configured maximum is 16 | Modestly higher concurrency deserves a separate benchmark. A cap of 32 could cause preemption on long responses; it is not established as safe or faster. |
 | Spare eight-GPU node | Job `2144976` failed NVIDIA topology reporting; independent health job `2144977` failed CUDA initialization with `device=7, num_gpus=7` although Slurm advertised eight GPUs | `deep-chungus-7` is unsuitable for this full-node diagnostic until its GPU exposure is repaired. No model replay ran there. |
-| Alternate full-node profile | Job `2144980`, `deep-chungus-4`, nine A100 40GB GPUs, exclusive, account `grad-students`, partition `low-priority`, QoS `normal`, two-hour limit | Health passed on all nine GPUs: collective sum 45, BF16 backward, Flash Attention backward and vLLM normalization. Both transport microbenchmarks passed. Baseline replay completed its first two updates; final replay results remain uncollected. Its nine-rank learner layout differs from production and cannot establish a four-rank production speedup. |
+| Alternate full-node profile | Job `2144980`, `deep-chungus-4`, nine A100 40GB GPUs, exclusive, account `grad-students`, partition `low-priority`, QoS `normal`, two-hour limit | Health passed on all nine GPUs: collective sum 45, BF16 backward, Flash Attention backward and vLLM normalization. Both transport microbenchmarks passed. Baseline replay completed two updates and then failed with CUDA out of memory on update 3; the alternative model replay never started. Its nine-rank learner layout differs from production and cannot establish a four-rank production speedup. |
 
 The normal-priority GPU allocation uses the standing fallback: production already consumes eight of the twelve GPUs permitted per user at high priority. The diagnostic does not interrupt it to obtain capacity.
 
@@ -45,7 +45,29 @@ The rank-zero trace for replay update 2 records 198 all-gather kernels totaling 
 
 The same replay's untraced first update took 287.997 seconds in the learner window. Its traced second update took 305.439 seconds, including profile serialization. Both use two real packed microbatches per rank. This establishes communication as the primary bottleneck of this diagnostic. It does not mean a 98% production speedup is available, and the production GPUs have different memory capacity and a different rank layout.
 
-The trace uses NCCL's `RING_LL` kernels despite large model parameter transfers. A prepared follow-up compares automatic protocol selection with `NCCL_PROTO=Simple`, and tests eight communication CTAs with shared memory. It includes 512 MiB and 1 GiB tensors, closer to the current model's layer transfers, in independent four- and five-rank groups covering a full nine-GPU node. Submission is pending restored SSH access. More CTAs consume additional GPU resources, so a standalone communication improvement must still pass a model replay. See [NVIDIA's NCCL environment-variable documentation](https://docs.nvidia.com/deeplearning/nccl/user-guide/docs/env.html#nccl-min-ctas).
+The trace uses NCCL's `RING_LL` kernels despite large model parameter transfers. Follow-up job `2144982` completed all five candidates in 5 minutes 21 seconds, with all correctness checks passing. It compared automatic protocol selection with `NCCL_PROTO=Simple` and eight communication CTAs, including 512 MiB and 1 GiB tensors in independent four- and five-rank groups covering the full nine-GPU node. More CTAs consume additional GPU resources, so a standalone communication improvement must still pass a model replay. See [NVIDIA's NCCL environment-variable documentation](https://docs.nvidia.com/deeplearning/nccl/user-guide/docs/env.html#nccl-min-ctas).
+
+## Four-rank transport matrix
+
+Raw results, health and exact environment settings are in [the transport matrix record](../diagnostics/profiling-20260927-transports.json). These are group-maximum median latencies over six repetitions after three warmups on `deep-chungus-4`.
+
+| Configuration | BF16 all-gather, 512 MiB | FP32 reduce-scatter, 1 GiB |
+| --- | ---: | ---: |
+| Network, automatic protocol | 519.70 ms | 1,089.56 ms |
+| Network, Simple protocol | 521.23 ms | 1,088.14 ms |
+| Shared memory, automatic protocol | 113.76 ms | 224.72 ms |
+| Shared memory, Simple protocol | 114.75 ms | 225.76 ms |
+| Shared memory, Simple, eight CTAs | 114.57 ms | 224.90 ms |
+
+The four-rank group improved by 4.57× and 4.85× with shared memory. Forcing Simple or eight CTAs did not add a useful benefit there. The simultaneous five-rank group improved less: 1.18× for the all-gather and 2.76× for the reduce-scatter with automatic protocol. Placement and group size matter; neither result is an end-to-end production speedup. The next model comparison changes only the two local-transport disable flags.
+
+## Corrected model replay
+
+The first replay harness accidentally set `PYTORCH_CUDA_ALLOC_CONF=expandable_segments:False` and `OMP_NUM_THREADS=4`. Production's pinned PrimeRL launcher sets expandable segments to `True` and OMP threads to `1`. The first replay's third update failed trying to allocate 2.90 GiB with 2.62 GiB free and 4.98 GiB reserved but unallocated. Allocator mismatch and profiling retention are possible contributors, not a proven diagnosis of the failure.
+
+The corrected runner imports the same pinned `DEFAULT_COMMON_ENV_VARS` and `DEFAULT_TRAINER_ENV_VARS` as production, records the effective environment per rank, and makes tracing opt-in. Job `2144987` runs an untraced comparison on all nine A100 40GB GPUs on `deep-chungus-4`, with three disposable updates per candidate and a one-hour allocation limit. Account `grad-students`, partition `low-priority`, QoS `normal`, 96 CPUs, all node memory and exclusive allocation were verified. Its health checks passed on every GPU. Model results are pending.
+
+The production run, its environment and imported library source are unchanged. Its four-rank A100 80GB topology still requires its own validation before deployment.
 
 ## Reproducible tools
 
@@ -57,7 +79,7 @@ The trace uses NCCL's `RING_LL` kernels despite large model parameter transfers.
 | [profile_logging.py](../scripts/profile_logging.py) | Compression and write/fsync timing using actual token archives, with exact column-by-column round-trip verification |
 | [profile_transport_matrix.py](../scripts/profile_transport_matrix.py) | Full-node health and bounded network/shared-memory, automatic/Simple protocol and CTA comparisons, with large tensors and explicit rank groups |
 
-Use these tools only inside an allocation. Set both NCCL transport variables before creating any CUDA communicator. The defaults require eight visible GPUs, split into two groups of four; the second round swaps transport placement. `--single-group --expected-gpus 9` instead profiles all nine GPUs sequentially. Every allocated GPU participates. All output directories must be new.
+Use these tools only inside an allocation. Set both NCCL transport variables before creating any CUDA communicator. The defaults require eight visible GPUs, split into two groups of four; the second round swaps transport placement. `--single-group --expected-gpus 9` instead profiles all nine GPUs sequentially. Every allocated GPU participates. All output directories must be new. `--trace` enables the optional first-round trace; timing comparisons leave it off. `--peer-protocol Simple` and `--peer-ctas N` apply only to the alternative, while the baseline clears protocol/CTA overrides.
 
 The node runner reads the immutable policy-zero warmup archive, repacks its 512 samples with the pinned official `BatchPacker`, and saves the grid. The trainer replays the first two packed microbatches per rank for three disposable optimizer updates, starting from the original base weights for each candidate. The original tokens, masks, behavior log probabilities and advantages are retained. This small repeated sample is a performance diagnostic, not a research training run or a replacement for its full batch.
 
@@ -77,8 +99,12 @@ Production: `/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/out
 
 Initial GPU checks and successful CPU logging measurements: `/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/profiling/20260927`.
 
-Nine-GPU diagnostic scripts, job log and results: `/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/profiling/20260927-nine-gpu`.
+Nine-GPU initial diagnostic: `/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/profiling/20260927-nine-gpu`.
 
-The authenticated SSH transport first closed after job `2144980` was observed running. One user-authorized reconnect timed out after 180 seconds before a password or Duo prompt. A later user-authorized connection succeeded and retrieved the health receipt, both communication benchmarks, logging timings and the baseline trace summaries. That session subsequently disconnected. The final model comparison remains uncollected; the Slurm job has a two-hour allocation limit. Production was last observed running with three completed updates and the next learner update active.
+Completed transport matrix: `/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/profiling/20260927-transports`.
 
-Local validation passed Ruff and Python compilation for all four profiling tools. The GRPO, queue and paper-metric suites passed 54 tests with one CUDA-only skip; an instrumented AdamW/linear-scheduler smoke check also passed. These checks do not substitute for collecting the GPU job's results.
+Corrected replay: `/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/profiling/20260927-replay-v2`.
+
+User-authorized SSH/Duo reconnection succeeded and collected the initial job's final failure and complete matrix results. The corrected replay is running separately from production.
+
+Local validation passed Ruff and Python compilation for the profiling tools. The earlier GRPO, queue and paper-metric suites passed 54 tests with one CUDA-only skip; an instrumented AdamW/linear-scheduler smoke check also passed. The new matrix passed actual GPU correctness checks for all five configurations and both rank groups. These checks do not establish model-level or production-level equivalence.

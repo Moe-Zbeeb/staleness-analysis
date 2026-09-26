@@ -129,6 +129,13 @@ def main():
     config_data["log"]["level"] = "debug"
     config = TrainerConfig.model_validate(config_data)
     (output / "config.json").write_text(config.model_dump_json(indent=2) + "\n")
+    environment = {
+        key: value
+        for key, value in os.environ.items()
+        if key.startswith("NCCL_")
+        or key in ("OMP_NUM_THREADS", "CUDA_DEVICE_ORDER", "CUDA_VISIBLE_DEVICES", "PYTORCH_CUDA_ALLOC_CONF")
+    }
+    (output / "environment.json").write_text(json.dumps(environment, indent=2) + "\n")
     train.FakeDataLoader = Replay
     train.setup_token_exporter = TimedExporter
     train.setup_optimizer = setup_optimizer
@@ -148,6 +155,7 @@ def main():
                     "job_id": os.environ.get("SLURM_JOB_ID"),
                     "rank": rank,
                     "transport": {key: os.environ.get(key) for key in ("NCCL_P2P_DISABLE", "NCCL_SHM_DISABLE")},
+                    "environment": environment,
                     "micro_batches": len(batches),
                     "steps": args.steps,
                     "phase_synchronization": True,

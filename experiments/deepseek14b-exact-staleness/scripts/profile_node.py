@@ -12,7 +12,14 @@ def main():
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--expected-gpus", type=int, default=8)
     parser.add_argument("--single-group", action="store_true")
+    parser.add_argument("--peer-protocol", choices=("auto", "Simple"), default="auto")
+    parser.add_argument("--peer-ctas", type=int)
+    parser.add_argument("--trace", action="store_true")
     args = parser.parse_args()
+    if args.peer_ctas is not None and not 1 <= args.peer_ctas <= 32:
+        raise ValueError("Profiling supports between one and 32 communication CTAs")
+    from prime_rl.utils.process import DEFAULT_COMMON_ENV_VARS, DEFAULT_TRAINER_ENV_VARS
+
     scripts = Path(__file__).resolve().parent
     args.output.mkdir(parents=True, exist_ok=False)
     devices = os.environ["CUDA_VISIBLE_DEVICES"].split(",")
@@ -21,7 +28,16 @@ def main():
         raise ValueError("Profiling must cover the complete allocation")
     group_size = count if args.single_group else 4
     environment = os.environ.copy()
-    environment.update(OMP_NUM_THREADS="4", TOKENIZERS_PARALLELISM="false", PYTHONUNBUFFERED="1")
+    environment.update(DEFAULT_COMMON_ENV_VARS)
+    environment.update(DEFAULT_TRAINER_ENV_VARS)
+    environment["TOKENIZERS_PARALLELISM"] = "false"
+    for key in ("NCCL_PROTO", "NCCL_MIN_CTAS", "NCCL_MAX_CTAS", "NCCL_MIN_NCHANNELS", "NCCL_MAX_NCHANNELS"):
+        environment.pop(key, None)
+    peer_overrides = {}
+    if args.peer_protocol != "auto":
+        peer_overrides["NCCL_PROTO"] = args.peer_protocol
+    if args.peer_ctas is not None:
+        peer_overrides.update(NCCL_MIN_CTAS=str(args.peer_ctas), NCCL_MAX_CTAS=str(args.peer_ctas))
     launcher = [sys.executable, "-m", "torch.distributed.run", "--standalone"]
 
     def run(name, command, env=None, timeout=900):
@@ -47,6 +63,8 @@ def main():
     )
     for transport, value in (("network", "1"), ("peer", "0")):
         env = {**environment, "NCCL_P2P_DISABLE": value, "NCCL_SHM_DISABLE": value, "NCCL_DEBUG": "INFO"}
+        if transport == "peer":
+            env.update(peer_overrides)
         run(
             f"collectives-{transport}",
             launcher
@@ -93,6 +111,10 @@ def main():
                 "profiling_world_size": group_size,
                 "production_world_size": 4,
                 "single_group": args.single_group,
+                "peer_overrides": peer_overrides,
+                "trainer_defaults": DEFAULT_TRAINER_ENV_VARS,
+                "common_defaults": DEFAULT_COMMON_ENV_VARS,
+                "trace": args.trace,
             },
             indent=2,
         )
@@ -110,8 +132,9 @@ def main():
                     "CUDA_VISIBLE_DEVICES": ",".join(devices[group * group_size : (group + 1) * group_size]),
                     "NCCL_P2P_DISABLE": value,
                     "NCCL_SHM_DISABLE": value,
-                    "PYTORCH_CUDA_ALLOC_CONF": "expandable_segments:False",
                 }
+                if transport == "peer":
+                    env.update(peer_overrides)
                 command = launcher + [
                     f"--nproc-per-node={group_size}",
                     str(scripts / "profile_trainer.py"),
@@ -122,7 +145,7 @@ def main():
                     "--output",
                     str(args.output / name),
                 ]
-                if round_index == 0:
+                if args.trace and round_index == 0:
                     command.append("--trace")
                 stream = (args.output / f"{name}.log").open("x")
                 print(json.dumps({"starting": name, "devices": env["CUDA_VISIBLE_DEVICES"]}), flush=True)

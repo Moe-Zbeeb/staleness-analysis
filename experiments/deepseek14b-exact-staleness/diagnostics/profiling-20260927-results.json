@@ -904,5 +904,20 @@
     }
   ],
   "model_replay_completed": false,
-  "production_speedup_applied": false
+  "production_speedup_applied": false,
+  "final_state": "FAILED",
+  "exit_code": "1:0",
+  "elapsed_seconds": 1128,
+  "failure": {
+    "stage": "baseline replay update 3",
+    "rank": 4,
+    "reason": "CUDA out of memory allocating 2.90 GiB; 2.62 GiB free, 31.19 GiB allocated, 4.98 GiB reserved but unallocated",
+    "alternative_started": false,
+    "diagnostic_environment_mismatch": {
+      "allocator": "expandable_segments:False versus production True",
+      "omp_threads": "4 versus production 1"
+    },
+    "trace_second_update": true,
+    "followup_job": 2144987
+  }
 }

@@ -1,0 +1,2401 @@
+{
+  "job_id": 2144982,
+  "state": "COMPLETED",
+  "exit_code": "0:0",
+  "elapsed_seconds": 321,
+  "manifest": {
+    "job_id": "2144982",
+    "node": "deep-chungus-4",
+    "visible_devices": [
+      "0",
+      "1",
+      "2",
+      "3",
+      "4",
+      "5",
+      "6",
+      "7",
+      "8"
+    ],
+    "groups": [
+      4,
+      5
+    ],
+    "candidates": [
+      [
+        "network-auto",
+        "network",
+        {}
+      ],
+      [
+        "network-simple",
+        "network",
+        {
+          "NCCL_PROTO": "Simple"
+        }
+      ],
+      [
+        "peer-auto",
+        "peer",
+        {}
+      ],
+      [
+        "peer-simple",
+        "peer",
+        {
+          "NCCL_PROTO": "Simple"
+        }
+      ],
+      [
+        "peer-simple-8ctas",
+        "peer",
+        {
+          "NCCL_PROTO": "Simple",
+          "NCCL_MIN_CTAS": "8",
+          "NCCL_MAX_CTAS": "8"
+        }
+      ]
+    ],
+    "scripts_sha256": {
+      "gpu_health.py": "63332e7544288328722aa7197368d271460a6bdf9e6624749c6fd4deb87e4838",
+      "profile_collectives.py": "e698ecc3e6b71018d86532a12299b4823282f4228dd1839968252ce2e4463ef0",
+      "profile_transport_matrix.py": "2c57df292b586a9002a9798c1ded0b321040fe11ce1eed8c85e0bd47e060a764"
+    }
+  },
+  "health": {
+    "job_id": "2144982",
+    "node": "deep-chungus-4",
+    "slurm_job_gpus": "0,1,2,3,4,5,6,7,8",
+    "world_size": 9,
+    "expected_all_reduce": 45.0,
+    "torch": "2.11.0+cu128",
+    "cuda_runtime": "12.8",
+    "devices": [
+      {
+        "rank": 0,
+        "visible_device": "0",
+        "name": "NVIDIA A100-PCIE-40GB",
+        "bytes": 42409000960,
+        "capability": [
+          8,
+          0
+        ],
+        "all_reduce": 45.0,
+        "bf16_backward": true,
+        "flash_attention_backward": true,
+        "vllm_rms_norm": true
+      },
+      {
+        "rank": 1,
+        "visible_device": "1",
+        "name": "NVIDIA A100-PCIE-40GB",
+        "bytes": 42409000960,
+        "capability": [
+          8,
+          0
+        ],
+        "all_reduce": 45.0,
+        "bf16_backward": true,
+        "flash_attention_backward": true,
+        "vllm_rms_norm": true
+      },
+      {
+        "rank": 2,
+        "visible_device": "2",
+        "name": "NVIDIA A100-PCIE-40GB",
+        "bytes": 42409000960,
+        "capability": [
+          8,
+          0
+        ],
+        "all_reduce": 45.0,
+        "bf16_backward": true,
+        "flash_attention_backward": true,
+        "vllm_rms_norm": true
+      },
+      {
+        "rank": 3,
+        "visible_device": "3",
+        "name": "NVIDIA A100-PCIE-40GB",
+        "bytes": 42409000960,
+        "capability": [
+          8,
+          0
+        ],
+        "all_reduce": 45.0,
+        "bf16_backward": true,
+        "flash_attention_backward": true,
+        "vllm_rms_norm": true
+      },
+      {
+        "rank": 4,
+        "visible_device": "4",
+        "name": "NVIDIA A100-PCIE-40GB",
+        "bytes": 42409000960,
+        "capability": [
+          8,
+          0
+        ],
+        "all_reduce": 45.0,
+        "bf16_backward": true,
+        "flash_attention_backward": true,
+        "vllm_rms_norm": true
+      },
+      {
+        "rank": 5,
+        "visible_device": "5",
+        "name": "NVIDIA A100-PCIE-40GB",
+        "bytes": 42409000960,
+        "capability": [
+          8,
+          0
+        ],
+        "all_reduce": 45.0,
+        "bf16_backward": true,
+        "flash_attention_backward": true,
+        "vllm_rms_norm": true
+      },
+      {
+        "rank": 6,
+        "visible_device": "6",
+        "name": "NVIDIA A100-PCIE-40GB",
+        "bytes": 42409000960,
+        "capability": [
+          8,
+          0
+        ],
+        "all_reduce": 45.0,
+        "bf16_backward": true,
+        "flash_attention_backward": true,
+        "vllm_rms_norm": true
+      },
+      {
+        "rank": 7,
+        "visible_device": "7",
+        "name": "NVIDIA A100-PCIE-40GB",
+        "bytes": 42409000960,
+        "capability": [
+          8,
+          0
+        ],
+        "all_reduce": 45.0,
+        "bf16_backward": true,
+        "flash_attention_backward": true,
+        "vllm_rms_norm": true
+      },
+      {
+        "rank": 8,
+        "visible_device": "8",
+        "name": "NVIDIA A100-PCIE-40GB",
+        "bytes": 42409000960,
+        "capability": [
+          8,
+          0
+        ],
+        "all_reduce": 45.0,
+        "bf16_backward": true,
+        "flash_attention_backward": true,
+        "vllm_rms_norm": true
+      }
+    ]
+  },
+  "measurements": {
+    "network-auto/network-group-0": {
+      "transport": "network",
+      "node": "deep-chungus-4",
+      "job_id": "2144982",
+      "group_size": 4,
+      "physical_devices": [
+        "0",
+        "1",
+        "2",
+        "3"
+      ],
+      "torch": "2.11.0+cu128",
+      "nccl": [
+        2,
+        28,
+        9
+      ],
+      "nccl_environment": {
+        "NCCL_P2P_DISABLE": "1",
+        "NCCL_SHM_DISABLE": "1",
+        "NCCL_DEBUG": "INFO"
+      },
+      "correctness_passed": true,
+      "rows": [
+        {
+          "operation": "all_gather",
+          "dtype": "torch.bfloat16",
+          "full_tensor_mib": 64,
+          "full_tensor_bytes": 67108864,
+          "median_seconds": 0.06617511250078678,
+          "seconds": [
+            0.0670649700332433,
+            0.0667225900106132,
+            0.06592965591698885,
+            0.06638536811806262,
+            0.06548525486141443,
+            0.06596485688351095
+          ],
+          "algorithm_gb_s": 1.014110312229573
+        },
+        {
+          "operation": "reduce_scatter",
+          "dtype": "torch.bfloat16",
+          "full_tensor_mib": 64,
+          "full_tensor_bytes": 67108864,
+          "median_seconds": 0.06705466494895518,
+          "seconds": [
+            0.06701333983801305,
+            0.0675413019489497,
+            0.0669025699608028,
+            0.06659850897267461,
+            0.06718485988676548,
+            0.0670959900598973
+          ],
+          "algorithm_gb_s": 1.000808281587658
+        },
+        {
+          "operation": "all_gather",
+          "dtype": "torch.bfloat16",
+          "full_tensor_mib": 512,
+          "full_tensor_bytes": 536870912,
+          "median_seconds": 0.5196950775571167,
+          "seconds": [
+            0.5196675069164485,
+            0.5274730210658163,
+            0.5214704130776227,
+            0.519413867034018,
+            0.519722648197785,
+            0.5193226970732212
+          ],
+          "algorithm_gb_s": 1.0330498309193539
+        },
+        {
+          "operation": "reduce_scatter",
+          "dtype": "torch.bfloat16",
+          "full_tensor_mib": 512,
+          "full_tensor_bytes": 536870912,
+          "median_seconds": 0.5289109265431762,
+          "seconds": [
+            0.5301492710132152,
+            0.5286888361442834,
+            0.5294218980707228,
+            0.5275205911602825,
+            0.5291330169420689,
+            0.5281917240936309
+          ],
+          "algorithm_gb_s": 1.0150497655793354
+        },
+        {
+          "operation": "all_gather",
+          "dtype": "torch.bfloat16",
+          "full_tensor_mib": 1024,
+          "full_tensor_bytes": 1073741824,
+          "median_seconds": 1.043556823511608,
+          "seconds": [
+            1.0432605978567153,
+            1.044170879991725,
+            1.0431327070109546,
+            1.049361066892743,
+            1.0438530491665006,
+            1.0423658250365406
+          ],
+          "algorithm_gb_s": 1.028925114386027
+        },
+        {
+          "operation": "reduce_scatter",
+          "dtype": "torch.bfloat16",
+          "full_tensor_mib": 1024,
+          "full_tensor_bytes": 1073741824,
+          "median_seconds": 1.0633670160314068,
+          "seconds": [
+            1.062450517900288,
+            1.062026406172663,
+            1.0646879251580685,
+            1.0641509629786015,
+            1.0720050679519773,
+            1.0625830690842122
+          ],
+          "algorithm_gb_s": 1.009756563643767
+        },
+        {
+          "operation": "all_gather",
+          "dtype": "torch.float32",
+          "full_tensor_mib": 64,
+          "full_tensor_bytes": 67108864,
+          "median_seconds": 0.06574480549897999,
+          "seconds": [
+            0.06655982905067503,
+            0.06532596494071186,
+            0.06592854601331055,
+            0.06620256695896387,
+            0.06538755516521633,
+            0.06556106498464942
+          ],
+          "algorithm_gb_s": 1.0207477760511616
+        },
+        {
+          "operation": "reduce_scatter",
+          "dtype": "torch.float32",
+          "full_tensor_mib": 64,
+          "full_tensor_bytes": 67108864,
+          "median_seconds": 0.0683621484786272,
+          "seconds": [
+            0.06832504295744002,
+            0.06868686503730714,
+            0.06846503401175141,
+            0.06786414189264178,
+            0.06831701402552426,
+            0.06839925399981439
+          ],
+          "algorithm_gb_s": 0.9816669822918301
+        },
+        {
+          "operation": "all_gather",
+          "dtype": "torch.float32",
+          "full_tensor_mib": 512,
+          "full_tensor_bytes": 536870912,
+          "median_seconds": 0.5217438344843686,
+          "seconds": [
+            0.5229087281040847,
+            0.5217214149888605,
+            0.5217662539798766,
+            0.5236082400660962,
+            0.5209325319156051,
+            0.5216746139340103
+          ],
+          "algorithm_gb_s": 1.0289933038319108
+        },
+        {
+          "operation": "reduce_scatter",
+          "dtype": "torch.float32",
+          "full_tensor_mib": 512,
+          "full_tensor_bytes": 536870912,
+          "median_seconds": 0.5452263929182664,
+          "seconds": [
+            0.5452491478063166,
+            0.5451963681261986,
+            0.5452036380302161,
+            0.5435942430049181,
+            0.5457343999296427,
+            0.5463554309681058
+          ],
+          "algorithm_gb_s": 0.984675208267992
+        },
+        {
+          "operation": "all_gather",
+          "dtype": "torch.float32",
+          "full_tensor_mib": 1024,
+          "full_tensor_bytes": 1073741824,
+          "median_seconds": 1.0440908785676584,
+          "seconds": [
+            1.0441523711197078,
+            1.0442181311082095,
+            1.0440260500181466,
+            1.0418368028476834,
+            1.0532288399990648,
+            1.044029386015609
+          ],
+          "algorithm_gb_s": 1.0283988166557094
+        },
+        {
+          "operation": "reduce_scatter",
+          "dtype": "torch.float32",
+          "full_tensor_mib": 1024,
+          "full_tensor_bytes": 1073741824,
+          "median_seconds": 1.0895607670536265,
+          "seconds": [
+            1.0886282990686595,
+            1.0912044269498438,
+            1.0925095910206437,
+            1.085869182832539,
+            1.0904932350385934,
+            1.0864733420312405
+          ],
+          "algorithm_gb_s": 0.9854813576883795
+        }
+      ]
+    },
+    "network-auto/network-group-1": {
+      "transport": "network",
+      "node": "deep-chungus-4",
+      "job_id": "2144982",
+      "group_size": 5,
+      "physical_devices": [
+        "4",
+        "5",
+        "6",
+        "7",
+        "8"
+      ],
+      "torch": "2.11.0+cu128",
+      "nccl": [
+        2,
+        28,
+        9
+      ],
+      "nccl_environment": {
+        "NCCL_P2P_DISABLE": "1",
+        "NCCL_SHM_DISABLE": "1",
+        "NCCL_DEBUG": "INFO"
+      },
+      "correctness_passed": true,
+      "rows": [
+        {
+          "operation": "all_gather",
+          "dtype": "torch.bfloat16",
+          "full_tensor_mib": 64,
+          "full_tensor_bytes": 67108860,
+          "median_seconds": 0.06971159798558801,
+          "seconds": [
+            0.07088450202718377,
+            0.07067761197686195,
+            0.06944001698866487,
+            0.06998317898251116,
+            0.06934733712114394,
+            0.06943523697555065
+          ],
+          "algorithm_gb_s": 0.9626642042242943
+        },
+        {
+          "operation": "reduce_scatter",
+          "dtype": "torch.bfloat16",
+          "full_tensor_mib": 64,
+          "full_tensor_bytes": 67108860,
+          "median_seconds": 0.07151984900701791,
+          "seconds": [
+            0.07077984092757106,
+            0.07177610392682254,
+            0.07144841412082314,
+            0.07109916303306818,
+            0.07159128389321268,
+            0.07191812503151596
+          ],
+          "algorithm_gb_s": 0.9383249675683029
+        },
+        {
+          "operation": "all_gather",
+          "dtype": "torch.bfloat16",
+          "full_tensor_mib": 512,
+          "full_tensor_bytes": 536870910,
+          "median_seconds": 0.553965445025824,
+          "seconds": [
+            0.5540224451106042,
+            0.5537857238668948,
+            0.5542607349343598,
+            0.5539084449410439,
+            0.5536811337806284,
+            0.5852274629287422
+          ],
+          "algorithm_gb_s": 0.9691415138266843
+        },
+        {
+          "operation": "reduce_scatter",
+          "dtype": "torch.bfloat16",
+          "full_tensor_mib": 512,
+          "full_tensor_bytes": 536870910,
+          "median_seconds": 0.5652552804676816,
+          "seconds": [
+            0.5656114420853555,
+            0.5653776810504496,
+            0.5650252101477236,
+            0.5646768789738417,
+            0.5651328798849136,
+            0.5924179451540112
+          ],
+          "algorithm_gb_s": 0.9497848645585462
+        },
+        {
+          "operation": "all_gather",
+          "dtype": "torch.bfloat16",
+          "full_tensor_mib": 1024,
+          "full_tensor_bytes": 1073741820,
+          "median_seconds": 1.1071222570026293,
+          "seconds": [
+            1.107045967830345,
+            1.1071794170420617,
+            1.107065096963197,
+            1.1067018161993474,
+            1.1072326980065554,
+            1.165099878795445
+          ],
+          "algorithm_gb_s": 0.9698493668684776
+        },
+        {
+          "operation": "reduce_scatter",
+          "dtype": "torch.bfloat16",
+          "full_tensor_mib": 1024,
+          "full_tensor_bytes": 1073741820,
+          "median_seconds": 1.127899172483012,
+          "seconds": [
+            1.1280734930187464,
+            1.1277248519472778,
+            1.129061525920406,
+            1.1277013120707124,
+            1.1272539710626006,
+            1.18496962194331
+          ],
+          "algorithm_gb_s": 0.9519838707179938
+        },
+        {
+          "operation": "all_gather",
+          "dtype": "torch.float32",
+          "full_tensor_mib": 64,
+          "full_tensor_bytes": 67108860,
+          "median_seconds": 0.06963777798227966,
+          "seconds": [
+            0.06986320903524756,
+            0.06920423684641719,
+            0.06941234692931175,
+            0.06986811896786094,
+            0.06923717702738941,
+            0.0735710400622338
+          ],
+          "algorithm_gb_s": 0.9636846830046303
+        },
+        {
+          "operation": "reduce_scatter",
+          "dtype": "torch.float32",
+          "full_tensor_mib": 64,
+          "full_tensor_bytes": 67108860,
+          "median_seconds": 0.07121903297957033,
+          "seconds": [
+            0.070856180973351,
+            0.07135961391031742,
+            0.07123881299048662,
+            0.07073285104706883,
+            0.07119925296865404,
+            0.07353260996751487
+          ],
+          "algorithm_gb_s": 0.9422882787421536
+        },
+        {
+          "operation": "all_gather",
+          "dtype": "torch.float32",
+          "full_tensor_mib": 512,
+          "full_tensor_bytes": 536870900,
+          "median_seconds": 0.5536269639851525,
+          "seconds": [
+            0.5539792750496417,
+            0.5535261440090835,
+            0.5531809730455279,
+            0.5537277839612216,
+            0.5532100631389767,
+            0.5814355309121311
+          ],
+          "algorithm_gb_s": 0.9697340175331455
+        },
+        {
+          "operation": "reduce_scatter",
+          "dtype": "torch.float32",
+          "full_tensor_mib": 512,
+          "full_tensor_bytes": 536870900,
+          "median_seconds": 0.5671104014618322,
+          "seconds": [
+            0.5671712269540876,
+            0.5670885560102761,
+            0.5668073750566691,
+            0.5663721640594304,
+            0.5671322469133884,
+            0.5847785209771246
+          ],
+          "algorithm_gb_s": 0.9466779283471362
+        },
+        {
+          "operation": "all_gather",
+          "dtype": "torch.float32",
+          "full_tensor_mib": 1024,
+          "full_tensor_bytes": 1073741820,
+          "median_seconds": 1.1069837025133893,
+          "seconds": [
+            1.1076966091059148,
+            1.10674694692716,
+            1.106948577100411,
+            1.1069015271496028,
+            1.1070188279263675,
+            1.1645760140381753
+          ],
+          "algorithm_gb_s": 0.9699707570780726
+        },
+        {
+          "operation": "reduce_scatter",
+          "dtype": "torch.float32",
+          "full_tensor_mib": 1024,
+          "full_tensor_bytes": 1073741820,
+          "median_seconds": 1.1329675725428388,
+          "seconds": [
+            1.1325752870179713,
+            1.1331774680875242,
+            1.1344311321154237,
+            1.132084737997502,
+            1.132775287143886,
+            1.1331598579417914
+          ],
+          "algorithm_gb_s": 0.94772511237024
+        }
+      ]
+    },
+    "network-simple/network-group-0": {
+      "transport": "network",
+      "node": "deep-chungus-4",
+      "job_id": "2144982",
+      "group_size": 4,
+      "physical_devices": [
+        "0",
+        "1",
+        "2",
+        "3"
+      ],
+      "torch": "2.11.0+cu128",
+      "nccl": [
+        2,
+        28,
+        9
+      ],
+      "nccl_environment": {
+        "NCCL_P2P_DISABLE": "1",
+        "NCCL_SHM_DISABLE": "1",
+        "NCCL_DEBUG": "INFO",
+        "NCCL_PROTO": "Simple"
+      },
+      "correctness_passed": true,
+      "rows": [
+        {
+          "operation": "all_gather",
+          "dtype": "torch.bfloat16",
+          "full_tensor_mib": 64,
+          "full_tensor_bytes": 67108864,
+          "median_seconds": 0.06635962799191475,
+          "seconds": [
+            0.06629734695889056,
+            0.06650148914195597,
+            0.06640557805076241,
+            0.06631367793306708,
+            0.06563719501718879,
+            0.06642066803760827
+          ],
+          "algorithm_gb_s": 1.011290539606047
+        },
+        {
+          "operation": "reduce_scatter",
+          "dtype": "torch.bfloat16",
+          "full_tensor_mib": 64,
+          "full_tensor_bytes": 67108864,
+          "median_seconds": 0.06697290006559342,
+          "seconds": [
+            0.06701882998459041,
+            0.06744610099121928,
+            0.066994370194152,
+            0.06651923921890557,
+            0.06695142993703485,
+            0.06694616004824638
+          ],
+          "algorithm_gb_s": 1.0020301335954307
+        },
+        {
+          "operation": "all_gather",
+          "dtype": "torch.bfloat16",
+          "full_tensor_mib": 512,
+          "full_tensor_bytes": 536870912,
+          "median_seconds": 0.5212263480061665,
+          "seconds": [
+            0.5259331769775599,
+            0.5204318598844111,
+            0.5261230180040002,
+            0.5209603318944573,
+            0.5214923641178757,
+            0.5192770860157907
+          ],
+          "algorithm_gb_s": 1.0300149139691004
+        },
+        {
+          "operation": "reduce_scatter",
+          "dtype": "torch.bfloat16",
+          "full_tensor_mib": 512,
+          "full_tensor_bytes": 536870912,
+          "median_seconds": 0.5284158850554377,
+          "seconds": [
+            0.5332307498902082,
+            0.5284675650764257,
+            0.5318810071330518,
+            0.5283642050344497,
+            0.528274754062295,
+            0.5279263439588249
+          ],
+          "algorithm_gb_s": 1.0160007054740137
+        },
+        {
+          "operation": "all_gather",
+          "dtype": "torch.bfloat16",
+          "full_tensor_mib": 1024,
+          "full_tensor_bytes": 1073741824,
+          "median_seconds": 1.0452216340927407,
+          "seconds": [
+            1.0554563759360462,
+            1.044599432963878,
+            1.0452688441146165,
+            1.045174424070865,
+            1.0465446580201387,
+            1.0438565299846232
+          ],
+          "algorithm_gb_s": 1.0272862606140132
+        },
+        {
+          "operation": "reduce_scatter",
+          "dtype": "torch.bfloat16",
+          "full_tensor_mib": 1024,
+          "full_tensor_bytes": 1073741824,
+          "median_seconds": 1.0606055025709793,
+          "seconds": [
+            1.061761286109686,
+            1.0598157790955156,
+            1.0599112301133573,
+            1.058552365982905,
+            1.069399269996211,
+            1.0612997750286013
+          ],
+          "algorithm_gb_s": 1.012385681006913
+        },
+        {
+          "operation": "all_gather",
+          "dtype": "torch.float32",
+          "full_tensor_mib": 64,
+          "full_tensor_bytes": 67108864,
+          "median_seconds": 0.06604878196958452,
+          "seconds": [
+            0.06644115806557238,
+            0.06505299406126142,
+            0.06615166692063212,
+            0.06622426700778306,
+            0.06518905400298536,
+            0.06594589701853693
+          ],
+          "algorithm_gb_s": 1.0160499860679284
+        },
+        {
+          "operation": "reduce_scatter",
+          "dtype": "torch.float32",
+          "full_tensor_mib": 64,
+          "full_tensor_bytes": 67108864,
+          "median_seconds": 0.06837475893553346,
+          "seconds": [
+            0.0681932840961963,
+            0.06871868507005274,
+            0.06849310407415032,
+            0.0677837529219687,
+            0.0685196949634701,
+            0.0682564137969166
+          ],
+          "algorithm_gb_s": 0.9814859320129085
+        },
+        {
+          "operation": "all_gather",
+          "dtype": "torch.float32",
+          "full_tensor_mib": 512,
+          "full_tensor_bytes": 536870912,
+          "median_seconds": 0.523296759580262,
+          "seconds": [
+            0.5231558890081942,
+            0.5225681471638381,
+            0.5221221658866853,
+            0.5271039300132543,
+            0.5235713799484074,
+            0.5234376301523298
+          ],
+          "algorithm_gb_s": 1.0259396836904282
+        },
+        {
+          "operation": "reduce_scatter",
+          "dtype": "torch.float32",
+          "full_tensor_mib": 512,
+          "full_tensor_bytes": 536870912,
+          "median_seconds": 0.5439784944755957,
+          "seconds": [
+            0.5451706470921636,
+            0.54473338695243,
+            0.5431878608651459,
+            0.5432236019987613,
+            0.5459885401651263,
+            0.5429744110442698
+          ],
+          "algorithm_gb_s": 0.9869340745125458
+        },
+        {
+          "operation": "all_gather",
+          "dtype": "torch.float32",
+          "full_tensor_mib": 1024,
+          "full_tensor_bytes": 1073741824,
+          "median_seconds": 1.0473316805437207,
+          "seconds": [
+            1.0450105438940227,
+            1.0457933258730918,
+            1.05558582697995,
+            1.0439866399392486,
+            1.05582524696365,
+            1.0488700352143496
+          ],
+          "algorithm_gb_s": 1.0252165994277653
+        },
+        {
+          "operation": "reduce_scatter",
+          "dtype": "torch.float32",
+          "full_tensor_mib": 1024,
+          "full_tensor_bytes": 1073741824,
+          "median_seconds": 1.0881428830325603,
+          "seconds": [
+            1.0841597649268806,
+            1.0833513429388404,
+            1.0895486420486122,
+            1.087189604062587,
+            1.0898046649526805,
+            1.0890961620025337
+          ],
+          "algorithm_gb_s": 0.9867654705488439
+        }
+      ]
+    },
+    "network-simple/network-group-1": {
+      "transport": "network",
+      "node": "deep-chungus-4",
+      "job_id": "2144982",
+      "group_size": 5,
+      "physical_devices": [
+        "4",
+        "5",
+        "6",
+        "7",
+        "8"
+      ],
+      "torch": "2.11.0+cu128",
+      "nccl": [
+        2,
+        28,
+        9
+      ],
+      "nccl_environment": {
+        "NCCL_P2P_DISABLE": "1",
+        "NCCL_SHM_DISABLE": "1",
+        "NCCL_DEBUG": "INFO",
+        "NCCL_PROTO": "Simple"
+      },
+      "correctness_passed": true,
+      "rows": [
+        {
+          "operation": "all_gather",
+          "dtype": "torch.bfloat16",
+          "full_tensor_mib": 64,
+          "full_tensor_bytes": 67108860,
+          "median_seconds": 0.07015964493621141,
+          "seconds": [
+            0.07114406302571297,
+            0.0706709309015423,
+            0.06966242799535394,
+            0.07037535985000432,
+            0.06925133685581386,
+            0.0699439300224185
+          ],
+          "algorithm_gb_s": 0.9565165282836714
+        },
+        {
+          "operation": "reduce_scatter",
+          "dtype": "torch.bfloat16",
+          "full_tensor_mib": 64,
+          "full_tensor_bytes": 67108860,
+          "median_seconds": 0.07139300357084721,
+          "seconds": [
+            0.07062554103322327,
+            0.07168815494515002,
+            0.07133130403235555,
+            0.07099058292806149,
+            0.07145470310933888,
+            0.07163499412126839
+          ],
+          "algorithm_gb_s": 0.9399921090783662
+        },
+        {
+          "operation": "all_gather",
+          "dtype": "torch.bfloat16",
+          "full_tensor_mib": 512,
+          "full_tensor_bytes": 536870910,
+          "median_seconds": 0.5544067515293136,
+          "seconds": [
+            0.5543139060027897,
+            0.5538460651878268,
+            0.5540597960352898,
+            0.5544995970558375,
+            0.5545086471829563,
+            0.5860705249942839
+          ],
+          "algorithm_gb_s": 0.9683700794029987
+        },
+        {
+          "operation": "reduce_scatter",
+          "dtype": "torch.bfloat16",
+          "full_tensor_mib": 512,
+          "full_tensor_bytes": 536870910,
+          "median_seconds": 0.562938702525571,
+          "seconds": [
+            0.5633474451024085,
+            0.5628393820952624,
+            0.5622519419994205,
+            0.5627603230532259,
+            0.5630380229558796,
+            0.5904602000955492
+          ],
+          "algorithm_gb_s": 0.9536933729931513
+        },
+        {
+          "operation": "all_gather",
+          "dtype": "torch.bfloat16",
+          "full_tensor_mib": 1024,
+          "full_tensor_bytes": 1073741820,
+          "median_seconds": 1.1080574558582157,
+          "seconds": [
+            1.1079966011457145,
+            1.1081118509173393,
+            1.108003060799092,
+            1.107847481034696,
+            1.1082973210141063,
+            1.1658866319339722
+          ],
+          "algorithm_gb_s": 0.9690308154357958
+        },
+        {
+          "operation": "reduce_scatter",
+          "dtype": "torch.bfloat16",
+          "full_tensor_mib": 1024,
+          "full_tensor_bytes": 1073741820,
+          "median_seconds": 1.1245311324018985,
+          "seconds": [
+            1.1253785858862102,
+            1.124078200897202,
+            1.1246930719353259,
+            1.1243691928684711,
+            1.1240673209540546,
+            1.1803826380055398
+          ],
+          "algorithm_gb_s": 0.9548351211109495
+        },
+        {
+          "operation": "all_gather",
+          "dtype": "torch.float32",
+          "full_tensor_mib": 64,
+          "full_tensor_bytes": 67108860,
+          "median_seconds": 0.0695871930802241,
+          "seconds": [
+            0.0698545090854168,
+            0.06929239793680608,
+            0.0693198770750314,
+            0.06986013916321099,
+            0.06931913597509265,
+            0.0721739949658513
+          ],
+          "algorithm_gb_s": 0.9643852127018986
+        },
+        {
+          "operation": "reduce_scatter",
+          "dtype": "torch.float32",
+          "full_tensor_mib": 64,
+          "full_tensor_bytes": 67108860,
+          "median_seconds": 0.07118414796423167,
+          "seconds": [
+            0.07062911102548242,
+            0.07133244397118688,
+            0.07115964288823307,
+            0.07060984103009105,
+            0.07120865304023027,
+            0.07336457003839314
+          ],
+          "algorithm_gb_s": 0.9427500633107331
+        },
+        {
+          "operation": "all_gather",
+          "dtype": "torch.float32",
+          "full_tensor_mib": 512,
+          "full_tensor_bytes": 536870900,
+          "median_seconds": 0.5541047203587368,
+          "seconds": [
+            0.5542785369325429,
+            0.5536652740556747,
+            0.5534275639802217,
+            0.5539350348990411,
+            0.5542744058184326,
+            0.5814135610125959
+          ],
+          "algorithm_gb_s": 0.968897900116102
+        },
+        {
+          "operation": "reduce_scatter",
+          "dtype": "torch.float32",
+          "full_tensor_mib": 512,
+          "full_tensor_bytes": 536870900,
+          "median_seconds": 0.5656017265282571,
+          "seconds": [
+            0.5655867310706526,
+            0.5652277010958642,
+            0.5658110519871116,
+            0.5652582210022956,
+            0.5656167219858617,
+            0.584582322044298
+          ],
+          "algorithm_gb_s": 0.9492030784548502
+        },
+        {
+          "operation": "all_gather",
+          "dtype": "torch.float32",
+          "full_tensor_mib": 1024,
+          "full_tensor_bytes": 1073741820,
+          "median_seconds": 1.107963605900295,
+          "seconds": [
+            1.1084324419498444,
+            1.1080745419021696,
+            1.1070744281169027,
+            1.1078526698984206,
+            1.1076113800518215,
+            1.1610107671003789
+          ],
+          "algorithm_gb_s": 0.9691128971041538
+        },
+        {
+          "operation": "reduce_scatter",
+          "dtype": "torch.float32",
+          "full_tensor_mib": 1024,
+          "full_tensor_bytes": 1073741820,
+          "median_seconds": 1.1295030429027975,
+          "seconds": [
+            1.1296742169652134,
+            1.1287859848234802,
+            1.1292107270564884,
+            1.1299718681257218,
+            1.1293318688403815,
+            1.1299965700600296
+          ],
+          "algorithm_gb_s": 0.9506320737662712
+        }
+      ]
+    },
+    "peer-auto/peer-group-0": {
+      "transport": "peer",
+      "node": "deep-chungus-4",
+      "job_id": "2144982",
+      "group_size": 4,
+      "physical_devices": [
+        "0",
+        "1",
+        "2",
+        "3"
+      ],
+      "torch": "2.11.0+cu128",
+      "nccl": [
+        2,
+        28,
+        9
+      ],
+      "nccl_environment": {
+        "NCCL_P2P_DISABLE": "0",
+        "NCCL_SHM_DISABLE": "0",
+        "NCCL_DEBUG": "INFO"
+      },
+      "correctness_passed": true,
+      "rows": [
+        {
+          "operation": "all_gather",
+          "dtype": "torch.bfloat16",
+          "full_tensor_mib": 64,
+          "full_tensor_bytes": 67108864,
+          "median_seconds": 0.017073669470846653,
+          "seconds": [
+            0.017167955869808793,
+            0.017075734911486506,
+            0.0170716040302068,
+            0.01713405502960086,
+            0.01690384396351874,
+            0.016849373932927847
+          ],
+          "algorithm_gb_s": 3.930547215675494
+        },
+        {
+          "operation": "reduce_scatter",
+          "dtype": "torch.bfloat16",
+          "full_tensor_mib": 64,
+          "full_tensor_bytes": 67108864,
+          "median_seconds": 0.016710948548279703,
+          "seconds": [
+            0.016539074014872313,
+            0.016731804003939033,
+            0.016690093092620373,
+            0.01687855483032763,
+            0.01678795414045453,
+            0.016684412956237793
+          ],
+          "algorithm_gb_s": 4.015862044342688
+        },
+        {
+          "operation": "all_gather",
+          "dtype": "torch.bfloat16",
+          "full_tensor_mib": 512,
+          "full_tensor_bytes": 536870912,
+          "median_seconds": 0.1137559610651806,
+          "seconds": [
+            0.11342618404887617,
+            0.11336552491411567,
+            0.11408204701729119,
+            0.11342987511307001,
+            0.1143370468635112,
+            0.11464593815617263
+          ],
+          "algorithm_gb_s": 4.7194969562287845
+        },
+        {
+          "operation": "reduce_scatter",
+          "dtype": "torch.bfloat16",
+          "full_tensor_mib": 512,
+          "full_tensor_bytes": 536870912,
+          "median_seconds": 0.11446911748498678,
+          "seconds": [
+            0.11398231610655785,
+            0.11427720705978572,
+            0.1148289090488106,
+            0.11463288799859583,
+            0.11475091800093651,
+            0.11430534697137773
+          ],
+          "algorithm_gb_s": 4.690093920488322
+        },
+        {
+          "operation": "all_gather",
+          "dtype": "torch.bfloat16",
+          "full_tensor_mib": 1024,
+          "full_tensor_bytes": 1073741824,
+          "median_seconds": 0.22111457108985633,
+          "seconds": [
+            0.22037941706366837,
+            0.22391940909437835,
+            0.22045838902704418,
+            0.2237265589646995,
+            0.22031450713984668,
+            0.22177075315266848
+          ],
+          "algorithm_gb_s": 4.856042813947588
+        },
+        {
+          "operation": "reduce_scatter",
+          "dtype": "torch.bfloat16",
+          "full_tensor_mib": 1024,
+          "full_tensor_bytes": 1073741824,
+          "median_seconds": 0.22328675200697035,
+          "seconds": [
+            0.22084107785485685,
+            0.22330921702086926,
+            0.22391811897978187,
+            0.22437483095563948,
+            0.22326428699307144,
+            0.22296760603785515
+          ],
+          "algorithm_gb_s": 4.808802198737169
+        },
+        {
+          "operation": "all_gather",
+          "dtype": "torch.float32",
+          "full_tensor_mib": 64,
+          "full_tensor_bytes": 67108864,
+          "median_seconds": 0.01684091961942613,
+          "seconds": [
+            0.016878355061635375,
+            0.016803484177216887,
+            0.016925374045968056,
+            0.01680182386189699,
+            0.016801022924482822,
+            0.01691170409321785
+          ],
+          "algorithm_gb_s": 3.984869325223155
+        },
+        {
+          "operation": "reduce_scatter",
+          "dtype": "torch.float32",
+          "full_tensor_mib": 64,
+          "full_tensor_bytes": 67108864,
+          "median_seconds": 0.016787304542958736,
+          "seconds": [
+            0.015909872017800808,
+            0.016784803941845894,
+            0.016746414825320244,
+            0.01681432407349348,
+            0.01680630398914218,
+            0.01678980514407158
+          ],
+          "algorithm_gb_s": 3.9975961494156684
+        },
+        {
+          "operation": "all_gather",
+          "dtype": "torch.float32",
+          "full_tensor_mib": 512,
+          "full_tensor_bytes": 536870912,
+          "median_seconds": 0.1140548714902252,
+          "seconds": [
+            0.11397705599665642,
+            0.11413268698379397,
+            0.11457840818911791,
+            0.11368126515299082,
+            0.11332560400478542,
+            0.11544942110776901
+          ],
+          "algorithm_gb_s": 4.707128288211795
+        },
+        {
+          "operation": "reduce_scatter",
+          "dtype": "torch.float32",
+          "full_tensor_mib": 512,
+          "full_tensor_bytes": 536870912,
+          "median_seconds": 0.11509741959162056,
+          "seconds": [
+            0.1149410989601165,
+            0.11509499000385404,
+            0.1148548589553684,
+            0.11512651992961764,
+            0.115204649977386,
+            0.11509984917938709
+          ],
+          "algorithm_gb_s": 4.664491297067149
+        },
+        {
+          "operation": "all_gather",
+          "dtype": "torch.float32",
+          "full_tensor_mib": 1024,
+          "full_tensor_bytes": 1073741824,
+          "median_seconds": 0.22152606607414782,
+          "seconds": [
+            0.22009105700999498,
+            0.22156406100839376,
+            0.22148807113990188,
+            0.22285496606491506,
+            0.22201782185584307,
+            0.22060631797648966
+          ],
+          "algorithm_gb_s": 4.847022488272796
+        },
+        {
+          "operation": "reduce_scatter",
+          "dtype": "torch.float32",
+          "full_tensor_mib": 1024,
+          "full_tensor_bytes": 1073741824,
+          "median_seconds": 0.22472197690512985,
+          "seconds": [
+            0.22422288986854255,
+            0.22490170295350254,
+            0.2256001951172948,
+            0.22454225085675716,
+            0.2258201139047742,
+            0.22388168890029192
+          ],
+          "algorithm_gb_s": 4.778089970494065
+        }
+      ]
+    },
+    "peer-auto/peer-group-1": {
+      "transport": "peer",
+      "node": "deep-chungus-4",
+      "job_id": "2144982",
+      "group_size": 5,
+      "physical_devices": [
+        "4",
+        "5",
+        "6",
+        "7",
+        "8"
+      ],
+      "torch": "2.11.0+cu128",
+      "nccl": [
+        2,
+        28,
+        9
+      ],
+      "nccl_environment": {
+        "NCCL_P2P_DISABLE": "0",
+        "NCCL_SHM_DISABLE": "0",
+        "NCCL_DEBUG": "INFO"
+      },
+      "correctness_passed": true,
+      "rows": [
+        {
+          "operation": "all_gather",
+          "dtype": "torch.bfloat16",
+          "full_tensor_mib": 64,
+          "full_tensor_bytes": 67108860,
+          "median_seconds": 0.05249062355142087,
+          "seconds": [
+            0.052843090146780014,
+            0.05288579990155995,
+            0.0523996080737561,
+            0.05234101810492575,
+            0.052581639029085636,
+            0.052373338025063276
+          ],
+          "algorithm_gb_s": 1.2784923374792607
+        },
+        {
+          "operation": "reduce_scatter",
+          "dtype": "torch.bfloat16",
+          "full_tensor_mib": 64,
+          "full_tensor_bytes": 67108860,
+          "median_seconds": 0.029468349879607558,
+          "seconds": [
+            0.029258964117616415,
+            0.029550974955782294,
+            0.029267122969031334,
+            0.029394104843959212,
+            0.029542594915255904,
+            0.031095199985429645
+          ],
+          "algorithm_gb_s": 2.277319913540192
+        },
+        {
+          "operation": "all_gather",
+          "dtype": "torch.bfloat16",
+          "full_tensor_mib": 512,
+          "full_tensor_bytes": 536870910,
+          "median_seconds": 0.46769239741843194,
+          "seconds": [
+            0.4679162928368896,
+            0.46781322290189564,
+            0.47010906995274127,
+            0.46757157193496823,
+            0.4630772068630904,
+            0.46472469298169017
+          ],
+          "algorithm_gb_s": 1.1479145544452283
+        },
+        {
+          "operation": "reduce_scatter",
+          "dtype": "torch.bfloat16",
+          "full_tensor_mib": 512,
+          "full_tensor_bytes": 536870910,
+          "median_seconds": 0.24400957848411053,
+          "seconds": [
+            0.24395984294824302,
+            0.24259559903293848,
+            0.2458549200091511,
+            0.24405931401997805,
+            0.24656521202996373,
+            0.24270786996930838
+          ],
+          "algorithm_gb_s": 2.20020424335498
+        },
+        {
+          "operation": "all_gather",
+          "dtype": "torch.bfloat16",
+          "full_tensor_mib": 1024,
+          "full_tensor_bytes": 1073741820,
+          "median_seconds": 0.8864164119586349,
+          "seconds": [
+            0.8769970468711108,
+            0.8850112529471517,
+            0.880683678900823,
+            0.9032329011242837,
+            0.887821570970118,
+            0.8939910219050944
+          ],
+          "algorithm_gb_s": 1.2113289031138863
+        },
+        {
+          "operation": "reduce_scatter",
+          "dtype": "torch.bfloat16",
+          "full_tensor_mib": 1024,
+          "full_tensor_bytes": 1073741820,
+          "median_seconds": 0.4552983025787398,
+          "seconds": [
+            0.45444107986986637,
+            0.45575868408195674,
+            0.4560808539390564,
+            0.4548379210755229,
+            0.4564407260622829,
+            0.45460065896622837
+          ],
+          "algorithm_gb_s": 2.3583259896171165
+        },
+        {
+          "operation": "all_gather",
+          "dtype": "torch.float32",
+          "full_tensor_mib": 64,
+          "full_tensor_bytes": 67108860,
+          "median_seconds": 0.052534713642671704,
+          "seconds": [
+            0.052590199979022145,
+            0.052521309116855264,
+            0.052548118168488145,
+            0.05247319908812642,
+            0.05255043809302151,
+            0.05219100695103407
+          ],
+          "algorithm_gb_s": 1.2774193546853245
+        },
+        {
+          "operation": "reduce_scatter",
+          "dtype": "torch.float32",
+          "full_tensor_mib": 64,
+          "full_tensor_bytes": 67108860,
+          "median_seconds": 0.02549729752354324,
+          "seconds": [
+            0.025545812910422683,
+            0.02546117198653519,
+            0.025504613062366843,
+            0.02550567197613418,
+            0.02548174187541008,
+            0.025489981984719634
+          ],
+          "algorithm_gb_s": 2.631998937849559
+        },
+        {
+          "operation": "all_gather",
+          "dtype": "torch.float32",
+          "full_tensor_mib": 512,
+          "full_tensor_bytes": 536870900,
+          "median_seconds": 0.439927777973935,
+          "seconds": [
+            0.4435638941358775,
+            0.4414962080772966,
+            0.43799049593508244,
+            0.4383593478705734,
+            0.44225890096277,
+            0.4375215850304812
+          ],
+          "algorithm_gb_s": 1.2203614476733695
+        },
+        {
+          "operation": "reduce_scatter",
+          "dtype": "torch.float32",
+          "full_tensor_mib": 512,
+          "full_tensor_bytes": 536870900,
+          "median_seconds": 0.20646232913713902,
+          "seconds": [
+            0.20851381006650627,
+            0.2061619320884347,
+            0.20637353183701634,
+            0.20646771416068077,
+            0.20645694411359727,
+            0.20812855893746018
+          ],
+          "algorithm_gb_s": 2.600333446996003
+        },
+        {
+          "operation": "all_gather",
+          "dtype": "torch.float32",
+          "full_tensor_mib": 1024,
+          "full_tensor_bytes": 1073741820,
+          "median_seconds": 0.892888362519443,
+          "seconds": [
+            0.8802508469671011,
+            0.8985993559472263,
+            0.8973389710299671,
+            0.8957859170623124,
+            0.8899908079765737,
+            0.8849048020783812
+          ],
+          "algorithm_gb_s": 1.20254879005282
+        },
+        {
+          "operation": "reduce_scatter",
+          "dtype": "torch.float32",
+          "full_tensor_mib": 1024,
+          "full_tensor_bytes": 1073741820,
+          "median_seconds": 0.4099198664771393,
+          "seconds": [
+            0.4112844809424132,
+            0.4123410840984434,
+            0.4085552520118654,
+            0.4147067619487643,
+            0.3885623370297253,
+            0.4075211880262941
+          ],
+          "algorithm_gb_s": 2.619394442205892
+        }
+      ]
+    },
+    "peer-simple/peer-group-0": {
+      "transport": "peer",
+      "node": "deep-chungus-4",
+      "job_id": "2144982",
+      "group_size": 4,
+      "physical_devices": [
+        "0",
+        "1",
+        "2",
+        "3"
+      ],
+      "torch": "2.11.0+cu128",
+      "nccl": [
+        2,
+        28,
+        9
+      ],
+      "nccl_environment": {
+        "NCCL_P2P_DISABLE": "0",
+        "NCCL_SHM_DISABLE": "0",
+        "NCCL_DEBUG": "INFO",
+        "NCCL_PROTO": "Simple"
+      },
+      "correctness_passed": true,
+      "rows": [
+        {
+          "operation": "all_gather",
+          "dtype": "torch.bfloat16",
+          "full_tensor_mib": 64,
+          "full_tensor_bytes": 67108864,
+          "median_seconds": 0.017065569991245866,
+          "seconds": [
+            0.01715757604688406,
+            0.017102095065638423,
+            0.01710746414028108,
+            0.01702904491685331,
+            0.017005554866045713,
+            0.016887973994016647
+          ],
+          "algorithm_gb_s": 3.932412690254405
+        },
+        {
+          "operation": "reduce_scatter",
+          "dtype": "torch.bfloat16",
+          "full_tensor_mib": 64,
+          "full_tensor_bytes": 67108864,
+          "median_seconds": 0.016803484060801566,
+          "seconds": [
+            0.01675222418271005,
+            0.01689126412384212,
+            0.016794684110209346,
+            0.016812284011393785,
+            0.016837314004078507,
+            0.01676219399087131
+          ],
+          "algorithm_gb_s": 3.9937469965855845
+        },
+        {
+          "operation": "all_gather",
+          "dtype": "torch.bfloat16",
+          "full_tensor_mib": 512,
+          "full_tensor_bytes": 536870912,
+          "median_seconds": 0.1147451534634456,
+          "seconds": [
+            0.11350228497758508,
+            0.11542981001548469,
+            0.1151246300432831,
+            0.11435280716978014,
+            0.11515271989628673,
+            0.1143656768836081
+          ],
+          "algorithm_gb_s": 4.678811224659098
+        },
+        {
+          "operation": "reduce_scatter",
+          "dtype": "torch.bfloat16",
+          "full_tensor_mib": 512,
+          "full_tensor_bytes": 536870912,
+          "median_seconds": 0.1152474950067699,
+          "seconds": [
+            0.11529910005629063,
+            0.1151524898596108,
+            0.11498593911528587,
+            0.11519588995724916,
+            0.1154661700129509,
+            0.11557228211313486
+          ],
+          "algorithm_gb_s": 4.658417191353816
+        },
+        {
+          "operation": "all_gather",
+          "dtype": "torch.bfloat16",
+          "full_tensor_mib": 1024,
+          "full_tensor_bytes": 1073741824,
+          "median_seconds": 0.22151267097797245,
+          "seconds": [
+            0.22241431381553411,
+            0.22097003017552197,
+            0.2217046518344432,
+            0.22209514281712472,
+            0.22132069012150168,
+            0.22113127005286515
+          ],
+          "algorithm_gb_s": 4.847315592645147
+        },
+        {
+          "operation": "reduce_scatter",
+          "dtype": "torch.bfloat16",
+          "full_tensor_mib": 1024,
+          "full_tensor_bytes": 1073741824,
+          "median_seconds": 0.22505271737463772,
+          "seconds": [
+            0.2252249929588288,
+            0.22526753298006952,
+            0.22488044179044664,
+            0.22585684503428638,
+            0.2247864119708538,
+            0.22456436208449304
+          ],
+          "algorithm_gb_s": 4.77106802586426
+        },
+        {
+          "operation": "all_gather",
+          "dtype": "torch.float32",
+          "full_tensor_mib": 64,
+          "full_tensor_bytes": 67108864,
+          "median_seconds": 0.01687160460278392,
+          "seconds": [
+            0.016881613992154598,
+            0.016878315014764667,
+            0.016850425163283944,
+            0.01686489419080317,
+            0.01683710399083793,
+            0.0169203148689121
+          ],
+          "algorithm_gb_s": 3.9776219025976123
+        },
+        {
+          "operation": "reduce_scatter",
+          "dtype": "torch.float32",
+          "full_tensor_mib": 64,
+          "full_tensor_bytes": 67108864,
+          "median_seconds": 0.01691184949595481,
+          "seconds": [
+            0.016439453000202775,
+            0.01697575394064188,
+            0.016917804954573512,
+            0.016825523925945163,
+            0.017019263934344053,
+            0.01690589403733611
+          ],
+          "algorithm_gb_s": 3.9681564110449266
+        },
+        {
+          "operation": "all_gather",
+          "dtype": "torch.float32",
+          "full_tensor_mib": 512,
+          "full_tensor_bytes": 536870912,
+          "median_seconds": 0.11446612351574004,
+          "seconds": [
+            0.11311937309801579,
+            0.11460673902183771,
+            0.11305303312838078,
+            0.11432550800964236,
+            0.11494560004211962,
+            0.11503926990553737
+          ],
+          "algorithm_gb_s": 4.690216594311205
+        },
+        {
+          "operation": "reduce_scatter",
+          "dtype": "torch.float32",
+          "full_tensor_mib": 512,
+          "full_tensor_bytes": 536870912,
+          "median_seconds": 0.11553022603038698,
+          "seconds": [
+            0.11548334104008973,
+            0.11557711102068424,
+            0.11512732994742692,
+            0.11593901203013957,
+            0.11517025995999575,
+            0.11587607208639383
+          ],
+          "algorithm_gb_s": 4.647016892867423
+        },
+        {
+          "operation": "all_gather",
+          "dtype": "torch.float32",
+          "full_tensor_mib": 1024,
+          "full_tensor_bytes": 1073741824,
+          "median_seconds": 0.22149439109489322,
+          "seconds": [
+            0.22377325897105038,
+            0.22055596811696887,
+            0.22186816204339266,
+            0.22112062014639378,
+            0.220324246911332,
+            0.22218425292521715
+          ],
+          "algorithm_gb_s": 4.847715640528272
+        },
+        {
+          "operation": "reduce_scatter",
+          "dtype": "torch.float32",
+          "full_tensor_mib": 1024,
+          "full_tensor_bytes": 1073741824,
+          "median_seconds": 0.22575973498169333,
+          "seconds": [
+            0.2234971271827817,
+            0.2260257159359753,
+            0.2263311769347638,
+            0.22549375402741134,
+            0.22391877812333405,
+            0.22671829792670906
+          ],
+          "algorithm_gb_s": 4.756126348602725
+        }
+      ]
+    },
+    "peer-simple/peer-group-1": {
+      "transport": "peer",
+      "node": "deep-chungus-4",
+      "job_id": "2144982",
+      "group_size": 5,
+      "physical_devices": [
+        "4",
+        "5",
+        "6",
+        "7",
+        "8"
+      ],
+      "torch": "2.11.0+cu128",
+      "nccl": [
+        2,
+        28,
+        9
+      ],
+      "nccl_environment": {
+        "NCCL_P2P_DISABLE": "0",
+        "NCCL_SHM_DISABLE": "0",
+        "NCCL_DEBUG": "INFO",
+        "NCCL_PROTO": "Simple"
+      },
+      "correctness_passed": true,
+      "rows": [
+        {
+          "operation": "all_gather",
+          "dtype": "torch.bfloat16",
+          "full_tensor_mib": 64,
+          "full_tensor_bytes": 67108860,
+          "median_seconds": 0.052377393119968474,
+          "seconds": [
+            0.052564369048923254,
+            0.05150165595114231,
+            0.052414588164538145,
+            0.0524269191082567,
+            0.05151310609653592,
+            0.0523401980753988
+          ],
+          "algorithm_gb_s": 1.2812562062088437
+        },
+        {
+          "operation": "reduce_scatter",
+          "dtype": "torch.bfloat16",
+          "full_tensor_mib": 64,
+          "full_tensor_bytes": 67108860,
+          "median_seconds": 0.029021388036198914,
+          "seconds": [
+            0.028949043015018106,
+            0.029110462870448828,
+            0.02889784285798669,
+            0.02912926417775452,
+            0.028868902008980513,
+            0.029093733057379723
+          ],
+          "algorithm_gb_s": 2.31239318795827
+        },
+        {
+          "operation": "all_gather",
+          "dtype": "torch.bfloat16",
+          "full_tensor_mib": 512,
+          "full_tensor_bytes": 536870910,
+          "median_seconds": 0.46360586944501847,
+          "seconds": [
+            0.45883319387212396,
+            0.46592043596319854,
+            0.4606257888954133,
+            0.4641521009616554,
+            0.46305963792838156,
+            0.46435921103693545
+          ],
+          "algorithm_gb_s": 1.1580330306056887
+        },
+        {
+          "operation": "reduce_scatter",
+          "dtype": "torch.bfloat16",
+          "full_tensor_mib": 512,
+          "full_tensor_bytes": 536870910,
+          "median_seconds": 0.2435933924280107,
+          "seconds": [
+            0.24233787902630866,
+            0.24338916200213134,
+            0.24379762285389006,
+            0.24495475692674518,
+            0.24379997211508453,
+            0.2382218148559332
+          ],
+          "algorithm_gb_s": 2.2039633532287284
+        },
+        {
+          "operation": "all_gather",
+          "dtype": "torch.bfloat16",
+          "full_tensor_mib": 1024,
+          "full_tensor_bytes": 1073741820,
+          "median_seconds": 0.8834018314955756,
+          "seconds": [
+            0.8798108149785548,
+            0.8752197399735451,
+            0.8937010201625526,
+            0.8869928480125964,
+            0.8758865220006555,
+            0.8876267799641937
+          ],
+          "algorithm_gb_s": 1.2154625242084725
+        },
+        {
+          "operation": "reduce_scatter",
+          "dtype": "torch.bfloat16",
+          "full_tensor_mib": 1024,
+          "full_tensor_bytes": 1073741820,
+          "median_seconds": 0.44799256802070886,
+          "seconds": [
+            0.4475687670055777,
+            0.4488683510571718,
+            0.45049897697754204,
+            0.44804156804457307,
+            0.44794356799684465,
+            0.44753094715997577
+          ],
+          "algorithm_gb_s": 2.396784894767195
+        },
+        {
+          "operation": "all_gather",
+          "dtype": "torch.float32",
+          "full_tensor_mib": 64,
+          "full_tensor_bytes": 67108860,
+          "median_seconds": 0.05208839161787182,
+          "seconds": [
+            0.05223770719021559,
+            0.051939076045528054,
+            0.051381846191361547,
+            0.051883366890251637,
+            0.05239878804422915,
+            0.052925430005416274
+          ],
+          "algorithm_gb_s": 1.2883649871994622
+        },
+        {
+          "operation": "reduce_scatter",
+          "dtype": "torch.float32",
+          "full_tensor_mib": 64,
+          "full_tensor_bytes": 67108860,
+          "median_seconds": 0.025324691901914775,
+          "seconds": [
+            0.02548008202575147,
+            0.02534947101958096,
+            0.02531604189425707,
+            0.025333341909572482,
+            0.023374085081741214,
+            0.02086683688685298
+          ],
+          "algorithm_gb_s": 2.649937865381334
+        },
+        {
+          "operation": "all_gather",
+          "dtype": "torch.float32",
+          "full_tensor_mib": 512,
+          "full_tensor_bytes": 536870900,
+          "median_seconds": 0.43919099506456405,
+          "seconds": [
+            0.4415430980734527,
+            0.4353988179937005,
+            0.44245984009467065,
+            0.43737000413239,
+            0.43732361402362585,
+            0.4410119859967381
+          ],
+          "algorithm_gb_s": 1.2224087151902474
+        },
+        {
+          "operation": "reduce_scatter",
+          "dtype": "torch.float32",
+          "full_tensor_mib": 512,
+          "full_tensor_bytes": 536870900,
+          "median_seconds": 0.20531652448698878,
+          "seconds": [
+            0.2058568608481437,
+            0.19860395812429488,
+            0.19951534108258784,
+            0.20477618812583387,
+            0.20701450505293906,
+            0.20597950206138194
+          ],
+          "algorithm_gb_s": 2.6148450610171046
+        },
+        {
+          "operation": "all_gather",
+          "dtype": "torch.float32",
+          "full_tensor_mib": 1024,
+          "full_tensor_bytes": 1073741820,
+          "median_seconds": 0.8841956190299243,
+          "seconds": [
+            0.88512635207735,
+            0.8776544679421932,
+            0.8832648859824985,
+            0.8831422859802842,
+            0.890692959073931,
+            0.8872015289962292
+          ],
+          "algorithm_gb_s": 1.214371341466306
+        },
+        {
+          "operation": "reduce_scatter",
+          "dtype": "torch.float32",
+          "full_tensor_mib": 1024,
+          "full_tensor_bytes": 1073741820,
+          "median_seconds": 0.41054668300785124,
+          "seconds": [
+            0.41106275003403425,
+            0.41306865494698286,
+            0.4076811589766294,
+            0.41020507691428065,
+            0.3870124120730907,
+            0.41088828910142183
+          ],
+          "algorithm_gb_s": 2.6153951899776176
+        }
+      ]
+    },
+    "peer-simple-8ctas/peer-group-0": {
+      "transport": "peer",
+      "node": "deep-chungus-4",
+      "job_id": "2144982",
+      "group_size": 4,
+      "physical_devices": [
+        "0",
+        "1",
+        "2",
+        "3"
+      ],
+      "torch": "2.11.0+cu128",
+      "nccl": [
+        2,
+        28,
+        9
+      ],
+      "nccl_environment": {
+        "NCCL_P2P_DISABLE": "0",
+        "NCCL_SHM_DISABLE": "0",
+        "NCCL_DEBUG": "INFO",
+        "NCCL_PROTO": "Simple",
+        "NCCL_MIN_CTAS": "8",
+        "NCCL_MAX_CTAS": "8"
+      },
+      "correctness_passed": true,
+      "rows": [
+        {
+          "operation": "all_gather",
+          "dtype": "torch.bfloat16",
+          "full_tensor_mib": 64,
+          "full_tensor_bytes": 67108864,
+          "median_seconds": 0.017095434945076704,
+          "seconds": [
+            0.017341226106509566,
+            0.01714946608990431,
+            0.01711647491902113,
+            0.01707439497113228,
+            0.01701123407110572,
+            0.01694333483465016
+          ],
+          "algorithm_gb_s": 3.925542942639585
+        },
+        {
+          "operation": "reduce_scatter",
+          "dtype": "torch.bfloat16",
+          "full_tensor_mib": 64,
+          "full_tensor_bytes": 67108864,
+          "median_seconds": 0.015899360994808376,
+          "seconds": [
+            0.01477036694996059,
+            0.01706711482256651,
+            0.017097205156460404,
+            0.017028355039656162,
+            0.014023474883288145,
+            0.014171886024996638
+          ],
+          "algorithm_gb_s": 4.220852902321866
+        },
+        {
+          "operation": "all_gather",
+          "dtype": "torch.bfloat16",
+          "full_tensor_mib": 512,
+          "full_tensor_bytes": 536870912,
+          "median_seconds": 0.11456558294594288,
+          "seconds": [
+            0.11387252481654286,
+            0.11511109001003206,
+            0.11399274505674839,
+            0.11461174790747464,
+            0.1150308579672128,
+            0.11451941798441112
+          ],
+          "algorithm_gb_s": 4.686144810639331
+        },
+        {
+          "operation": "reduce_scatter",
+          "dtype": "torch.bfloat16",
+          "full_tensor_mib": 512,
+          "full_tensor_bytes": 536870912,
+          "median_seconds": 0.11595623753964901,
+          "seconds": [
+            0.11603737203404307,
+            0.11612139292992651,
+            0.1154160110745579,
+            0.11602291301824152,
+            0.1155946918297559,
+            0.1158895620610565
+          ],
+          "algorithm_gb_s": 4.629944221986569
+        },
+        {
+          "operation": "all_gather",
+          "dtype": "torch.bfloat16",
+          "full_tensor_mib": 1024,
+          "full_tensor_bytes": 1073741824,
+          "median_seconds": 0.22172673710156232,
+          "seconds": [
+            0.2222207731101662,
+            0.22191480197943747,
+            0.2213985719718039,
+            0.22166530205868185,
+            0.22147098113782704,
+            0.2217881721444428
+          ],
+          "algorithm_gb_s": 4.842635750816875
+        },
+        {
+          "operation": "reduce_scatter",
+          "dtype": "torch.bfloat16",
+          "full_tensor_mib": 1024,
+          "full_tensor_bytes": 1073741824,
+          "median_seconds": 0.2237737134564668,
+          "seconds": [
+            0.2238799489568919,
+            0.22366755781695247,
+            0.22384443785995245,
+            0.22370298905298114,
+            0.22395536908879876,
+            0.2233198571484536
+          ],
+          "algorithm_gb_s": 4.79833760371004
+        },
+        {
+          "operation": "all_gather",
+          "dtype": "torch.float32",
+          "full_tensor_mib": 64,
+          "full_tensor_bytes": 67108864,
+          "median_seconds": 0.016928524477407336,
+          "seconds": [
+            0.01694276393391192,
+            0.016883034957572818,
+            0.016933854902163148,
+            0.016887753969058394,
+            0.016955784056335688,
+            0.016923194052651525
+          ],
+          "algorithm_gb_s": 3.9642476867705105
+        },
+        {
+          "operation": "reduce_scatter",
+          "dtype": "torch.float32",
+          "full_tensor_mib": 64,
+          "full_tensor_bytes": 67108864,
+          "median_seconds": 0.016974919592030346,
+          "seconds": [
+            0.017086296109482646,
+            0.017049924936145544,
+            0.01399236498400569,
+            0.01695925509557128,
+            0.016990584088489413,
+            0.013973324792459607
+          ],
+          "algorithm_gb_s": 3.953412776783186
+        },
+        {
+          "operation": "all_gather",
+          "dtype": "torch.float32",
+          "full_tensor_mib": 512,
+          "full_tensor_bytes": 536870912,
+          "median_seconds": 0.11410790611989796,
+          "seconds": [
+            0.11366998497396708,
+            0.1138980460818857,
+            0.11428640712983906,
+            0.114327406976372,
+            0.11392940510995686,
+            0.11438354616984725
+          ],
+          "algorithm_gb_s": 4.7049405273977
+        },
+        {
+          "operation": "reduce_scatter",
+          "dtype": "torch.float32",
+          "full_tensor_mib": 512,
+          "full_tensor_bytes": 536870912,
+          "median_seconds": 0.11664394452236593,
+          "seconds": [
+            0.11663775495253503,
+            0.11665013409219682,
+            0.11541203083470464,
+            0.11692303512245417,
+            0.11676245415583253,
+            0.11634968291036785
+          ],
+          "algorithm_gb_s": 4.602647091526106
+        },
+        {
+          "operation": "all_gather",
+          "dtype": "torch.float32",
+          "full_tensor_mib": 1024,
+          "full_tensor_bytes": 1073741824,
+          "median_seconds": 0.22208814311306924,
+          "seconds": [
+            0.2220391531009227,
+            0.22213713312521577,
+            0.22158584091812372,
+            0.22226435388438404,
+            0.22141264099627733,
+            0.22241189400665462
+          ],
+          "algorithm_gb_s": 4.834755286568081
+        },
+        {
+          "operation": "reduce_scatter",
+          "dtype": "torch.float32",
+          "full_tensor_mib": 1024,
+          "full_tensor_bytes": 1073741824,
+          "median_seconds": 0.2248955819522962,
+          "seconds": [
+            0.2253104338888079,
+            0.2244807300157845,
+            0.22595576499588788,
+            0.22644968703389168,
+            0.2243636699859053,
+            0.22441990091465414
+          ],
+          "algorithm_gb_s": 4.774401589746468
+        }
+      ]
+    },
+    "peer-simple-8ctas/peer-group-1": {
+      "transport": "peer",
+      "node": "deep-chungus-4",
+      "job_id": "2144982",
+      "group_size": 5,
+      "physical_devices": [
+        "4",
+        "5",
+        "6",
+        "7",
+        "8"
+      ],
+      "torch": "2.11.0+cu128",
+      "nccl": [
+        2,
+        28,
+        9
+      ],
+      "nccl_environment": {
+        "NCCL_P2P_DISABLE": "0",
+        "NCCL_SHM_DISABLE": "0",
+        "NCCL_DEBUG": "INFO",
+        "NCCL_PROTO": "Simple",
+        "NCCL_MIN_CTAS": "8",
+        "NCCL_MAX_CTAS": "8"
+      },
+      "correctness_passed": true,
+      "rows": [
+        {
+          "operation": "all_gather",
+          "dtype": "torch.bfloat16",
+          "full_tensor_mib": 64,
+          "full_tensor_bytes": 67108860,
+          "median_seconds": 0.04968065000139177,
+          "seconds": [
+            0.04991459101438522,
+            0.04991335119120777,
+            0.04969008010812104,
+            0.0496712198946625,
+            0.049613439943641424,
+            0.049485008930787444
+          ],
+          "algorithm_gb_s": 1.3508047901571336
+        },
+        {
+          "operation": "reduce_scatter",
+          "dtype": "torch.bfloat16",
+          "full_tensor_mib": 64,
+          "full_tensor_bytes": 67108860,
+          "median_seconds": 0.02856224705465138,
+          "seconds": [
+            0.028646512888371944,
+            0.028336331015452743,
+            0.028759852051734924,
+            0.028555072145536542,
+            0.028569421963766217,
+            0.02848935197107494
+          ],
+          "algorithm_gb_s": 2.3495651400113244
+        },
+        {
+          "operation": "all_gather",
+          "dtype": "torch.bfloat16",
+          "full_tensor_mib": 512,
+          "full_tensor_bytes": 536870910,
+          "median_seconds": 0.44460884237196296,
+          "seconds": [
+            0.4452607589773834,
+            0.443995526060462,
+            0.44452581694349647,
+            0.4449462390039116,
+            0.4433587130624801,
+            0.44469186780042946
+          ],
+          "algorithm_gb_s": 1.2075128941112014
+        },
+        {
+          "operation": "reduce_scatter",
+          "dtype": "torch.bfloat16",
+          "full_tensor_mib": 512,
+          "full_tensor_bytes": 536870910,
+          "median_seconds": 0.23762951302342117,
+          "seconds": [
+            0.23908731783740222,
+            0.23677729908376932,
+            0.23703016201034188,
+            0.23778136307373643,
+            0.2383504849858582,
+            0.2374776629731059
+          ],
+          "algorithm_gb_s": 2.25927707029844
+        },
+        {
+          "operation": "all_gather",
+          "dtype": "torch.bfloat16",
+          "full_tensor_mib": 1024,
+          "full_tensor_bytes": 1073741820,
+          "median_seconds": 0.8602085665334016,
+          "seconds": [
+            0.8524863871280104,
+            0.8583470347803086,
+            0.871267206966877,
+            0.8587027071043849,
+            0.866684053093195,
+            0.8617144259624183
+          ],
+          "algorithm_gb_s": 1.2482342791901353
+        },
+        {
+          "operation": "reduce_scatter",
+          "dtype": "torch.bfloat16",
+          "full_tensor_mib": 1024,
+          "full_tensor_bytes": 1073741820,
+          "median_seconds": 0.4499089395394549,
+          "seconds": [
+            0.4529452449642122,
+            0.4461758020333946,
+            0.45061631593853235,
+            0.4501983360387385,
+            0.4284689559135586,
+            0.44961954304017127
+          ],
+          "algorithm_gb_s": 2.3865758726624238
+        },
+        {
+          "operation": "all_gather",
+          "dtype": "torch.float32",
+          "full_tensor_mib": 64,
+          "full_tensor_bytes": 67108860,
+          "median_seconds": 0.04969999997410923,
+          "seconds": [
+            0.04967025900259614,
+            0.049697509966790676,
+            0.04965162021107972,
+            0.04977813991717994,
+            0.05007474101148546,
+            0.04970248998142779
+          ],
+          "algorithm_gb_s": 1.3502788739428522
+        },
+        {
+          "operation": "reduce_scatter",
+          "dtype": "torch.float32",
+          "full_tensor_mib": 64,
+          "full_tensor_bytes": 67108860,
+          "median_seconds": 0.021642759442329407,
+          "seconds": [
+            0.020963787799701095,
+            0.021698859985917807,
+            0.024769139010459185,
+            0.020898468093946576,
+            0.021586658898741007,
+            0.024810590082779527
+          ],
+          "algorithm_gb_s": 3.1007534034106086
+        },
+        {
+          "operation": "all_gather",
+          "dtype": "torch.float32",
+          "full_tensor_mib": 512,
+          "full_tensor_bytes": 536870900,
+          "median_seconds": 0.4255937511334196,
+          "seconds": [
+            0.42749008210375905,
+            0.4232968289870769,
+            0.42707256111316383,
+            0.4253513452131301,
+            0.4236779098864645,
+            0.42583615705370903
+          ],
+          "algorithm_gb_s": 1.2614633052535025
+        },
+        {
+          "operation": "reduce_scatter",
+          "dtype": "torch.float32",
+          "full_tensor_mib": 512,
+          "full_tensor_bytes": 536870900,
+          "median_seconds": 0.17915295506827533,
+          "seconds": [
+            0.17444853018969297,
+            0.18183737294748425,
+            0.17912297509610653,
+            0.18160542310215533,
+            0.17918293504044414,
+            0.17411506897769868
+          ],
+          "algorithm_gb_s": 2.996718082575853
+        },
+        {
+          "operation": "all_gather",
+          "dtype": "torch.float32",
+          "full_tensor_mib": 1024,
+          "full_tensor_bytes": 1073741820,
+          "median_seconds": 0.8650413274299353,
+          "seconds": [
+            0.850557201076299,
+            0.864201484946534,
+            0.8666623120661825,
+            0.8706091050989926,
+            0.8658811699133366,
+            0.8624141491018236
+          ],
+          "algorithm_gb_s": 1.2412607189417415
+        },
+        {
+          "operation": "reduce_scatter",
+          "dtype": "torch.float32",
+          "full_tensor_mib": 1024,
+          "full_tensor_bytes": 1073741820,
+          "median_seconds": 0.3538418865064159,
+          "seconds": [
+            0.35421688784845173,
+            0.3534668851643801,
+            0.3534566049929708,
+            0.35506066982634366,
+            0.37535409489646554,
+            0.3529143128544092
+          ],
+          "algorithm_gb_s": 3.0345243481526905
+        }
+      ]
+    }
+  },
+  "production_speedup_applied": false,
+  "model_replay_pending_job": 2144987
+}

@@ -91,5 +91,39 @@
       "profile_transport_matrix.py": "2c57df292b586a9002a9798c1ded0b321040fe11ce1eed8c85e0bd47e060a764"
     },
     "results": "profiling-20260927-results.json"
+  },
+  "latest_followup": {
+    "recorded_utc": "2026-09-26T22:35:45.607891+00:00",
+    "connection": "user-authorized SSH/Duo reconnect succeeded",
+    "production_modified": false,
+    "matrix_job": 2144982,
+    "matrix_state": "COMPLETED",
+    "matrix_results": "profiling-20260927-transports.json",
+    "replay_job": 2144987,
+    "replay_state": "RUNNING",
+    "replay_node": "deep-chungus-4",
+    "replay_account": "grad-students",
+    "replay_partition": "low-priority",
+    "replay_qos": "normal",
+    "replay_gpus": 9,
+    "replay_cpus": 96,
+    "replay_exclusive": true,
+    "replay_time_limit_seconds": 3600,
+    "replay_shell": "profiling/20260927-replay-v2/replay-v2.sh",
+    "replay_changes": [
+      "inherit pinned production common/trainer environment defaults",
+      "disable optional profiler trace for timing comparison",
+      "record effective environment per rank"
+    ],
+    "deployed_scripts_sha256": {
+      "profile_node.py": "15e15adfa345717f630a62af6519eb438308dc0449c6f0e7d165d9aade525e43",
+      "profile_trainer.py": "3d6c224b4ecd0c6c00492ac3c7ee7618c3e644f79ce589068dfdff6b287d4f34",
+      "profile_collectives.py": "e698ecc3e6b71018d86532a12299b4823282f4228dd1839968252ce2e4463ef0",
+      "gpu_health.py": "63332e7544288328722aa7197368d271460a6bdf9e6624749c6fd4deb87e4838"
+    },
+    "production_completed_updates": 4,
+    "production_update4_learner_seconds": 2607.41356139211,
+    "effective_submission": "sbatch --parsable --account=grad-students --partition=low-priority --qos=normal --exclude=deep-chungus-[1-3,6-11],deep-gpu-[10-11] --nodes=1 --ntasks=1 --cpus-per-task=96 --gres=gpu:a100:9 --exclusive --mem=0 --time=01:00:00 --no-requeue --job-name=staleness-replay-v2 --output=/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/profiling/20260927-replay-v2/slurm-%j.log /mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/profiling/20260927-replay-v2/replay-v2.sh",
+    "health_passed_all_gpus": true
   }
 }
