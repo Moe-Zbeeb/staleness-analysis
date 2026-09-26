@@ -20,12 +20,12 @@ def save(path, value):
     path.write_text(json.dumps(value))
 
 
-def shard(output, rank, count=4, step=33):
-    current = torch.tensor([99.0] + [-1.0, -3.0, -2.0, -2.0] * count, requires_grad=True)
+def shard(output, rank, count=4, step=33, device="cpu"):
+    current = torch.tensor([99.0] + [-1.0, -3.0, -2.0, -2.0] * count, requires_grad=True, device=device)
     behavior = torch.tensor([-99.0] + [-2.0] * 4 * count)
     advantage = torch.tensor([99.0] + [1.0, -1.0, 0.0, -1.0] * count)
     mask = torch.tensor([False] + [True] * 4 * count)
-    inputs = LossInputs(current, behavior, None, advantage, mask)
+    inputs = LossInputs(current, behavior.to(device), None, advantage.to(device), mask.to(device))
     loss = clipped_grpo(inputs, 0.2).loss
     loss.backward()
     gradient = current.grad.clone()
@@ -37,18 +37,21 @@ def shard(output, rank, count=4, step=33):
         "advantages": advantage.reshape(1, -1),
         "inference_logprobs": behavior.reshape(1, -1),
     }
-    entropy = torch.tensor([999.0] + [1.0, 2.0, 3.0, 4.0] * count)
+    entropy = torch.tensor([999.0] + [1.0, 2.0, 3.0, 4.0] * count, device=device)
     exporter.export(step, 0, batch, {"logprobs": current, "entropy": entropy}, [2] + [1] * (len(current) - 2), None)
     exporter.mark_stable()
     assert torch.equal(current.grad, gradient)
     with np.load(output / f"paper/tokens/step_{step}/rank_{rank}.npz") as saved:
-        np.testing.assert_array_equal(saved["zero_policy_signal"], current.grad[mask].numpy() == 0)
+        np.testing.assert_array_equal(saved["zero_policy_signal"], current.grad.cpu()[mask].numpy() == 0)
     return current, behavior, advantage
 
 
-def test_token_export_preserves_gradient_and_uses_complete_rank_union(tmp_path):
-    shard(tmp_path, 0, count=1)
-    shard(tmp_path, 1, count=3)
+@pytest.mark.parametrize(
+    "device", ["cpu", pytest.param("cuda", marks=pytest.mark.skipif(not torch.cuda.is_available(), reason="CUDA required"))]
+)
+def test_token_export_preserves_gradient_and_uses_complete_rank_union(tmp_path, device):
+    shard(tmp_path, 0, count=1, device=device)
+    shard(tmp_path, 1, count=3, device=device)
     arrays = read_tokens(tmp_path / "paper/tokens/step_33", 2)
     assert len(arrays["current_logp"]) == 16
     assert arrays["entropy"].mean() == 2.5

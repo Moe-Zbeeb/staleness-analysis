@@ -1,6 +1,6 @@
 # Imported libraries and study customizations
 
-**Official dependency source files are unchanged.** The study imports a pinned upstream checkout and implements experiment-specific behavior in `src/`. Some integration points use internal APIs, and two trainer factories is temporarily replaced in memory. This page makes those distinctions explicit.
+**Official dependency source files are unchanged.** The study imports a pinned upstream checkout and implements experiment-specific behavior in `src/`. Some integration points use internal APIs, and two trainer factories are temporarily replaced in memory. This page makes those distinctions explicit.
 
 ## NCCL startup on PCIe nodes
 
@@ -70,3 +70,5 @@ Any future upstream source patch, additional in-memory override, pin change or t
 The [paper metric inventory](paper-metrics.md) describes the additional export factory, CPU aggregation, XFS mirror and offline evaluation import. Capturing entropy uses the existing forward output; the loss, optimizer and update clock are unchanged. This adds I/O and CPU overhead, not a loss term. Model checkpoints remain on NFS.
 
 The token-contribution update adds detached loss diagnostics and schema-2 raw masks (`surrogate_clipped`, `zero_policy_signal`). The GRPO objective and its autograd path are unchanged. PrimeRL source remains unmodified; the masks are computed by our loss/export adapters and globally counted by the existing paper observer.
+
+Live diagnostic `2144959` generated and graded 32 responses, totaling 186,397 response tokens, and reached backward execution. It then exposed a device mismatch in the token exporter before the first optimizer update: PrimeRL passes the original CPU microbatch alongside GPU model outputs to its export hook. The exporter now moves only the detached mask, behavior log probabilities and advantages to the model-output device before calculating contribution masks. This keeps the mask arithmetic on the same device as the GRPO calculation and leaves autograd unchanged. A CPU/GPU parameterized regression checks the saved masks against actual gradients with CPU rollout metadata and GPU outputs; the CUDA case runs inside the allocated readiness job.

@@ -49,10 +49,11 @@ class PaperTokenExporter:
             "advantage": micro_batch["advantages"],
             "entropy": model_output["entropy"],
         }
-        device_mask = micro_batch["loss_mask"].reshape(-1).bool()
+        device = model_output["logprobs"].device
+        device_mask = micro_batch["loss_mask"].reshape(-1).to(device=device, dtype=torch.bool)
         current = model_output["logprobs"].reshape(-1)[device_mask].float()
-        behavior = micro_batch["inference_logprobs"].reshape(-1)[device_mask].float()
-        advantages = micro_batch["advantages"].reshape(-1)[device_mask].float()
+        behavior = micro_batch["inference_logprobs"].reshape(-1).to(device=device, dtype=torch.float32)[device_mask]
+        advantages = micro_batch["advantages"].reshape(-1).to(device=device, dtype=torch.float32)[device_mask]
         clipped, no_signal = token_signal_masks(torch.exp(current - behavior), advantages, self.clip_epsilon)
         self.parts["surrogate_clipped"].append(clipped.cpu().numpy().copy())
         self.parts["zero_policy_signal"].append(no_signal.cpu().numpy().copy())
