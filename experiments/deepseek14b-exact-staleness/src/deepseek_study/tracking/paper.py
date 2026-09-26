@@ -2,7 +2,9 @@ import json
 from pathlib import Path
 
 import numpy as np
+import torch
 
+from deepseek_study.learning.loss import token_signal_masks
 from deepseek_study.runtime.checkpoints import atomic_write
 from deepseek_study.tracking.tokens import COLUMNS
 
@@ -17,19 +19,30 @@ def read_tokens(directory, ranks):
     for rank in range(ranks):
         path = Path(directory) / f"rank_{rank}.npz"
         receipt = json.loads(path.with_suffix(".json").read_text())
-        if receipt["schema_version"] != 1 or receipt["rank"] != rank or path.parent.name != f"step_{receipt['step']}":
+        if (
+            receipt["schema_version"] not in (1, 2)
+            or receipt["rank"] != rank
+            or path.parent.name != f"step_{receipt['step']}"
+        ):
             raise ValueError("Invalid token shard receipt")
         with np.load(path, allow_pickle=False) as loaded:
-            arrays = {key: loaded[key] for key in (*COLUMNS, "response_lengths")}
+            columns = COLUMNS if receipt["schema_version"] == 2 else COLUMNS[:-2]
+            arrays = {key: loaded[key] for key in (*columns, "response_lengths")}
         count = receipt["tokens"]
-        if any(len(arrays[key]) != count for key in COLUMNS) or arrays["response_lengths"].sum() != count:
+        if any(len(arrays[key]) != count for key in columns) or arrays["response_lengths"].sum() != count:
             raise ValueError("Token columns or response lengths do not align")
-        if any(not np.isfinite(arrays[key]).all() for key in COLUMNS):
+        if any(not np.isfinite(arrays[key]).all() for key in columns):
             raise ValueError("Nonfinite token diagnostic; refusing to hide invalid values")
         if (arrays["response_lengths"] <= 0).any():
             raise ValueError("Invalid response token count")
+        for key in COLUMNS[-2:]:
+            if key in arrays and arrays[key].dtype != np.bool_:
+                raise ValueError("Invalid token signal mask")
+        arrays["signal_mask_recorded"] = np.full(count, receipt["schema_version"] == 2, dtype=bool)
         shards.append(arrays)
-    return {key: np.concatenate([shard[key] for shard in shards]) for key in (*COLUMNS, "response_lengths")}
+    if len({"zero_policy_signal" in shard for shard in shards}) != 1:
+        raise ValueError("Mixed token archive schemas within an update")
+    return {key: np.concatenate([shard[key] for shard in shards]) for key in shards[0]}
 
 
 def summarize(arrays, epsilon):
@@ -46,8 +59,18 @@ def summarize(arrays, epsilon):
     if not np.isfinite(ratio).all():
         raise ValueError("Nonfinite importance ratios")
     positive, negative, zero = advantage > 0, advantage < 0, advantage == 0
-    clipped = (positive & (ratio > 1 + epsilon)) | (negative & (ratio < 1 - epsilon))
-    active = ~clipped & ~zero
+    if "zero_policy_signal" in arrays:
+        clipped = arrays["surrogate_clipped"]
+        inactive = arrays["zero_policy_signal"]
+    else:
+        trainer_ratio = torch.exp(
+            torch.from_numpy(arrays["current_logp"]).float() - torch.from_numpy(arrays["behavior_logp"]).float()
+        )
+        clipped_tensor, inactive_tensor = token_signal_masks(
+            trainer_ratio, torch.from_numpy(arrays["advantage"]).float(), epsilon
+        )
+        clipped, inactive = clipped_tensor.numpy(), inactive_tensor.numpy()
+    active = ~inactive
     objective = np.minimum(ratio * advantage, np.clip(ratio, 1 - epsilon, 1 + epsilon) * advantage)
     metrics = {}
 
@@ -81,6 +104,13 @@ def summarize(arrays, epsilon):
     metrics["clip/upper_bound"] = 1 + epsilon
     mean("clip/fraction", clipped)
     mean("clip/outside_range_fraction", (ratio < 1 - epsilon) | (ratio > 1 + epsilon))
+    for name, selection in (("noncontributing", inactive), ("contributing", active)):
+        metrics[f"gradient_signal/{name}_tokens"] = int(selection.sum())
+        mean(f"gradient_signal/{name}_token_fraction", selection)
+    mean("gradient_signal/zero_advantage_fraction", zero)
+    mean("gradient_signal/clipped_zero_gradient_fraction", inactive & clipped & ~zero)
+    mean("gradient_signal/numerical_zero_fraction", inactive & ~clipped & ~zero)
+    mean("gradient_signal/recorded_mask_fraction", arrays.get("signal_mask_recorded", np.zeros(len(ratio))))
     mean("loss/grpo_global_token_mean", -objective)
     stats("entropy", entropy)
     stats("ratio", ratio)

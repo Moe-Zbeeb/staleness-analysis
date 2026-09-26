@@ -45,6 +45,47 @@ adaptive bounds and M2PO's applied mask cannot be reported as if they were activ
 No alternate loss, mask, entropy bonus, reference KL, sampling or update rule is
 introduced here.
 
+## Tokens with no direct GRPO contribution
+
+The primary metric is **`paper/gradient_signal/noncontributing_token_fraction`**:
+the number of valid response tokens whose direct GRPO loss derivative with respect
+to their current log probability is zero, divided by all valid response tokens.
+Prompt and padding tokens are excluded. Its complement is
+`paper/gradient_signal/contributing_token_fraction`; both token counts are logged.
+
+Normally the noncontributing set is the union of zero advantages and the two
+clipped directions: `A>0 and r>1+epsilon`, or `A<0 and r<1-epsilon`.
+Positive-advantage tokens below the lower bound and negative-advantage tokens
+above the upper bound still contribute. `clip/outside_range_fraction` and
+`clip/fraction` retain their separate meanings and are not renamed.
+
+The new metric captures a boolean mask on the trainer's device using the same
+FP32 ratio arithmetic and PyTorch minimum/clamp derivative conventions as the
+loss, including ties, inclusive clamp boundaries and numerical zero coefficients.
+The observer counts the full union of rank shards; it does not average rank
+fractions. The matching trainer diagnostic is
+`trainer/study/noncontributing_token_fraction/mean` (subject to the upstream
+trainer's aggregation); use the `paper/` series as the global token fraction.
+
+The disjoint breakdown under `paper/gradient_signal/` is:
+
+- `zero_advantage_fraction`: all zero-advantage response tokens.
+- `clipped_zero_gradient_fraction`: nonzero-advantage tokens with zero coefficient in a clipped direction.
+- `numerical_zero_fraction`: remaining nonzero-advantage tokens with a zero coefficient.
+
+These fractions add to the noncontributing fraction in the supported unweighted
+GRPO baseline. The derivative is measured before global token normalization and
+the optimizer. This is a direct per-token loss signal, not a claim that token
+embeddings or model parameters receive no gradient through other tokens, nor that
+Adam momentum cannot update parameters. No response is dropped or newly masked.
+
+Raw shard schema 2 preserves `surrogate_clipped` and `zero_policy_signal` boolean
+columns. `gradient_signal/recorded_mask_fraction` is 1 for this capture path.
+Uncached legacy schema-1 raw shards can be analyzed with FP32 CPU reconstruction,
+marked 0; this cannot guarantee the original device's rounding at a boundary.
+Previously written metric journals and cached summaries keep their historical
+values. Use a fresh run/source snapshot for the new logging contract.
+
 ## Definitions and important distinctions
 
 All token diagnostics use **valid response tokens only**, excluding prompts and
@@ -57,7 +98,7 @@ The raw float32 values are preserved; the CPU analysis uses float64 arithmetic.
 - `mismatch/kl_k1 = mean(-l)` follows M2PO Eq. 3; this finite sample estimate can be negative.
 - `mismatch/kl_k3 = mean(exp(l)-1-l)` and `kl_absolute = mean(abs(l))` are separately named mismatch statistics. They include trainer/inference numerical differences and stale-context effects; neither is an exact full-distribution KL measurement.
 - A token is surrogate-clipped when `A>0 and r>1+epsilon`, or `A<0 and r<1-epsilon`. Merely being outside the interval does not establish clipping of the learning signal. Zero advantages are not counted as clipped.
-- `m2_active` averages over nonzero-advantage, unclipped tokens. `m2_active_global_denominator` puts zeros at excluded tokens but divides by all response tokens. Neither is labelled M2PO masking.
+- `m2_active` averages over tokens with a nonzero direct GRPO coefficient, normally nonzero-advantage, unclipped tokens. `m2_active_global_denominator` puts zeros at excluded tokens but divides by all response tokens. Neither is labelled M2PO masking.
 - Let `J=min(r*A,clip(r)*A)`, `P=sum(J[A>0])`, `N=-sum(J[A<0])`. The positive loss share is `P/(P+N)`; the positive-to-negative ratio is `P/N`. Undefined conditional metrics are omitted, with count zero recorded; they are never fabricated as zero.
 - BAPO's printed Eq. 8, its figure's contribution shares, and its released recipe are not the same formula. We retain an explicitly named empirical `abs(sum(p_behavior*J[A>0]))/abs(sum(p_behavior*J))` as well as the bounded absolute shares and `P/N`. Near-cancellation can make the former arbitrarily large. It is not used to adjust clipping.
 - `gradient_signal/*/absolute_coefficient` is a token-level surrogate gradient coefficient, **not** a positive/negative parameter-gradient norm. Computing those norms would require additional backward passes.
@@ -81,8 +122,8 @@ upstream. The factory is restored in `finally`; upstream source remains unedited
 Each rank collects detached CPU columns from the existing forward, compresses one
 NPZ shard per optimizer update, fsyncs it and atomically publishes it. Columns are
 token ID, token position, current log probability, original behavior log probability,
-advantage and full-vocabulary entropy, plus response lengths. There is no extra
-model forward/backward or extra tensor all-gather. The study requires one unique DP
+advantage and full-vocabulary entropy, plus the two contribution masks and response
+lengths. There is no extra model forward/backward or extra tensor all-gather. The study requires one unique DP
 shard per trainer rank and rejects context-parallel duplication.
 
 The paper observer concatenates the union of all rank shards. Global means and
@@ -156,8 +197,8 @@ a permanent failure appears in `paper-status.json` and the observer log. There i
 no automatic deletion or retention limit for research evidence.
 
 The mount was 98% full (2.8 TB available globally) when inspected; this is not a
-personal quota. Six token columns cost 24 bytes per response token before ZIP
-compression, at most about 96 GiB for 1,000 updates of 512 responses at 8,192 tokens,
+personal quota. Six numeric columns and two boolean masks cost 26 bytes per response
+token before ZIP compression, at most about 102 GiB for 1,000 updates of 512 responses at 8,192 tokens,
 per copy. Real size depends on completion lengths and compression. Do not mistake
 this for a guarantee of available capacity over a long run.
 

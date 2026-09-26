@@ -5,16 +5,27 @@ from pathlib import Path
 import numpy as np
 import torch
 
+from deepseek_study.learning.loss import token_signal_masks
 from deepseek_study.runtime.checkpoints import atomic_write
 
 
-COLUMNS = ("token_id", "position", "current_logp", "behavior_logp", "advantage", "entropy")
+COLUMNS = (
+    "token_id",
+    "position",
+    "current_logp",
+    "behavior_logp",
+    "advantage",
+    "entropy",
+    "surrogate_clipped",
+    "zero_policy_signal",
+)
 
 
 class PaperTokenExporter:
-    def __init__(self, output, rank):
+    def __init__(self, output, rank, clip_epsilon):
         self.output = Path(output) / "paper" / "tokens"
         self.rank = rank
+        self.clip_epsilon = clip_epsilon
         self.step = None
         self.parts = {key: [] for key in COLUMNS}
         self.lengths = []
@@ -38,6 +49,13 @@ class PaperTokenExporter:
             "advantage": micro_batch["advantages"],
             "entropy": model_output["entropy"],
         }
+        device_mask = micro_batch["loss_mask"].reshape(-1).bool()
+        current = model_output["logprobs"].reshape(-1)[device_mask].float()
+        behavior = micro_batch["inference_logprobs"].reshape(-1)[device_mask].float()
+        advantages = micro_batch["advantages"].reshape(-1)[device_mask].float()
+        clipped, no_signal = token_signal_masks(torch.exp(current - behavior), advantages, self.clip_epsilon)
+        self.parts["surrogate_clipped"].append(clipped.cpu().numpy().copy())
+        self.parts["zero_policy_signal"].append(no_signal.cpu().numpy().copy())
         for key, tensor in tensors.items():
             dtype = torch.int32 if key in {"token_id", "position"} else torch.float32
             values = tensor.detach().to(device="cpu", dtype=dtype).reshape(-1).numpy()
@@ -70,7 +88,7 @@ class PaperTokenExporter:
         atomic_write(
             directory / f"rank_{self.rank}.json",
             json.dumps(
-                {"schema_version": 1, "step": self.step, "rank": self.rank, "tokens": len(arrays["token_id"])}
+                {"schema_version": 2, "step": self.step, "rank": self.rank, "tokens": len(arrays["token_id"])}
             ).encode(),
         )
         self.step = None
@@ -89,4 +107,4 @@ def setup_paper_exporter(config, parallel_dims, world, logger):
     ):
         raise ValueError("Paper exporter requires enabled token export and one unique data shard per trainer rank")
     logger.info("Archiving detached paper diagnostics from the existing forward pass")
-    return PaperTokenExporter(config.output_dir, world.rank)
+    return PaperTokenExporter(config.output_dir, world.rank, config.loss.kwargs["clip_epsilon"])

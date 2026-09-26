@@ -45,6 +45,7 @@ def main():
         advantages = torch.tensor([0.0, 1.0, 1.0] * response_count)
         if rank:
             advantages = -advantages
+        advantages[1:3] = 0
         behavior = torch.full((3 * response_count,), -2.0)
         current = behavior + (0.4 if rank == 0 else -0.4)
         batch = {
@@ -54,7 +55,7 @@ def main():
             "inference_logprobs": behavior,
             "advantages": advantages,
         }
-        exporter = PaperTokenExporter(output, rank)
+        exporter = PaperTokenExporter(output, rank, study.clip_epsilon)
         exporter.export(
             33,
             0,
@@ -99,6 +100,9 @@ def main():
             break
         time.sleep(1)
     expected = json.loads((output / "paper-metrics.jsonl").read_text())["metrics"]
+    assert expected["clip/fraction"] == 0.75
+    assert expected["gradient_signal/noncontributing_token_fraction"] == 1
+    assert expected["gradient_signal/zero_advantage_fraction"] == 0.25
     paper_rows = [row for row in rows if "paper/mismatch/m2" in row]
     if len(rows) != 3 or len(paper_rows) != 1 or paper_rows[0]["_step"] != 33:
         raise RuntimeError("Hosted Runboard row/step verification failed")

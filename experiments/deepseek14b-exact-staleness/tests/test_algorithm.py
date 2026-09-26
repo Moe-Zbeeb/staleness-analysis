@@ -27,6 +27,7 @@ def test_clipping_uses_behavior_logprobs_and_masks_prompt_gradients():
     assert behavior.grad is None
     assert result.metrics["study/ratio_outside_clip_range"].tolist() == [1.0, 1.0, 1.0]
     assert result.metrics["study/surrogate_clipped_fraction"].tolist() == [1.0, 1.0, 0.0]
+    assert result.metrics["study/noncontributing_token_fraction"].tolist() == [1.0, 1.0, 0.0]
 
 
 def test_zero_advantage_batch_has_finite_zero_gradients():
@@ -36,6 +37,46 @@ def test_zero_advantage_batch_has_finite_zero_gradients():
     result.loss.backward()
     assert result.loss.item() == 0.0
     assert current.grad.tolist() == [0.0, 0.0]
+    assert result.metrics["study/noncontributing_token_fraction"].tolist() == [1.0, 1.0]
+
+
+@pytest.mark.parametrize("weighted", [False, True])
+def test_noncontributing_metric_matches_autograd_at_bounds_and_underflow(weighted):
+    bounds = torch.tensor([0.8, 1.2])
+    ratios = torch.cat(
+        [
+            torch.tensor([0.5, 1.0, 1.5]),
+            bounds,
+            torch.nextafter(bounds, torch.zeros(2)),
+            torch.nextafter(bounds, torch.full((2,), 2.0)),
+        ]
+    )
+    values = torch.cat([ratios.log(), torch.tensor([-1000.0])])
+    advantages = torch.tensor([-1.0, -0.875, -0.5, -0.125, 0.0, 0.125, 0.5, 0.875, 1.0])
+    current = values.repeat_interleave(len(advantages)).requires_grad_()
+    advantage = advantages.repeat(len(values))
+    weights = torch.ones_like(current) if weighted else None
+    if weighted:
+        weights[::3] = 0
+    mask = torch.ones_like(current, dtype=torch.bool)
+    mask[0] = False
+    result = clipped_grpo(LossInputs(current, torch.zeros_like(current), None, advantage, mask, weights), 0.2)
+    result.loss.backward()
+    assert torch.equal(result.metrics["study/noncontributing_token_fraction"].bool(), current.grad[mask] == 0)
+    assert result.metrics["study/noncontributing_token_fraction"].requires_grad is False
+
+
+def test_outside_bounds_does_not_imply_zero_training_contribution():
+    current = torch.tensor([0.5, 1.5, 0.5, 1.5, 1.0]).log().requires_grad_()
+    advantages = torch.tensor([1.0, -1.0, -1.0, 1.0, 0.0])
+    result = clipped_grpo(
+        LossInputs(current, torch.zeros_like(current), None, advantages, torch.ones(5, dtype=torch.bool)), 0.2
+    )
+    result.loss.backward()
+    assert result.metrics["study/ratio_outside_clip_range"].mean().item() == pytest.approx(0.8)
+    assert result.metrics["study/surrogate_clipped_fraction"].mean().item() == pytest.approx(0.4)
+    assert result.metrics["study/noncontributing_token_fraction"].mean().item() == pytest.approx(0.6)
+    assert (current.grad == 0).tolist() == [False, False, True, True, True]
 
 
 @pytest.mark.parametrize("advantage", [0.0, 1.0, -1.0])

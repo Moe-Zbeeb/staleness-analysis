@@ -59,3 +59,5 @@ Any future upstream source patch, additional in-memory override, pin change or t
 ## Paper diagnostics
 
 The [paper metric inventory](paper-metrics.md) describes the additional export factory, CPU aggregation, XFS mirror and offline evaluation import. Capturing entropy uses the existing forward output; the loss, optimizer and update clock are unchanged. This adds I/O and CPU overhead, not a loss term. Model checkpoints remain on NFS.
+
+The token-contribution update adds detached loss diagnostics and schema-2 raw masks (`surrogate_clipped`, `zero_policy_signal`). The GRPO objective and its autograd path are unchanged. PrimeRL source remains unmodified; the masks are computed by our loss/export adapters and globally counted by the existing paper observer.

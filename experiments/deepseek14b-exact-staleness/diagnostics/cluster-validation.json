@@ -3,7 +3,7 @@
   "study_training_started": false,
   "prime_commit": "ab5de8fff44b2c4a5c85e24b6e6e3f7d57eee7b1",
   "dependency_lock_sha256": "b55625d807f687401109534bce30bfbb2faf5ba889b246ba521db934d7e1ba4f",
-  "local_tests_passed": 124,
+  "local_tests_passed": 128,
   "linux_preparation": {
     "job_id": "2144915",
     "state": "COMPLETED",
@@ -68,7 +68,7 @@
     "prepared_assets_verified": true,
     "study_training_started": false
   },
-  "updated_at_utc": "2026-09-26T13:19:41.585000+00:00",
+  "updated_at_utc": "2026-09-26T13:44:34.165546+00:00",
   "paper_metrics_preparation": {
     "job_id": "2144955",
     "node": "deep-chungus-1.csail.mit.edu",
@@ -107,5 +107,36 @@
     "cloudflare_deployment_commit": "11814e7",
     "cloudflare_build_conclusion": "success",
     "browser_access": "Read-only loopback proxy forwarding the actual hosted assets and API with the saved connection credentials"
+  },
+  "token_contribution_preparation": {
+    "job_id": "2144956",
+    "node": "deep-chungus-1.csail.mit.edu",
+    "output": "/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/releases/token-contribution-20260926/diagnostics/cluster/paper-metrics-smoke-2144956",
+    "archive": {
+      "steps": 1,
+      "mirror": {
+        "directory": "/mnt/xfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/metrics/paper-metrics-smoke-2144956",
+        "verified_files": 11
+      }
+    },
+    "runboard": {
+      "project": "staleness-analysis-checks",
+      "run_id": "d74a413443e445f98e8f47933badc04a",
+      "mode": "http"
+    },
+    "verified_rows": 3,
+    "verified_paper_scalars": 281,
+    "training_started": false,
+    "gpu_used": false,
+    "state": "COMPLETED",
+    "exit_code": "0:0",
+    "tests_passed": 128,
+    "release": "/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/releases/token-contribution-20260926",
+    "verified_fractions": {
+      "noncontributing": 1.0,
+      "surrogate_clipped": 0.75,
+      "zero_advantage": 0.25
+    },
+    "raw_shard_schema": 2
   }
 }
