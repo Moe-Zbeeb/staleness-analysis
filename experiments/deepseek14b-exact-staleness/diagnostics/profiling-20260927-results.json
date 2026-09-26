@@ -1,0 +1,908 @@
+{
+  "job_id": 2144980,
+  "health": {
+    "job_id": "2144980",
+    "node": "deep-chungus-4",
+    "slurm_job_gpus": "0,1,2,3,4,5,6,7,8",
+    "world_size": 9,
+    "expected_all_reduce": 45.0,
+    "torch": "2.11.0+cu128",
+    "cuda_runtime": "12.8",
+    "devices": [
+      {
+        "rank": 0,
+        "visible_device": "0",
+        "name": "NVIDIA A100-PCIE-40GB",
+        "bytes": 42409000960,
+        "capability": [
+          8,
+          0
+        ],
+        "all_reduce": 45.0,
+        "bf16_backward": true,
+        "flash_attention_backward": true,
+        "vllm_rms_norm": true
+      },
+      {
+        "rank": 1,
+        "visible_device": "1",
+        "name": "NVIDIA A100-PCIE-40GB",
+        "bytes": 42409000960,
+        "capability": [
+          8,
+          0
+        ],
+        "all_reduce": 45.0,
+        "bf16_backward": true,
+        "flash_attention_backward": true,
+        "vllm_rms_norm": true
+      },
+      {
+        "rank": 2,
+        "visible_device": "2",
+        "name": "NVIDIA A100-PCIE-40GB",
+        "bytes": 42409000960,
+        "capability": [
+          8,
+          0
+        ],
+        "all_reduce": 45.0,
+        "bf16_backward": true,
+        "flash_attention_backward": true,
+        "vllm_rms_norm": true
+      },
+      {
+        "rank": 3,
+        "visible_device": "3",
+        "name": "NVIDIA A100-PCIE-40GB",
+        "bytes": 42409000960,
+        "capability": [
+          8,
+          0
+        ],
+        "all_reduce": 45.0,
+        "bf16_backward": true,
+        "flash_attention_backward": true,
+        "vllm_rms_norm": true
+      },
+      {
+        "rank": 4,
+        "visible_device": "4",
+        "name": "NVIDIA A100-PCIE-40GB",
+        "bytes": 42409000960,
+        "capability": [
+          8,
+          0
+        ],
+        "all_reduce": 45.0,
+        "bf16_backward": true,
+        "flash_attention_backward": true,
+        "vllm_rms_norm": true
+      },
+      {
+        "rank": 5,
+        "visible_device": "5",
+        "name": "NVIDIA A100-PCIE-40GB",
+        "bytes": 42409000960,
+        "capability": [
+          8,
+          0
+        ],
+        "all_reduce": 45.0,
+        "bf16_backward": true,
+        "flash_attention_backward": true,
+        "vllm_rms_norm": true
+      },
+      {
+        "rank": 6,
+        "visible_device": "6",
+        "name": "NVIDIA A100-PCIE-40GB",
+        "bytes": 42409000960,
+        "capability": [
+          8,
+          0
+        ],
+        "all_reduce": 45.0,
+        "bf16_backward": true,
+        "flash_attention_backward": true,
+        "vllm_rms_norm": true
+      },
+      {
+        "rank": 7,
+        "visible_device": "7",
+        "name": "NVIDIA A100-PCIE-40GB",
+        "bytes": 42409000960,
+        "capability": [
+          8,
+          0
+        ],
+        "all_reduce": 45.0,
+        "bf16_backward": true,
+        "flash_attention_backward": true,
+        "vllm_rms_norm": true
+      },
+      {
+        "rank": 8,
+        "visible_device": "8",
+        "name": "NVIDIA A100-PCIE-40GB",
+        "bytes": 42409000960,
+        "capability": [
+          8,
+          0
+        ],
+        "all_reduce": 45.0,
+        "bf16_backward": true,
+        "flash_attention_backward": true,
+        "vllm_rms_norm": true
+      }
+    ]
+  },
+  "replay_source": {
+    "archive": "/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/outputs/exact256-80gb-seed42-v2/rollouts/0-warmup-3eac378a871513a90159ba0df8cbc614acacb513219eca6b3ec93700cca5720c.msgpack",
+    "rank_micro_batches": [
+      33,
+      33,
+      33,
+      33,
+      33,
+      33,
+      33,
+      33,
+      33
+    ],
+    "samples": 512,
+    "profiling_world_size": 9,
+    "production_world_size": 4,
+    "single_group": true
+  },
+  "transport_label_correction": {
+    "socket": "P2P/SHM disabled; NCCL logs show NET/IB/RoCE, not TCP sockets",
+    "peer": "P2P/SHM enabled; NCCL logs show SHM/direct/direct"
+  },
+  "communication": {
+    "network": {
+      "transport": "socket",
+      "node": "deep-chungus-4",
+      "job_id": "2144980",
+      "group_size": 9,
+      "physical_devices": [
+        "0",
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7",
+        "8"
+      ],
+      "torch": "2.11.0+cu128",
+      "nccl": [
+        2,
+        28,
+        9
+      ],
+      "correctness_passed": true,
+      "rows": [
+        {
+          "operation": "all_gather",
+          "dtype": "torch.bfloat16",
+          "full_tensor_mib": 16,
+          "median_seconds": 0.02152159798424691,
+          "seconds": [
+            0.022478660801425576,
+            0.02257732185535133,
+            0.021538797998800874,
+            0.021442197961732745,
+            0.02158596902154386,
+            0.02161429892294109,
+            0.022107010008767247,
+            0.021500389091670513,
+            0.021504397969692945,
+            0.021479858085513115,
+            0.02136679901741445,
+            0.021472267108038068
+          ],
+          "algorithm_gb_s": 0.779552522646337
+        },
+        {
+          "operation": "reduce_scatter",
+          "dtype": "torch.bfloat16",
+          "full_tensor_mib": 16,
+          "median_seconds": 0.02045258041471243,
+          "seconds": [
+            0.02038732497021556,
+            0.020467004971578717,
+            0.02047647605650127,
+            0.0208497759886086,
+            0.020437344908714294,
+            0.02042757486924529,
+            0.020458014914765954,
+            0.020632925909012556,
+            0.02086443593725562,
+            0.020447145914658904,
+            0.02037972491234541,
+            0.020400543930009007
+          ],
+          "algorithm_gb_s": 0.8202982538052469
+        },
+        {
+          "operation": "all_gather",
+          "dtype": "torch.bfloat16",
+          "full_tensor_mib": 64,
+          "median_seconds": 0.08320861961692572,
+          "seconds": [
+            0.08312944392673671,
+            0.08277982310391963,
+            0.08335111499764025,
+            0.08320774417370558,
+            0.0831962248776108,
+            0.08330587390810251,
+            0.08285587304271758,
+            0.08321150322444737,
+            0.08329811482690275,
+            0.08354216418229043,
+            0.08320949506014585,
+            0.0829967730678618
+          ],
+          "algorithm_gb_s": 0.8065133673524993
+        },
+        {
+          "operation": "reduce_scatter",
+          "dtype": "torch.bfloat16",
+          "full_tensor_mib": 64,
+          "median_seconds": 0.08061921643093228,
+          "seconds": [
+            0.08088155696168542,
+            0.0805844459682703,
+            0.08017611410468817,
+            0.0805431860499084,
+            0.08068786608055234,
+            0.08023608406074345,
+            0.08079450693912804,
+            0.08076551603153348,
+            0.08015610394068062,
+            0.08065398689359426,
+            0.08065438596531749,
+            0.08026371500454843
+          ],
+          "algorithm_gb_s": 0.832417715911357
+        },
+        {
+          "operation": "all_gather",
+          "dtype": "torch.bfloat16",
+          "full_tensor_mib": 256,
+          "median_seconds": 0.3108221114380285,
+          "seconds": [
+            0.3102994149085134,
+            0.31103291804902256,
+            0.31098908791318536,
+            0.3105994360521436,
+            0.31051810598000884,
+            0.3105246059130877,
+            0.31094383681192994,
+            0.3104536251630634,
+            0.31093195686116815,
+            0.3107122660148889,
+            0.3111134679056704,
+            0.31101741688326
+          ],
+          "algorithm_gb_s": 0.8636305015691281
+        },
+        {
+          "operation": "reduce_scatter",
+          "dtype": "torch.bfloat16",
+          "full_tensor_mib": 256,
+          "median_seconds": 0.3185629064682871,
+          "seconds": [
+            0.3185848619323224,
+            0.31858783098869026,
+            0.31822788110002875,
+            0.3187756419647485,
+            0.31831454997882247,
+            0.3190874040592462,
+            0.31854095100425184,
+            0.3194949449971318,
+            0.3184727921616286,
+            0.31830071099102497,
+            0.3189139829482883,
+            0.31828110106289387
+          ],
+          "algorithm_gb_s": 0.8426450492180034
+        },
+        {
+          "operation": "all_gather",
+          "dtype": "torch.float32",
+          "full_tensor_mib": 16,
+          "median_seconds": 0.021001126966439188,
+          "seconds": [
+            0.02101154695264995,
+            0.02117064711637795,
+            0.02134470804594457,
+            0.020872305845841765,
+            0.020990706980228424,
+            0.020852466113865376,
+            0.021430718014016747,
+            0.020890866871923208,
+            0.020943026058375835,
+            0.021031987154856324,
+            0.020887106889858842,
+            0.02141132694669068
+          ],
+          "algorithm_gb_s": 0.7988721760889689
+        },
+        {
+          "operation": "reduce_scatter",
+          "dtype": "torch.float32",
+          "full_tensor_mib": 16,
+          "median_seconds": 0.020147048984654248,
+          "seconds": [
+            0.02009553392417729,
+            0.020515225129202008,
+            0.020142834167927504,
+            0.02013913309201598,
+            0.020154583966359496,
+            0.02016353397630155,
+            0.02050608489662409,
+            0.02010573400184512,
+            0.020151263801380992,
+            0.020110613899305463,
+            0.020117773907259107,
+            0.0206371049862355
+          ],
+          "algorithm_gb_s": 0.8327381351372597
+        },
+        {
+          "operation": "all_gather",
+          "dtype": "torch.float32",
+          "full_tensor_mib": 64,
+          "median_seconds": 0.08308854349888861,
+          "seconds": [
+            0.08286183304153383,
+            0.08308750414289534,
+            0.0826260419562459,
+            0.0829072140622884,
+            0.083177455002442,
+            0.08320921403355896,
+            0.08328442508354783,
+            0.08271593204699457,
+            0.08297445299103856,
+            0.08308958285488188,
+            0.08310971385799348,
+            0.08309857407584786
+          ],
+          "algorithm_gb_s": 0.8076789070312401
+        },
+        {
+          "operation": "reduce_scatter",
+          "dtype": "torch.float32",
+          "full_tensor_mib": 64,
+          "median_seconds": 0.08050628064665943,
+          "seconds": [
+            0.08055956591852009,
+            0.07996029406785965,
+            0.08078030589967966,
+            0.08107605809345841,
+            0.08040075493045151,
+            0.0804032061714679,
+            0.08065109583549201,
+            0.08033396489918232,
+            0.08008617395535111,
+            0.0807705360930413,
+            0.08055773610249162,
+            0.08045482519082725
+          ],
+          "algorithm_gb_s": 0.8335854477558037
+        },
+        {
+          "operation": "all_gather",
+          "dtype": "torch.float32",
+          "full_tensor_mib": 256,
+          "median_seconds": 0.31086492154281586,
+          "seconds": [
+            0.31039776490069926,
+            0.3108348969835788,
+            0.3109237072058022,
+            0.3112279181368649,
+            0.3108949461020529,
+            0.3111604480072856,
+            0.3110250970348716,
+            0.3106046770699322,
+            0.3106848772149533,
+            0.31054888595826924,
+            0.31062213610857725,
+            0.3110447770450264
+          ],
+          "algorithm_gb_s": 0.8635115685223043
+        },
+        {
+          "operation": "reduce_scatter",
+          "dtype": "torch.float32",
+          "full_tensor_mib": 256,
+          "median_seconds": 0.3210186545038596,
+          "seconds": [
+            0.320752538042143,
+            0.3204857581295073,
+            0.3213242799974978,
+            0.3212164400611073,
+            0.3205873880069703,
+            0.3213200999889523,
+            0.32075457903556526,
+            0.3212955999188125,
+            0.32099340902641416,
+            0.3209149588365108,
+            0.321043899981305,
+            0.32110595889389515
+          ],
+          "algorithm_gb_s": 0.8361989318498393
+        }
+      ]
+    },
+    "shared_memory": {
+      "transport": "peer",
+      "node": "deep-chungus-4",
+      "job_id": "2144980",
+      "group_size": 9,
+      "physical_devices": [
+        "0",
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7",
+        "8"
+      ],
+      "torch": "2.11.0+cu128",
+      "nccl": [
+        2,
+        28,
+        9
+      ],
+      "correctness_passed": true,
+      "rows": [
+        {
+          "operation": "all_gather",
+          "dtype": "torch.bfloat16",
+          "full_tensor_mib": 16,
+          "median_seconds": 0.03534235211554915,
+          "seconds": [
+            0.035973985213786364,
+            0.03530620294623077,
+            0.03513610106892884,
+            0.03545646299608052,
+            0.035580363124608994,
+            0.03535042214207351,
+            0.03537672199308872,
+            0.035504003055393696,
+            0.03530796314589679,
+            0.03506272193044424,
+            0.03533428208902478,
+            0.03477149992249906
+          ],
+          "algorithm_gb_s": 0.47470569998137535
+        },
+        {
+          "operation": "reduce_scatter",
+          "dtype": "torch.bfloat16",
+          "full_tensor_mib": 16,
+          "median_seconds": 0.019285431131720543,
+          "seconds": [
+            0.01629128190688789,
+            0.01961604179814458,
+            0.01893036998808384,
+            0.01953138317912817,
+            0.01903154980391264,
+            0.01997824409045279,
+            0.01954648084938526,
+            0.019296671962365508,
+            0.01925759087316692,
+            0.01928919111378491,
+            0.019069461151957512,
+            0.019281671149656177
+          ],
+          "algorithm_gb_s": 0.8699424910654422
+        },
+        {
+          "operation": "all_gather",
+          "dtype": "torch.bfloat16",
+          "full_tensor_mib": 64,
+          "median_seconds": 0.13490741304121912,
+          "seconds": [
+            0.13527984987013042,
+            0.1349072481971234,
+            0.1344997368287295,
+            0.1343263869639486,
+            0.13490757788531482,
+            0.13560372008942068,
+            0.13419781578704715,
+            0.1360573119018227,
+            0.13512007892131805,
+            0.13499645912088454,
+            0.13489917805418372,
+            0.13368914392776787
+          ],
+          "algorithm_gb_s": 0.4974438578812256
+        },
+        {
+          "operation": "reduce_scatter",
+          "dtype": "torch.bfloat16",
+          "full_tensor_mib": 64,
+          "median_seconds": 0.06525798700749874,
+          "seconds": [
+            0.0654287370853126,
+            0.0658515989780426,
+            0.06545432796701789,
+            0.06414489401504397,
+            0.06570025905966759,
+            0.06500660721212626,
+            0.06460617505945265,
+            0.06714645307511091,
+            0.06490418617613614,
+            0.06508723692968488,
+            0.0643845449667424,
+            0.06557473889552057
+          ],
+          "algorithm_gb_s": 1.0283624591774272
+        },
+        {
+          "operation": "all_gather",
+          "dtype": "torch.bfloat16",
+          "full_tensor_mib": 256,
+          "median_seconds": 0.20078807743266225,
+          "seconds": [
+            0.19958323403261602,
+            0.20140995900146663,
+            0.20153070893138647,
+            0.1996816440951079,
+            0.2007859069854021,
+            0.2012693788856268,
+            0.19887616205960512,
+            0.2007902478799224,
+            0.20073811803013086,
+            0.20120258908718824,
+            0.20049861702136695,
+            0.2009122280869633
+          ],
+          "algorithm_gb_s": 1.3369093395997302
+        },
+        {
+          "operation": "reduce_scatter",
+          "dtype": "torch.bfloat16",
+          "full_tensor_mib": 256,
+          "median_seconds": 0.176428945036605,
+          "seconds": [
+            0.17614413797855377,
+            0.1762947200331837,
+            0.17643382004462183,
+            0.17682531103491783,
+            0.17666621995158494,
+            0.1763717900030315,
+            0.17693119193427265,
+            0.17563763703219593,
+            0.17522240616381168,
+            0.17642407002858818,
+            0.17679389216937125,
+            0.1789152082055807
+          ],
+          "algorithm_gb_s": 1.5214932898017712
+        },
+        {
+          "operation": "all_gather",
+          "dtype": "torch.float32",
+          "full_tensor_mib": 16,
+          "median_seconds": 0.03368763695470989,
+          "seconds": [
+            0.0329823549836874,
+            0.03384939790703356,
+            0.03347538597881794,
+            0.03341884701512754,
+            0.033765256870537996,
+            0.033968128031119704,
+            0.03413034789264202,
+            0.03414223785512149,
+            0.03350221598520875,
+            0.03361001703888178,
+            0.033827956998720765,
+            0.033354006009176373
+          ],
+          "algorithm_gb_s": 0.49802294006419967
+        },
+        {
+          "operation": "reduce_scatter",
+          "dtype": "torch.float32",
+          "full_tensor_mib": 16,
+          "median_seconds": 0.009876366006210446,
+          "seconds": [
+            0.009955361019819975,
+            0.009783071000128984,
+            0.009877871023491025,
+            0.009874860988929868,
+            0.01015096204355359,
+            0.009787372080609202,
+            0.010348693002015352,
+            0.010397383011877537,
+            0.009742741007357836,
+            0.009595450945198536,
+            0.009645360987633467,
+            0.009950100909918547
+          ],
+          "algorithm_gb_s": 1.6987235982799915
+        },
+        {
+          "operation": "all_gather",
+          "dtype": "torch.float32",
+          "full_tensor_mib": 64,
+          "median_seconds": 0.13510927406605333,
+          "seconds": [
+            0.13447361695580184,
+            0.13348100311122835,
+            0.1359152018558234,
+            0.13596714101731777,
+            0.13494150899350643,
+            0.1342427460476756,
+            0.13559564109891653,
+            0.13527703913860023,
+            0.13530351012013853,
+            0.1330257230438292,
+            0.13541213888674974,
+            0.13471088791266084
+          ],
+          "algorithm_gb_s": 0.49670064815233383
+        },
+        {
+          "operation": "reduce_scatter",
+          "dtype": "torch.float32",
+          "full_tensor_mib": 64,
+          "median_seconds": 0.037817264441400766,
+          "seconds": [
+            0.03789638984017074,
+            0.037309539038687944,
+            0.03758984012529254,
+            0.03798343101516366,
+            0.03761227894574404,
+            0.03872656309977174,
+            0.037193397991359234,
+            0.03801006102003157,
+            0.038221401860937476,
+            0.03773813904263079,
+            0.038611972937360406,
+            0.03743242798373103
+          ],
+          "algorithm_gb_s": 1.774556277173026
+        },
+        {
+          "operation": "all_gather",
+          "dtype": "torch.float32",
+          "full_tensor_mib": 256,
+          "median_seconds": 0.20087243290618062,
+          "seconds": [
+            0.200846788007766,
+            0.20088303787633777,
+            0.2015254299622029,
+            0.20113553805276752,
+            0.20003367494791746,
+            0.19868368096649647,
+            0.2018051310442388,
+            0.2024619618896395,
+            0.20106681785546243,
+            0.20086182793602347,
+            0.19984850496985018,
+            0.20035397610627115
+          ],
+          "algorithm_gb_s": 1.33634791054368
+        },
+        {
+          "operation": "reduce_scatter",
+          "dtype": "torch.float32",
+          "full_tensor_mib": 256,
+          "median_seconds": 0.20877154299523681,
+          "seconds": [
+            0.2091341749764979,
+            0.2090216730721295,
+            0.20960142510011792,
+            0.208705373108387,
+            0.20883771288208663,
+            0.20869401306845248,
+            0.208998842863366,
+            0.20811097999103367,
+            0.20837226184085011,
+            0.20822067093104124,
+            0.209748316090554,
+            0.20756419887766242
+          ],
+          "algorithm_gb_s": 1.2857856590451335
+        }
+      ]
+    }
+  },
+  "logging": {
+    "job_id": "2144978",
+    "node": "deep-chungus-6",
+    "rows": [
+      {
+        "source": "/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/outputs/exact256-80gb-seed42-v2/paper/tokens/step_3/rank_0.npz",
+        "repeat": 0,
+        "read_and_decompress_seconds": 0.11489254608750343,
+        "compress_seconds": 0.8152075039688498,
+        "write_and_fsync_seconds": 0.07737882202491164,
+        "bytes": 7686885,
+        "tokens": 693148,
+        "exact_round_trip": true
+      },
+      {
+        "source": "/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/outputs/exact256-80gb-seed42-v2/paper/tokens/step_3/rank_0.npz",
+        "repeat": 1,
+        "read_and_decompress_seconds": 0.11489254608750343,
+        "compress_seconds": 0.806982799898833,
+        "write_and_fsync_seconds": 0.08258272614330053,
+        "bytes": 7686885,
+        "tokens": 693148,
+        "exact_round_trip": true
+      },
+      {
+        "source": "/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/outputs/exact256-80gb-seed42-v2/paper/tokens/step_3/rank_0.npz",
+        "repeat": 2,
+        "read_and_decompress_seconds": 0.11489254608750343,
+        "compress_seconds": 0.8095386300701648,
+        "write_and_fsync_seconds": 0.08477291511371732,
+        "bytes": 7686885,
+        "tokens": 693148,
+        "exact_round_trip": true
+      },
+      {
+        "source": "/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/outputs/exact256-80gb-seed42-v2/paper/tokens/step_3/rank_1.npz",
+        "repeat": 0,
+        "read_and_decompress_seconds": 0.08108983491547406,
+        "compress_seconds": 0.7989906668663025,
+        "write_and_fsync_seconds": 0.10324549488723278,
+        "bytes": 7652360,
+        "tokens": 696597,
+        "exact_round_trip": true
+      },
+      {
+        "source": "/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/outputs/exact256-80gb-seed42-v2/paper/tokens/step_3/rank_1.npz",
+        "repeat": 1,
+        "read_and_decompress_seconds": 0.08108983491547406,
+        "compress_seconds": 0.7888076021336019,
+        "write_and_fsync_seconds": 0.0648873548489064,
+        "bytes": 7652360,
+        "tokens": 696597,
+        "exact_round_trip": true
+      },
+      {
+        "source": "/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/outputs/exact256-80gb-seed42-v2/paper/tokens/step_3/rank_1.npz",
+        "repeat": 2,
+        "read_and_decompress_seconds": 0.08108983491547406,
+        "compress_seconds": 0.7888187230564654,
+        "write_and_fsync_seconds": 0.07840604311786592,
+        "bytes": 7652360,
+        "tokens": 696597,
+        "exact_round_trip": true
+      },
+      {
+        "source": "/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/outputs/exact256-80gb-seed42-v2/paper/tokens/step_3/rank_2.npz",
+        "repeat": 0,
+        "read_and_decompress_seconds": 0.08139064302667975,
+        "compress_seconds": 0.8030219650827348,
+        "write_and_fsync_seconds": 0.08548758598044515,
+        "bytes": 7649096,
+        "tokens": 694849,
+        "exact_round_trip": true
+      },
+      {
+        "source": "/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/outputs/exact256-80gb-seed42-v2/paper/tokens/step_3/rank_2.npz",
+        "repeat": 1,
+        "read_and_decompress_seconds": 0.08139064302667975,
+        "compress_seconds": 0.7992478010710329,
+        "write_and_fsync_seconds": 0.09031915687955916,
+        "bytes": 7649096,
+        "tokens": 694849,
+        "exact_round_trip": true
+      },
+      {
+        "source": "/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/outputs/exact256-80gb-seed42-v2/paper/tokens/step_3/rank_2.npz",
+        "repeat": 2,
+        "read_and_decompress_seconds": 0.08139064302667975,
+        "compress_seconds": 0.7992465388961136,
+        "write_and_fsync_seconds": 0.09008722798898816,
+        "bytes": 7649096,
+        "tokens": 694849,
+        "exact_round_trip": true
+      },
+      {
+        "source": "/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/outputs/exact256-80gb-seed42-v2/paper/tokens/step_3/rank_3.npz",
+        "repeat": 0,
+        "read_and_decompress_seconds": 0.07847826019860804,
+        "compress_seconds": 0.8055822621099651,
+        "write_and_fsync_seconds": 0.09618841810151935,
+        "bytes": 7771391,
+        "tokens": 693538,
+        "exact_round_trip": true
+      },
+      {
+        "source": "/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/outputs/exact256-80gb-seed42-v2/paper/tokens/step_3/rank_3.npz",
+        "repeat": 1,
+        "read_and_decompress_seconds": 0.07847826019860804,
+        "compress_seconds": 0.8031534419860691,
+        "write_and_fsync_seconds": 0.06674566701985896,
+        "bytes": 7771391,
+        "tokens": 693538,
+        "exact_round_trip": true
+      },
+      {
+        "source": "/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/outputs/exact256-80gb-seed42-v2/paper/tokens/step_3/rank_3.npz",
+        "repeat": 2,
+        "read_and_decompress_seconds": 0.07847826019860804,
+        "compress_seconds": 0.803963934071362,
+        "write_and_fsync_seconds": 0.10033526481129229,
+        "bytes": 7771391,
+        "tokens": 693538,
+        "exact_round_trip": true
+      }
+    ]
+  },
+  "logging_summary": {
+    "compress_seconds": {
+      "median": 0.803087703534402,
+      "maximum": 0.8152075039688498
+    },
+    "write_and_fsync_seconds": {
+      "median": 0.08513025054708123,
+      "maximum": 0.10324549488723278
+    }
+  },
+  "rank0_traced_step2_nccl_kernels": [
+    {
+      "name": "ncclDevKernel_AllReduce_Sum_u64_TREE_LL(ncclDevKernelArgsStorage<4096ul>)",
+      "count": 1,
+      "self_cpu_us": 0,
+      "self_device_us": 8297.436
+    },
+    {
+      "name": "ncclDevKernel_AllGather_RING_LL(ncclDevKernelArgsStorage<4096ul>)",
+      "count": 198,
+      "self_cpu_us": 0,
+      "self_device_us": 142678913.62600005
+    },
+    {
+      "name": "ncclDevKernel_ReduceScatter_Sum_f32_RING_LL(ncclDevKernelArgsStorage<4096ul>)",
+      "count": 100,
+      "self_cpu_us": 0,
+      "self_device_us": 139468304.17900008
+    },
+    {
+      "name": "ncclDevKernel_AllReduce_Sum_f32_TREE_LL(ncclDevKernelArgsStorage<4096ul>)",
+      "count": 2,
+      "self_cpu_us": 0,
+      "self_device_us": 1096.300000011921
+    }
+  ],
+  "baseline_step_timings": [
+    {
+      "step": 1,
+      "time": 1790459399.4049702,
+      "time/step": 288.31308067194186,
+      "time/wait_for_batch": 2.3401807993650436e-06,
+      "time/load_data": 2.0220177248120308e-05,
+      "time/broadcast_weights": 0,
+      "time/save_ckpt": 0,
+      "time/forward_backward": 287.996569708921,
+      "producer": "trainer"
+    },
+    {
+      "step": 2,
+      "time": 1790459705.6401381,
+      "time/step": 306.2087669649627,
+      "time/wait_for_batch": 2.1750107407569885e-05,
+      "time/load_data": 0.5390849001705647,
+      "time/broadcast_weights": 0,
+      "time/save_ckpt": 0,
+      "time/forward_backward": 305.43895779410377,
+      "producer": "trainer"
+    }
+  ],
+  "model_replay_completed": false,
+  "production_speedup_applied": false
+}

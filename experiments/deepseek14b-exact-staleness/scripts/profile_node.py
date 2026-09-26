@@ -45,7 +45,7 @@ def main():
             str(args.output / "health.json"),
         ],
     )
-    for transport, value in (("socket", "1"), ("peer", "0")):
+    for transport, value in (("network", "1"), ("peer", "0")):
         env = {**environment, "NCCL_P2P_DISABLE": value, "NCCL_SHM_DISABLE": value, "NCCL_DEBUG": "INFO"}
         run(
             f"collectives-{transport}",
@@ -102,8 +102,8 @@ def main():
         processes = []
         try:
             for group in range(1 if args.single_group else 2):
-                transport = "socket" if group == round_index else "peer"
-                value = "1" if transport == "socket" else "0"
+                transport = "network" if group == round_index else "peer"
+                value = "1" if transport == "network" else "0"
                 name = f"replay-{round_index}-{transport}"
                 env = {
                     **environment,

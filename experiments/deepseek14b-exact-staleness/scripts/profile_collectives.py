@@ -14,25 +14,37 @@ import torch.distributed as dist
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--output", type=Path, required=True)
-    parser.add_argument("--transport", choices=["socket", "peer"], required=True)
+    parser.add_argument("--transport", choices=["network", "peer"], required=True)
     parser.add_argument("--repeats", type=int, default=12)
     parser.add_argument("--group-size", type=int, default=4)
+    parser.add_argument("--group-sizes", type=int, nargs="+")
+    parser.add_argument("--sizes-mib", type=int, nargs="+", default=[16, 64, 256])
     args = parser.parse_args()
     rank = int(os.environ["LOCAL_RANK"])
     world = int(os.environ["WORLD_SIZE"])
-    size = args.group_size
-    if size < 2 or world % size or torch.cuda.device_count() != world:
+    if args.group_size < 2:
+        raise ValueError("Collective groups need at least two ranks")
+    sizes = args.group_sizes or [args.group_size] * (world // args.group_size)
+    if min(sizes, default=0) < 2 or sum(sizes) != world or torch.cuda.device_count() != world:
         raise ValueError("Collective groups must cover every allocated GPU exactly once")
-    expected = "1" if args.transport == "socket" else "0"
+    if not 1 <= args.repeats <= 100 or any(not 1 <= value <= 2048 for value in args.sizes_mib):
+        raise ValueError("Use bounded positive repeat counts and tensor sizes")
+    expected = "1" if args.transport == "network" else "0"
     if any(os.environ.get(key) != expected for key in ("NCCL_P2P_DISABLE", "NCCL_SHM_DISABLE")):
         raise ValueError("Set both transport variables before starting the process")
     torch.cuda.set_device(rank)
     dist.init_process_group("nccl", timeout=timedelta(seconds=120))
-    groups = [dist.new_group(list(range(start, start + size))) for start in range(0, world, size)]
-    group = groups[rank // size]
+    offset = 0
+    for index, size in enumerate(sizes):
+        members = list(range(offset, offset + size))
+        candidate = dist.new_group(members)
+        if rank in members:
+            group, group_index, group_start, group_size = candidate, index, offset, size
+        offset += size
+    size = group_size
     rows = []
     for dtype in (torch.bfloat16, torch.float32):
-        for size_mib in (16, 64, 256):
+        for size_mib in args.sizes_mib:
             count = size_mib * 1024 * 1024 // torch.empty((), dtype=dtype).element_size()
             count = count // size * size
             shard = torch.full((count // size,), rank + 1, device="cuda", dtype=dtype)
@@ -58,25 +70,27 @@ def main():
                     times.append(elapsed.item())
                 if name == "all_gather":
                     for index in range(size):
-                        if not torch.all(full.chunk(size)[index] == rank // size * size + index + 1).item():
+                        if not torch.all(full.chunk(size)[index] == group_start + index + 1).item():
                             raise AssertionError("Incorrect gathered data")
-                elif not torch.all(
-                    reduced == sum(range(rank // size * size + 1, rank // size * size + size + 1))
-                ).item():
+                elif not torch.all(reduced == sum(range(group_start + 1, group_start + size + 1))).item():
                     raise AssertionError("Incorrect reduced data")
                 row = {
                     "operation": name,
                     "dtype": str(dtype),
                     "full_tensor_mib": size_mib,
+                    "full_tensor_bytes": count * torch.empty((), dtype=dtype).element_size(),
                     "median_seconds": statistics.median(times),
                     "seconds": times,
-                    "algorithm_gb_s": size_mib * 1024 * 1024 / statistics.median(times) / 1e9,
+                    "algorithm_gb_s": count
+                    * torch.empty((), dtype=dtype).element_size()
+                    / statistics.median(times)
+                    / 1e9,
                 }
                 rows.append(row)
-                if rank % size == 0:
-                    print(json.dumps({"transport": args.transport, "group": rank // size, **row}), flush=True)
+                if rank == group_start:
+                    print(json.dumps({"transport": args.transport, "group": group_index, **row}), flush=True)
             del shard, full, source, reduced
-    if rank % size == 0:
+    if rank == group_start:
         args.output.mkdir(parents=True, exist_ok=True)
         result = {
             "transport": args.transport,
@@ -86,10 +100,12 @@ def main():
             "physical_devices": os.environ["CUDA_VISIBLE_DEVICES"].split(",")[rank : rank + size],
             "torch": torch.__version__,
             "nccl": torch.cuda.nccl.version(),
+            "nccl_environment": {key: value for key, value in os.environ.items() if key.startswith("NCCL_")},
             "correctness_passed": True,
             "rows": rows,
         }
-        (args.output / f"{args.transport}-group-{rank // size}.json").write_text(json.dumps(result, indent=2) + "\n")
+        with (args.output / f"{args.transport}-group-{group_index}.json").open("x") as stream:
+            stream.write(json.dumps(result, indent=2) + "\n")
     dist.barrier()
     dist.destroy_process_group()
 

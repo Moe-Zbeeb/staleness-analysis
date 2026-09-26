@@ -77,5 +77,19 @@
     "focused_tests_passed": 54,
     "cuda_tests_skipped": 1,
     "instrumented_adamw_scheduler": "passed"
+  },
+  "followup": {
+    "connection": "user-authorized reconnect succeeded, then session dropped again",
+    "collected": "nine-GPU health, both collective benchmarks, baseline operators and first two step timings, complete CPU logging results",
+    "production_speedup_applied": false,
+    "matrix_submitted": false,
+    "matrix_prepared": true,
+    "matrix_local_validation": "Ruff and Python compilation passed; GPU execution pending",
+    "scripts_sha256": {
+      "profile_collectives.py": "e698ecc3e6b71018d86532a12299b4823282f4228dd1839968252ce2e4463ef0",
+      "profile_node.py": "3019cf0b861d8ded8e281400512e1bf454a519ee041f1caef9ed6426a097a75d",
+      "profile_transport_matrix.py": "2c57df292b586a9002a9798c1ded0b321040fe11ce1eed8c85e0bd47e060a764"
+    },
+    "results": "profiling-20260927-results.json"
   }
 }
