@@ -22,6 +22,7 @@ Start with the [architecture](docs/architecture.md) for the directory tree and e
 | Assets, preparation and grading | [dataset/](src/deepseek_study/dataset/) | Working on the dataset or reward policy |
 | PrimeRL configuration, processes and recovery | [runtime/](src/deepseek_study/runtime/) | Working on the library integration or checkpoint lifecycle |
 | Runboard metrics and dashboard delivery | [tracking/](src/deepseek_study/tracking/) | Observing existing logs without changing training |
+| Independent checkpoint benchmarks | [evaluation/](src/deepseek_study/evaluation/) | Exporting completed learners and evaluating them on separate 40GB GPUs |
 | Taskset plugin | [deepseek_deepscaler/](src/deepseek_deepscaler/) | Connecting prepared questions and rewards to Verifiers |
 | Installation and health checks | [scripts/](scripts/) | Preparing dependencies, packaging or checking hardware |
 | Tests and evidence | [tests/](tests/), [diagnostics/](diagnostics/) | Reviewing validated behavior and limits |
@@ -110,7 +111,7 @@ A changed prompt, token limit, grader source or grader dependency version requir
 
 The original cleaned dataset is pinned by revision and SHA256 and remains unchanged. Deterministic preparation accepts **37,703 of 37,713 questions**. Ten unsupported references are excluded with original IDs, reference text and reasons; no labels are rewritten. No questions exceeded the 2,048-token prompt cap; the corrected run's longest retained prompt is 793 tokens. See `diagnostics/prepared-data-exclusions.json` and `diagnostics/prepared-data-summary.json` for the original preparation reports. This validation does not itself establish benchmark decontamination.
 
-The local grader uses the last complete boxed answer after the closing thinking tag, strips only outer math delimiters from references, disables permissive parse fallback, and gives binary correctness reward. A complete correct final answer may earn reward on a truncated response. Persistent isolated workers have an eight-second internal timeout and ten-second outer deadline, with one retry on the identical saved response. Infrastructure failures stop the cohort rather than becoming zero rewards. The teammate's v3.2 grader is not required or used.
+The local training grader uses the last complete boxed answer after the closing thinking tag, strips only outer math delimiters from references, disables permissive parse fallback, and gives binary correctness reward. A complete correct final answer may earn reward on a truncated response. Persistent isolated workers have an eight-second internal timeout and ten-second outer deadline, with one retry on the identical saved response. Infrastructure failures stop the cohort rather than becoming zero rewards. Training does not use the benchmark v3.2 grader; the separate [checkpoint evaluator](docs/evaluation.md) uses that corrected grader with its frozen benchmark policy.
 
 The current reward policy is `strict-final-box-v2-structure-case`. It rejects tuple/set mismatches and enforces symbol case on otherwise accepted comparisons. The rebuilt manifest selects exactly the same 37,703 question IDs as before. Targeted regression probes cover additional items from the teammate's grading snag list, but do not establish an overall error rate or reproduce the v3.2 benchmark-specific policy. See the [grading review](docs/grading-review.md) for evidence and limits.
 
@@ -136,7 +137,7 @@ With the default cluster root, checkpoints are written directly to NFS at `/mnt/
 
 A checkpoint becomes complete after trainer state, every trainer rank's RNG state, sampler progress and the pending queue have been saved. Trainer state includes sharded model weights, optimizer state and scheduler state. Component manifests bind metadata/sampler/RNG contents and trainer shard sizes. They do not checksum every large tensor shard. These are distributed recovery checkpoints, not standalone Hugging Face model exports.
 
-Intermediate evaluation is explicitly disabled. The saved milestones are available for a separate evaluation workflow after training; no evaluation job is automatically launched. Existing run JSON files retain their old interval: set `checkpoint_interval` and `checkpoint_keep_interval` to `100` and rebuild resolved configs before a new run, or use `init` for a new configuration. The current cluster release includes these defaults.
+Evaluation inside the training controller is explicitly disabled. The separate [checkpoint evaluation pool](docs/evaluation.md) can evaluate saved milestones while training continues, once its coordinator is launched and the run is registered. The training launcher itself does not submit evaluation jobs. Existing run JSON files retain their old interval: set `checkpoint_interval` and `checkpoint_keep_interval` to `100` and rebuild resolved configs before a new run, or use `init` for a new configuration. The current cluster release includes these defaults.
 
 For resume, copy the same scientific configuration and change only `output_dir` to a new directory:
 
@@ -151,7 +152,13 @@ Changed source, runtime identity, data or configuration is rejected. The origina
 
 Rollout archive format 2 explicitly stores `sample_response_ids` and `sample_task_keys` in training-sample order. Other cohort metadata remains in arrival order and must be joined by response ID. Recovery preflight releases its temporary queue before workers start, and queue checkpoint I/O streams pickle data instead of creating a full serialized byte copy. The pending queue itself remains in CPU memory.
 
-The benchmark suite from the teammate note is not bundled or automatically run: its frozen benchmark artifacts and audited exclusions were not supplied. Training metrics are not benchmark evaluation results.
+The [checkpoint evaluator](docs/evaluation.md) now supports the frozen MATH500/AIME24/AIME25 core suite and includes the audited correction/exclusion policy. Model weights and the original sweep manifest/generated question protocol remain external assets; the guide lists the handoff paths and preparation commands. Training metrics are not benchmark evaluation results.
+
+## Independent checkpoint evaluation
+
+Use [the evaluator guide](docs/evaluation.md) to deploy one pool per researcher, register multiple staleness runs, and evaluate their saved current learners on separate A100 40GB workers. Defaults are 8,192 response tokens plus 2,048 prompt tokens, TP=1, two active sequences per GPU, and two GPU workers per pool. The 559-question core suite produces 2,944 sampled responses per checkpoint. Raw responses, grades, truncation/missing-final statistics and checkpoint provenance are retained; results publish only after complete coverage.
+
+Local validation passed 213 tests with two inherited skips; all 45 evaluator tests passed on Linux. Real 14B inference, full-context memory stress and scheduler-launched smoke evaluation passed on one A100 40GB per worker. A full export-and-evaluate check of the teammate's trained checkpoint remains pending private metadata access; the real 579-tensor checkpoint schema passed. Deploy the evaluator from a separate immutable checkout so existing training source/resume identities stay intact. This adds no training-loop callback and does not validate the separate 40GB training profile.
 
 ## Runboard dashboard
 

@@ -1,0 +1,562 @@
+{
+  "version": "v3-question-policy-3",
+  "experiment_hash": "75c1e4724dbd17e799a7a6647a54c13b563297c528e08013fec8467673117625",
+  "corrections": {
+    "minerva:126": {
+      "row_hash": "07048ebf71213ada643f7eff6c2717fb7e746e38332b37073da28787a69b3d3b",
+      "original_gold": "(t + \\frac{1}{2} \\sin{2t}) u(t)",
+      "gold": "(t - \\frac{1}{2}\\sin(2t))u(t)",
+      "meta": {
+        "multiple": false
+      },
+      "reason": "Partial fractions 1/s^2 - 1/(s^2+4); inverse is t - sin(2t)/2, times u(t)."
+    },
+    "olympiadbench:2498": {
+      "row_hash": "e985dd82bfcbe08efb57c1ee6728c7f77b6137eb707311ee38df818f2002eabc",
+      "original_gold": [
+        "$\\frac{1}{2},\\sqrt{x}$"
+      ],
+      "gold": [
+        "$\\frac{1}{2}\\sqrt{x}$"
+      ],
+      "meta": {
+        "multiple": false
+      },
+      "reason": "log2(x)-2log2(y)=2 implies y=sqrt(x)/2, x>0. Source solution agrees; final_answer comma is malformed."
+    }
+  },
+  "exclusions": {
+    "aime24:88": {
+      "row_hash": "a637f4886257a0dac67397e42c2853a41837bd8adbaf5462feade57bd286746f",
+      "reason": "Question repeats outside/external tangency where intended problem contrasts internal and external tangency."
+    },
+    "olympiadbench:2655": {
+      "row_hash": "76c3b61c55493d67990c168a7fecd9e907656f3f41d067f4a0a03f535e0992a2",
+      "reason": "Relay A and B values omitted from question; numeric key cannot be derived."
+    },
+    "olympiadbench:2967": {
+      "row_hash": "90016fb28d8a50cb8a41851ad4abaa81a7ba5608c597032f8634cdad6558e43c",
+      "reason": "Relay A and B values omitted from question; numeric key cannot be derived."
+    }
+  },
+  "format_hints": {
+    "minerva:28": {
+      "row_hash": "f96091ee50147db5702005050a34906502be9cae2f6c36d2f22373a314ba892b",
+      "answer_labels": [
+        "P(z)"
+      ],
+      "reason": "Explicit output variable/function named in frozen question; comparison still requires exact RHS equivalence."
+    },
+    "minerva:41": {
+      "row_hash": "57b56c5c2f5d335b52da502a92a95744d744172b652ad8d084ec0d060804136f",
+      "answer_labels": [
+        "\\omega(r)"
+      ],
+      "reason": "Explicit output variable/function named in frozen question; comparison still requires exact RHS equivalence."
+    },
+    "minerva:72": {
+      "row_hash": "c8ff16f6840f2741451a4237b44d2253d31a8910ea04c128a95b5c1bd479ad60",
+      "answer_labels": [
+        "x(t)"
+      ],
+      "reason": "Explicit output variable/function named in frozen question; comparison still requires exact RHS equivalence."
+    },
+    "minerva:80": {
+      "row_hash": "38998cafbfdd23bfe0eb13c6f915dc9202b979f946472537168c09d14b227102",
+      "answer_labels": [
+        "y"
+      ],
+      "reason": "Explicit output variable/function named in frozen question; comparison still requires exact RHS equivalence.",
+      "constant_case": [
+        "c",
+        "C"
+      ]
+    },
+    "minerva:88": {
+      "row_hash": "1f23606a2aed1e2ddc3dd672007464e138b8fc819511d28c2e809cf587a37c76",
+      "answer_labels": [
+        "H(omega)"
+      ],
+      "reason": "Explicit output variable/function named in frozen question; comparison still requires exact RHS equivalence."
+    },
+    "minerva:96": {
+      "row_hash": "e8da9a14f0217b78c15e3978be936af5252c17f81d4c6ab920e19e9473acfe96",
+      "answer_labels": [
+        "x(t)",
+        "x"
+      ],
+      "reason": "Explicit output variable/function named in frozen question; comparison still requires exact RHS equivalence.",
+      "constant_case": [
+        "c",
+        "C"
+      ]
+    },
+    "minerva:124": {
+      "row_hash": "5e3ab2a4b11e378fad0c1dfa8feee0058e98e5204e552237a5cb15f8ebbb3830",
+      "answer_labels": [
+        "y(t)"
+      ],
+      "reason": "Explicit output variable/function named in frozen question; comparison still requires exact RHS equivalence."
+    },
+    "minerva:126": {
+      "row_hash": "07048ebf71213ada643f7eff6c2717fb7e746e38332b37073da28787a69b3d3b",
+      "answer_labels": [
+        "f(t)"
+      ],
+      "reason": "Explicit output variable/function named in frozen question; comparison still requires exact RHS equivalence."
+    },
+    "minerva:252": {
+      "row_hash": "60f1deea000c45f681a2ab36cc6f22b4419e0f39e2f522b64f0908dce6c9592b",
+      "answer_labels": [
+        "Y",
+        "Y_s(p)",
+        "Y_S(p)",
+        "Q_s",
+        "S(p)"
+      ],
+      "reason": "Explicit output variable/function named in frozen question; comparison still requires exact RHS equivalence. Price is the only P/p variable in this question; accept capitalization of this explicitly identified price.",
+      "symbol_aliases": {
+        "P": "p"
+      }
+    },
+    "olympiadbench:2498": {
+      "row_hash": "e985dd82bfcbe08efb57c1ee6728c7f77b6137eb707311ee38df818f2002eabc",
+      "answer_labels": [
+        "y"
+      ],
+      "reason": "Explicit output variable/function named in frozen question; comparison still requires exact RHS equivalence."
+    },
+    "minerva:231": {
+      "row_hash": "7381f913c854df5f5a7e4194b381320f53acf5568789c81a5b490ff478715767",
+      "optional_units": [
+        "\\%",
+        "%"
+      ],
+      "reason": "Question explicitly asks what percent, so percent sign optional without rescaling."
+    },
+    "math500:test/geometry/473.json": {
+      "row_hash": "037a973b3075fb125031f5025b1ca689d7e78b2378bf8660f8620e67f7fad1dc",
+      "optional_units": [
+        "\\mbox{ inches}^2"
+      ],
+      "reason": "Question explicitly requests square inches; reference unit suffix optional, no conversion."
+    },
+    "math500:test/intermediate_algebra/1388.json": {
+      "row_hash": "cbe0ffbcab84c065316d905b1c1fc24ce6bbaf3881d54b3800f4c27d90c471b5",
+      "unordered_sequence": true,
+      "reason": "Question explicitly asks all integer solutions separated by commas."
+    },
+    "math500:test/intermediate_algebra/662.json": {
+      "row_hash": "04543862118e5030ef652eced1858cb2f5e7fd5365d0dec5cc602e6659e7dd71",
+      "unordered_sequence": true,
+      "reason": "Question explicitly asks all real roots separated by commas; expand both signs of plus-minus."
+    },
+    "minerva:12": {
+      "row_hash": "bc8ce289671da22bef078ec45574396987884eb8752fcb070ac30e6fb12380cd",
+      "reason": "Output name/function explicit in the frozen question or conventional inverse-transform label; RHS must still match.",
+      "answer_labels": [
+        "I(\\lambda)"
+      ]
+    },
+    "minerva:25": {
+      "row_hash": "517a22f41bf45492becd7cf032aba635d5c976f97987c2e1150abbd457d4463f",
+      "reason": "Output name/function explicit in the frozen question or conventional inverse-transform label; RHS must still match.",
+      "answer_labels": [
+        "R(M)",
+        "R"
+      ]
+    },
+    "minerva:30": {
+      "row_hash": "373bf66599f76fb21a71fe8ec73311ee3717138f7842c9815531107acd204a66",
+      "reason": "Output name/function explicit in the frozen question or conventional inverse-transform label; RHS must still match.",
+      "answer_labels": [
+        "v(r)"
+      ]
+    },
+    "minerva:35": {
+      "row_hash": "b2caafeadb011517f31021d4f70ddbc878565b6aabd6300ea1d08ea338c128f3",
+      "reason": "Output name/function explicit in the frozen question or conventional inverse-transform label; RHS must still match.",
+      "answer_labels": [
+        "\\theta_a"
+      ]
+    },
+    "minerva:63": {
+      "row_hash": "bdc649cbb75f675cbfa763b06614a73333fafeeace7599a927166c3c9ca24958",
+      "reason": "Output name/function explicit in the frozen question or conventional inverse-transform label; RHS must still match.",
+      "answer_labels": [
+        "y"
+      ],
+      "constant_case": [
+        "c",
+        "C"
+      ]
+    },
+    "minerva:74": {
+      "row_hash": "e45492d82e26013f577e25bf26bfad19debfb92b23cb7825335f64379b25457b",
+      "reason": "Output name/function explicit in the frozen question or conventional inverse-transform label; RHS must still match.",
+      "answer_labels": [
+        "x",
+        "x(t)"
+      ]
+    },
+    "minerva:76": {
+      "row_hash": "fd2eb2bfe25d8a9f654932f7a30e47234728e74bd97275969e9ba3d9ff8a6c89",
+      "reason": "Output name/function explicit in the frozen question or conventional inverse-transform label; RHS must still match.",
+      "answer_labels": [
+        "x(t)",
+        "x"
+      ]
+    },
+    "minerva:77": {
+      "row_hash": "f97d60449eebca33ddea17f51eff0c6ae45f0a5eb820427cf422f375bc6210ac",
+      "reason": "Output name/function explicit in the frozen question or conventional inverse-transform label; RHS must still match.",
+      "answer_labels": [
+        "A"
+      ]
+    },
+    "minerva:81": {
+      "row_hash": "6f57177a02efe0e10b530da9d873eae15b1aade66a1a468aa8e2569e53c74184",
+      "reason": "Output name/function explicit in the frozen question or conventional inverse-transform label; RHS must still match.",
+      "answer_labels": [
+        "x(t)",
+        "x"
+      ]
+    },
+    "minerva:86": {
+      "row_hash": "cb7e5903bdc1c9487d117035b6eef7ae83757b2772d045ec3ca846df0ba3bffc",
+      "reason": "Output name/function explicit in the frozen question or conventional inverse-transform label; RHS must still match.",
+      "answer_labels": [
+        "I(t)"
+      ]
+    },
+    "minerva:90": {
+      "row_hash": "bf4c65576d84ba593f66b40781bbefb3802112477f710ca03af3923163fc34b4",
+      "reason": "Output name/function explicit in the frozen question or conventional inverse-transform label; RHS must still match.",
+      "answer_labels": [
+        "x(t)",
+        "x"
+      ]
+    },
+    "minerva:92": {
+      "row_hash": "341700210c61f3440c0a3977d38f34f734196d2d2a036daaceba20abbe9cc42f",
+      "reason": "Output name/function explicit in the frozen question or conventional inverse-transform label; RHS must still match.",
+      "answer_labels": [
+        "x",
+        "x(t)"
+      ]
+    },
+    "minerva:94": {
+      "row_hash": "6d67cb811835e48ee9e39facce2dad2be2432d4458bffa0f84b8e424c172e54a",
+      "reason": "Output name/function explicit in the frozen question or conventional inverse-transform label; RHS must still match.",
+      "answer_labels": [
+        "x(t)",
+        "x"
+      ]
+    },
+    "minerva:95": {
+      "row_hash": "05827f43be2a2394169714204abd97556e3019cdd6b6b1543207ea6dc337f588",
+      "reason": "Output name/function explicit in the frozen question or conventional inverse-transform label; RHS must still match.",
+      "answer_labels": [
+        "x(t)",
+        "x"
+      ]
+    },
+    "minerva:97": {
+      "row_hash": "779291cc9b5541d5cb279a4b8721b3a8aa57b8eefe0df8d04723f034fd08d105",
+      "reason": "Output name/function explicit in the frozen question or conventional inverse-transform label; RHS must still match.",
+      "answer_labels": [
+        "x(t)",
+        "x"
+      ]
+    },
+    "minerva:99": {
+      "row_hash": "43b92089eef07f329c96b06903f49708562a7c05102dcfac4a4130c3fe29af76",
+      "reason": "Output name/function explicit in the frozen question or conventional inverse-transform label; RHS must still match.",
+      "answer_labels": [
+        "x",
+        "x(t)"
+      ]
+    },
+    "minerva:112": {
+      "row_hash": "8ccd9199c5cf4ebcf9a3ce5afe8de9d9259be24b3722d27951203de56a41fc15",
+      "reason": "Output name/function explicit in the frozen question or conventional inverse-transform label; RHS must still match.",
+      "answer_labels": [
+        "y(t)"
+      ]
+    },
+    "minerva:113": {
+      "row_hash": "4e9c258a66be6e1502ed9a8be8fd802b990874d921d24f0c3ac2a297ccc85fb9",
+      "reason": "Output name/function explicit in the frozen question or conventional inverse-transform label; RHS must still match.",
+      "answer_labels": [
+        "X(s)"
+      ]
+    },
+    "minerva:115": {
+      "row_hash": "ddf59bf7d45c53a5ef7ce65ad22760381253d6da16b0bed6bb0663782b831bb7",
+      "reason": "Output name/function explicit in the frozen question or conventional inverse-transform label; RHS must still match.",
+      "answer_labels": [
+        "W(s)"
+      ]
+    },
+    "minerva:118": {
+      "row_hash": "671623cca56cfc0d3d7736fb149c25c56dcb3c85b214b0971a974f7d8e520b18",
+      "reason": "Output name/function explicit in the frozen question or conventional inverse-transform label; RHS must still match.",
+      "answer_labels": [
+        "Y(s)"
+      ]
+    },
+    "minerva:122": {
+      "row_hash": "58f9662ff874c4d3db69c26c8928173d77415c93fc786a9da1245ad236a7968d",
+      "reason": "Output name/function explicit in the frozen question or conventional inverse-transform label; RHS must still match.",
+      "answer_labels": [
+        "f(t)"
+      ]
+    },
+    "beyondaime:32": {
+      "row_hash": "61f943308c0396a332ca32334266400a4d85b885deef664b25ccda2db812599e",
+      "reason": "Question explicitly asks m+n; integer equality remains exact.",
+      "answer_labels": [
+        "m+n"
+      ]
+    },
+    "olympiadbench:2461": {
+      "row_hash": "c6591a9b0c40c7fdce18ea492b3d831e2df29e84700ccf0273baa2f2f96dec86",
+      "reason": "Question asks x in a logarithmic equation; RHS must match.",
+      "answer_labels": [
+        "x"
+      ]
+    },
+    "minerva:4": {
+      "row_hash": "81b6e29edb932f9450b9003cc273d4d2706d576f14bd979ae7ae550e70c6f609",
+      "reason": "Explicit requested units (or source numerical convention); only this unit suffix is optional, with no rescaling.",
+      "optional_units": [
+        "\\text{m/s}^2",
+        "\\mathrm{m/s}^2",
+        "\\text{m/s\u00b2}"
+      ]
+    },
+    "minerva:14": {
+      "row_hash": "a5d9b51b7207459a1d5468570ef9a56176357ecde380f79d1e6554906a9dedf7",
+      "reason": "Explicit requested units (or source numerical convention); only this unit suffix is optional, with no rescaling.",
+      "optional_units": [
+        "\\text{ arcseconds}"
+      ]
+    },
+    "minerva:42": {
+      "row_hash": "c9140ff67aa93aca2726b15ddc83ded61003c2a492cdebad37eaa1ab347e04ff",
+      "reason": "Explicit requested units (or source numerical convention); only this unit suffix is optional, with no rescaling.",
+      "optional_units": [
+        "\\text{ cm}",
+        "\\mathrm{cm}"
+      ]
+    },
+    "minerva:47": {
+      "row_hash": "5006c51765ef4b53b348f8a466edb3b3784fa9d416e30b25fb3efdd31067b694",
+      "reason": "Explicit requested units (or source numerical convention); only this unit suffix is optional, with no rescaling.",
+      "optional_units": [
+        "\\text{ cm}",
+        "\\mathrm{cm}"
+      ]
+    },
+    "minerva:50": {
+      "row_hash": "12c73f82088a393bd80b4541fc19dff4d589dda8ad2c3022aff38d4cd2edaa20",
+      "reason": "Explicit requested units (or source numerical convention); only this unit suffix is optional, with no rescaling.",
+      "optional_units": [
+        "\\text{rad}"
+      ]
+    },
+    "minerva:58": {
+      "row_hash": "03bb56b48045e313cf70c3d172e9ce1bb8f7f8beb23ada953c054a6218fe5d6c",
+      "reason": "Explicit requested units (or source numerical convention); only this unit suffix is optional, with no rescaling.",
+      "optional_units": [
+        "\\text{kcal m}^{-2} \\text{yr}^{-1}"
+      ]
+    },
+    "minerva:143": {
+      "row_hash": "a3caacc32b574789db83c8e2eb95764318105c92659e5a41ae713e93bab5c2de",
+      "reason": "Explicit requested units (or source numerical convention); only this unit suffix is optional, with no rescaling.",
+      "optional_units": [
+        "\\text{ minute}"
+      ]
+    },
+    "minerva:158": {
+      "row_hash": "e69b8ba40e20b20c0b3de6bace43530574957a60708d041106e8d55d48e68154",
+      "reason": "Explicit requested units (or source numerical convention); only this unit suffix is optional, with no rescaling.",
+      "optional_units": [
+        "\\text{m/s}"
+      ]
+    },
+    "minerva:172": {
+      "row_hash": "6b3ee568d06a9a2901647a2af9e30e9da2b7596f5dcfd23504823d2e4642d4b3",
+      "reason": "Explicit requested units (or source numerical convention); only this unit suffix is optional, with no rescaling.",
+      "optional_units": [
+        "\\text{s}^{-1}",
+        "\\mathrm{s}^{-1}"
+      ]
+    },
+    "minerva:186": {
+      "row_hash": "a56d932538b907569aaedc0ecfe801aab3b65c4e910f871a457f689275b1f056",
+      "reason": "Explicit requested units (or source numerical convention); only this unit suffix is optional, with no rescaling.",
+      "optional_units": [
+        "\\mathrm{cm}^2/\\mathrm{sec}"
+      ]
+    },
+    "minerva:212": {
+      "row_hash": "d9965bb932089ba7d9e80e0fde31de75ce010518e4517359305fc8c6ec527846",
+      "reason": "Explicit requested units (or source numerical convention); only this unit suffix is optional, with no rescaling.",
+      "optional_units": [
+        "\\text{ eV}"
+      ]
+    },
+    "minerva:264": {
+      "row_hash": "971eefa522a41b95abfb344338a82495c80d1c319c557d2a93f4de567590ab7d",
+      "reason": "Explicit requested units (or source numerical convention); only this unit suffix is optional, with no rescaling.",
+      "optional_units": [
+        "\\mathrm{~J}",
+        "\\mathrm{J}"
+      ]
+    },
+    "minerva:265": {
+      "row_hash": "81a9212a1e053e0b4d1da1150aaf67597429d43170901efc69676a23a39cac64",
+      "reason": "Explicit requested units (or source numerical convention); only this unit suffix is optional, with no rescaling.",
+      "optional_units": [
+        "\\text{ kg\u00b7m/s}"
+      ]
+    },
+    "math500:test/prealgebra/1114.json": {
+      "row_hash": "e8a04fff8930da599de86459118f6e881978fb361566ffc6276828b1dc1c18a7",
+      "reason": "Explicit reference/question units, optional suffix only; no rescaling.",
+      "optional_units": [
+        "\\mbox{ cm}^2"
+      ]
+    },
+    "math500:test/prealgebra/1044.json": {
+      "row_hash": "013e96625b54f94bd0b007340fa70acd23fc218427e473fcfe3231e7641030cb",
+      "reason": "Explicit reference/question units, optional suffix only; no rescaling.",
+      "optional_units": [
+        "\\text{ cents}"
+      ]
+    },
+    "math500:test/prealgebra/1003.json": {
+      "row_hash": "7da86a31569e191b84899b2137b62251bebf400fb8c96220cf82d883d3e57f2e",
+      "reason": "Explicit reference/question units, optional suffix only; no rescaling.",
+      "optional_units": [
+        "\\text{ degrees}"
+      ]
+    },
+    "math500:test/prealgebra/1233.json": {
+      "row_hash": "f8ee59c58cf7e4d62962c82ae34b2ddb8e6b36e340ca9199ef53fdd131217315",
+      "reason": "Explicit reference/question units, optional suffix only; no rescaling.",
+      "optional_units": [
+        "\\%",
+        "%"
+      ]
+    },
+    "olympiadbench:2276": {
+      "row_hash": "3ce683451063659a29f42ebdb6c95c11f641489fd5f303e57cac53a16d2cb175",
+      "reason": "Explicit reference/question units, optional suffix only; no rescaling.",
+      "optional_units": [
+        "\\%",
+        "%"
+      ]
+    },
+    "math500:test/intermediate_algebra/1102.json": {
+      "row_hash": "a442c99991ecba8a2896cf9d819b4d9d1de07aa4e08546ae778b91f27a9c9140",
+      "reason": "Question asks solution values; comma-separated order immaterial.",
+      "unordered_sequence": true
+    },
+    "olympiadbench:2317": {
+      "row_hash": "854e34d8ba5e2eaa63043ab5abca088dead64054ae86fb156dca3d9c98e7c731",
+      "reason": "Bind every explicitly requested component to the corresponding source reference; do not accept a subset or swapped labels.",
+      "component_labels": [
+        "b",
+        "c"
+      ]
+    },
+    "olympiadbench:2356": {
+      "row_hash": "e8f788dc683492a662f22c482a8f8b99f660e1db19b5db49a3a3538364185b28",
+      "reason": "Bind every explicitly requested component to the corresponding source reference; do not accept a subset or swapped labels.",
+      "component_labels": [
+        "w",
+        "d",
+        "a",
+        "b"
+      ]
+    },
+    "olympiadbench:2420": {
+      "row_hash": "c5bc63da99e0d4d6a83aec27fe5406c1e457582ac96a9b7da14a2c51ef280d1d",
+      "reason": "Bind every explicitly requested component to the corresponding source reference; do not accept a subset or swapped labels.",
+      "component_labels": [
+        "a",
+        "h",
+        "k"
+      ]
+    },
+    "olympiadbench:2445": {
+      "row_hash": "84bb22ccc5f3f1d63e6d49ada7e2357e1eb809d55f7b048608974ca39698c484",
+      "reason": "Bind every explicitly requested component to the corresponding source reference; do not accept a subset or swapped labels.",
+      "component_labels": [
+        "x",
+        "y"
+      ]
+    },
+    "olympiadbench:2509": {
+      "row_hash": "9a4f18545b66e31fed9172965f4a4cd64e40a67a1fea5387a48824afde526c6e",
+      "reason": "Bind every explicitly requested component to the corresponding source reference; do not accept a subset or swapped labels.",
+      "component_labels": [
+        "a",
+        "b",
+        "c"
+      ]
+    },
+    "olympiadbench:2532": {
+      "row_hash": "235f938f6929083f38714cbb6e1d06e08d285a8788095bcdb76588b6bc3eeae6",
+      "reason": "Bind every explicitly requested component to the corresponding source reference; do not accept a subset or swapped labels.",
+      "component_labels": [
+        "a",
+        "b"
+      ]
+    },
+    "olympiadbench:2536": {
+      "row_hash": "d5a59c4c1d055cf5ad92e0d1bc17eca6370ce0a6eae16a45f346f61ba2a77dc6",
+      "reason": "Bind every explicitly requested component to the corresponding source reference; do not accept a subset or swapped labels.",
+      "component_labels": [
+        "p",
+        "q"
+      ]
+    },
+    "olympiadbench:2679": {
+      "row_hash": "8c3cd1dd1166222d1f24541d30f04fa7113ce88942a36a4ae06aee4bd2dbfd37",
+      "reason": "Bind every explicitly requested component to the corresponding source reference; do not accept a subset or swapped labels.",
+      "component_labels": [
+        "d(6)",
+        "d(16)",
+        "d(72)"
+      ]
+    },
+    "olympiadbench:2268": {
+      "row_hash": "99c7c2956e3c8ae497741c9cbf3ce15b090f72e62affe0e5c333464826e4b9c8",
+      "reason": "Bind every explicitly requested component to the corresponding source reference; do not accept a subset or swapped labels.",
+      "component_labels": [
+        "\\text{max}",
+        "\\text{min}"
+      ],
+      "label_aliases": {
+        "\\text{minimum}": "\\text{min}",
+        "\\text{maximum}": "\\text{max}"
+      }
+    },
+    "olympiadbench:2369": {
+      "row_hash": "1205e1499dd72dce93d3c388edd35eb45a187fbfc57234f43786fe573d30d8c4",
+      "component_units": [
+        [
+          "\\text{goats}"
+        ],
+        [
+          "\\text{helicopters}"
+        ]
+      ],
+      "reason": "Question asks counts of goats and helicopters; bind each count to its explicit label and require both."
+    }
+  }
+}

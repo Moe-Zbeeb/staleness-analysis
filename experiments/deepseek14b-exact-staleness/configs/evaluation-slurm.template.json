@@ -1,0 +1,10 @@
+{
+  "limits": {"export": 1, "evaluate": 2},
+  "nodes": "deep-chungus-[1-8,10]",
+  "account": "grad-students",
+  "partition": "low-priority",
+  "qos": "background",
+  "cpus": 8,
+  "python": "/path/to/your/pinned/runtime/bin/python",
+  "uv": "/path/to/your/uv"
+}

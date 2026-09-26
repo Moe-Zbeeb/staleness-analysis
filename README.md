@@ -19,8 +19,9 @@ Research code for studying how rollout staleness affects reinforcement learning.
 | Bounded 14B test, fixes and production limits | [Readiness test](experiments/deepseek14b-exact-staleness/docs/readiness-test.md) |
 | BAPO/M2PO metric coverage, plots and XFS archive | [Paper metrics](experiments/deepseek14b-exact-staleness/docs/paper-metrics.md) |
 | Runboard setup, metrics and delivery | [Runboard integration](experiments/deepseek14b-exact-staleness/docs/runboard.md) |
+| Evaluate saved learners on separate A100 40GB workers | [Checkpoint evaluation: setup, protocol, recovery and validation](experiments/deepseek14b-exact-staleness/docs/evaluation.md) |
 
-The code is separated into `learning/`, `rollouts/`, `dataset/`, `runtime/` and `tracking/`. Official PrimeRL source files are not edited. There are explicit process-local checkpoint and token-export factory overrides, documented with the other integration points in the [dependency guide](experiments/deepseek14b-exact-staleness/docs/upstream-integration.md).
+The code is separated into `learning/`, `rollouts/`, `dataset/`, `runtime/`, `tracking/` and the independent `evaluation/` pool. Official PrimeRL source files are not edited. There are explicit process-local checkpoint and token-export factory overrides, documented with the other integration points in the [dependency guide](experiments/deepseek14b-exact-staleness/docs/upstream-integration.md).
 
 ## Related projects
 
@@ -29,7 +30,7 @@ The code is separated into `learning/`, `rollouts/`, `dataset/`, `runtime/` and 
 | [Exact-age math data](experiments/exact-age-14b-data/README.md) | Preparation and publication of cleaned Skywork, DeepScaleR and merged datasets |
 | [Reasoning budget evaluation](experiments/reasoning-budget-eval/README.md) | Separate five-model evaluation with 4K/8K/12K generation budgets, native tokenizers and final-answer grading |
 
-The separate evaluation project is not automatically integrated into the exact-staleness training study.
+The older reasoning-budget evaluation project is not automatically integrated into the exact-staleness training study. The new [checkpoint evaluation pool](experiments/deepseek14b-exact-staleness/docs/evaluation.md) lives inside the training study package and reads its completed checkpoints; it is deployed and launched separately from training.
 
 ## Previous experiments
 
