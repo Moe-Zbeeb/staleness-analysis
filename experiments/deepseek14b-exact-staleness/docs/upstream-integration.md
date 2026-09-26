@@ -66,6 +66,8 @@ Deploy a fresh package/source tree. Preserve existing asset, dependency and outp
 
 ## Reviewing future library changes
 
+The standalone `scripts/profile_trainer.py` diagnostic adds process-local timing wrappers around the imported trainer's forward, loss, optimizer and backward calls, replaces its fake loader with archived microbatches, and times the study token exporter. It operates only in a disposable diagnostic process, with policy publication and checkpoint saving disabled. Production does not import these hooks; upstream source is unchanged. See the [profiling record](profiling.md) for measurement caveats and cluster results.
+
 Any future upstream source patch, additional in-memory override, pin change or tokenizer compatibility change should be recorded here and summarized in the experiment README with the affected interface, reason, behavior and validation. Keep experiment changes in this package where practical so the dependency checkout remains reviewable against the official commit.
 
 ## Paper diagnostics

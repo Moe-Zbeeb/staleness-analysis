@@ -1,0 +1,81 @@
+{
+  "recorded_utc": "2026-09-26T21:50:36.873846+00:00",
+  "production_job": 2144963,
+  "production_source_commit": "5ad56dedbd4bfd3a4e3bb2f39ac4e56d0de274d8",
+  "production_modified": false,
+  "production_speedup_applied": false,
+  "jobs": [
+    {
+      "id": 2144976,
+      "purpose": "eight-GPU profiling",
+      "node": "deep-chungus-7",
+      "state": "FAILED",
+      "failure": "nvidia-smi topo -m exited 255"
+    },
+    {
+      "id": 2144977,
+      "purpose": "independent eight-GPU health",
+      "node": "deep-chungus-7",
+      "state": "FAILED",
+      "failure": "CUDA initialization: device=7, num_gpus=7"
+    },
+    {
+      "id": 2144978,
+      "purpose": "token archive compression and NFS write benchmark",
+      "node": "deep-chungus-6",
+      "state": "COMPLETED",
+      "exit_code": "0:0",
+      "elapsed_seconds": 13,
+      "account": "grad-students",
+      "partition": "high-priority",
+      "qos": "high-priority",
+      "gpus": 0,
+      "cpus": 4,
+      "memory": "8G",
+      "repetitions_per_rank": 3,
+      "ranks": 4,
+      "exact_round_trip_passed": true,
+      "observed_rank3_repeat2": {
+        "compress_seconds": 0.803963934071362,
+        "write_and_fsync_seconds": 0.10033526481129229,
+        "bytes": 7771391,
+        "tokens": 693538
+      }
+    },
+    {
+      "id": 2144980,
+      "purpose": "full-node transport and archived trainer replay",
+      "node": "deep-chungus-4",
+      "last_observed_state": "RUNNING",
+      "last_observed_stage": "health probe launched",
+      "results_collected": false,
+      "account": "grad-students",
+      "partition": "low-priority",
+      "qos": "normal",
+      "gpus": 9,
+      "cpus": 96,
+      "exclusive": true,
+      "time_limit_seconds": 7200,
+      "production_layout_equivalent": false
+    }
+  ],
+  "ssh": {
+    "established_session": "dropped",
+    "authorized_reconnects": 1,
+    "reconnect_result": "timeout at jump connection before password or Duo prompt",
+    "further_attempts": 0
+  },
+  "scripts_sha256": {
+    "profile_collectives.py": "50455dba193a0d62fa2a2404aaa79c1046871c7bf293c73b567e80259afb8e29",
+    "profile_logging.py": "553675811a6a7393ad4dfd48afb4593b81a9560a416a6a502425e629d5f32ce8",
+    "profile_node.py": "ea71e1501e8e18e0f6d57805e61388a26c2b380e35c93093f0bee363a35b51e5",
+    "profile_trainer.py": "da4201441a68476ae2f4a63632e69cdb996e65a801e7f9a49b0670df8efe2085"
+  },
+  "validation": {
+    "ruff": "passed",
+    "python_compile": "passed",
+    "focused_tests_passed": 54,
+    "cuda_tests_skipped": 1,
+    "instrumented_adamw_scheduler": "passed"
+  }
+}
