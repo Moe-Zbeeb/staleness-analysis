@@ -1,0 +1,15 @@
+vendor/
+.venv/
+__pycache__/
+.pytest_cache/
+.ruff_cache/
+*.pyc
+outputs/
+assets/
+dist/
+.cache/
+package.tar.gz
+diagnostics/cluster/
+diagnostics/*submission*.json
+configs/run*.json
+resolved-configs/
