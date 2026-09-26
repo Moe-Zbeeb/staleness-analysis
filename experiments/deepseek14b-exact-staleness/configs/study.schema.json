@@ -270,6 +270,24 @@
       "title": "Timeout Seconds",
       "type": "integer"
     },
+    "training_timeout_seconds": {
+      "default": 14400,
+      "minimum": 1,
+      "title": "Training Timeout Seconds",
+      "type": "integer"
+    },
+    "weight_transfer_timeout_seconds": {
+      "default": 1800,
+      "minimum": 1,
+      "title": "Weight Transfer Timeout Seconds",
+      "type": "integer"
+    },
+    "checkpoint_timeout_seconds": {
+      "default": 7200,
+      "minimum": 1,
+      "title": "Checkpoint Timeout Seconds",
+      "type": "integer"
+    },
     "generation_timeout_seconds": {
       "default": 86400,
       "minimum": 1,

@@ -1,5 +1,7 @@
 # First production run: exact staleness 256
 
+**Stopped:** the user requested cancellation and a corrected fresh launch. Slurm records job `2144962` as cancelled. At cancellation it had recorded one 512-response bootstrap cohort (2,662,027 response tokens, 1,712.45 seconds of generation) and no completed optimizer-update receipt. Partial work on the first update is not a completed policy version. The original output, launch script and `STOP_REQUEST.json` are preserved. See the [v2 relaunch record](exact256-v2.md). The remainder of this page is the historical launch record.
+
 The user authorized production training on September 26, 2026, after the [bounded readiness test](../readiness-test.md). Job **2144962** was submitted at **16:31:59 UTC** and started on **deep-chungus-11** with one exclusive node, eight A100 80 GB PCIe GPUs, 128 CPU slots and all node memory. The account is `grad-students`; partition and QoS are both `high-priority`. All eight ranks passed the startup NCCL, BF16 backward, Flash Attention backward and vLLM RMSNorm checks. Inference uses visible devices 0–3 and training uses 4–7.
 
 The submitted scientific configuration is unchanged. This is one 1,000-update run with seed 42 and exact lag 256. Benchmark evaluation remains offline only. Production-scale memory and long-run stability were not established by the preceding small test; the user elected to proceed with the full run.

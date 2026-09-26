@@ -26,6 +26,8 @@ UPDATE_METRICS = {
     "generated_output_tokens": "generation/total_output_tokens",
     "queue_payload_bytes": "queue/payload_bytes",
     "step_wall_seconds": "study/update_wall_seconds",
+    "training_wait_seconds": "study/training_wait_seconds",
+    "weight_transfer_seconds": "study/weight_transfer_seconds",
 }
 
 

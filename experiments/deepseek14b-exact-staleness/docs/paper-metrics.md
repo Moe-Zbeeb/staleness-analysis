@@ -1,5 +1,7 @@
 # Paper metrics: coverage and measurement contract
 
+Rollout archive format 2 adds `sample_response_ids` and `sample_task_keys` aligned with serialized training samples. Cohort metadata retains arrival order; join by response ID rather than array index. This fixes raw rollout auditing without changing sample order or advantages. Packed GPU token archives still lack a global response-ID join. New scalar fields `study/training_wait_seconds` and `study/weight_transfer_seconds` measure controller phase waits; the training wait excludes computation overlapped by generation and is not total GPU update time.
+
 The reference papers are [BAPO, arXiv:2510.18927v1](https://arxiv.org/html/2510.18927v1)
 and [Prosperity before Collapse / M2PO, arXiv:2510.01161v2](https://arxiv.org/html/2510.01161v2).
 Their PDF figures, tables and appendices were inspected on September 26, 2026.

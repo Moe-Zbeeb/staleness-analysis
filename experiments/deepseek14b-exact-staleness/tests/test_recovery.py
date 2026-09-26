@@ -100,3 +100,34 @@ def test_official_checkpoint_adapter_saves_and_restores_rng_with_rank_identity(t
     monkeypatch.setattr(torch.distributed, "get_world_size", lambda: 2)
     with pytest.raises(ValueError, match="original sharding"):
         manager.load(3)
+
+
+def test_resume_preflight_releases_queue_before_workers_start(tmp_path, study, monkeypatch):
+    import weakref
+    from deepseek_study.runtime.launcher import resume_step
+
+    references = []
+
+    def load(*args):
+        state = QueueState(1, completed_steps=1)
+        references.append(weakref.ref(state))
+        return state
+
+    monkeypatch.setattr(checkpoints, "verify_components", lambda path: None)
+    monkeypatch.setattr(checkpoints, "load", load)
+    for name in ("trainer/.metadata", "orchestrator/progress.pt"):
+        path = tmp_path / name
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.touch()
+    assert resume_step(tmp_path, study, "source") == 1
+    assert references[0]() is None
+
+
+def test_queue_checkpoint_uses_streaming_pickle(tmp_path, monkeypatch):
+    def forbidden(*args, **kwargs):
+        raise AssertionError("Whole-queue byte copies are forbidden")
+
+    monkeypatch.setattr(checkpoints.pickle, "dumps", forbidden)
+    monkeypatch.setattr(checkpoints.pickle, "loads", forbidden)
+    checkpoints.save(tmp_path, QueueState(0), "config", "source")
+    assert checkpoints.load(tmp_path, "config", "source").completed_steps == 0

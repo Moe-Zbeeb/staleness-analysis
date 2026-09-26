@@ -4,7 +4,7 @@ Research code for studying how rollout staleness affects reinforcement learning.
 
 ## Start here: exact-staleness DeepSeek 14B
 
-[DeepSeek 14B on cleaned DeepScaleR](experiments/deepseek14b-exact-staleness/README.md) is the current study. Each invocation prepares one explicit exact lag `k`; it does not schedule a sweep. The production exact-256 run has not been launched. A separate [bounded GPU readiness test](experiments/deepseek14b-exact-staleness/docs/readiness-test.md) exercises the real model and records its results.
+[DeepSeek 14B on cleaned DeepScaleR](experiments/deepseek14b-exact-staleness/README.md) is the current study. Each invocation prepares one explicit exact lag `k`; it does not schedule a sweep. The first production exact-256 job was stopped for correctness fixes; the [fresh relaunch record](experiments/deepseek14b-exact-staleness/docs/runs/exact256-v2.md) documents the replacement. A separate [bounded GPU readiness test](experiments/deepseek14b-exact-staleness/docs/readiness-test.md) records the preceding real-model diagnostic.
 
 | What you need | Where to go |
 | --- | --- |

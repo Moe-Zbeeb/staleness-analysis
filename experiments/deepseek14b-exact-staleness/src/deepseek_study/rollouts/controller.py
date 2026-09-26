@@ -14,6 +14,7 @@ from deepseek_study.runtime import checkpoints
 from deepseek_study.runtime.identity import read_identity
 from deepseek_study.learning.advantages import StudyGRPO
 from deepseek_study.rollouts.queue import Cohort, QueueState, run
+from deepseek_study.rollouts.provenance import ProvenanceTrainSink
 from deepseek_study.dataset.rewards import completion_tokens
 from prime_rl import monitors
 from prime_rl.configs.orchestrator import OrchestratorConfig
@@ -30,6 +31,8 @@ class Payload:
     rewards: tuple[float, ...]
     truncated: tuple[bool, ...]
     task_keys: tuple[str, ...]
+    sample_response_ids: tuple[str, ...]
+    sample_task_keys: tuple[str, ...]
 
 
 def payload_digest(payload):
@@ -81,6 +84,7 @@ class PrimeBackend:
     def __init__(self, study, orchestrator):
         self.study = study
         self.orch = orchestrator
+        self.orch.train_sink = ProvenanceTrainSink(self.orch.train_sink)
         self.source = FiniteSource(orchestrator.train_source)
         self.orch.dispatcher.train_source = self.source
         self.orch.concurrency.bind(
@@ -91,6 +95,8 @@ class PrimeBackend:
             env.algorithm = StudyGRPO(env.config.algo, self.orch.clients, study)
         self.shipped = None
         self.step_started = time.monotonic()
+        self.training_wait_seconds = 0.0
+        self.weight_transfer_seconds = 0.0
         self.identity = read_identity(study.output_dir / "source" / "identity.json")
 
     def assert_idle(self):
@@ -157,6 +163,8 @@ class PrimeBackend:
                 rewards=tuple(e.traces[0].reward for e in episodes),
                 truncated=tuple(e.traces[0].is_truncated for e in episodes),
                 task_keys=tuple(str(e.task.data.question_id) for e in episodes),
+                sample_response_ids=tuple(item[0] for item in self.orch.train_sink.sample_provenance),
+                sample_task_keys=tuple(item[1] for item in self.orch.train_sink.sample_provenance),
             )
             cohort = Cohort(
                 version=version,
@@ -170,6 +178,7 @@ class PrimeBackend:
                 self.study.output_dir / "rollouts" / f"{version}-{purpose}-{cohort.digest}.msgpack",
                 msgspec.msgpack.encode(
                     {
+                        "format": 2,
                         "behavior_version": version,
                         "purpose": purpose,
                         "response_ids": cohort.response_ids,
@@ -200,6 +209,16 @@ class PrimeBackend:
             raise RuntimeError("Stored tokens, log-probabilities, advantages, or provenance changed")
         if len(payload.policy_spans) != self.study.response_batch_size:
             raise RuntimeError("Response provenance is incomplete")
+        questions = dict(zip(cohort.response_ids, payload.task_keys, strict=True))
+        if (
+            Counter(payload.sample_response_ids) != Counter(cohort.response_ids)
+            or len(payload.sample_task_keys) != self.study.response_batch_size
+            or any(
+                questions[response] != question
+                for response, question in zip(payload.sample_response_ids, payload.sample_task_keys, strict=True)
+            )
+        ):
+            raise RuntimeError("Training sample provenance differs from the rollout cohort")
         if any(start != cohort.version or end != cohort.version for start, end in payload.policy_spans):
             raise RuntimeError("Mixed behavior versions in a queued cohort")
         expected = 0 if learner_version < self.study.lag else self.study.lag
@@ -222,7 +241,22 @@ class PrimeBackend:
 
     async def synchronize(self, version):
         self.assert_idle()
-        await asyncio.wait_for(self.orch.watcher.apply_policy_update(version), self.study.timeout_seconds)
+        started = time.monotonic()
+        try:
+            await asyncio.wait_for(
+                self.orch.watcher.receiver.wait_published(version), self.study.training_timeout_seconds
+            )
+        except TimeoutError as error:
+            raise TimeoutError(f"Learner policy {version} was not published before the training deadline") from error
+        self.training_wait_seconds = time.monotonic() - started
+        started = time.monotonic()
+        try:
+            await asyncio.wait_for(
+                self.orch.watcher.apply_policy_update(version), self.study.weight_transfer_timeout_seconds
+            )
+        except TimeoutError as error:
+            raise TimeoutError(f"Policy {version} transfer exceeded the weight-transfer deadline") from error
+        self.weight_transfer_seconds = time.monotonic() - started
         if self.orch.policy.version != version or self.orch.watcher.ckpt_step != version:
             raise RuntimeError("Inference did not acknowledge the completed learner update")
 
@@ -250,6 +284,8 @@ class PrimeBackend:
                 / self.study.response_batch_size,
                 "step_wall_seconds": time.monotonic() - self.step_started,
                 "queue_payload_bytes": sum(len(cohort.payload.samples) for cohort in state.pending.values()),
+                "training_wait_seconds": self.training_wait_seconds,
+                "weight_transfer_seconds": self.weight_transfer_seconds,
             }
         )
         self.append("updates.jsonl", receipt)
@@ -262,28 +298,28 @@ class PrimeBackend:
             or state.completed_steps == self.study.max_steps
         ):
             directory = self.study.output_dir / "checkpoints" / f"step_{state.completed_steps}"
-            async with asyncio.timeout(self.study.timeout_seconds):
+            async with asyncio.timeout(self.study.checkpoint_timeout_seconds):
                 while not (directory / "trainer" / ".metadata").is_file() or any(
                     not (directory / "rng" / f"rank_{rank}.pt").is_file() for rank in range(self.study.trainer_gpus)
                 ):
                     await asyncio.sleep(0.2)
-            self.orch.ckpt_manager.save(self.orch.progress, self.orch.train_source, step=state.completed_steps)
-            components_hash = await asyncio.to_thread(checkpoints.seal, directory, self.study.trainer_gpus)
-            await asyncio.to_thread(
-                checkpoints.save,
-                directory / "study",
-                state,
-                self.study.fingerprint(),
-                self.identity["sha256"],
-                components_hash,
-            )
-            await asyncio.to_thread(
-                checkpoints.prune_complete,
-                directory.parent,
-                self.study.checkpoint_keep_last,
-                self.study.checkpoint_keep_interval,
-                self.identity["sha256"],
-            )
+                self.orch.ckpt_manager.save(self.orch.progress, self.orch.train_source, step=state.completed_steps)
+                components_hash = await asyncio.to_thread(checkpoints.seal, directory, self.study.trainer_gpus)
+                await asyncio.to_thread(
+                    checkpoints.save,
+                    directory / "study",
+                    state,
+                    self.study.fingerprint(),
+                    self.identity["sha256"],
+                    components_hash,
+                )
+                await asyncio.to_thread(
+                    checkpoints.prune_complete,
+                    directory.parent,
+                    self.study.checkpoint_keep_last,
+                    self.study.checkpoint_keep_interval,
+                    self.identity["sha256"],
+                )
         self.step_started = time.monotonic()
 
 

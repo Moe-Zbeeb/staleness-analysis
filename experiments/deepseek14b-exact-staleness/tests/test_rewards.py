@@ -50,3 +50,30 @@ def test_comparison_failure_propagates_instead_of_becoming_a_wrong_answer(monkey
     monkeypatch.setattr(rewards, "verify", fail)
     with pytest.raises(RuntimeError, match="worker failure"):
         grade("</think>\\boxed{4}", "4", False, "zero", 5)
+
+
+@pytest.mark.parametrize(
+    "answer,prediction,expected",
+    [
+        ("(1997,0)", r"\{1997,0\}", 0),
+        ("(1997,0)", "{1997,0}", 0),
+        (r"\{1997,0\}", "(1997,0)", 0),
+        ("(1997,0)", "(1997,0)", 1),
+        ("(1997,0)", "(0,1997)", 0),
+        (r"\{1,2\}", r"\{2,1\}", 1),
+        (r"\{1,2\}", r"\{1\}", 0),
+        ("(1,(2,3))", r"(1,\{2,3\})", 0),
+        ("A", "a", 0),
+        ("A+B", "a+b", 0),
+        ("A+A", "2A", 1),
+        ("A-a", "0", 0),
+        ("0", "A-a", 0),
+        ("A-A", "0", 1),
+        (r"\text{ABC}", "ABC", 1),
+        ("1000000000000000001", "1000000000000000000", 0),
+        (r"\frac{1}{2}", "0.5", 1),
+        ("(1,2)", r"\left(1,2\right)", 1),
+    ],
+)
+def test_structure_and_case_safeguards(answer, prediction, expected):
+    assert grade("</think>\\boxed{" + prediction + "}", answer, False, "grade_final", 8) == expected

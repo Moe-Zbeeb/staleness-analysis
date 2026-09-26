@@ -1,12 +1,17 @@
 from functools import lru_cache
 import hashlib
+import re
 from importlib.metadata import version
 from pathlib import Path
 
 from math_verify import LatexExtractionConfig, parse, verify
+from math_verify.utils import timeout as bounded
+from math_verify.errors import TimeoutException
+from latex2sympy2_extended.latex2sympy2 import ConversionConfig, latex2sympy
+from sympy import FiniteSet, Interval, Symbol, Tuple
 
 EXTRACTION = LatexExtractionConfig(try_extract_without_anchor=False, boxed_match_priority=0)
-POLICY = "strict-final-box-v1"
+POLICY = "strict-final-box-v2-structure-case"
 
 
 class ReferenceRejected(ValueError):
@@ -60,6 +65,40 @@ def normalize_reference(answer):
 
 
 @lru_cache(maxsize=50000)
+def case_preserved(answer, timeout):
+    @bounded(timeout_seconds=timeout)
+    def convert():
+        value = latex2sympy(
+            normalize_reference(answer),
+            normalization_config=EXTRACTION.normalization_config,
+            conversion_config=ConversionConfig(lowercase_symbols=False),
+        )
+        return value.xreplace(
+            {
+                symbol: Symbol("".join(f"case{ord(char):06x}" for char in symbol.name), **symbol.assumptions0)
+                for symbol in value.free_symbols
+            }
+        )
+
+    return convert()
+
+
+def structure_compatible(gold, predicted):
+    if isinstance(gold, (Tuple, FiniteSet, Interval)) or isinstance(predicted, (Tuple, FiniteSet, Interval)):
+        if isinstance(gold, FiniteSet) != isinstance(predicted, FiniteSet):
+            return False
+        if isinstance(gold, Tuple) and isinstance(predicted, Tuple):
+            return len(gold) == len(predicted) and all(
+                structure_compatible(left, right) for left, right in zip(gold, predicted, strict=True)
+            )
+        if isinstance(gold, FiniteSet) and isinstance(predicted, FiniteSet):
+            return len(gold) == len(predicted)
+        if isinstance(gold, (Tuple, Interval)) != isinstance(predicted, (Tuple, Interval)):
+            return False
+    return True
+
+
+@lru_cache(maxsize=50000)
 def parse_gold(answer, timeout):
     text = normalize_reference(answer)
     parsed = parse(
@@ -72,6 +111,13 @@ def parse_gold(answer, timeout):
     )
     if not parsed:
         raise ReferenceRejected("Reference answer is not parseable with the pinned reward implementation")
+    if re.search("[A-Z]", text):
+        try:
+            case_preserved(text, timeout)
+        except TimeoutException:
+            raise
+        except Exception as error:
+            raise ReferenceRejected("Reference cannot be verified while preserving symbol case") from error
     return parsed
 
 
@@ -101,7 +147,20 @@ def grade_result(raw_completion, answer, truncated, truncated_reward, timeout):
     )
     if not predicted:
         return result(0, "unsupported_prediction", boxed)
-    correct = verify(gold, predicted, timeout_seconds=timeout, raise_on_error=True)
+    compatible = [(left, right) for left in gold for right in predicted if structure_compatible(left, right)]
+    if not compatible:
+        return result(0, "answer_structure_mismatch", boxed)
+    correct = any(verify(left, right, timeout_seconds=timeout, raise_on_error=True) for left, right in compatible)
+    if correct and re.search("[A-Z]", normalize_reference(answer) + boxed):
+        try:
+            predicted_case = case_preserved(boxed, timeout)
+        except TimeoutException:
+            raise
+        except Exception:
+            return result(0, "unsupported_case_sensitive_prediction", boxed)
+        correct = verify(case_preserved(answer, timeout), predicted_case, timeout_seconds=timeout, raise_on_error=True)
+        if not correct:
+            return result(0, "symbol_case_mismatch", boxed)
     return result(correct, "correct" if correct else "not_verified_correct", boxed)
 
 

@@ -35,8 +35,19 @@ def atomic_write(path: Path, data: bytes):
 
 def save(directory: Path, state: QueueState, config_hash: str, identity_hash: str, components_hash: str | None = None):
     state.validate()
-    data = pickle.dumps(state, protocol=5)
-    atomic_write(directory / "queue.pkl", data)
+    directory.mkdir(parents=True, exist_ok=True)
+    fd, temporary = tempfile.mkstemp(dir=directory, prefix="queue.pkl.")
+    try:
+        with os.fdopen(fd, "wb") as stream:
+            pickle.dump(state, stream, protocol=5)
+            stream.flush()
+            os.fsync(stream.fileno())
+        queue_hash = file_digest(Path(temporary))
+        os.replace(temporary, directory / "queue.pkl")
+        fsync_directory(directory)
+    finally:
+        if os.path.exists(temporary):
+            os.unlink(temporary)
     marker = {
         "format": 2,
         "step": state.completed_steps,
@@ -44,19 +55,24 @@ def save(directory: Path, state: QueueState, config_hash: str, identity_hash: st
         "config_sha256": config_hash,
         "identity_sha256": identity_hash,
         "components_sha256": components_hash,
-        "queue_sha256": hashlib.sha256(data).hexdigest(),
+        "queue_sha256": queue_hash,
     }
     atomic_write(directory / "complete.json", (json.dumps(marker, indent=2) + "\n").encode())
 
 
+def file_digest(path):
+    with path.open("rb") as stream:
+        return hashlib.file_digest(stream, "sha256").hexdigest()
+
+
 def load(directory: Path, config_hash: str, identity_hash: str):
     marker = json.loads((directory / "complete.json").read_text())
-    data = (directory / "queue.pkl").read_bytes()
     if marker["format"] != 2 or marker["config_sha256"] != config_hash or marker["identity_sha256"] != identity_hash:
         raise ValueError("Checkpoint protocol differs from the requested study")
-    if hashlib.sha256(data).hexdigest() != marker["queue_sha256"]:
+    if file_digest(directory / "queue.pkl") != marker["queue_sha256"]:
         raise ValueError("Checkpoint queue checksum mismatch")
-    state = pickle.loads(data)
+    with (directory / "queue.pkl").open("rb") as stream:
+        state = pickle.load(stream)
     if not isinstance(state, QueueState) or state.completed_steps != marker["step"] or state.lag != marker["lag"]:
         raise ValueError("Checkpoint state differs from its commit marker")
     state.validate()

@@ -43,6 +43,19 @@ def configure_nccl_transport():
     disable_nccl_p2p_if_unavailable()
 
 
+def resume_step(directory, study, identity_hash):
+    checkpoints.verify_components(directory)
+    state = checkpoints.load(directory / "study", study.fingerprint(), identity_hash)
+    if state.completed_steps >= study.max_steps:
+        raise ValueError("Checkpoint already completed the configured training budget")
+    if (
+        not (directory / "trainer" / ".metadata").is_file()
+        or not (directory / "orchestrator" / "progress.pt").is_file()
+    ):
+        raise ValueError("Checkpoint is missing trainer or sampler state")
+    return state.completed_steps
+
+
 def launch(study, root, resume=None):
     verify_upstream(root)
     configure_nccl_transport()
@@ -51,16 +64,7 @@ def launch(study, root, resume=None):
     starting_step = 0
     if resume:
         directory = Path(resume).resolve()
-        checkpoints.verify_components(directory)
-        state = checkpoints.load(directory / "study", study.fingerprint(), identity["sha256"])
-        starting_step = state.completed_steps
-        if state.completed_steps >= study.max_steps:
-            raise ValueError("Checkpoint already completed the configured training budget")
-        if (
-            not (directory / "trainer" / ".metadata").is_file()
-            or not (directory / "orchestrator" / "progress.pt").is_file()
-        ):
-            raise ValueError("Checkpoint is missing trainer or sampler state")
+        starting_step = resume_step(directory, study, identity["sha256"])
     import torch
 
     count = torch.cuda.device_count()
@@ -100,9 +104,7 @@ def launch(study, root, resume=None):
                 "config_sha256": study.fingerprint(),
                 "identity_sha256": identity["sha256"],
                 "hardware": hardware,
-                "nccl_transport": {
-                    key: os.environ.get(key) for key in ("NCCL_P2P_DISABLE", "NCCL_SHM_DISABLE")
-                },
+                "nccl_transport": {key: os.environ.get(key) for key in ("NCCL_P2P_DISABLE", "NCCL_SHM_DISABLE")},
             },
             indent=2,
         ).encode(),

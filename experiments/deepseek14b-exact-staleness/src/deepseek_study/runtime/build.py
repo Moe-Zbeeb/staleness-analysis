@@ -35,9 +35,21 @@ def resolve(study, resume=None):
                 "num_train_gpus": study.trainer_gpus,
                 "num_infer_gpus": study.inference_gpus,
             },
-            "weight_broadcast": {"type": "nccl", "port": study.inference_port + 10, "timeout": study.timeout_seconds},
+            "weight_broadcast": {
+                "type": "nccl",
+                "port": study.inference_port + 10,
+                "timeout": max(
+                    study.generation_timeout_seconds,
+                    study.training_timeout_seconds,
+                    study.weight_transfer_timeout_seconds,
+                    study.checkpoint_timeout_seconds,
+                ),
+            },
             "rollout_transport": {"type": "zmq", "port": study.inference_port + 20},
             "trainer": {
+                "dist_timeout_seconds": max(
+                    study.generation_timeout_seconds, study.training_timeout_seconds, study.checkpoint_timeout_seconds
+                ),
                 "enable_token_export": True,
                 "model": {
                     "impl": "hf",
