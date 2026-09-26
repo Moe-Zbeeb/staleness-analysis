@@ -2,7 +2,9 @@
 
 One run at a time, with the exact nonnegative integer `k` you request. This package composes official PrimeRL v0.9.0 at `ab5de8fff44b2c4a5c85e24b6e6e3f7d57eee7b1`; it does not import the teammate fork or edit upstream files.
 
-**Status:** the current package passes all 128 tests locally and on Linux in CPU-only Slurm job `2144956`. That job verified the XFS mirror and exact hosted Runboard delivery of all 281 paper scalars in its synthetic diagnostic, including the noncontributing-token fraction. Earlier hardware checks passed on eight A100 80GB GPUs for NCCL, BF16 backward, Flash Attention backward and vLLM RMSNorm. The new relationship-chart interface is deployed through `runboard-cloudflare` commit `11814e7` and verified in a browser against the hosted diagnostic data. Full 14B training, live model-weight transfer, memory fit and training/resume execution remain unverified. No study training has been launched. See [validation evidence](diagnostics/cluster-validation.json).
+**Status:** bounded GPU readiness job `2144960` passed on an exclusive eight-A100-80GB PCIe node at high priority (exit `0:0`, 54m 45s). All 129 cluster tests passed. The real 14B model completed three updates with ages 0, 1, 1, then resumed checkpoint 2 and reexecuted update 3 using the original queued data. Responses reached 8,192 tokens; trainer peak memory reached about 72 GiB after restart. Checkpoints are on NFS and metric evidence is mirrored to XFS. The production exact-256 run remains prepared and unlaunched; its 512-response batch and full queue memory remain untested. See the [readiness report](docs/readiness-test.md) and [validation evidence](diagnostics/cluster-validation.json).
+
+The diagnostic found and fixed two integration bugs: NCCL transport settings were applied too late, and the token exporter mixed CPU rollout tensors with GPU model outputs. Both fixes are in this package. The official PrimeRL checkout, GRPO objective, rollout scheduler and production configuration remain unchanged.
 
 ## Review and organization
 
@@ -137,7 +139,7 @@ vendor/prime-rl/.venv/bin/deepseek-study run configs/resume.json --resume /absol
 vendor/prime-rl/.venv/bin/deepseek-study audit /absolute/path/to/new-run
 ```
 
-Changed source, runtime identity, data or configuration is rejected. The original GPU layout is required; cross-layout optimizer/RNG resharding is not enabled. Queued responses are preserved exactly and trainer RNG is restored. Future inference is not guaranteed bitwise identical after restart because the complete vLLM RNG state is not restored. Only load trusted project checkpoints.
+Changed source, runtime identity, data or configuration is rejected. The original GPU layout is required; cross-layout optimizer/RNG resharding is not enabled. Queued responses are preserved exactly and trainer RNG is restored. Future inference is not guaranteed bitwise identical after restart because the complete vLLM RNG state is not restored. GPU backward is not configured for strict determinism either: the readiness replay matched all saved forward log probabilities but showed small post-update weight/Adam differences, documented in the [readiness report](docs/readiness-test.md). Only load trusted project checkpoints.
 
 `updates.jsonl` records versions, exact age, bootstrap status, original question/response IDs, reward, zero-advantage fraction and queue accounting. `generations.jsonl` records generation time and provenance. `grading.jsonl` records extraction/comparison reasons and retry information. `rollouts/*.msgpack` preserves full training token/log-probability payloads; failed episodes are written under `failures/`. Original trainer metrics and process logs remain local. The Runboard observer forwards numeric metrics and run metadata to a configured backend, or stores dashboard data locally when no backend is configured; it does not upload rollout text or checkpoint files.
 

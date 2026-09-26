@@ -1,6 +1,6 @@
 {
   "recorded_at_utc": "2026-09-26T02:21:45.795023+00:00",
-  "study_training_started": false,
+  "study_training_started": true,
   "prime_commit": "ab5de8fff44b2c4a5c85e24b6e6e3f7d57eee7b1",
   "dependency_lock_sha256": "b55625d807f687401109534bce30bfbb2faf5ba889b246ba521db934d7e1ba4f",
   "local_tests_passed": 128,
@@ -50,10 +50,10 @@
     "resolution": "Use the pinned native module and verify its RMSNorm output against a Torch reference."
   },
   "not_validated": [
-    "End-to-end 14B training",
-    "Live model-weight broadcast",
-    "Full-context training memory fit",
-    "Training checkpoint and resume execution"
+    "Production 512-response batch and full inference concurrency",
+    "Live exact-256 consumed cohorts and full queue host-memory/checkpoint scaling",
+    "Long-run training stability and sustained production throughput",
+    "Held-out benchmark evaluation"
   ],
   "dependency_checkout": {
     "git_diff_head_clean": true,
@@ -68,7 +68,7 @@
     "prepared_assets_verified": true,
     "study_training_started": false
   },
-  "updated_at_utc": "2026-09-26T13:44:34.165546+00:00",
+  "updated_at_utc": "2026-09-26T16:05:11.553280+00:00",
   "paper_metrics_preparation": {
     "job_id": "2144955",
     "node": "deep-chungus-1.csail.mit.edu",
@@ -138,5 +138,202 @@
       "zero_advantage": 0.25
     },
     "raw_shard_schema": 2
+  },
+  "production_training_started": false,
+  "training_scope": "bounded_readiness_only",
+  "local_tests_skipped": 1,
+  "not_guaranteed": [
+    "Bitwise GPU backward and optimizer trajectories after restart"
+  ],
+  "bounded_gpu_readiness": {
+    "job_id": "2144960",
+    "state": "COMPLETED",
+    "exit_code": "0:0",
+    "elapsed": "00:54:45",
+    "node": "deep-chungus-11",
+    "account": "grad-students",
+    "partition": "high-priority",
+    "qos": "high-priority",
+    "exclusive_node": true,
+    "gpu_count": 8,
+    "gpu_model": "NVIDIA A100 80GB PCIe",
+    "tests_passed": 129,
+    "source_commit": "377e5887f9e4582d8a0c797365cca9c1e9b285c3",
+    "source_identity_sha256": "8e6a70049c77bb03d2229b8e614bd23f19f372ebf14d9885f62c904e7854e724",
+    "tested_package_sha256": "09e70c98172598c250e1ac4d4c4e77edf1de4ca25c86a2cfb92f1fc2b4a21df1",
+    "production_started": false,
+    "upstream_source_modified": false,
+    "requested_queue": {
+      "lag": 256,
+      "updates": 1000,
+      "synthetic_responses_per_cohort": 4
+    },
+    "diagnostic_overrides": {
+      "output_dir": "/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/diagnostics/cluster/readiness-2144960/readiness-2144960-initial",
+      "prompts_per_update": 4,
+      "max_steps": 3,
+      "lr_warmup_steps": 1,
+      "checkpoint_interval": 2,
+      "lag": 1
+    },
+    "initial": {
+      "updates_in_this_run": 3,
+      "last_completed_step": 3,
+      "warmup_updates": 1,
+      "requested_lag": 1,
+      "exact_staleness_updates": 2,
+      "unique_trained_responses": 96,
+      "complete": true,
+      "paper_metric_updates": 3,
+      "response_tokens": 531134
+    },
+    "resume": {
+      "updates_in_this_run": 1,
+      "last_completed_step": 3,
+      "warmup_updates": 0,
+      "requested_lag": 1,
+      "exact_staleness_updates": 1,
+      "unique_trained_responses": 32,
+      "complete": true,
+      "paper_metric_updates": 1,
+      "response_tokens": 153675
+    },
+    "resumed_original_queued_data": true,
+    "independent_verification": {
+      "verified_at_utc": "2026-09-26T16:05:11.553280+00:00",
+      "initial": {
+        "output": "/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/diagnostics/cluster/readiness-2144960/readiness-2144960-initial",
+        "runboard": {
+          "project": "staleness-analysis-readiness",
+          "run_id": "76faf1e625784c2bacb53be9e3d127aa",
+          "mode": "http",
+          "status": "finished"
+        },
+        "backend_rows": 26,
+        "paper_checks": [
+          {
+            "step": 1,
+            "matched_paper_scalars": 399,
+            "response_tokens": 197829,
+            "max_response_length": 8192.0,
+            "noncontributing_token_fraction": 0.46151474253016495
+          },
+          {
+            "step": 2,
+            "matched_paper_scalars": 359,
+            "response_tokens": 179630,
+            "max_response_length": 8192.0,
+            "noncontributing_token_fraction": 0.805589266826254
+          },
+          {
+            "step": 3,
+            "matched_paper_scalars": 373,
+            "response_tokens": 153675,
+            "max_response_length": 8192.0,
+            "noncontributing_token_fraction": 0.5859703920611681
+          }
+        ],
+        "mirror": "/mnt/xfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/metrics/readiness-2144960-initial",
+        "mirror_files_verified": 44,
+        "trainer": {
+          "1": {
+            "perf/peak_memory": 58.26953125,
+            "optim/grad_norm": 0.08652866631746292,
+            "loss/mean": 0.0010839822934940457,
+            "time/save_ckpt": 0,
+            "time/forward_backward": 245.00026322412305
+          },
+          "2": {
+            "perf/peak_memory": 69.677734375,
+            "optim/grad_norm": 0.04534270986914635,
+            "loss/mean": 4.839326720684767e-05,
+            "time/save_ckpt": 259.465473002987,
+            "time/forward_backward": 207.82908060005866
+          },
+          "3": {
+            "perf/peak_memory": 69.013671875,
+            "optim/grad_norm": 0.061200711876153946,
+            "loss/mean": 0.0005425911513157189,
+            "time/save_ckpt": 0,
+            "time/forward_backward": 175.22975612198934
+          }
+        },
+        "checkpoint_bytes": {
+          "step_3": 177254315323,
+          "step_2": 177259076888
+        }
+      },
+      "resumed": {
+        "output": "/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/diagnostics/cluster/readiness-2144960/readiness-2144960-resumed",
+        "runboard": {
+          "project": "staleness-analysis-readiness",
+          "run_id": "d6eb479ef296472190a2af7c4949ff6e",
+          "mode": "http",
+          "status": "finished"
+        },
+        "backend_rows": 8,
+        "paper_checks": [
+          {
+            "step": 3,
+            "matched_paper_scalars": 373,
+            "response_tokens": 153675,
+            "max_response_length": 8192.0,
+            "noncontributing_token_fraction": 0.5859703920611681
+          }
+        ],
+        "mirror": "/mnt/xfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/metrics/readiness-2144960-resumed",
+        "mirror_files_verified": 24,
+        "trainer": {
+          "3": {
+            "perf/peak_memory": 72.001953125,
+            "optim/grad_norm": 0.06119707599282265,
+            "loss/mean": 0.0005425911513157189,
+            "time/save_ckpt": 0,
+            "time/forward_backward": 172.07116053788923
+          }
+        },
+        "checkpoint_bytes": {
+          "step_3": 177254315323
+        }
+      },
+      "resume_current_logp_max_absolute_difference_per_rank": {
+        "0": 0.0,
+        "1": 0.0,
+        "2": 0.0,
+        "3": 0.0
+      },
+      "resumed_original_token_metadata": true,
+      "post_update_checkpoint_spot_check": {
+        "app.model.model.layers.0.input_layernorm.weight": {
+          "exact_match": false,
+          "max_absolute_difference": 1.1920928955078125e-07
+        },
+        "app.optimizers.state.model.layers.0.input_layernorm.weight.exp_avg": {
+          "exact_match": false,
+          "max_absolute_difference": 2.7939677238464355e-08
+        },
+        "app.optimizers.state.model.layers.0.input_layernorm.weight.exp_avg_sq": {
+          "exact_match": false,
+          "max_absolute_difference": 1.2250617187348212e-14
+        },
+        "app.optimizers.state.model.layers.0.input_layernorm.weight.step": {
+          "exact_match": true,
+          "max_absolute_difference": 0.0
+        }
+      }
+    },
+    "corrected_failures": [
+      {
+        "job_id": "2144957",
+        "cause": "NCCL transport settings changed after initial communicator creation",
+        "fix": "Apply the existing upstream topology helper before spawning any child",
+        "probe_job_id": "2144958"
+      },
+      {
+        "job_id": "2144959",
+        "cause": "Token exporter mixed CPU rollout tensors and GPU outputs",
+        "fix": "Align detached contribution-mask inputs with the model-output device; add CUDA regression coverage"
+      }
+    ]
   }
 }

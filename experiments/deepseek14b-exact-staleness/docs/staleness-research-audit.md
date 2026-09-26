@@ -10,6 +10,8 @@ The requested evaluation protocol now saves and retains checkpoints every 100 op
 
 The scan traced the authored configuration, queue, controller, loss, data preparation, grader, launcher, provenance and recovery paths; the pinned PrimeRL trainer, loss reduction, optimizer, scheduler, metrics, weight watcher and transport; and primary literature and released M2PO code. This is a source and contract audit, not a proof of distributed execution.
 
+The later [bounded GPU readiness test](readiness-test.md) records real 14B execution and the integration fixes discovered afterward. It does not measure staleness tolerance or validate the full production exact-256 run. Execution limits stated in this original audit should be read alongside that newer record.
+
 ## 1. What we should measure
 
 Let `theta_t` denote the learner after `t` completed optimizer updates. The next update uses behavior policy `mu = theta_(t-k)` after bootstrap.

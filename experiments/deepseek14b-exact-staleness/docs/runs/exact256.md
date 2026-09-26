@@ -1,6 +1,6 @@
 # Prepared first run: exact staleness 256
 
-This is one prepared run, not a sweep. The user requested preparation only; no training or evaluation job is submitted.
+This is one prepared run, not a sweep. The user requested preparation only for this production run; no production training or evaluation job is submitted. A later, separately authorized [readiness test](../readiness-test.md) uses diagnostic directories and a three-update lag-1 configuration.
 
 ## Configuration
 
@@ -43,7 +43,7 @@ Checkpoints 100 and 200 contain only bootstrap training. Checkpoint 300 contains
 
 ## Cluster preparation
 
-The deployed runtime remains the validated `releases/token-contribution-20260926` under `/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study`. Its source corresponds to commit `b7821a3667b48ec8c7a78df30d8fe570a666eced`. This preparation adds a run configuration and resolved files, without replacing that runtime or changing its dependencies.
+The deployed runtime is `releases/readiness-20260926` under `/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study`. Its runtime source matches tested commit `377e5887f9e4582d8a0c797365cca9c1e9b285c3`. This supersedes the earlier `token-contribution-20260926` runtime with the two integration fixes found by the bounded readiness test. Dependencies and the production scientific configuration are unchanged. The preparation history preserves the earlier runtime receipt.
 
 The prepared run directory is `/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/prepared-runs/exact256-80gb-seed42`. It contains `study.json`, `resolved/`, this guide and a preparation receipt recording file hashes and the runtime release. It is separate from the future training output.
 
@@ -55,6 +55,6 @@ To reproduce configuration resolution from the repository's experiment directory
 vendor/prime-rl/.venv/bin/deepseek-study build configs/exact256-80gb-seed42.json resolved-configs/exact256-80gb-seed42
 ```
 
-Configuration resolution does not load the 14B model or start training. Existing model and dataset verification is documented in [cluster operations](../cluster.md). Full-model memory fit, live weight transfer and actual training/resume remain unverified.
+Configuration resolution does not load the 14B model or start training. Model and dataset verification is documented in [cluster operations](../cluster.md); real-model diagnostic results are in the [readiness record](../readiness-test.md). A short lag-1 test does not establish production-scale memory fit or live exact-256 consumption.
 
 Launch requires a later instruction to train and a compatible complete eight-GPU allocation. At that point, recheck storage, available node memory, all-eight-GPU assignment, scheduler eligibility and output-directory freshness. Keep the selected configuration and runtime release fixed. No `sbatch`, `srun` or training command is executed by this preparation.

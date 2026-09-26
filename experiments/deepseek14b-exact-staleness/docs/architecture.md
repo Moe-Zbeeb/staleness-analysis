@@ -97,7 +97,7 @@ The launcher also starts a Runboard observer from the source snapshot. Existing 
 4. Read [controller.py](../src/deepseek_study/rollouts/controller.py), then [runtime/](../src/deepseek_study/runtime/), to review execution and recovery.
 5. Read the [research audit](staleness-research-audit.md) before interpreting training logs as scientific results.
 
-The CPU suite checks contracts and behavior. Full 14B execution, live model-weight transfer, memory fit and actual training/resume remain unverified. Held-out evaluation, richer tail diagnostics and explicit sample-to-response mapping remain research work; reorganizing the modules does not implement them.
+The CPU suite checks contracts and behavior. The later [bounded GPU readiness test](readiness-test.md) records real 14B execution, weight-transfer, memory and recovery checks separately from production-scale validation. Held-out evaluation and explicit sample-to-response mapping in token archives remain research work; reorganizing the modules does not implement them. Implemented tail diagnostics are listed in the [paper metric inventory](paper-metrics.md).
 
 ## Paper diagnostics data path
 
