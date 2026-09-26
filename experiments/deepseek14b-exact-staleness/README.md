@@ -2,7 +2,9 @@
 
 One run at a time, with the exact nonnegative integer `k` you request. This package composes official PrimeRL v0.9.0 at `ab5de8fff44b2c4a5c85e24b6e6e3f7d57eee7b1`; it does not import the teammate fork or edit upstream files.
 
-**Status:** bounded GPU readiness job `2144960` passed on an exclusive eight-A100-80GB PCIe node at high priority (exit `0:0`, 54m 45s). All 129 cluster tests passed. The real 14B model completed three updates with ages 0, 1, 1, then resumed checkpoint 2 and reexecuted update 3 using the original queued data. Responses reached 8,192 tokens; trainer peak memory reached about 72 GiB after restart. Checkpoints are on NFS and metric evidence is mirrored to XFS. The production exact-256 run remains prepared and unlaunched; its 512-response batch and full queue memory remain untested. See the [readiness report](docs/readiness-test.md) and [validation evidence](diagnostics/cluster-validation.json).
+**Status:** production exact-256 job **2144962** was authorized and started on September 26, 2026, on an exclusive eight-A100-80GB PCIe node at high priority. It retains the prepared 1,000-update configuration, including 256 bootstrap updates. All eight GPUs passed startup checks. See the [production run record](docs/runs/exact256.md) for the launch and its validation limits.
+
+The preceding bounded readiness job `2144960` passed (exit `0:0`, 54m 45s), including all 129 cluster tests. The real 14B model completed three updates with ages 0, 1, 1, then resumed checkpoint 2 and reexecuted update 3 using the original queued data. Responses reached 8,192 tokens; trainer peak memory reached about 72 GiB after restart. Checkpoints are on NFS and metric evidence is mirrored to XFS. See the [readiness report](docs/readiness-test.md) and [validation evidence](diagnostics/cluster-validation.json).
 
 The diagnostic found and fixed two integration bugs: NCCL transport settings were applied too late, and the token exporter mixed CPU rollout tensors with GPU model outputs. Both fixes are in this package. The official PrimeRL checkout, GRPO objective, rollout scheduler and production configuration remain unchanged.
 

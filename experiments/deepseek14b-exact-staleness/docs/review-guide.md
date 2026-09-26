@@ -44,7 +44,7 @@ The current package passed 128 local CPU tests (one CUDA case skipped) and all 1
 
 Cluster preparation verified all 11 pinned model files and five native-tokenizer probes. GPU diagnostic `2144920` passed on eight A100 80GB GPUs: NCCL all-reduce returned 36 on every rank, BF16 and Flash Attention backward passed, and vLLM RMSNorm matched its Torch reference. The diagnostic does not load or train the 14B model. See [validation evidence](../diagnostics/cluster-validation.json) and [cluster operations](cluster.md).
 
-Those CPU and component checks alone do not establish end-to-end readiness. The later [bounded GPU test](readiness-test.md) records live model execution and recovery validation. The production exact-256 run has not been launched; its 512-response batch, full queue memory and long-run stability remain separate validation limits.
+Those CPU and component checks alone do not establish end-to-end readiness. The later [bounded GPU test](readiness-test.md) records live model execution and recovery validation. The [production exact-256 run](runs/exact256.md) was subsequently authorized and submitted as job 2144962. The earlier small test does not establish production-batch memory fit, full queue memory or long-run stability.
 
 Future inference after resume is not bitwise reproducible because full vLLM RNG state is not restored. The GPU readiness test also observed small backward/optimizer differences despite identical saved forward log probabilities; strict deterministic GPU training is not configured. Large trainer checkpoint shards are checked by size, while metadata and smaller state files are hashed. Cross-layout resume and automatic benchmark evaluation are not implemented.
 

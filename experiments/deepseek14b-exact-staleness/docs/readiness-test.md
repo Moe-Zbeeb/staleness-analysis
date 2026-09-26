@@ -1,6 +1,6 @@
 # Bounded 14B cluster readiness test
 
-This diagnostic uses one exclusive node with eight A100 80 GB PCIe GPUs under the `grad-students` account, `high-priority` partition and `high-priority` QoS. Four GPUs run the trainer and four run inference. It does not start the prepared production exact-256 run or benchmark evaluation.
+This diagnostic uses one exclusive node with eight A100 80 GB PCIe GPUs under the `grad-students` account, `high-priority` partition and `high-priority` QoS. Four GPUs run the trainer and four run inference. It did not start the production exact-256 run or benchmark evaluation. This record describes the completed diagnostic; the later production submission is recorded in the [exact-256 run guide](runs/exact256.md).
 
 ## Result
 

@@ -38,7 +38,7 @@ sacct -j 2144915,2144916,2144920,2144923,2144954,2144955 --format=JobID,State,Ex
 
 ## Preparing a future run
 
-Setup and component probes do not invoke `deepseek-study run`. The separately authorized [readiness harness](readiness-test.md) does execute bounded training and recovery in diagnostic directories. The production exact-256 run has not been launched. Choose the requested k and a GPU profile before initializing a run configuration. Use the `80gb` profile on a compatible complete eight-A100-80GB node; do not infer every A100 node has the same memory or GPU count.
+Setup and component probes do not invoke `deepseek-study run`. The separately authorized [readiness harness](readiness-test.md) does execute bounded training and recovery in diagnostic directories. The [production exact-256 run](runs/exact256.md) was subsequently authorized and submitted as job **2144962** on September 26, 2026. Choose the requested k and a GPU profile before initializing another run configuration. Use the `80gb` profile on a compatible complete eight-A100-80GB node; do not infer every A100 node has the same memory or GPU count.
 
 `deepseek-study init` writes a configuration; `build` resolves official PrimeRL settings; `check` verifies assets. These commands do not start training. `run` starts training and must only be invoked when authorized, inside the matching Slurm allocation.
 

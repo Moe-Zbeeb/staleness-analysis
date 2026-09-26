@@ -1,6 +1,12 @@
-# Prepared first run: exact staleness 256
+# First production run: exact staleness 256
 
-This is one prepared run, not a sweep. The user requested preparation only for this production run; no production training or evaluation job is submitted. A later, separately authorized [readiness test](../readiness-test.md) uses diagnostic directories and a three-update lag-1 configuration.
+The user authorized production training on September 26, 2026, after the [bounded readiness test](../readiness-test.md). Job **2144962** was submitted at **16:31:59 UTC** and started on **deep-chungus-11** with one exclusive node, eight A100 80 GB PCIe GPUs, 128 CPU slots and all node memory. The account is `grad-students`; partition and QoS are both `high-priority`. All eight ranks passed the startup NCCL, BF16 backward, Flash Attention backward and vLLM RMSNorm checks. Inference uses visible devices 0–3 and training uses 4–7.
+
+The submitted scientific configuration is unchanged. This is one 1,000-update run with seed 42 and exact lag 256. Benchmark evaluation remains offline only. Production-scale memory and long-run stability were not established by the preceding small test; the user elected to proceed with the full run.
+
+The launch directory is `/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/launches/exact256-seed42-20260926T163159Z`. It retains the exact batch script, copied configuration, preparation receipt, scheduler admission result, submission command, scheduler verification, hardware receipt and Slurm log. `prepared-runs/exact256-80gb-seed42/SUBMISSION.json` points to this launch; the original preparation receipt remains historical. The requested wall-time limit is 14 days, not a duration estimate. Automatic Slurm requeue is disabled because recovery must explicitly select a completed checkpoint and a fresh output directory.
+
+The [submission and startup record](../../diagnostics/runs/exact256-2144962.json) captures the verified scheduler, hardware and source/configuration identities. Runboard registered run `66e69f8370814ff8b4b687a5ec46a7d9` in project `staleness-analysis`. The model loaded, startup policy synchronization completed, and generation and grading began. At the recorded startup observation, the first full 512-response cohort was still in progress and no production optimizer update had completed. This is a timestamped launch record, not a live progress report.
 
 ## Configuration
 
@@ -45,7 +51,7 @@ Checkpoints 100 and 200 contain only bootstrap training. Checkpoint 300 contains
 
 The deployed runtime is `releases/readiness-20260926` under `/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study`. Its runtime source matches tested commit `377e5887f9e4582d8a0c797365cca9c1e9b285c3`. This supersedes the earlier `token-contribution-20260926` runtime with the two integration fixes found by the bounded readiness test. Dependencies and the production scientific configuration are unchanged. The preparation history preserves the earlier runtime receipt.
 
-The prepared run directory is `/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/prepared-runs/exact256-80gb-seed42`. It contains `study.json`, `resolved/`, this guide and a preparation receipt recording file hashes and the runtime release. It is separate from the future training output.
+The prepared run directory is `/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/prepared-runs/exact256-80gb-seed42`. It contains `study.json`, `resolved/`, the original preparation guide and a preparation receipt recording file hashes and the runtime release. It remains separate from the training output. Submission copied its configuration without changes and verified the runtime source hashes against the successful readiness run.
 
 The selected output directory is `/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/outputs/exact256-80gb-seed42`. Checkpoints will be below `checkpoints/step_<N>/` there. The metric mirror is `/mnt/xfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/metrics/exact256-80gb-seed42`. Runboard uses the existing saved connection. Credentials are not stored in the configuration or preparation record.
 
@@ -57,4 +63,4 @@ vendor/prime-rl/.venv/bin/deepseek-study build configs/exact256-80gb-seed42.json
 
 Configuration resolution does not load the 14B model or start training. Model and dataset verification is documented in [cluster operations](../cluster.md); real-model diagnostic results are in the [readiness record](../readiness-test.md). A short lag-1 test does not establish production-scale memory fit or live exact-256 consumption.
 
-Launch requires a later instruction to train and a compatible complete eight-GPU allocation. At that point, recheck storage, available node memory, all-eight-GPU assignment, scheduler eligibility and output-directory freshness. Keep the selected configuration and runtime release fixed. No `sbatch`, `srun` or training command is executed by this preparation.
+At launch, the output and metric-mirror directories were absent, NFS had approximately 15 TB free and XFS had approximately 2.7 TB free globally. The active runtime release is fixed. Do not launch a second writer against this output directory or modify its scientific configuration in place. Inspect the recorded job and completed checkpoint markers before planning recovery.

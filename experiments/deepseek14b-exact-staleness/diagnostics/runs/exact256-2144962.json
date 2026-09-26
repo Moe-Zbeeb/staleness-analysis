@@ -1,0 +1,356 @@
+{
+  "submitted_utc": "2026-09-26T16:31:59.469761+00:00",
+  "job_id": "2144962",
+  "command": [
+    "sbatch",
+    "--parsable",
+    "--account=grad-students",
+    "--partition=high-priority",
+    "--qos=high-priority",
+    "--nodes=1",
+    "--exclusive",
+    "--gres=gpu:a100:8",
+    "--exclude=deep-chungus-[1-8,10],deep-gpu-[10-11]",
+    "--ntasks=1",
+    "--cpus-per-task=128",
+    "--mem=0",
+    "--time=14-00:00:00",
+    "--no-requeue",
+    "--signal=B:TERM@90",
+    "--job-name=deepseek14b-exact256",
+    "--chdir=/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/releases/readiness-20260926",
+    "--output=/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/launches/exact256-seed42-20260926T163159Z/slurm-%j.log",
+    "/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/launches/exact256-seed42-20260926T163159Z/train.sh"
+  ],
+  "deployment_commit": "c2c998f1dcb8a906b105722a0f4cfc39f6619a73",
+  "runtime_source_commit": "377e5887f9e4582d8a0c797365cca9c1e9b285c3",
+  "identity_sha256": "8e6a70049c77bb03d2229b8e614bd23f19f372ebf14d9885f62c904e7854e724",
+  "config_fingerprint": "d2f2d1e7078e6e820c24e34546103fdba28cd8278a8dec5ead1bedb7cb246f24",
+  "config_sha256": "54db99107cd570b549f9fc94453a96ba511e9d60e4161459e58f4f39905e6f86",
+  "runtime_release": "/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/releases/readiness-20260926",
+  "output_dir": "/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/outputs/exact256-80gb-seed42",
+  "launch_directory": "/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/launches/exact256-seed42-20260926T163159Z",
+  "verified_slurm_fields": "JobId=2144962 JobName=deepseek14b-exact256 UserId=mohamadzbib(29562) GroupId=mohamadzbib(29562) MCS_label=N/A Priority=71 Nice=0 Account=grad-students QOS=high-priority JobState=PENDING Reason=None Dependency=(null) Requeue=0 Restarts=0 BatchFlag=1 Reboot=0 ExitCode=0:0 RunTime=00:00:00 TimeLimit=14-00:00:00 TimeMin=N/A SubmitTime=2026-09-26T12:31:59 EligibleTime=2026-09-26T12:31:59 AccrueTime=Unknown StartTime=Unknown EndTime=Unknown Deadline=N/A SuspendTime=None SecsPreSuspend=0 LastSchedEval=2026-09-26T12:31:59 Scheduler=Main Partition=high-priority AllocNode:Sid=mslurm:3604368 ReqNodeList=(null) ExcNodeList=deep-chungus-[1-8,10],deep-gpu-[10-11] NodeList=(null) NumNodes=1-1 NumCPUs=128 NumTasks=1 CPUs/Task=128 ReqB:S:C:T=0:0:*:* TRES=cpu=128,mem=500000M,node=1,billing=128,gres/gpu=8,gres/gpu:a100=8 Socks/Node=* NtasksPerN:B:S:C=0:0:*:* CoreSpec=* MinCPUsNode=128 MinMemoryNode=0 MinTmpDiskNode=0 Features=(null) DelayBoot=00:00:00 OverSubscribe=NO Contiguous=0 Licenses=(null) Network=(null) Command=/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/launches/exact256-seed42-20260926T163159Z/train.sh WorkDir=/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/releases/readiness-20260926 StdErr=/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/launches/exact256-seed42-20260926T163159Z/slurm-2144962.log StdIn=/dev/null StdOut=/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/launches/exact256-seed42-20260926T163159Z/slurm-2144962.log Power= TresPerNode=gres:gpu:a100:8",
+  "startup_verified_utc": "2026-09-26T16:34:14.501895+00:00",
+  "scheduler": {
+    "checked_utc": "2026-09-26T16:32:32.770417+00:00",
+    "job_id": "2144962",
+    "fields": {
+      "JobId": "2144962",
+      "JobName": "deepseek14b-exact256",
+      "UserId": "mohamadzbib(29562)",
+      "GroupId": "mohamadzbib(29562)",
+      "MCS_label": "N/A",
+      "Priority": "71",
+      "Nice": "0",
+      "Account": "grad-students",
+      "QOS": "high-priority",
+      "JobState": "RUNNING",
+      "Reason": "None",
+      "Dependency": "(null)",
+      "Requeue": "0",
+      "Restarts": "0",
+      "BatchFlag": "1",
+      "Reboot": "0",
+      "ExitCode": "0:0",
+      "RunTime": "00:00:33",
+      "TimeLimit": "14-00:00:00",
+      "TimeMin": "N/A",
+      "SubmitTime": "2026-09-26T12:31:59",
+      "EligibleTime": "2026-09-26T12:31:59",
+      "AccrueTime": "2026-09-26T12:31:59",
+      "StartTime": "2026-09-26T12:31:59",
+      "EndTime": "2026-10-10T12:31:59",
+      "Deadline": "N/A",
+      "PreemptEligibleTime": "2026-09-26T12:31:59",
+      "PreemptTime": "None",
+      "SuspendTime": "None",
+      "SecsPreSuspend": "0",
+      "LastSchedEval": "2026-09-26T12:31:59",
+      "Scheduler": "Main",
+      "Partition": "high-priority",
+      "AllocNode:Sid": "mslurm:3604368",
+      "ReqNodeList": "(null)",
+      "ExcNodeList": "deep-chungus-[1-8,10],deep-gpu-[10-11]",
+      "NodeList": "deep-chungus-11",
+      "BatchHost": "deep-chungus-11",
+      "NumNodes": "1",
+      "NumCPUs": "128",
+      "NumTasks": "1",
+      "CPUs/Task": "128",
+      "ReqB:S:C:T": "0:0:*:*",
+      "TRES": "cpu=128,node=1,billing=128,gres/gpu=8,gres/gpu:a100=8",
+      "Socks/Node": "*",
+      "NtasksPerN:B:S:C": "0:0:*:*",
+      "CoreSpec": "*",
+      "MinCPUsNode": "128",
+      "MinMemoryNode": "0",
+      "MinTmpDiskNode": "0",
+      "Features": "(null)",
+      "DelayBoot": "00:00:00",
+      "OverSubscribe": "NO",
+      "Contiguous": "0",
+      "Licenses": "(null)",
+      "Network": "(null)",
+      "Command": "/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/launches/exact256-seed42-20260926T163159Z/train.sh",
+      "WorkDir": "/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/releases/readiness-20260926",
+      "StdErr": "/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/launches/exact256-seed42-20260926T163159Z/slurm-2144962.log",
+      "StdIn": "/dev/null",
+      "StdOut": "/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/launches/exact256-seed42-20260926T163159Z/slurm-2144962.log",
+      "Power": "",
+      "TresPerNode": "gres:gpu:a100:8"
+    }
+  },
+  "allocation": {
+    "job_id": "2144962",
+    "node": "deep-chungus-11",
+    "slurm_job_gpus": "0,1,2,3,4,5,6,7",
+    "visible_devices": [
+      "0",
+      "1",
+      "2",
+      "3",
+      "4",
+      "5",
+      "6",
+      "7"
+    ],
+    "inference_devices": [
+      "0",
+      "1",
+      "2",
+      "3"
+    ],
+    "trainer_devices": [
+      "4",
+      "5",
+      "6",
+      "7"
+    ]
+  },
+  "hardware": {
+    "job_id": "2144962",
+    "node": "deep-chungus-11",
+    "slurm_job_gpus": "0,1,2,3,4,5,6,7",
+    "world_size": 8,
+    "expected_all_reduce": 36,
+    "torch": "2.11.0+cu128",
+    "cuda_runtime": "12.8",
+    "devices": [
+      {
+        "rank": 0,
+        "visible_device": "0",
+        "name": "NVIDIA A100 80GB PCIe",
+        "bytes": 85097971712,
+        "capability": [
+          8,
+          0
+        ],
+        "all_reduce": 36,
+        "bf16_backward": true,
+        "flash_attention_backward": true,
+        "vllm_rms_norm": true
+      },
+      {
+        "rank": 1,
+        "visible_device": "1",
+        "name": "NVIDIA A100 80GB PCIe",
+        "bytes": 85097971712,
+        "capability": [
+          8,
+          0
+        ],
+        "all_reduce": 36,
+        "bf16_backward": true,
+        "flash_attention_backward": true,
+        "vllm_rms_norm": true
+      },
+      {
+        "rank": 2,
+        "visible_device": "2",
+        "name": "NVIDIA A100 80GB PCIe",
+        "bytes": 85097971712,
+        "capability": [
+          8,
+          0
+        ],
+        "all_reduce": 36,
+        "bf16_backward": true,
+        "flash_attention_backward": true,
+        "vllm_rms_norm": true
+      },
+      {
+        "rank": 3,
+        "visible_device": "3",
+        "name": "NVIDIA A100 80GB PCIe",
+        "bytes": 85097971712,
+        "capability": [
+          8,
+          0
+        ],
+        "all_reduce": 36,
+        "bf16_backward": true,
+        "flash_attention_backward": true,
+        "vllm_rms_norm": true
+      },
+      {
+        "rank": 4,
+        "visible_device": "4",
+        "name": "NVIDIA A100 80GB PCIe",
+        "bytes": 85097971712,
+        "capability": [
+          8,
+          0
+        ],
+        "all_reduce": 36,
+        "bf16_backward": true,
+        "flash_attention_backward": true,
+        "vllm_rms_norm": true
+      },
+      {
+        "rank": 5,
+        "visible_device": "5",
+        "name": "NVIDIA A100 80GB PCIe",
+        "bytes": 85097971712,
+        "capability": [
+          8,
+          0
+        ],
+        "all_reduce": 36,
+        "bf16_backward": true,
+        "flash_attention_backward": true,
+        "vllm_rms_norm": true
+      },
+      {
+        "rank": 6,
+        "visible_device": "6",
+        "name": "NVIDIA A100 80GB PCIe",
+        "bytes": 85097971712,
+        "capability": [
+          8,
+          0
+        ],
+        "all_reduce": 36,
+        "bf16_backward": true,
+        "flash_attention_backward": true,
+        "vllm_rms_norm": true
+      },
+      {
+        "rank": 7,
+        "visible_device": "7",
+        "name": "NVIDIA A100 80GB PCIe",
+        "bytes": 85097971712,
+        "capability": [
+          8,
+          0
+        ],
+        "all_reduce": 36,
+        "bf16_backward": true,
+        "flash_attention_backward": true,
+        "vllm_rms_norm": true
+      }
+    ]
+  },
+  "run": {
+    "run_uuid": "d7b909ea28c84cadbad57891c2e77a59",
+    "starting_step": 0,
+    "resume_from": null,
+    "config_sha256": "d2f2d1e7078e6e820c24e34546103fdba28cd8278a8dec5ead1bedb7cb246f24",
+    "identity_sha256": "8e6a70049c77bb03d2229b8e614bd23f19f372ebf14d9885f62c904e7854e724",
+    "hardware": [
+      {
+        "index": 0,
+        "name": "NVIDIA A100 80GB PCIe",
+        "total_memory": 85097971712,
+        "capability": [
+          8,
+          0
+        ]
+      },
+      {
+        "index": 1,
+        "name": "NVIDIA A100 80GB PCIe",
+        "total_memory": 85097971712,
+        "capability": [
+          8,
+          0
+        ]
+      },
+      {
+        "index": 2,
+        "name": "NVIDIA A100 80GB PCIe",
+        "total_memory": 85097971712,
+        "capability": [
+          8,
+          0
+        ]
+      },
+      {
+        "index": 3,
+        "name": "NVIDIA A100 80GB PCIe",
+        "total_memory": 85097971712,
+        "capability": [
+          8,
+          0
+        ]
+      },
+      {
+        "index": 4,
+        "name": "NVIDIA A100 80GB PCIe",
+        "total_memory": 85097971712,
+        "capability": [
+          8,
+          0
+        ]
+      },
+      {
+        "index": 5,
+        "name": "NVIDIA A100 80GB PCIe",
+        "total_memory": 85097971712,
+        "capability": [
+          8,
+          0
+        ]
+      },
+      {
+        "index": 6,
+        "name": "NVIDIA A100 80GB PCIe",
+        "total_memory": 85097971712,
+        "capability": [
+          8,
+          0
+        ]
+      },
+      {
+        "index": 7,
+        "name": "NVIDIA A100 80GB PCIe",
+        "total_memory": 85097971712,
+        "capability": [
+          8,
+          0
+        ]
+      }
+    ],
+    "nccl_transport": {
+      "NCCL_P2P_DISABLE": "1",
+      "NCCL_SHM_DISABLE": "1"
+    }
+  },
+  "runboard": {
+    "project": "staleness-analysis",
+    "run_id": "66e69f8370814ff8b4b687a5ec46a7d9"
+  },
+  "training_configuration_changed": false,
+  "first_update_verified": false,
+  "startup_status": {
+    "checked_utc": "2026-09-26T16:37:03.004137+00:00",
+    "state": "RUNNING",
+    "node": "deep-chungus-11",
+    "completed_updates": 0,
+    "completed_cohorts": 0,
+    "graded_responses": 32,
+    "first_update_verified": false,
+    "paper_metric_updates": 0,
+    "terminal_status": null
+  }
+}
