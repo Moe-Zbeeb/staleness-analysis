@@ -14,6 +14,7 @@ class StudyConfig(BaseModel):
     data_manifest: Path
     prepared_model_path: Path
     output_dir: Path
+    metrics_mirror_root: Path | None = None
     prompts_per_update: int = Field(ge=1)
     responses_per_prompt: int = Field(ge=2)
     prompt_max_tokens: int = Field(ge=1)
@@ -88,6 +89,12 @@ class StudyConfig(BaseModel):
         if self.sequence_length > 131072:
             raise ValueError("Sequence length exceeds the pinned model context")
         inputs = (self.model_path, self.dataset_path, self.prepared_model_path, self.data_manifest)
+        if self.metrics_mirror_root is not None:
+            mirror = self.metrics_mirror_root.resolve() / self.output_dir.name
+            if mirror.is_relative_to(self.output_dir.resolve()) or self.output_dir.resolve().is_relative_to(mirror):
+                raise ValueError("Metric mirror and run directory must be separate")
+            if any(mirror.is_relative_to(path.resolve()) or path.resolve().is_relative_to(mirror) for path in inputs):
+                raise ValueError("Metric mirror must not overlap input assets")
         if any(
             self.output_dir.resolve().is_relative_to(path.resolve())
             for path in (self.model_path, self.prepared_model_path)
@@ -109,7 +116,7 @@ class StudyConfig(BaseModel):
         return self.prompt_max_tokens + self.response_max_tokens
 
     def fingerprint(self):
-        content = self.model_dump(mode="json", exclude={"output_dir"})
+        content = self.model_dump(mode="json", exclude={"output_dir", "metrics_mirror_root"})
         return hashlib.sha256(json.dumps(content, sort_keys=True).encode()).hexdigest()
 
     @classmethod

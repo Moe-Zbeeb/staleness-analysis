@@ -99,7 +99,14 @@ class Metrics:
         self.output = Path(output)
         self.run = run
         self.tails = {
-            name: JsonlTail(self.output / name) for name in ("metrics.jsonl", "updates.jsonl", "generations.jsonl")
+            name: JsonlTail(self.output / name)
+            for name in (
+                "metrics.jsonl",
+                "updates.jsonl",
+                "generations.jsonl",
+                "paper-metrics.jsonl",
+                "evaluation-metrics.jsonl",
+            )
         }
         self.checkpoints = {}
 
@@ -119,6 +126,9 @@ class Metrics:
             values = {metric: record[key] for key, metric in UPDATE_METRICS.items() if scalar(record.get(key))}
             if isinstance(record.get("queued_versions"), list):
                 values["queue/cohorts"] = len(record["queued_versions"])
+        elif name in {"paper-metrics.jsonl", "evaluation-metrics.jsonl"}:
+            prefix = "paper" if name == "paper-metrics.jsonl" else "evaluation"
+            values = {f"{prefix}/{key}": value for key, value in record.get("metrics", {}).items() if scalar(value)}
         else:
             step = record.get("policy_version")
             purpose = record.get("purpose")
@@ -173,7 +183,15 @@ def create_run(output, run_id):
     config = {
         key: value
         for key, value in study.items()
-        if key not in {"model_path", "dataset_path", "data_manifest", "prepared_model_path", "output_dir"}
+        if key
+        not in {
+            "model_path",
+            "dataset_path",
+            "data_manifest",
+            "prepared_model_path",
+            "output_dir",
+            "metrics_mirror_root",
+        }
     }
     config.update(
         model_id=MODEL_ID,
@@ -184,6 +202,34 @@ def create_run(output, run_id):
         starting_step=launch["starting_step"],
         resumed=bool(launch.get("resume_from")),
         intermediate_evaluation=False,
+        diagnostic_only=bool(launch.get("diagnostic_only", False)),
+        runboard_binned_charts=[
+            {
+                "title": "Entropy versus ratio distance",
+                "prefix": "paper/joint/entropy_by_ratio_distance",
+                "x_label": "abs(ratio - 1)",
+            },
+            {
+                "title": "Entropy versus token probability",
+                "prefix": "paper/joint/entropy_by_probability",
+                "x_label": "current token probability",
+            },
+            *[
+                {
+                    "title": f"{name} token probability versus ratio ({label})",
+                    "prefix": f"paper/joint/{name}/probability_by_ratio",
+                    "x_label": "importance ratio",
+                    "y": field,
+                }
+                for name in ("positive", "negative", "all")
+                for label, field in (
+                    ("mean", "mean"),
+                    ("median", "p50"),
+                    ("lower quartile", "p25"),
+                    ("upper quartile", "p75"),
+                )
+            ],
+        ],
     )
     settings = read_server_info()
     server = os.environ.get("RUNBOARD_SERVER") or settings.get("url")
@@ -220,6 +266,13 @@ def observe(output, once=False, parent_pid=None, stop=None):
         while True:
             advanced = metrics.poll()
             terminal = terminal_status(output, allow_completion=parent_pid is None)
+            if (
+                terminal
+                and parent_pid is not None
+                and (output / "paper-observer.json").is_file()
+                and not (output / "paper-status.json").is_file()
+            ):
+                terminal = None
             if stop.is_set():
                 terminal = terminal or "killed"
             if parent_pid is not None and os.getppid() != parent_pid:

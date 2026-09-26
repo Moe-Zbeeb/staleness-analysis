@@ -270,3 +270,31 @@ def test_launcher_observer_failure_does_not_fail_training(study, tmp_path, monke
     assert launcher.launch(study, tmp_path) == study.output_dir
     assert json.loads((study.output_dir / "run-status.json").read_text())["status"] == "finished"
     assert "training continues" in capsys.readouterr().err
+
+
+def test_live_dashboard_waits_for_final_paper_metrics(recorded):
+    write_json(recorded / "paper-observer.json", {"enabled": True})
+    process = subprocess.Popen(
+        [sys.executable, "-m", "deepseek_study.tracking.runboard", str(recorded), "--parent-pid", str(os.getpid())],
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        text=True,
+    )
+    try:
+        deadline = time.monotonic() + 10
+        while not list((recorded / "tracking").glob("runboard-*.json")) and time.monotonic() < deadline:
+            time.sleep(0.05)
+        write_json(recorded / "run-status.json", {"status": "finished"})
+        time.sleep(1.2)
+        assert process.poll() is None
+        append(recorded / "paper-metrics.jsonl", {"step": 1000, "metrics": {"mismatch/m2": 0.031}})
+        write_json(recorded / "paper-status.json", {"status": "complete"})
+        stdout, stderr = process.communicate(timeout=15)
+        assert process.returncode == 0, stderr
+        info = json.loads(stdout)
+        rows, _ = Storage(recorded / "tracking/runboard-runs").read_rows(info["project"], info["run_id"])
+        assert any(row.get("paper/mismatch/m2") == 0.031 and row["_step"] == 1000 for row in rows)
+    finally:
+        if process.poll() is None:
+            process.kill()
+            process.wait()

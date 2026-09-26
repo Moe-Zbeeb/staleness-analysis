@@ -26,6 +26,19 @@
       "title": "Output Dir",
       "type": "string"
     },
+    "metrics_mirror_root": {
+      "anyOf": [
+        {
+          "format": "path",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Metrics Mirror Root"
+    },
     "prompts_per_update": {
       "minimum": 1,
       "title": "Prompts Per Update",

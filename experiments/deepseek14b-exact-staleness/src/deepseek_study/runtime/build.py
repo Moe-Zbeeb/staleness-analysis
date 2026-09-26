@@ -38,6 +38,7 @@ def resolve(study, resume=None):
             "weight_broadcast": {"type": "nccl", "port": study.inference_port + 10, "timeout": study.timeout_seconds},
             "rollout_transport": {"type": "zmq", "port": study.inference_port + 20},
             "trainer": {
+                "enable_token_export": True,
                 "model": {
                     "impl": "hf",
                     "attn": {"fa2": "flash_attention_2", "fa3": "flash_attention_3", "fa4": "flash_attention_4"}[

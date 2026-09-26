@@ -51,5 +51,6 @@
   "reward_outer_timeout_seconds": 10,
   "reward_workers": 4,
   "reward_retries": 1,
-  "inference_port": 8000
+  "inference_port": 8000,
+  "metrics_mirror_root": "/mnt/xfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/metrics"
 }

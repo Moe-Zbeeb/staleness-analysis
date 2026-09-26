@@ -98,3 +98,7 @@ The launcher also starts a Runboard observer from the source snapshot. Existing 
 5. Read the [research audit](staleness-research-audit.md) before interpreting training logs as scientific results.
 
 The CPU suite checks contracts and behavior. Full 14B execution, live model-weight transfer, memory fit and actual training/resume remain unverified. Held-out evaluation, richer tail diagnostics and explicit sample-to-response mapping remain research work; reorganizing the modules does not implement them.
+
+## Paper diagnostics data path
+
+`tracking/tokens.py` observes detached tensors at PrimeRL's existing export hook and atomically writes one compressed shard per rank/update. `tracking/observer.py` waits for the controller's completed-update receipt; `tracking/paper.py` then computes global statistics over the union of trainer shards. `tracking/archive.py` mirrors journals and immutable metric artifacts to XFS. `tracking/runboard.py` sends the scalar results to the dashboard. `tracking/evaluation.py` imports independently generated offline predictions with benchmark and checkpoint provenance. None of these modules adds a term to the GRPO loss.

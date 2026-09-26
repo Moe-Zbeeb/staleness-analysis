@@ -1,6 +1,6 @@
 # Imported libraries and study customizations
 
-**Official dependency source files are unchanged.** The study imports a pinned upstream checkout and implements experiment-specific behavior in `src/`. Some integration points use internal APIs, and one trainer factory is temporarily replaced in memory. This page makes those distinctions explicit.
+**Official dependency source files are unchanged.** The study imports a pinned upstream checkout and implements experiment-specific behavior in `src/`. Some integration points use internal APIs, and two trainer factories is temporarily replaced in memory. This page makes those distinctions explicit.
 
 ## Pinned source
 
@@ -15,7 +15,7 @@
 
 The unused prime-kernels submodule remains uninitialized. No teammate fork is imported. Installation uses `uv sync --frozen`; the bootstrap and runtime constants must agree on the PrimeRL commit. Local source verification during this organization pass found the expected commit, lock digest, submodule revisions and no tracked changes.
 
-The study additionally installs [Runboard](https://github.com/Moe-Zbeeb/runboard) from commit `379e67646391347f50f9e72f1e0226e62c52644f` (version 0.2.0), as a direct dependency in the study's `pyproject.toml`. Bootstrap installs it with `--no-deps` after PrimeRL's frozen sync, without modifying the upstream lockfile or either library's source. Run identity captures the installed Runboard version; the source snapshot binds the exact dependency requirement. This new dependency and tracking source change require matching source/runtime identities on resume.
+The study additionally installs [Runboard](https://github.com/Moe-Zbeeb/runboard) from commit `74b21564d586e43d165d19d2b844ec6cac4deb95` (version 0.2.0), as a direct dependency in the study's `pyproject.toml`. Bootstrap installs it with `--no-deps` after PrimeRL's frozen sync, without modifying PrimeRL's lockfile or source. Runboard's dashboard has been extended in its own repository with generic binned relationship charts; both dashboard asset copies are kept byte-identical. Run identity captures the installed Runboard version; the source snapshot binds the exact dependency requirement. This new dependency and tracking source change require matching source/runtime identities on resume.
 
 `runtime/launcher.py::verify_upstream` checks the checkout, submodule state and where the key Python packages were imported from. The run identity records the upstream lockfile and runtime versions. This is a pinned integration, not a promise that a future PrimeRL release will work unchanged.
 
@@ -29,6 +29,7 @@ The study additionally installs [Runboard](https://github.com/Moe-Zbeeb/runboard
 | [rollouts/controller.py](../src/deepseek_study/rollouts/controller.py) | `Orchestrator`, dispatcher, `StandardSampler`, training sink, packer, transport | Replaces the dispatcher instance's source with a finite source and drives a complete-cohort loop | No |
 | [rollouts/controller.py](../src/deepseek_study/rollouts/controller.py) | `WeightWatcher.apply_policy_update` | Calls weight updates explicitly after generation drains; does not start the automatic watcher loop | No |
 | [runtime/trainer.py](../src/deepseek_study/runtime/trainer.py) | `prime_rl.trainer.rl.train.setup_ckpt_manager` | Temporarily replaces this module-level factory in each trainer process with one returning `CheckpointWithRNG`; restores it in `finally` | No; in-memory replacement |
+| [tracking/tokens.py](../src/deepseek_study/tracking/tokens.py) | `prime_rl.trainer.rl.train.setup_token_exporter` | Replaces the process-local factory with a detached compressed token exporter; enables the upstream export/flush hooks and restores the factory on exit | No; in-memory replacement |
 | [runtime/trainer_state.py](../src/deepseek_study/runtime/trainer_state.py) | Official checkpoint manager | Delegates save/load, adds per-rank RNG state and disables upstream cleanup so study retention owns complete bundles | No |
 | [runtime/checkpoints.py](../src/deepseek_study/runtime/checkpoints.py) | Official trainer/orchestrator checkpoint output | Commits queue/state metadata and prunes only completed study bundles | No |
 | [deepseek_deepscaler/](../src/deepseek_deepscaler/) | Verifiers `Taskset`, `Task`, reward API | Adds the cleaned DeepScaleR taskset and strict math grader | No |
@@ -49,8 +50,12 @@ This source organization changes internal Python module paths, not the scientifi
 
 Existing prepared assets remain valid: the grader source bytes, reward identity and prepared manifest were checked against the previous layout. Source fingerprints and pickle class paths do change. Resume old checkpoints using their original source/environment; do not bypass identity validation or mix source layouts. No study training checkpoints have been created by this task.
 
-Deploy a fresh package/source tree. Preserve existing asset, dependency and output directories deliberately; do not extract over an old tree and leave `data.py` or other retired flat modules behind. `scripts/package.py` builds a complete archive of the new layout with file checksums. The earlier cluster receipts remain historical evidence until the new layout is separately deployed and checked.
+Deploy a fresh package/source tree. Preserve existing asset, dependency and output directories deliberately; do not extract over an old tree and leave `data.py` or other retired flat modules behind. `scripts/package.py` builds a complete archive of the new layout with file checksums. The organized release `releases/paper-metrics-20260926` was separately deployed and checked in CPU-only job `2144955`; the preceding hardware receipts still describe component checks, not end-to-end model training.
 
 ## Reviewing future library changes
 
 Any future upstream source patch, additional in-memory override, pin change or tokenizer compatibility change should be recorded here and summarized in the experiment README with the affected interface, reason, behavior and validation. Keep experiment changes in this package where practical so the dependency checkout remains reviewable against the official commit.
+
+## Paper diagnostics
+
+The [paper metric inventory](paper-metrics.md) describes the additional export factory, CPU aggregation, XFS mirror and offline evaluation import. Capturing entropy uses the existing forward output; the loss, optimizer and update clock are unchanged. This adds I/O and CPU overhead, not a loss term. Model checkpoints remain on NFS.

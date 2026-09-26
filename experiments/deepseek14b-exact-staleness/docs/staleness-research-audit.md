@@ -237,3 +237,7 @@ Previously recorded validation remains 103 tests on macOS and Linux plus cluster
 [m2-worker]: https://github.com/Infini-AI-Lab/M2PO/blob/af54a3e8feffb7a66a8258003aebefa37759cec0/verl/workers/fsdp_workers.py
 [m2-trainer]: https://github.com/Infini-AI-Lab/M2PO/blob/af54a3e8feffb7a66a8258003aebefa37759cec0/verl/trainer/ppo/ray_trainer.py
 [m2-loss]: https://github.com/Infini-AI-Lab/M2PO/blob/af54a3e8feffb7a66a8258003aebefa37759cec0/verl/trainer/ppo/core_algos.py
+
+## September 26 measurement update
+
+The [paper metric inventory](paper-metrics.md) supersedes the missing-training-diagnostics list in this historical audit. The implementation now captures aligned current/behavior log probabilities, entropy, advantages and token IDs on every update, computes global KL/M2/clipping/contribution/length statistics, and retains joint distributions and clipped-token counts. Benchmark evaluation remains offline; only its validated result import is implemented. No research sweeps or study training were launched.

@@ -3,7 +3,7 @@
   "study_training_started": false,
   "prime_commit": "ab5de8fff44b2c4a5c85e24b6e6e3f7d57eee7b1",
   "dependency_lock_sha256": "b55625d807f687401109534bce30bfbb2faf5ba889b246ba521db934d7e1ba4f",
-  "local_tests_passed": 103,
+  "local_tests_passed": 124,
   "linux_preparation": {
     "job_id": "2144915",
     "state": "COMPLETED",
@@ -67,5 +67,45 @@
     "official_checkout_and_imports_verified": true,
     "prepared_assets_verified": true,
     "study_training_started": false
+  },
+  "updated_at_utc": "2026-09-26T13:19:41.585000+00:00",
+  "paper_metrics_preparation": {
+    "job_id": "2144955",
+    "node": "deep-chungus-1.csail.mit.edu",
+    "output": "/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/releases/paper-metrics-20260926/diagnostics/cluster/paper-metrics-smoke-2144955",
+    "archive": {
+      "steps": 1,
+      "mirror": {
+        "directory": "/mnt/xfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/metrics/paper-metrics-smoke-2144955",
+        "verified_files": 11
+      }
+    },
+    "runboard": {
+      "project": "staleness-analysis-checks",
+      "run_id": "ff57b958ee90480fbe2ed7e37a62b365",
+      "mode": "http"
+    },
+    "verified_rows": 3,
+    "verified_paper_scalars": 260,
+    "training_started": false,
+    "gpu_used": false,
+    "state": "COMPLETED",
+    "exit_code": "0:0",
+    "tests_passed": 124,
+    "release": "/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/releases/paper-metrics-20260926",
+    "runboard_commit": "74b21564d586e43d165d19d2b844ec6cac4deb95",
+    "hosted_binned_dashboard_deployed": true,
+    "local_binned_browser_smoke_passed": true,
+    "initial_install_failure": {
+      "job_id": "2144954",
+      "cause": "Shell quoting split the dependency specification into separate arguments.",
+      "resolution": "Use one git+ dependency argument and set the release as the explicit Slurm working directory."
+    },
+    "hosted_binned_browser_smoke_passed": true,
+    "hosted_assets_match_pinned_source": true,
+    "hosted_metric_pagination_verified": true,
+    "cloudflare_deployment_commit": "11814e7",
+    "cloudflare_build_conclusion": "success",
+    "browser_access": "Read-only loopback proxy forwarding the actual hosted assets and API with the saved connection credentials"
   }
 }

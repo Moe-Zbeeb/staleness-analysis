@@ -1,6 +1,6 @@
 # Runboard integration
 
-The study uses [Runboard](https://github.com/Moe-Zbeeb/runboard) at commit `379e67646391347f50f9e72f1e0226e62c52644f` (package version 0.2.0). Bootstrap installs this exact revision into the study environment with `--no-deps`, after installing PrimeRL's frozen environment. Neither dependency's source is modified. Runboard is an additional study dependency; it is not inserted into PrimeRL's lockfile. Its installed version is recorded in the run identity.
+The study uses [Runboard](https://github.com/Moe-Zbeeb/runboard) at commit `74b21564d586e43d165d19d2b844ec6cac4deb95` (package version 0.2.0). Bootstrap installs this exact revision into the study environment with `--no-deps`, after installing PrimeRL's frozen environment. Neither dependency's source is modified. Runboard is an additional study dependency; it is not inserted into PrimeRL's lockfile. Its installed version is recorded in the run identity.
 
 ## Execution boundary
 
@@ -62,4 +62,10 @@ Receipts are saved as `<output_dir>/tracking/runboard-<id>.json` with the projec
 
 Local tests exercise the actual pinned Runboard SDK in file mode and through an authenticated local HTTP server, checking the exact run and row count. They cover partial records, metric clocks, metadata, terminal states, network-outage spooling, the real observer subprocess, final trainer-log draining, and launcher tolerance of observer failure. No model is loaded and no training is launched by these checks.
 
-The cluster has not yet received this integration. A live cluster dashboard is not verified until the new package is deployed, its pinned Runboard dependency is installed, and an authorized diagnostic completes with the exact expected records readable from the selected backend. Full 14B training remains separately unverified. Intermediate evaluation stays disabled, checkpoints remain every 100 updates plus completion on NFS, and weight decay remains zero.
+CPU-only Slurm job `2144955` deployed the pinned client and passed all 124 study tests. Its synthetic diagnostic verified three exact backend rows, including all 260 paper scalars, under project `staleness-analysis-checks`; it also verified 11 files in the XFS mirror. The run is explicitly marked `diagnostic_only`, not a training result. The relationship-chart interface passed both local and hosted-data browser checks. Cloudflare deployed [deployment commit 11814e7](https://github.com/Moe-Zbeeb/runboard-cloudflare/commit/11814e7); every deployed asset matches the tested source, and API pagination was verified. Full 14B training remains separately unverified. Intermediate evaluation stays disabled, checkpoints remain every 100 updates plus completion on NFS, and weight decay remains zero.
+
+## Paper metrics and relationship charts
+
+The [paper guide](paper-metrics.md) inventories the BAPO/M2PO measurements. In addition to existing logs, the observer reads `paper-metrics.jsonl` and `evaluation-metrics.jsonl`. They appear under `paper/` and `evaluation/`. The separate paper observer combines complete rank token archives, persists derived data and mirrors it to the configured XFS root. It runs even if Runboard delivery is disabled. The live Runboard observer waits for the paper observer's final status before closing.
+
+The updated Runboard dashboard understands `config.runboard_binned_charts`. It displays latest-step mean/quantile relationships with explicit source steps. Individual bin histories remain available through the metric filter. Full raw scatter/word-cloud data remain on NFS and XFS; they are not uploaded as response text or token arrays. Updating an independently hosted dashboard requires deploying its new static assets.

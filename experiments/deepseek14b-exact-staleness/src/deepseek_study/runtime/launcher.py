@@ -13,6 +13,7 @@ from deepseek_study.runtime import checkpoints
 from deepseek_study.dataset.assets import validate_prepared
 from deepseek_study.runtime.build import build
 from deepseek_study.runtime.identity import capture, snapshot
+from deepseek_study.tracking.archive import reserve_mirror
 from prime_rl.entrypoints.rl import env_servers
 from prime_rl.utils.process import DEFAULT_COMMON_ENV_VARS, DEFAULT_INFERENCE_ENV_VARS, DEFAULT_TRAINER_ENV_VARS
 
@@ -86,6 +87,7 @@ def launch(study, root, resume=None):
         output / "run.json",
         json.dumps(
             {
+                "run_uuid": uuid.uuid4().hex,
                 "starting_step": starting_step,
                 "resume_from": str(Path(resume).resolve()) if resume else None,
                 "config_sha256": study.fingerprint(),
@@ -95,6 +97,7 @@ def launch(study, root, resume=None):
             indent=2,
         ).encode(),
     )
+    reserve_mirror(output, study.metrics_mirror_root)
     logs = output / "logs"
     logs.mkdir()
     base_env = {
@@ -126,7 +129,14 @@ def launch(study, root, resume=None):
 
     run_status = "crashed"
     observer_warned = False
+    paper_warned = False
     try:
+        checkpoints.atomic_write(output / "paper-observer.json", b'{"enabled":true}')
+        start(
+            "paper-metrics",
+            [sys.executable, "-m", "deepseek_study.tracking.observer", str(output), "--parent-pid", str(os.getpid())],
+            {"CUDA_VISIBLE_DEVICES": "", "RANK": "0", "LOCAL_RANK": "0"},
+        )
         if os.environ.get("DEEPSEEK_STUDY_RUNBOARD", "1") != "0":
             try:
                 start(
@@ -193,6 +203,14 @@ def launch(study, root, resume=None):
         while True:
             status = {name: process.poll() for name, process in processes.items()}
             for name, code in status.items():
+                if name == "paper-metrics":
+                    if code is not None and not paper_warned:
+                        print(
+                            "Paper metric observer exited; raw token evidence remains. See logs/paper-metrics.log",
+                            file=sys.stderr,
+                        )
+                        paper_warned = True
+                    continue
                 if name == "runboard":
                     if code is not None and not observer_warned:
                         print("Runboard observer exited; training continues. See logs/runboard.log", file=sys.stderr)
@@ -215,6 +233,7 @@ def launch(study, root, resume=None):
         raise
     finally:
         observer = processes.pop("runboard", None)
+        paper_observer = processes.pop("paper-metrics", None)
         for process in processes.values():
             try:
                 os.killpg(process.pid, signal.SIGTERM)
@@ -236,6 +255,17 @@ def launch(study, root, resume=None):
             checkpoints.atomic_write(output / "run-status.json", json.dumps({"status": run_status}).encode())
         except Exception as error:
             print(f"Could not record launcher status ({type(error).__name__})", file=sys.stderr)
+        if paper_observer is not None:
+            try:
+                paper_observer.wait(timeout=20)
+            except subprocess.TimeoutExpired:
+                os.killpg(paper_observer.pid, signal.SIGKILL)
+                paper_observer.wait()
+                checkpoints.atomic_write(
+                    output / "paper-status.json",
+                    b'{"status":"interrupted","error":"Replay with paper-metrics --once"}',
+                )
+                print("Paper metrics need offline replay after the shutdown deadline", file=sys.stderr)
         if observer is not None:
             try:
                 observer.wait(timeout=20)

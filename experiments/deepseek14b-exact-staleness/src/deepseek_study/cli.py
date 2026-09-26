@@ -22,6 +22,14 @@ def main():
     tracking = commands.add_parser("track")
     tracking.add_argument("directory", type=Path)
     tracking.add_argument("--once", action="store_true")
+    paper = commands.add_parser("paper-metrics")
+    paper.add_argument("directory", type=Path)
+    paper.add_argument("--once", action="store_true")
+    evaluation = commands.add_parser("import-evaluation")
+    evaluation.add_argument("directory", type=Path)
+    evaluation.add_argument("predictions", type=Path)
+    evaluation.add_argument("protocol", type=Path)
+    evaluation.add_argument("--step", type=int, required=True)
     prepare = commands.add_parser("prepare")
     prepare.add_argument("--model", type=Path, required=True)
     prepare.add_argument("--dataset", type=Path, required=True)
@@ -56,6 +64,16 @@ def main():
         from deepseek_study.tracking.runboard import observe
 
         print(json.dumps(observe(args.directory, once=args.once), indent=2))
+        return
+    if args.command == "paper-metrics":
+        from deepseek_study.tracking.observer import observe_papers
+
+        print(json.dumps(observe_papers(args.directory, once=args.once), indent=2))
+        return
+    if args.command == "import-evaluation":
+        from deepseek_study.tracking.evaluation import import_evaluation
+
+        print(json.dumps(import_evaluation(args.directory, args.predictions, args.protocol, args.step), indent=2))
         return
     if args.command == "prepare":
         from deepseek_study.dataset.assets import prepare

@@ -14,6 +14,11 @@ def baseline(lag, profile="80gb", max_steps=1000, seed=42, root=None):
         data_manifest=root / "assets" / "train-manifest.json",
         prepared_model_path=root / "assets" / "native-model",
         output_dir=root / "outputs" / f"exact{lag}-{profile}-seed{seed}",
+        metrics_mirror_root=(
+            Path("/mnt/xfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/metrics")
+            if root.is_relative_to("/mnt/nfs")
+            else None
+        ),
         lag=lag,
         prompts_per_update=64,
         responses_per_prompt=8,

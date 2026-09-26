@@ -16,9 +16,10 @@ Research code for studying how rollout staleness affects reinforcement learning.
 | Code review and exact-k example | [Review guide](experiments/deepseek14b-exact-staleness/docs/review-guide.md) |
 | Research factors, confounders and remaining measurement work | [Research audit](experiments/deepseek14b-exact-staleness/docs/staleness-research-audit.md) |
 | Cluster paths, installation and validation evidence | [Cluster guide](experiments/deepseek14b-exact-staleness/docs/cluster.md) |
+| BAPO/M2PO metric coverage, plots and XFS archive | [Paper metrics](experiments/deepseek14b-exact-staleness/docs/paper-metrics.md) |
 | Runboard setup, metrics and delivery | [Runboard integration](experiments/deepseek14b-exact-staleness/docs/runboard.md) |
 
-The code is separated into `learning/`, `rollouts/`, `dataset/`, `runtime/` and `tracking/`. Official PrimeRL source files are not edited. There is an explicit process-local checkpoint-factory override, documented with the other integration points in the [dependency guide](experiments/deepseek14b-exact-staleness/docs/upstream-integration.md).
+The code is separated into `learning/`, `rollouts/`, `dataset/`, `runtime/` and `tracking/`. Official PrimeRL source files are not edited. There is explicit process-local checkpoint and token-export factory overrides, documented with the other integration points in the [dependency guide](experiments/deepseek14b-exact-staleness/docs/upstream-integration.md).
 
 ## Related projects
 

@@ -2,7 +2,7 @@
 
 One run at a time, with the exact nonnegative integer `k` you request. This package composes official PrimeRL v0.9.0 at `ab5de8fff44b2c4a5c85e24b6e6e3f7d57eee7b1`; it does not import the teammate fork or edit upstream files.
 
-**Status:** the current package passes all 113 tests locally, including ten Runboard integration checks. The earlier deployed layout passed 103 tests on Linux, plus checks on eight A100 80GB GPUs for NCCL, BF16 backward, Flash Attention backward and vLLM RMSNorm. Those cluster receipts describe the earlier deployment, not a new test of this layout or Runboard delivery. Full 14B training, live model-weight transfer, memory fit and training/resume execution remain unverified. No study training has been launched. See [validation evidence](diagnostics/cluster-validation.json).
+**Status:** the current package passes all 124 tests locally and on Linux in CPU-only Slurm job `2144955`. That job verified the XFS mirror and exact hosted Runboard delivery of all 260 paper scalars in its synthetic diagnostic. Earlier hardware checks passed on eight A100 80GB GPUs for NCCL, BF16 backward, Flash Attention backward and vLLM RMSNorm. The new relationship-chart interface is deployed through `runboard-cloudflare` commit `11814e7` and verified in a browser against the hosted diagnostic data. Full 14B training, live model-weight transfer, memory fit and training/resume execution remain unverified. No study training has been launched. See [validation evidence](diagnostics/cluster-validation.json).
 
 ## Review and organization
 
@@ -30,7 +30,7 @@ The [staleness research audit](docs/staleness-research-audit.md) separates exact
 
 **No tracked source files in official PrimeRL or its imported submodules are modified.** We pin PrimeRL v0.9.0 at `ab5de8fff44b2c4a5c85e24b6e6e3f7d57eee7b1` and install its frozen dependency lock. The launcher rejects tracked changes or a different dependency revision.
 
-We do customize behavior through our package: a configured loss, a group-advantage algorithm, a finite rollout source and explicit weight synchronization. In each trainer process, `runtime/trainer.py` temporarily replaces PrimeRL's checkpoint-manager factory with our RNG-saving adapter and restores the factory on exit. This is an in-memory override, not a source patch. A separate prepared model view changes only tokenizer-class metadata for compatibility; the original model files remain untouched.
+We do customize behavior through our package: a configured loss, a group-advantage algorithm, a finite rollout source and explicit weight synchronization. In each trainer process, `runtime/trainer.py` temporarily replaces PrimeRL's checkpoint-manager and token-exporter factories with our RNG-saving and compressed diagnostic adapters. Both factories are restored on exit. These are in-memory overrides; upstream source is unchanged. A separate prepared model view changes only tokenizer-class metadata for compatibility; the original model files remain untouched.
 
 The [integration guide](docs/upstream-integration.md) lists every customization, the dependency pins, and what must be reviewed when upgrading the library. These internal interfaces are version-sensitive; the package does not automatically follow upstream changes.
 
@@ -56,7 +56,7 @@ The loss is clipped GRPO with epsilon 0.2, reward-minus-group-mean advantages wi
 
 AdamW uses LR 1e-6, betas 0.9/0.999, epsilon 1e-8, weight decay 0 and gradient norm clipping at 1. Disabling weight decay removes parameter shrinkage independent of the GRPO loss gradient; the exact-age queue and GRPO objective are unchanged. LR warms up over 30 optimizer updates, then remains constant. This LR warm-up is distinct from the k-update bootstrap. Full-model training uses BF16 compute, FP32 optimization/reduction, activation checkpointing, and no quantization. Compilation and prefix caching are initially disabled.
 
-The baseline and configuration template previously used weight decay 0.01. Existing run JSON files retain their explicit settings: set `weight_decay` to `0.0` and rebuild resolved configs before a new run, or create a new configuration with `init`. This is a scientific configuration change, so it must not be applied while resuming an older recipe. The cluster deployment and its historical validation receipts predate this change.
+The baseline and configuration template previously used weight decay 0.01. Existing run JSON files retain their explicit settings: set `weight_decay` to `0.0` and rebuild resolved configs before a new run, or create a new configuration with `init`. This is a scientific configuration change, so it must not be applied while resuming an older recipe. The current cluster release includes zero weight decay.
 
 | Profile | Trainer / inference GPUs | Request concurrency | Active sequences per inference replica | Activation CPU offload |
 |---|---:|---:|---:|---|
@@ -122,7 +122,7 @@ With the default cluster root, checkpoints are written directly to NFS at `/mnt/
 
 A checkpoint becomes complete after trainer state, every trainer rank's RNG state, sampler progress and the pending queue have been saved. Trainer state includes sharded model weights, optimizer state and scheduler state. Component manifests bind metadata/sampler/RNG contents and trainer shard sizes. They do not checksum every large tensor shard. These are distributed recovery checkpoints, not standalone Hugging Face model exports.
 
-Intermediate evaluation is explicitly disabled. The saved milestones are available for a separate evaluation workflow after training; no evaluation job is automatically launched. Existing run JSON files retain their old interval: set `checkpoint_interval` and `checkpoint_keep_interval` to `100` and rebuild resolved configs before a new run, or use `init` for a new configuration. The earlier cluster deployment has not received these changes.
+Intermediate evaluation is explicitly disabled. The saved milestones are available for a separate evaluation workflow after training; no evaluation job is automatically launched. Existing run JSON files retain their old interval: set `checkpoint_interval` and `checkpoint_keep_interval` to `100` and rebuild resolved configs before a new run, or use `init` for a new configuration. The current cluster release includes these defaults.
 
 For resume, copy the same scientific configuration and change only `output_dir` to a new directory:
 
@@ -141,9 +141,9 @@ The benchmark suite from the teammate note is not bundled or automatically run: 
 
 The launcher automatically starts one separate Runboard observer. It reads existing trainer/study logs and completed-checkpoint markers, then reports staleness, consumed-rollout reward, queue size, generation timing, trainer loss/ratio/optimizer metrics and checkpoint milestones. It does not run evaluation or change the training algorithm. Observer failure does not fail training.
 
-Bootstrap installs Runboard from pinned commit `379e67646391347f50f9e72f1e0226e62c52644f`. The observer uses your configured Runboard endpoint or `RUNBOARD_DIR`; without either, it writes to `<output_dir>/tracking/runboard-runs`, on NFS with the default output path. Credentials remain in Runboard's saved connection or environment. `RUNBOARD_PROJECT` selects the dashboard project; `DEEPSEEK_STUDY_RUNBOARD=0` disables the observer.
+Bootstrap installs Runboard from pinned commit `74b21564d586e43d165d19d2b844ec6cac4deb95`. The observer uses your configured Runboard endpoint or `RUNBOARD_DIR`; without either, it writes to `<output_dir>/tracking/runboard-runs`, on NFS with the default output path. Credentials remain in Runboard's saved connection or environment. `RUNBOARD_PROJECT` selects the dashboard project; `DEEPSEEK_STUDY_RUNBOARD=0` disables the observer.
 
-See the [Runboard guide](docs/runboard.md) for setup, exact metric meanings, outage handling and importing completed logs with `deepseek-study track <run-directory> --once`. The integration is tested locally, including authenticated HTTP delivery, but has not been deployed or verified against a live cluster backend.
+See the [Runboard guide](docs/runboard.md) for setup, exact metric meanings, outage handling and importing completed logs with `deepseek-study track <run-directory> --once`. CPU-only job `2144955` completed and verified three exact metric rows against the live backend. Hosted relationship charts, static asset parity and metric pagination are also verified.
 
 ## Local validation and portable package
 
@@ -156,3 +156,11 @@ uv run --no-project --python 3.12 scripts/package.py
 The archive under `dist/` contains source, tests, configuration/schema, manifests, reports and the prepared question manifest. It excludes model weights, raw data, virtual environments, credentials and previous runs. Bootstrap fetches the official pinned dependency sources on the destination machine. `PACKAGE_SHA256.json` records the packaged file hashes.
 
 See the [review guide](docs/review-guide.md), [architecture](docs/architecture.md) and [cluster operations](docs/cluster.md).
+
+## BAPO and M2PO research measurements
+
+See the [complete paper metric inventory](docs/paper-metrics.md) for each figure/table, exact formulas, dashboard series and limits. Every update captures detached token ID, position, current/behavior log probabilities, advantage and full-vocabulary entropy in compressed per-rank files. A CPU observer calculates global diagnostics and feeds Runboard. It also mirrors metric evidence to `/mnt/xfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/metrics/<run-name>/`; checkpoints stay on NFS. The setting is `metrics_mirror_root`.
+
+PrimeRL source remains unchanged. A second in-memory factory override, `setup_token_exporter`, activates compressed capture from its existing hooks. Runboard itself adds binned relationship plots in its own repository; its pinned revision is listed in `pyproject.toml`. These changes and their costs are documented in the [dependency guide](docs/upstream-integration.md). No training or intermediate evaluation is started by this integration.
+
+Use `deepseek-study paper-metrics RUN_DIRECTORY --once` to replay completed raw evidence. Use `deepseek-study import-evaluation RUN_DIRECTORY predictions.jsonl protocol.json --step 100` for independently produced benchmark predictions. The importer validates coverage and provenance and logs benchmark accuracy; it is not a checkpoint exporter or evaluation inference runner.
