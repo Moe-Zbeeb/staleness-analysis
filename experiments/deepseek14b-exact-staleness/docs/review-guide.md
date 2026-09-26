@@ -2,6 +2,8 @@
 
 The entry point is `deepseek-study`. Each invocation uses one explicit lag; the package does not schedule sweeps or start training during setup.
 
+For the scientific review, read the [staleness research audit](staleness-research-audit.md). It identifies which settings affect age versus tolerance, traces the effective loss and logging semantics, and distinguishes implemented controls from missing evaluation and diagnostic work.
+
 ## Code map
 
 | Concern | Files | Review question |

@@ -8,6 +8,8 @@ One run at a time, with the exact nonnegative integer `k` you request. This pack
 
 Start with the [review guide](docs/review-guide.md) for the module map and a worked exact-k example. Runtime source lives in `src/`, installation and health tools in `scripts/`, focused checks in `tests/`, and configuration contracts in `configs/`. Pinned model hashes are in `manifests/`; deterministic preparation writes the question-selection record to `assets/train-manifest.json`. Model weights, raw datasets, generated manifests, environments, caches, run outputs and job logs are excluded from Git. The small preparation summary and exclusion report remain reviewable in `diagnostics/`.
 
+The [staleness research audit](docs/staleness-research-audit.md) separates exact age, policy difference, learning quality and throughput. It maps the relevant knobs, differences from the cited paper, current measurement gaps and a proposed research protocol. It does not launch experiments or change the baseline.
+
 ## Training contract
 
 `theta_t` is the model after `t` optimizer updates. After the initial bootstrap, training `theta_t` consumes responses generated entirely by `theta_(t-k)`. Microbatches accumulate into one update; responses are trained on once. For `k=32`, updating `theta_100` uses responses from `theta_68`.
