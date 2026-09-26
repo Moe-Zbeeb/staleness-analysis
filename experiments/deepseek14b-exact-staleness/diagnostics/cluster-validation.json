@@ -1,0 +1,71 @@
+{
+  "recorded_at_utc": "2026-09-26T02:21:45.795023+00:00",
+  "study_training_started": false,
+  "prime_commit": "ab5de8fff44b2c4a5c85e24b6e6e3f7d57eee7b1",
+  "dependency_lock_sha256": "b55625d807f687401109534bce30bfbb2faf5ba889b246ba521db934d7e1ba4f",
+  "local_tests_passed": 103,
+  "linux_preparation": {
+    "job_id": "2144915",
+    "state": "COMPLETED",
+    "exit_code": "0:0",
+    "node": "deep-chungus-6.csail.mit.edu",
+    "tests_passed": 103,
+    "verified_model_files": 11,
+    "native_tokenizer_probes_passed": 5,
+    "assets": {
+      "rows": 37703,
+      "excluded_rows": 10,
+      "longest_prompt_tokens": 834,
+      "data_manifest_sha256": "aae52b2e0d5481876809b5f8c3e5dccefc73c754d448142a492ab89dd1fc08e9"
+    },
+    "runtime": {
+      "prime-rl": "0.9.0",
+      "torch": "2.11.0+cu128",
+      "transformers": "5.6.2",
+      "vllm": "0.26.0+cu129",
+      "math-verify": "0.9.0",
+      "latex2sympy2-extended": "1.11.0",
+      "sympy": "1.14.0",
+      "msgspec": "0.21.1",
+      "pyarrow": "24.0.0"
+    }
+  },
+  "gpu_health": {
+    "job_id": "2144920",
+    "state": "COMPLETED",
+    "exit_code": "0:0",
+    "node": "deep-chungus-9",
+    "gpu_count": 8,
+    "gpu_model": "NVIDIA A100 80GB PCIe",
+    "world_size": 8,
+    "all_reduce_expected_and_observed": 36,
+    "bf16_backward": true,
+    "flash_attention_backward": true,
+    "vllm_rms_norm": true,
+    "script_sha256": "63332e7544288328722aa7197368d271460a6bdf9e6624749c6fd4deb87e4838"
+  },
+  "diagnostic_fix": {
+    "failed_job_id": "2144916",
+    "cause": "The diagnostic imported vllm._C; the pinned CUDA wheel exposes vllm._C_stable_libtorch.",
+    "resolution": "Use the pinned native module and verify its RMSNorm output against a Torch reference."
+  },
+  "not_validated": [
+    "End-to-end 14B training",
+    "Live model-weight broadcast",
+    "Full-context training memory fit",
+    "Training checkpoint and resume execution"
+  ],
+  "dependency_checkout": {
+    "git_diff_head_clean": true,
+    "unrelated_lfs_assets_preserved_and_restored_to_pointers": 3,
+    "bootstrap_skips_dependency_lfs_smudge": true
+  },
+  "launcher_preflight": {
+    "job_id": "2144923",
+    "state": "COMPLETED",
+    "exit_code": "0:0",
+    "official_checkout_and_imports_verified": true,
+    "prepared_assets_verified": true,
+    "study_training_started": false
+  }
+}

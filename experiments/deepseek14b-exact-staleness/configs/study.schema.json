@@ -1,0 +1,344 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "model_path": {
+      "format": "path",
+      "title": "Model Path",
+      "type": "string"
+    },
+    "dataset_path": {
+      "format": "path",
+      "title": "Dataset Path",
+      "type": "string"
+    },
+    "data_manifest": {
+      "format": "path",
+      "title": "Data Manifest",
+      "type": "string"
+    },
+    "prepared_model_path": {
+      "format": "path",
+      "title": "Prepared Model Path",
+      "type": "string"
+    },
+    "output_dir": {
+      "format": "path",
+      "title": "Output Dir",
+      "type": "string"
+    },
+    "prompts_per_update": {
+      "minimum": 1,
+      "title": "Prompts Per Update",
+      "type": "integer"
+    },
+    "responses_per_prompt": {
+      "minimum": 2,
+      "title": "Responses Per Prompt",
+      "type": "integer"
+    },
+    "prompt_max_tokens": {
+      "minimum": 1,
+      "title": "Prompt Max Tokens",
+      "type": "integer"
+    },
+    "response_max_tokens": {
+      "minimum": 1,
+      "title": "Response Max Tokens",
+      "type": "integer"
+    },
+    "max_steps": {
+      "minimum": 1,
+      "title": "Max Steps",
+      "type": "integer"
+    },
+    "learning_rate": {
+      "exclusiveMinimum": 0,
+      "title": "Learning Rate",
+      "type": "number"
+    },
+    "lr_warmup_steps": {
+      "minimum": 0,
+      "title": "Lr Warmup Steps",
+      "type": "integer"
+    },
+    "lr_decay_steps": {
+      "minimum": 0,
+      "title": "Lr Decay Steps",
+      "type": "integer"
+    },
+    "min_learning_rate": {
+      "minimum": 0,
+      "title": "Min Learning Rate",
+      "type": "number"
+    },
+    "weight_decay": {
+      "minimum": 0,
+      "title": "Weight Decay",
+      "type": "number"
+    },
+    "adam_beta1": {
+      "exclusiveMaximum": 1,
+      "minimum": 0,
+      "title": "Adam Beta1",
+      "type": "number"
+    },
+    "adam_beta2": {
+      "exclusiveMaximum": 1,
+      "minimum": 0,
+      "title": "Adam Beta2",
+      "type": "number"
+    },
+    "adam_epsilon": {
+      "const": 1e-08,
+      "title": "Adam Epsilon",
+      "type": "number"
+    },
+    "max_grad_norm": {
+      "exclusiveMinimum": 0,
+      "title": "Max Grad Norm",
+      "type": "number"
+    },
+    "clip_epsilon": {
+      "exclusiveMaximum": 1,
+      "exclusiveMinimum": 0,
+      "title": "Clip Epsilon",
+      "type": "number"
+    },
+    "advantage_normalization": {
+      "enum": [
+        "centered",
+        "population_std",
+        "sample_std"
+      ],
+      "title": "Advantage Normalization",
+      "type": "string"
+    },
+    "advantage_epsilon": {
+      "exclusiveMinimum": 0,
+      "title": "Advantage Epsilon",
+      "type": "number"
+    },
+    "temperature": {
+      "const": 1.0,
+      "title": "Temperature",
+      "type": "number"
+    },
+    "loss_reduction": {
+      "const": "global_token_mean",
+      "title": "Loss Reduction",
+      "type": "string"
+    },
+    "reference_kl_coefficient": {
+      "const": 0.0,
+      "title": "Reference Kl Coefficient",
+      "type": "number"
+    },
+    "updates_per_cohort": {
+      "const": 1,
+      "title": "Updates Per Cohort",
+      "type": "integer"
+    },
+    "prompt_instruction": {
+      "title": "Prompt Instruction",
+      "type": "string"
+    },
+    "truncated_reward": {
+      "enum": [
+        "zero",
+        "grade_final"
+      ],
+      "title": "Truncated Reward",
+      "type": "string"
+    },
+    "seed": {
+      "minimum": 0,
+      "title": "Seed",
+      "type": "integer"
+    },
+    "checkpoint_interval": {
+      "minimum": 1,
+      "title": "Checkpoint Interval",
+      "type": "integer"
+    },
+    "checkpoint_keep_last": {
+      "default": 4,
+      "minimum": 1,
+      "title": "Checkpoint Keep Last",
+      "type": "integer"
+    },
+    "checkpoint_keep_interval": {
+      "default": 100,
+      "minimum": 1,
+      "title": "Checkpoint Keep Interval",
+      "type": "integer"
+    },
+    "trainer_gpus": {
+      "minimum": 1,
+      "title": "Trainer Gpus",
+      "type": "integer"
+    },
+    "inference_gpus": {
+      "minimum": 1,
+      "title": "Inference Gpus",
+      "type": "integer"
+    },
+    "inference_tensor_parallel": {
+      "enum": [
+        1,
+        2,
+        4,
+        8
+      ],
+      "title": "Inference Tensor Parallel",
+      "type": "integer"
+    },
+    "rollout_concurrency": {
+      "minimum": 1,
+      "title": "Rollout Concurrency",
+      "type": "integer"
+    },
+    "trainer_micro_batch_size": {
+      "const": 1,
+      "title": "Trainer Micro Batch Size",
+      "type": "integer"
+    },
+    "trainer_attention": {
+      "enum": [
+        "fa2",
+        "fa3",
+        "fa4"
+      ],
+      "title": "Trainer Attention",
+      "type": "string"
+    },
+    "trainer_compile": {
+      "title": "Trainer Compile",
+      "type": "boolean"
+    },
+    "optimizer_cpu_offload": {
+      "title": "Optimizer Cpu Offload",
+      "type": "boolean"
+    },
+    "activation_checkpointing": {
+      "title": "Activation Checkpointing",
+      "type": "boolean"
+    },
+    "activation_cpu_offload": {
+      "default": false,
+      "title": "Activation Cpu Offload",
+      "type": "boolean"
+    },
+    "lm_head_chunk_size": {
+      "default": 8192,
+      "minimum": 1,
+      "title": "Lm Head Chunk Size",
+      "type": "integer"
+    },
+    "inference_memory_utilization": {
+      "exclusiveMaximum": 1,
+      "exclusiveMinimum": 0,
+      "title": "Inference Memory Utilization",
+      "type": "number"
+    },
+    "inference_max_sequences": {
+      "default": 16,
+      "minimum": 1,
+      "title": "Inference Max Sequences",
+      "type": "integer"
+    },
+    "lag": {
+      "minimum": 0,
+      "title": "Lag",
+      "type": "integer"
+    },
+    "timeout_seconds": {
+      "default": 1800,
+      "minimum": 1,
+      "title": "Timeout Seconds",
+      "type": "integer"
+    },
+    "generation_timeout_seconds": {
+      "default": 86400,
+      "minimum": 1,
+      "title": "Generation Timeout Seconds",
+      "type": "integer"
+    },
+    "reward_timeout_seconds": {
+      "default": 8,
+      "minimum": 1,
+      "title": "Reward Timeout Seconds",
+      "type": "integer"
+    },
+    "reward_outer_timeout_seconds": {
+      "default": 10,
+      "minimum": 1,
+      "title": "Reward Outer Timeout Seconds",
+      "type": "integer"
+    },
+    "reward_workers": {
+      "default": 4,
+      "minimum": 1,
+      "title": "Reward Workers",
+      "type": "integer"
+    },
+    "reward_retries": {
+      "default": 1,
+      "maximum": 3,
+      "minimum": 0,
+      "title": "Reward Retries",
+      "type": "integer"
+    },
+    "inference_port": {
+      "default": 8000,
+      "maximum": 44000,
+      "minimum": 1024,
+      "title": "Inference Port",
+      "type": "integer"
+    }
+  },
+  "required": [
+    "model_path",
+    "dataset_path",
+    "data_manifest",
+    "prepared_model_path",
+    "output_dir",
+    "prompts_per_update",
+    "responses_per_prompt",
+    "prompt_max_tokens",
+    "response_max_tokens",
+    "max_steps",
+    "learning_rate",
+    "lr_warmup_steps",
+    "lr_decay_steps",
+    "min_learning_rate",
+    "weight_decay",
+    "adam_beta1",
+    "adam_beta2",
+    "adam_epsilon",
+    "max_grad_norm",
+    "clip_epsilon",
+    "advantage_normalization",
+    "advantage_epsilon",
+    "temperature",
+    "loss_reduction",
+    "reference_kl_coefficient",
+    "updates_per_cohort",
+    "prompt_instruction",
+    "truncated_reward",
+    "seed",
+    "checkpoint_interval",
+    "trainer_gpus",
+    "inference_gpus",
+    "inference_tensor_parallel",
+    "rollout_concurrency",
+    "trainer_micro_batch_size",
+    "trainer_attention",
+    "trainer_compile",
+    "optimizer_cpu_offload",
+    "activation_checkpointing",
+    "inference_memory_utilization",
+    "lag"
+  ],
+  "title": "StudyConfig",
+  "type": "object"
+}

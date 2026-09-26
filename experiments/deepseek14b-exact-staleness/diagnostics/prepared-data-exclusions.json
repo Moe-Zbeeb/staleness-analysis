@@ -1,0 +1,72 @@
+[
+  {
+    "id": "83c14b329eb135cf2a3a02cfdc52a75e5ed3d7b25f54ffcc968b6ae80330c677",
+    "prompt_tokens": 48,
+    "included": false,
+    "reason": "unsupported_reference",
+    "original_reference": "$11\\frac{1}{9} \\%$"
+  },
+  {
+    "id": "b07ee6ccf74887c64d0f0cfb255ef2f31b95bbc8e5ccd26cd4ae175c821791f0",
+    "prompt_tokens": 161,
+    "included": false,
+    "reason": "unsupported_reference",
+    "original_reference": "33\\frac{1}{3}\\%"
+  },
+  {
+    "id": "00541f891341a17607ef2073fbec58296c7f9494458b22b7d230d6959ff31fc7",
+    "prompt_tokens": 77,
+    "included": false,
+    "reason": "unsupported_reference",
+    "original_reference": "\\[ n \\in \\{ \\mathbf{N} \\equiv 0, 3 \\pmod{8} \\} \\]"
+  },
+  {
+    "id": "b75dc38c74d996bb17ee7a713098e352e664f5558a56d21eff3b6c6cf142cca9",
+    "prompt_tokens": 90,
+    "included": false,
+    "reason": "unsupported_reference",
+    "original_reference": "3,-\\frac{3}{2}+\\frac{3i\\sqrt{3}}{2},-\\frac{3}{2}-\\frac{3i\\sqrt{3}}{2"
+  },
+  {
+    "id": "21ee39f457870333e63a01d156e32921b55e278b7555ee454d24d118f1939180",
+    "prompt_tokens": 77,
+    "included": false,
+    "reason": "unsupported_reference",
+    "original_reference": "\\frac{-9}{2} \\leq x \\leq -2 \\cup \\frac{1-\\sqrt{5}}{2} < x < \\frac{1+\\sqrt{5}}{2}"
+  },
+  {
+    "id": "a0fc1b93aa8fcdb66484339cbfb6aaf14461654afaaf131b2db94920ac43c0fc",
+    "prompt_tokens": 72,
+    "included": false,
+    "reason": "unsupported_reference",
+    "original_reference": "$\\frac{1}{2}, \\frac{-1 \\pm \\sqrt{13}}{4}$"
+  },
+  {
+    "id": "2593496e16842ed3849005420db9ff591b4f1416658cb9202a52a8bc4aeba05c",
+    "prompt_tokens": 104,
+    "included": false,
+    "reason": "unsupported_reference",
+    "original_reference": "$x = -\\frac{1}{2} (\\sqrt6 \\pm \\sqrt 2)$"
+  },
+  {
+    "id": "5f52c36286489815f10589e01d1fdb4ec521fc987a02ef4880cd2e486256b258",
+    "prompt_tokens": 77,
+    "included": false,
+    "reason": "unsupported_reference",
+    "original_reference": "(0, 0, 0)\\left(-\\frac{1}{2}, -\\frac{1}{2}, -\\frac{1}{2}\\right)"
+  },
+  {
+    "id": "37d679adff67eb32ae6932b5932b7caa4b67d23a907e67ef4fdc1fbba9666347",
+    "prompt_tokens": 81,
+    "included": false,
+    "reason": "unsupported_reference",
+    "original_reference": "f(x) = 0, \\quad f(x) = \\frac{1}{2}, \\quad f(x) = x^2."
+  },
+  {
+    "id": "01aea5296f0002603958886423a6e958f7680a58539c0fde91a65c8b730ad672",
+    "prompt_tokens": 69,
+    "included": false,
+    "reason": "unsupported_reference",
+    "original_reference": "-\\frac{5}{3}."
+  }
+]

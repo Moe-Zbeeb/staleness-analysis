@@ -1,0 +1,50 @@
+import pytest
+
+from deepseek_study.config import StudyConfig
+
+
+@pytest.fixture
+def study(tmp_path):
+    return StudyConfig(
+        model_path=tmp_path / "original",
+        dataset_path=tmp_path / "train.parquet",
+        data_manifest=tmp_path / "train-manifest.json",
+        prepared_model_path=tmp_path / "prepared",
+        output_dir=tmp_path / "run",
+        prompts_per_update=2,
+        responses_per_prompt=4,
+        prompt_max_tokens=128,
+        response_max_tokens=128,
+        max_steps=70,
+        learning_rate=1e-6,
+        lr_warmup_steps=2,
+        lr_decay_steps=2,
+        min_learning_rate=0.0,
+        weight_decay=0.0,
+        adam_beta1=0.9,
+        adam_beta2=0.999,
+        adam_epsilon=1e-8,
+        max_grad_norm=1.0,
+        clip_epsilon=0.2,
+        advantage_normalization="population_std",
+        advantage_epsilon=1e-8,
+        temperature=1.0,
+        loss_reduction="global_token_mean",
+        reference_kl_coefficient=0.0,
+        updates_per_cohort=1,
+        prompt_instruction="",
+        truncated_reward="zero",
+        seed=17,
+        checkpoint_interval=5,
+        trainer_gpus=2,
+        inference_gpus=2,
+        inference_tensor_parallel=2,
+        rollout_concurrency=8,
+        trainer_micro_batch_size=1,
+        trainer_attention="fa2",
+        trainer_compile=False,
+        optimizer_cpu_offload=True,
+        activation_checkpointing=True,
+        inference_memory_utilization=0.8,
+        lag=32,
+    )
