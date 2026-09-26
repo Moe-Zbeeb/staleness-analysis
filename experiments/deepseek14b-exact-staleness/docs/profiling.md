@@ -1,6 +1,6 @@
 # Throughput profiling
 
-This investigation uses separate, bounded diagnostic jobs. Production job `2144963`, its source snapshot, queued rollouts, weights and optimizer are not modified. No measured speedup has yet been applied to production. Collected results establish a communication bottleneck in the nine-GPU replay, with mixed results from enabling shared-memory transport. Raw measurements are in [the results record](../diagnostics/profiling-20260927-results.json).
+This investigation uses separate, bounded diagnostic jobs. Production job `2144963`, its source snapshot, queued rollouts, weights and optimizer are not modified. No measured speedup has yet been applied to production. NCCL kernels dominate the traced nine-GPU replay, but enabling shared-memory transport yielded only about 2% observed median improvement in the completed model comparison. No major model-level speedup is established. Raw measurements are in [the results record](../diagnostics/profiling-20260927-results.json).
 
 ## Production baseline
 
@@ -43,7 +43,7 @@ NCCL logs show `NET/IB/0` for the baseline and `SHM/direct/direct` for the alter
 
 The rank-zero trace for replay update 2 records 198 all-gather kernels totaling 142.679 seconds and 100 FP32 reduce-scatter kernels totaling 139.468 seconds. These are the GPU kernel entries only; summing their CPU/operator wrapper entries again would double-count them. Communication overlaps some computation, so these totals must not be treated as an additive wall-time breakdown.
 
-The same replay's untraced first update took 287.997 seconds in the learner window. Its traced second update took 305.439 seconds, including profile serialization. Both use two real packed microbatches per rank. This establishes communication as the primary bottleneck of this diagnostic. It does not mean a 98% production speedup is available, and the production GPUs have different memory capacity and a different rank layout.
+The same replay's untraced first update took 287.997 seconds in the learner window. Its traced second update took 305.439 seconds, including profile serialization. Both use two real packed microbatches per rank. NCCL kernels dominate GPU time in this diagnostic. Their duration includes synchronization waits, so this does not isolate physical transfer bandwidth as the cause. All nine traced ranks recorded approximately 282 seconds in NCCL kernels; no single rank had distinctly shorter NCCL time that would identify an obvious GPU-compute straggler. It does not mean a 98% production speedup is available, and the production GPUs have different memory capacity and a different rank layout.
 
 The trace uses NCCL's `RING_LL` kernels despite large model parameter transfers. Follow-up job `2144982` completed all five candidates in 5 minutes 21 seconds, with all correctness checks passing. It compared automatic protocol selection with `NCCL_PROTO=Simple` and eight communication CTAs, including 512 MiB and 1 GiB tensors in independent four- and five-rank groups covering the full nine-GPU node. More CTAs consume additional GPU resources, so a standalone communication improvement must still pass a model replay. See [NVIDIA's NCCL environment-variable documentation](https://docs.nvidia.com/deeplearning/nccl/user-guide/docs/env.html#nccl-min-ctas).
 
@@ -65,9 +65,21 @@ The four-rank group improved by 4.57× and 4.85× with shared memory. Forcing Si
 
 The first replay harness accidentally set `PYTORCH_CUDA_ALLOC_CONF=expandable_segments:False` and `OMP_NUM_THREADS=4`. Production's pinned PrimeRL launcher sets expandable segments to `True` and OMP threads to `1`. The first replay's third update failed trying to allocate 2.90 GiB with 2.62 GiB free and 4.98 GiB reserved but unallocated. Allocator mismatch and profiling retention are possible contributors, not a proven diagnosis of the failure.
 
-The corrected runner imports the same pinned `DEFAULT_COMMON_ENV_VARS` and `DEFAULT_TRAINER_ENV_VARS` as production, records the effective environment per rank, and makes tracing opt-in. Job `2144987` runs an untraced comparison on all nine A100 40GB GPUs on `deep-chungus-4`, with three disposable updates per candidate and a one-hour allocation limit. Account `grad-students`, partition `low-priority`, QoS `normal`, 96 CPUs, all node memory and exclusive allocation were verified. Its health checks passed on every GPU. Model results are pending.
+The corrected runner imports the same pinned `DEFAULT_COMMON_ENV_VARS` and `DEFAULT_TRAINER_ENV_VARS` as production, records the effective environment per rank, and makes tracing opt-in. Job `2144987` runs an untraced comparison on all nine A100 40GB GPUs on `deep-chungus-4`, with three disposable updates per candidate and a one-hour allocation limit. Account `grad-students`, partition `low-priority`, QoS `normal`, 96 CPUs, all node memory and exclusive allocation were verified. Its health checks passed on every GPU, and both three-update replays completed successfully. Peak memory reached 38.45 GiB after optimizer state allocation and stayed stable. The job completed in 31 minutes 41 seconds.
 
-Weight-transfer job `2144997` is queued after the replay. It assigns four GPUs to inference-side probes and five to trainer-side probes, covering the complete spare node. The broadcast communicator has the same five members as production: one trainer sender and four inference receivers. It tests both transports with each side's real allocator setting. This small-tensor compatibility probe does not load the model or establish the full four-trainer/four-inference production memory fit.
+Weight-transfer job `2144997` completed successfully in 50 seconds; both network and shared-memory probes passed ([receipts](../diagnostics/profiling-20260927-bridge.json)). It assigns four GPUs to inference-side probes and five to trainer-side probes, covering the complete spare node. The broadcast communicator has the same five members as production: one trainer sender and four inference receivers. It tests both transports with each side's real allocator setting. This small-tensor compatibility probe does not load the model or establish the full four-trainer/four-inference production memory fit.
+
+The [complete replay comparison](../diagnostics/profiling-20260927-replay-comparison.json) reports:
+
+| Update | Network | Shared memory | Observed speedup |
+| --- | ---: | ---: | ---: |
+| 1 | 286.85 s | 282.43 s | 1.016× |
+| 2 | 285.18 s | 278.96 s | 1.022× |
+| 3 | 284.24 s | 272.79 s | 1.042× |
+
+These sequential, short measurements do not establish a statistically reliable production gain. Packed inputs, behavior log probabilities and advantages matched for all 511,671 token observations across the three updates. Outputs and clipping masks were identical in updates 1 and 2. Update 3 had mean absolute current-log-probability difference 0.008782, maximum 0.248840, and four changed surrogate-clipping/zero-signal decisions among 170,557 tokens. The gradient norm also differed, so this is not bitwise-equivalent training. A repeat with the same transport is needed to distinguish ordinary run-to-run nondeterminism from transport effects; no production change is justified by this comparison alone.
+
+Follow-up job `2145003` isolates one model update with `NCCL_PROTO=Simple`, retaining the same archived microbatches and production allocator/OMP settings. It has a twelve-minute limit on the same full nine-GPU node. The job completed successfully in 5 minutes 52 seconds, including health/startup. Detailed NCCL logs confirm RING/SIMPLE selection and two communication channels. Its learner window was 284.50 seconds versus the baseline first update's 286.85 seconds: 1.008×, less than 1% observed improvement. All 170,557 initial token observations matched exactly, while the gradient norm differed slightly. This single-update test does not establish stability after subsequent updates or a useful throughput gain. See [the Simple-protocol results](../diagnostics/profiling-20260927-simple.json).
 
 The production run, its environment and imported library source are unchanged. Its four-rank A100 80GB topology still requires its own validation before deployment.
 
@@ -93,7 +105,7 @@ The profiler temporarily wraps the imported trainer's forward, loss, optimizer a
 
 ## Next decisions depend on results
 
-Transport changes need correct collectives, matching replay outputs within justified floating-point tolerances, stable memory, and a successful four-trainer/four-inference handoff. Compilation requires its own measured replay and numerical comparison. Selective activation checkpointing is not a simple supported switch for the current Hugging Face Qwen2 implementation; the pinned code supports that mode only for registered layer implementations.
+The tested transport/protocol changes have not established a major model-level speedup. Further work needs an isolated four-rank A100 80GB measurement, a same-configuration numerical repeat, and a full four-trainer/four-inference handoff before deployment. Correct collectives, stable memory and a small-tensor handoff alone do not establish equivalent training or production throughput. Compilation requires its own measured replay and numerical comparison. Selective activation checkpointing is not a simple supported switch for the current Hugging Face Qwen2 implementation; the pinned code supports that mode only for registered layer implementations.
 
 Keep all tokens and optimizer updates. Preserve BF16 compute, FP32 optimizer/reduction, group advantages, global token normalization, exact lag 256, output caps, grading and logging. No shorter answers, zero-gradient-token removal, checkpoint reuse, reduced precision or optimizer offload is an approved speedup from this profile.
 
@@ -109,6 +121,10 @@ Completed transport matrix: `/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deep
 
 Corrected replay: `/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/profiling/20260927-replay-v2`.
 
-User-authorized SSH/Duo reconnection succeeded and collected the initial job's final failure and complete matrix results. The corrected replay is running separately from production.
+Weight-transfer check: `/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/profiling/20260927-bridge`.
+
+Simple-protocol model diagnostic: `/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/profiling/20260927-peer-simple`.
+
+User-authorized SSH/Duo reconnection succeeded and collected the initial job's final failure and complete matrix results. The corrected replay, weight-transfer check and Simple-protocol diagnostic all completed separately from production.
 
 Local validation passed Ruff and Python compilation for the profiling tools. The earlier GRPO, queue and paper-metric suites passed 54 tests with one CUDA-only skip; an instrumented AdamW/linear-scheduler smoke check also passed. The replay comparator also passed local smoke checks for equal outputs, modified inputs/outputs/masks and rejection of mismatched grids. The new matrix passed actual GPU correctness checks for all five configurations and both rank groups. These checks do not establish model-level or production-level equivalence.

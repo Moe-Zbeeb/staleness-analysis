@@ -1,0 +1,223 @@
+{
+  "job_id": 2144997,
+  "state": "COMPLETED",
+  "exit_code": "0:0",
+  "elapsed_seconds": 50,
+  "health": {
+    "job_id": "2144997",
+    "node": "deep-chungus-4",
+    "slurm_job_gpus": "0,1,2,3,4,5,6,7,8",
+    "world_size": 9,
+    "expected_all_reduce": 45.0,
+    "torch": "2.11.0+cu128",
+    "cuda_runtime": "12.8",
+    "devices": [
+      {
+        "rank": 0,
+        "visible_device": "0",
+        "name": "NVIDIA A100-PCIE-40GB",
+        "bytes": 42409000960,
+        "capability": [
+          8,
+          0
+        ],
+        "all_reduce": 45.0,
+        "bf16_backward": true,
+        "flash_attention_backward": true,
+        "vllm_rms_norm": true
+      },
+      {
+        "rank": 1,
+        "visible_device": "1",
+        "name": "NVIDIA A100-PCIE-40GB",
+        "bytes": 42409000960,
+        "capability": [
+          8,
+          0
+        ],
+        "all_reduce": 45.0,
+        "bf16_backward": true,
+        "flash_attention_backward": true,
+        "vllm_rms_norm": true
+      },
+      {
+        "rank": 2,
+        "visible_device": "2",
+        "name": "NVIDIA A100-PCIE-40GB",
+        "bytes": 42409000960,
+        "capability": [
+          8,
+          0
+        ],
+        "all_reduce": 45.0,
+        "bf16_backward": true,
+        "flash_attention_backward": true,
+        "vllm_rms_norm": true
+      },
+      {
+        "rank": 3,
+        "visible_device": "3",
+        "name": "NVIDIA A100-PCIE-40GB",
+        "bytes": 42409000960,
+        "capability": [
+          8,
+          0
+        ],
+        "all_reduce": 45.0,
+        "bf16_backward": true,
+        "flash_attention_backward": true,
+        "vllm_rms_norm": true
+      },
+      {
+        "rank": 4,
+        "visible_device": "4",
+        "name": "NVIDIA A100-PCIE-40GB",
+        "bytes": 42409000960,
+        "capability": [
+          8,
+          0
+        ],
+        "all_reduce": 45.0,
+        "bf16_backward": true,
+        "flash_attention_backward": true,
+        "vllm_rms_norm": true
+      },
+      {
+        "rank": 5,
+        "visible_device": "5",
+        "name": "NVIDIA A100-PCIE-40GB",
+        "bytes": 42409000960,
+        "capability": [
+          8,
+          0
+        ],
+        "all_reduce": 45.0,
+        "bf16_backward": true,
+        "flash_attention_backward": true,
+        "vllm_rms_norm": true
+      },
+      {
+        "rank": 6,
+        "visible_device": "6",
+        "name": "NVIDIA A100-PCIE-40GB",
+        "bytes": 42409000960,
+        "capability": [
+          8,
+          0
+        ],
+        "all_reduce": 45.0,
+        "bf16_backward": true,
+        "flash_attention_backward": true,
+        "vllm_rms_norm": true
+      },
+      {
+        "rank": 7,
+        "visible_device": "7",
+        "name": "NVIDIA A100-PCIE-40GB",
+        "bytes": 42409000960,
+        "capability": [
+          8,
+          0
+        ],
+        "all_reduce": 45.0,
+        "bf16_backward": true,
+        "flash_attention_backward": true,
+        "vllm_rms_norm": true
+      },
+      {
+        "rank": 8,
+        "visible_device": "8",
+        "name": "NVIDIA A100-PCIE-40GB",
+        "bytes": 42409000960,
+        "capability": [
+          8,
+          0
+        ],
+        "all_reduce": 45.0,
+        "bf16_backward": true,
+        "flash_attention_backward": true,
+        "vllm_rms_norm": true
+      }
+    ]
+  },
+  "transport_receipts": {
+    "network": [
+      {
+        "transport": "network",
+        "rank": 4,
+        "bridge_rank": 0,
+        "passed": true
+      },
+      {
+        "transport": "network",
+        "rank": 0,
+        "bridge_rank": 1,
+        "passed": true
+      },
+      {
+        "transport": "network",
+        "rank": 1,
+        "bridge_rank": 2,
+        "passed": true
+      },
+      {
+        "transport": "network",
+        "rank": 2,
+        "bridge_rank": 3,
+        "passed": true
+      },
+      {
+        "transport": "network",
+        "rank": 3,
+        "bridge_rank": 4,
+        "passed": true
+      },
+      {
+        "transport": "network",
+        "world_size": 9,
+        "inference_gpus": 4,
+        "trainer_gpus": 5,
+        "status": "passed"
+      }
+    ],
+    "peer": [
+      {
+        "transport": "peer",
+        "rank": 4,
+        "bridge_rank": 0,
+        "passed": true
+      },
+      {
+        "transport": "peer",
+        "rank": 0,
+        "bridge_rank": 1,
+        "passed": true
+      },
+      {
+        "transport": "peer",
+        "rank": 1,
+        "bridge_rank": 2,
+        "passed": true
+      },
+      {
+        "transport": "peer",
+        "rank": 3,
+        "bridge_rank": 4,
+        "passed": true
+      },
+      {
+        "transport": "peer",
+        "rank": 2,
+        "bridge_rank": 3,
+        "passed": true
+      },
+      {
+        "transport": "peer",
+        "world_size": 9,
+        "inference_gpus": 4,
+        "trainer_gpus": 5,
+        "status": "passed"
+      }
+    ]
+  }
+}

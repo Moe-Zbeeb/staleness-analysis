@@ -1,0 +1,343 @@
+{
+  "job_id": 2145003,
+  "state": "COMPLETED",
+  "exit_code": "0:0",
+  "elapsed_seconds": 352,
+  "node": "deep-chungus-4",
+  "gpus": 9,
+  "steps": 1,
+  "micro_batches_per_rank": 2,
+  "health": {
+    "job_id": "2145003",
+    "node": "deep-chungus-4",
+    "slurm_job_gpus": "0,1,2,3,4,5,6,7,8",
+    "world_size": 9,
+    "expected_all_reduce": 45.0,
+    "torch": "2.11.0+cu128",
+    "cuda_runtime": "12.8",
+    "devices": [
+      {
+        "rank": 0,
+        "visible_device": "0",
+        "name": "NVIDIA A100-PCIE-40GB",
+        "bytes": 42409000960,
+        "capability": [
+          8,
+          0
+        ],
+        "all_reduce": 45.0,
+        "bf16_backward": true,
+        "flash_attention_backward": true,
+        "vllm_rms_norm": true
+      },
+      {
+        "rank": 1,
+        "visible_device": "1",
+        "name": "NVIDIA A100-PCIE-40GB",
+        "bytes": 42409000960,
+        "capability": [
+          8,
+          0
+        ],
+        "all_reduce": 45.0,
+        "bf16_backward": true,
+        "flash_attention_backward": true,
+        "vllm_rms_norm": true
+      },
+      {
+        "rank": 2,
+        "visible_device": "2",
+        "name": "NVIDIA A100-PCIE-40GB",
+        "bytes": 42409000960,
+        "capability": [
+          8,
+          0
+        ],
+        "all_reduce": 45.0,
+        "bf16_backward": true,
+        "flash_attention_backward": true,
+        "vllm_rms_norm": true
+      },
+      {
+        "rank": 3,
+        "visible_device": "3",
+        "name": "NVIDIA A100-PCIE-40GB",
+        "bytes": 42409000960,
+        "capability": [
+          8,
+          0
+        ],
+        "all_reduce": 45.0,
+        "bf16_backward": true,
+        "flash_attention_backward": true,
+        "vllm_rms_norm": true
+      },
+      {
+        "rank": 4,
+        "visible_device": "4",
+        "name": "NVIDIA A100-PCIE-40GB",
+        "bytes": 42409000960,
+        "capability": [
+          8,
+          0
+        ],
+        "all_reduce": 45.0,
+        "bf16_backward": true,
+        "flash_attention_backward": true,
+        "vllm_rms_norm": true
+      },
+      {
+        "rank": 5,
+        "visible_device": "5",
+        "name": "NVIDIA A100-PCIE-40GB",
+        "bytes": 42409000960,
+        "capability": [
+          8,
+          0
+        ],
+        "all_reduce": 45.0,
+        "bf16_backward": true,
+        "flash_attention_backward": true,
+        "vllm_rms_norm": true
+      },
+      {
+        "rank": 6,
+        "visible_device": "6",
+        "name": "NVIDIA A100-PCIE-40GB",
+        "bytes": 42409000960,
+        "capability": [
+          8,
+          0
+        ],
+        "all_reduce": 45.0,
+        "bf16_backward": true,
+        "flash_attention_backward": true,
+        "vllm_rms_norm": true
+      },
+      {
+        "rank": 7,
+        "visible_device": "7",
+        "name": "NVIDIA A100-PCIE-40GB",
+        "bytes": 42409000960,
+        "capability": [
+          8,
+          0
+        ],
+        "all_reduce": 45.0,
+        "bf16_backward": true,
+        "flash_attention_backward": true,
+        "vllm_rms_norm": true
+      },
+      {
+        "rank": 8,
+        "visible_device": "8",
+        "name": "NVIDIA A100-PCIE-40GB",
+        "bytes": 42409000960,
+        "capability": [
+          8,
+          0
+        ],
+        "all_reduce": 45.0,
+        "bf16_backward": true,
+        "flash_attention_backward": true,
+        "vllm_rms_norm": true
+      }
+    ]
+  },
+  "environment": {
+    "NCCL_P2P_DISABLE": "0",
+    "NCCL_DEBUG_SUBSYS": "INIT,ENV,GRAPH,TUNING",
+    "NCCL_DEBUG": "INFO",
+    "NCCL_PROTO": "Simple",
+    "CUDA_DEVICE_ORDER": "PCI_BUS_ID",
+    "NCCL_SHM_DISABLE": "0",
+    "PYTORCH_CUDA_ALLOC_CONF": "expandable_segments:True",
+    "CUDA_VISIBLE_DEVICES": "0,1,2,3,4,5,6,7,8",
+    "OMP_NUM_THREADS": "1"
+  },
+  "baseline_first_update": {
+    "time/forward_backward": 286.84979000594467,
+    "time/step": 286.9568231489975,
+    "perf/peak_memory": 27.017578125,
+    "optim/lr": 3.3333343e-08,
+    "optim/grad_norm": 0.09820811450481415,
+    "loss/mean": 0.0011056980583816767
+  },
+  "simple_first_update": {
+    "time/forward_backward": 284.4973031049594,
+    "time/step": 284.60026676696725,
+    "perf/peak_memory": 27.017578125,
+    "optim/lr": 3.3333343e-08,
+    "optim/grad_norm": 0.09821268171072006,
+    "loss/mean": 0.0011056980583816767
+  },
+  "observed_speedup": 1.0082689251367607,
+  "comparisons": [
+    {
+      "rank": 0,
+      "tokens": 19490,
+      "different_elements": {
+        "token_id": 0,
+        "position": 0,
+        "current_logp": 0,
+        "behavior_logp": 0,
+        "advantage": 0,
+        "entropy": 0,
+        "surrogate_clipped": 0,
+        "zero_policy_signal": 0,
+        "response_lengths": 0
+      },
+      "maximum_absolute_logp_error": 0.0,
+      "maximum_absolute_entropy_error": 0.0
+    },
+    {
+      "rank": 1,
+      "tokens": 16384,
+      "different_elements": {
+        "token_id": 0,
+        "position": 0,
+        "current_logp": 0,
+        "behavior_logp": 0,
+        "advantage": 0,
+        "entropy": 0,
+        "surrogate_clipped": 0,
+        "zero_policy_signal": 0,
+        "response_lengths": 0
+      },
+      "maximum_absolute_logp_error": 0.0,
+      "maximum_absolute_entropy_error": 0.0
+    },
+    {
+      "rank": 2,
+      "tokens": 19138,
+      "different_elements": {
+        "token_id": 0,
+        "position": 0,
+        "current_logp": 0,
+        "behavior_logp": 0,
+        "advantage": 0,
+        "entropy": 0,
+        "surrogate_clipped": 0,
+        "zero_policy_signal": 0,
+        "response_lengths": 0
+      },
+      "maximum_absolute_logp_error": 0.0,
+      "maximum_absolute_entropy_error": 0.0
+    },
+    {
+      "rank": 3,
+      "tokens": 19798,
+      "different_elements": {
+        "token_id": 0,
+        "position": 0,
+        "current_logp": 0,
+        "behavior_logp": 0,
+        "advantage": 0,
+        "entropy": 0,
+        "surrogate_clipped": 0,
+        "zero_policy_signal": 0,
+        "response_lengths": 0
+      },
+      "maximum_absolute_logp_error": 0.0,
+      "maximum_absolute_entropy_error": 0.0
+    },
+    {
+      "rank": 4,
+      "tokens": 18638,
+      "different_elements": {
+        "token_id": 0,
+        "position": 0,
+        "current_logp": 0,
+        "behavior_logp": 0,
+        "advantage": 0,
+        "entropy": 0,
+        "surrogate_clipped": 0,
+        "zero_policy_signal": 0,
+        "response_lengths": 0
+      },
+      "maximum_absolute_logp_error": 0.0,
+      "maximum_absolute_entropy_error": 0.0
+    },
+    {
+      "rank": 5,
+      "tokens": 19093,
+      "different_elements": {
+        "token_id": 0,
+        "position": 0,
+        "current_logp": 0,
+        "behavior_logp": 0,
+        "advantage": 0,
+        "entropy": 0,
+        "surrogate_clipped": 0,
+        "zero_policy_signal": 0,
+        "response_lengths": 0
+      },
+      "maximum_absolute_logp_error": 0.0,
+      "maximum_absolute_entropy_error": 0.0
+    },
+    {
+      "rank": 6,
+      "tokens": 18165,
+      "different_elements": {
+        "token_id": 0,
+        "position": 0,
+        "current_logp": 0,
+        "behavior_logp": 0,
+        "advantage": 0,
+        "entropy": 0,
+        "surrogate_clipped": 0,
+        "zero_policy_signal": 0,
+        "response_lengths": 0
+      },
+      "maximum_absolute_logp_error": 0.0,
+      "maximum_absolute_entropy_error": 0.0
+    },
+    {
+      "rank": 7,
+      "tokens": 19894,
+      "different_elements": {
+        "token_id": 0,
+        "position": 0,
+        "current_logp": 0,
+        "behavior_logp": 0,
+        "advantage": 0,
+        "entropy": 0,
+        "surrogate_clipped": 0,
+        "zero_policy_signal": 0,
+        "response_lengths": 0
+      },
+      "maximum_absolute_logp_error": 0.0,
+      "maximum_absolute_entropy_error": 0.0
+    },
+    {
+      "rank": 8,
+      "tokens": 19957,
+      "different_elements": {
+        "token_id": 0,
+        "position": 0,
+        "current_logp": 0,
+        "behavior_logp": 0,
+        "advantage": 0,
+        "entropy": 0,
+        "surrogate_clipped": 0,
+        "zero_policy_signal": 0,
+        "response_lengths": 0
+      },
+      "maximum_absolute_logp_error": 0.0,
+      "maximum_absolute_entropy_error": 0.0
+    }
+  ],
+  "model_nccl_logs_confirm": {
+    "all_gather_bytes_reported": 61180702,
+    "reduce_scatter_bytes_reported": 122361404,
+    "algorithm": "RING",
+    "protocol": "SIMPLE",
+    "channels": 2
+  },
+  "limitations": [
+    "One disposable optimizer update only; not a stability or production throughput test",
+    "Detailed NCCL communication logging enabled for this candidate",
+    "A100 40GB nine-rank layout differs from production"
+  ],
+  "production_speedup_applied": false
+}

@@ -919,5 +919,44 @@
     },
     "trace_second_update": true,
     "followup_job": 2144987
-  }
+  },
+  "traced_ranks_nccl_kernel_seconds": [
+    {
+      "rank": 0,
+      "seconds": 282.15661154100013
+    },
+    {
+      "rank": 1,
+      "seconds": 282.905363285
+    },
+    {
+      "rank": 2,
+      "seconds": 282.45587532699955
+    },
+    {
+      "rank": 3,
+      "seconds": 282.4871779900003
+    },
+    {
+      "rank": 4,
+      "seconds": 282.2161058460001
+    },
+    {
+      "rank": 5,
+      "seconds": 282.28333184599995
+    },
+    {
+      "rank": 6,
+      "seconds": 282.513332829
+    },
+    {
+      "rank": 7,
+      "seconds": 282.135364809
+    },
+    {
+      "rank": 8,
+      "seconds": 282.24304695200016
+    }
+  ],
+  "trace_interpretation": "NCCL kernel durations include synchronization wait; they do not isolate physical transfer bandwidth as the cause. All traced ranks have similar NCCL totals."
 }
