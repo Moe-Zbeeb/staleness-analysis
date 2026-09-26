@@ -54,5 +54,18 @@
     "Live model-weight broadcast",
     "Full-context training memory fit",
     "Training checkpoint and resume execution"
-  ]
+  ],
+  "dependency_checkout": {
+    "git_diff_head_clean": true,
+    "unrelated_lfs_assets_preserved_and_restored_to_pointers": 3,
+    "bootstrap_skips_dependency_lfs_smudge": true
+  },
+  "launcher_preflight": {
+    "job_id": "2144923",
+    "state": "COMPLETED",
+    "exit_code": "0:0",
+    "official_checkout_and_imports_verified": true,
+    "prepared_assets_verified": true,
+    "study_training_started": false
+  }
 }

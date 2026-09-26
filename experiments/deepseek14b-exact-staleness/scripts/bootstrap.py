@@ -6,8 +6,8 @@ from pathlib import Path
 PIN = "ab5de8fff44b2c4a5c85e24b6e6e3f7d57eee7b1"
 
 
-def run(*args, cwd=None):
-    subprocess.run(args, cwd=cwd, check=True)
+def run(*args, cwd=None, env=None):
+    subprocess.run(args, cwd=cwd, env=env, check=True)
 
 
 def main():
@@ -17,6 +17,7 @@ def main():
     args = parser.parse_args()
     root = Path(__file__).resolve().parents[1]
     vendor = root / "vendor" / "prime-rl"
+    git_environment = {**os.environ, "GIT_LFS_SKIP_SMUDGE": "1"}
     if not vendor.exists():
         vendor.parent.mkdir(exist_ok=True)
         run(
@@ -26,8 +27,9 @@ def main():
             "--no-checkout",
             "https://github.com/PrimeIntellect-ai/prime-rl.git",
             str(vendor),
+            env=git_environment,
         )
-        run("git", "checkout", "--detach", PIN, cwd=vendor)
+        run("git", "checkout", "--detach", PIN, cwd=vendor, env=git_environment)
     actual = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=vendor, text=True).strip()
     if actual != PIN or subprocess.check_output(["git", "diff", "HEAD"], cwd=vendor):
         raise RuntimeError("Existing official checkout differs from the pinned source; refusing to overwrite it")
@@ -44,6 +46,7 @@ def main():
         "deps/pydantic-config",
         "deps/prime-envs",
         cwd=vendor,
+        env=git_environment,
     )
     command = ["uv", "sync", "--frozen", "--python", "3.12"]
     if args.gpu:

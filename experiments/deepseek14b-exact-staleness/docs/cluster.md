@@ -1,6 +1,6 @@
 # Cluster operations
 
-The deployed project is `/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study`. Its isolated environment is `vendor/prime-rl/.venv`; the official checkout and submodules are pinned and unmodified. Caches and managed Python live under the project, and existing model weights and raw data are reused through verified paths.
+The deployed project is `/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study`. Its isolated environment is `vendor/prime-rl/.venv`; the official checkout and submodules are pinned and unmodified. Caches and managed Python live under the project, and existing model weights and raw data are reused through verified paths. Bootstrap sets `GIT_LFS_SKIP_SMUDGE=1` for dependency checkout: unrelated task assets remain at their recorded LFS pointers. Three initially expanded assets were matched to their recorded content hashes and preserved under `diagnostics/cluster/lfs-objects/` before restoring the pointer files. The official source-integrity check remains strict.
 
 ## Completed preparation
 
@@ -9,6 +9,7 @@ The deployed project is `/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscal
 | 2144915 | Linux installation, asset verification, both configuration profiles, test suite | Completed, exit 0:0; 103 tests passed |
 | 2144916 | Initial GPU probe | Failed because the probe used the former `vllm._C` module name |
 | 2144920 | Corrected GPU probe and numerical RMSNorm check | Completed, exit 0:0 on all eight A100 80GB GPUs of deep-chungus-9 |
+| 2144923 | Launcher source/import checks and prepared-asset checks | Completed, exit 0:0; no training launched |
 
 The pinned vLLM wheel exposes `vllm._C_stable_libtorch`; the corrected diagnostic loads it and compares the actual CUDA RMSNorm kernel with a Torch reference. NCCL, BF16 backward and Flash Attention backward also passed on every rank. The numerical all-reduce result was 36, derived from the eight-rank world size.
 
@@ -21,7 +22,7 @@ The small [validation summary](../diagnostics/cluster-validation.json) is commit
 ```bash
 cat diagnostics/cluster/preparation.json
 cat diagnostics/cluster/gpu-health-2144920.json
-sacct -j 2144915,2144916,2144920 --format=JobID,State,ExitCode,NodeList
+sacct -j 2144915,2144916,2144920,2144923 --format=JobID,State,ExitCode,NodeList
 ```
 
 ## Preparing a future run
