@@ -2,9 +2,9 @@ import msgspec
 import pytest
 import verifiers.v1 as vf
 
-from deepseek_study.algorithm import StudyGRPO
-from deepseek_study.build import resolve
-from deepseek_study.controller import Payload, payload_digest
+from deepseek_study.learning.advantages import StudyGRPO
+from deepseek_study.runtime.build import resolve
+from deepseek_study.rollouts.controller import Payload, payload_digest
 from prime_rl.orchestrator.envs import TrainEnvs
 from prime_rl.orchestrator.train_sink import TrainSink
 from prime_rl.orchestrator.types import Progress

@@ -12,7 +12,7 @@ class GraderFailure(RuntimeError):
 
 class Worker:
     def __init__(self, command=None):
-        self.command = command or [sys.executable, "-m", "deepseek_study.grader_worker"]
+        self.command = command or [sys.executable, "-m", "deepseek_study.dataset.worker"]
         self.process = None
 
     async def close(self):

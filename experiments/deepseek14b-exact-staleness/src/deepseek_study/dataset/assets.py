@@ -3,7 +3,7 @@ import json
 from pathlib import Path
 
 from deepseek_study import DATASET_ROWS, DATASET_SHA256, MODEL_ID, MODEL_REVISION
-from deepseek_study.checkpoints import atomic_write
+from deepseek_study.runtime.checkpoints import atomic_write
 
 
 def sha256(path):
@@ -116,7 +116,7 @@ def validate_prepared(study):
     if sha256(directory / "tokenizer_config.json") != receipt["prepared_tokenizer_config_sha256"]:
         raise ValueError("Prepared tokenizer metadata changed")
     tokenizer_parity(study.model_path, directory)
-    from deepseek_study.data import load_manifest, prepared_rows
+    from deepseek_study.dataset.prepare import load_manifest, prepared_rows
 
     rows = prepared_rows(
         study.dataset_path,

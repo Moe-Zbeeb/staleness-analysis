@@ -6,9 +6,9 @@ import numpy as np
 import pytest
 import torch
 
-from deepseek_study import checkpoints, identity
-from deepseek_study.queue import QueueState
-from deepseek_study.trainer_state import CheckpointWithRNG, capture_rng, restore_rng
+from deepseek_study.runtime import checkpoints, identity
+from deepseek_study.rollouts.queue import QueueState
+from deepseek_study.runtime.trainer_state import CheckpointWithRNG, capture_rng, restore_rng
 
 
 def test_source_snapshot_detects_code_edits_and_freezes_original_bytes(tmp_path, monkeypatch):

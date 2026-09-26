@@ -8,10 +8,11 @@ import time
 import uuid
 from pathlib import Path
 
-from deepseek_study import PRIME_COMMIT, checkpoints
-from deepseek_study.assets import validate_prepared
-from deepseek_study.build import build
-from deepseek_study.identity import capture, snapshot
+from deepseek_study import PRIME_COMMIT
+from deepseek_study.runtime import checkpoints
+from deepseek_study.dataset.assets import validate_prepared
+from deepseek_study.runtime.build import build
+from deepseek_study.runtime.identity import capture, snapshot
 from prime_rl.entrypoints.rl import env_servers
 from prime_rl.utils.process import DEFAULT_COMMON_ENV_VARS, DEFAULT_INFERENCE_ENV_VARS, DEFAULT_TRAINER_ENV_VARS
 
@@ -162,7 +163,7 @@ def launch(study, root, resume=None):
                 f"--nproc-per-node={study.trainer_gpus}",
                 f"--master-port={study.inference_port + 40}",
                 "--module",
-                "deepseek_study.trainer",
+                "deepseek_study.runtime.trainer",
                 "@",
                 str(config_dir / "trainer.json"),
             ],

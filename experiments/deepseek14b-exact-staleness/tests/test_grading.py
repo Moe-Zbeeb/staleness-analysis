@@ -3,7 +3,7 @@ import sys
 
 import pytest
 
-from deepseek_study.grading import GraderFailure, GraderPool
+from deepseek_study.dataset.grading import GraderFailure, GraderPool
 
 
 async def test_actual_isolated_worker_grades_and_preserves_failure_reason():

@@ -7,7 +7,7 @@ import shutil
 import tempfile
 from pathlib import Path
 
-from deepseek_study.queue import QueueState
+from deepseek_study.rollouts.queue import QueueState
 
 
 def fsync_directory(path):

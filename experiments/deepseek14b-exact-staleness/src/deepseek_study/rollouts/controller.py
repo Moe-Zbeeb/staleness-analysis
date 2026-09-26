@@ -10,11 +10,11 @@ from pathlib import Path
 
 import msgspec
 
-from deepseek_study import checkpoints
-from deepseek_study.identity import read_identity
-from deepseek_study.algorithm import StudyGRPO
-from deepseek_study.queue import Cohort, QueueState, run
-from deepseek_study.rewards import completion_tokens
+from deepseek_study.runtime import checkpoints
+from deepseek_study.runtime.identity import read_identity
+from deepseek_study.learning.advantages import StudyGRPO
+from deepseek_study.rollouts.queue import Cohort, QueueState, run
+from deepseek_study.dataset.rewards import completion_tokens
 from prime_rl import monitors
 from prime_rl.configs.orchestrator import OrchestratorConfig
 from prime_rl.orchestrator.types import DispatchFailure, GroupCancellation

@@ -4,7 +4,7 @@ import sys
 
 from math_verify.errors import TimeoutException
 
-from deepseek_study.rewards import ReferenceRejected, grade_result, normalize_reference, parse_gold
+from deepseek_study.dataset.rewards import ReferenceRejected, grade_result, normalize_reference, parse_gold
 
 
 def main():

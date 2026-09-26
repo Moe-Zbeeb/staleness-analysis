@@ -1,6 +1,6 @@
 import pytest
 
-from deepseek_study.rewards import ReferenceRejected, grade, last_complete_box, normalize_reference, parse_gold
+from deepseek_study.dataset.rewards import ReferenceRejected, grade, last_complete_box, normalize_reference, parse_gold
 
 
 @pytest.mark.parametrize(
@@ -42,7 +42,7 @@ def test_partial_root_list_reference_is_rejected_instead_of_accepting_one_root()
 
 
 def test_comparison_failure_propagates_instead_of_becoming_a_wrong_answer(monkeypatch):
-    import deepseek_study.rewards as rewards
+    import deepseek_study.dataset.rewards as rewards
 
     def fail(*args, **kwargs):
         raise RuntimeError("worker failure")

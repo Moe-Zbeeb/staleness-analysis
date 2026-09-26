@@ -42,7 +42,7 @@ def main():
         print(args.destination.resolve())
         return
     if args.command == "audit":
-        from deepseek_study.audit import audit
+        from deepseek_study.rollouts.audit import audit
 
         print(json.dumps(audit(args.directory), indent=2))
         return
@@ -50,32 +50,32 @@ def main():
         print(json.dumps(StudyConfig.model_json_schema(), indent=2))
         return
     if args.command == "prepare":
-        from deepseek_study.assets import prepare
+        from deepseek_study.dataset.assets import prepare
 
         print(json.dumps(prepare(args.model, args.dataset, args.destination, args.manifest), indent=2))
         return
     study = StudyConfig.read(args.study)
     if args.command == "prepare-data":
-        from deepseek_study.data import prepare_data
+        from deepseek_study.dataset.prepare import prepare_data
 
         print(json.dumps(asyncio.run(prepare_data(study)), indent=2))
     elif args.command == "build":
-        from deepseek_study.build import build
+        from deepseek_study.runtime.build import build
 
         build(study, args.destination, args.resume)
         print(args.destination.resolve())
     elif args.command == "check":
-        from deepseek_study.assets import validate_prepared
-        from deepseek_study.build import resolve
+        from deepseek_study.dataset.assets import validate_prepared
+        from deepseek_study.runtime.build import resolve
 
         resolve(study)
         print(json.dumps(validate_prepared(study), indent=2))
     elif args.command == "run":
-        from deepseek_study.launcher import launch
+        from deepseek_study.runtime.launcher import launch
 
         print(launch(study, Path(__file__).resolve().parents[2], args.resume))
     elif args.command == "controller":
-        from deepseek_study.controller import control
+        from deepseek_study.rollouts.controller import control
 
         asyncio.run(control(study, args.destination, args.resume))
 

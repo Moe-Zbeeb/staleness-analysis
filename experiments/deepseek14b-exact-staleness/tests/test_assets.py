@@ -2,7 +2,7 @@ from pathlib import Path
 
 import pytest
 
-from deepseek_study.assets import prepare_tokenizer, read_rows
+from deepseek_study.dataset.assets import prepare_tokenizer, read_rows
 
 
 def test_native_tokenizer_and_official_renderer_match(tmp_path):

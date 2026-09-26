@@ -4,9 +4,9 @@ from types import SimpleNamespace
 import pytest
 from pydantic import ValidationError
 
-from deepseek_study.build import build, resolve
+from deepseek_study.runtime.build import build, resolve
 from deepseek_study.config import StudyConfig
-from deepseek_study.controller import FiniteSource
+from deepseek_study.rollouts.controller import FiniteSource
 from deepseek_study.recipe import baseline
 from prime_rl.orchestrator.types import TaskRequest
 from prime_rl.orchestrator.curriculum.samplers.standard import StandardSampler
@@ -23,7 +23,7 @@ def test_official_config_and_taskset_plugin_resolve(study, tmp_path):
     assert config.orchestrator.num_train_workers == study.trainer_gpus
     assert config.orchestrator.train.filter_zero_advantages is False
     assert config.orchestrator.train.source[0].group_size == study.responses_per_prompt
-    assert config.trainer.loss.import_path == "deepseek_study.loss.clipped_grpo"
+    assert config.trainer.loss.import_path == "deepseek_study.learning.loss.clipped_grpo"
     assert config.inference.vllm.model == str(study.prepared_model_path)
     assert config.inference.vllm.logprobs_mode == "raw_logprobs"
     assert config.orchestrator.model.client.base_url.endswith(":8000/v1")

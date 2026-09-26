@@ -4,10 +4,10 @@ import json
 from pathlib import Path
 
 from deepseek_study import DATASET_SHA256, MODEL_REVISION
-from deepseek_study.assets import read_rows
-from deepseek_study.checkpoints import atomic_write
-from deepseek_study.grading import GraderPool
-from deepseek_study.rewards import reward_identity, tokenizer
+from deepseek_study.dataset.assets import read_rows
+from deepseek_study.runtime.checkpoints import atomic_write
+from deepseek_study.dataset.grading import GraderPool
+from deepseek_study.dataset.rewards import reward_identity, tokenizer
 
 
 def digest(value):

@@ -8,17 +8,17 @@ For the scientific review, read the [staleness research audit](staleness-researc
 
 | Concern | Files | Review question |
 | --- | --- | --- |
-| Public interface and scientific settings | `cli.py`, `config.py`, `recipe.py`, `build.py` | Are every run's settings explicit and validated before launch? |
-| Exact-k scheduling | `queue.py` | Is every consumed rollout exactly k optimizer updates old after bootstrap? |
-| PrimeRL integration | `controller.py`, `launcher.py` | Are inference weights frozen for a complete cohort and process failures fatal? |
-| GRPO objective | `algorithm.py`, `loss.py` | Do advantages, original behavior probabilities, masks and global token normalization agree? |
-| Model and data provenance | `assets.py`, `data.py`, `manifests/`, `assets/train-manifest.json` | Are native tokenization, input identities and exclusions reproducible? |
-| Grading | `rewards.py`, `grading.py`, `grader_worker.py`, `deepseek_deepscaler/` | Are mathematical correctness and infrastructure failures distinguished? |
-| Recovery | `checkpoints.py`, `trainer.py`, `trainer_state.py` | Is a checkpoint usable only after all required state is committed? |
-| Reproducibility and auditing | `identity.py`, `audit.py` | Do source snapshots and logs bind the actual run and consumed cohorts? |
+| Public interface and scientific settings | `cli.py`, `config.py`, `recipe.py`, `runtime/build.py` | Are every run's settings explicit and validated before launch? |
+| Exact-k scheduling | `rollouts/queue.py` | Is every consumed rollout exactly k optimizer updates old after bootstrap? |
+| PrimeRL integration | `rollouts/controller.py`, `runtime/launcher.py` | Are inference weights frozen for a complete cohort and process failures fatal? |
+| GRPO objective | `learning/advantages.py`, `learning/loss.py` | Do advantages, original behavior probabilities, masks and global token normalization agree? |
+| Model and data provenance | `dataset/assets.py`, `dataset/prepare.py`, `manifests/`, `assets/train-manifest.json` | Are native tokenization, input identities and exclusions reproducible? |
+| Grading | `dataset/rewards.py`, `dataset/grading.py`, `dataset/worker.py`, `deepseek_deepscaler/` | Are mathematical correctness and infrastructure failures distinguished? |
+| Recovery | `runtime/checkpoints.py`, `runtime/trainer.py`, `runtime/trainer_state.py` | Is a checkpoint usable only after all required state is committed? |
+| Reproducibility and auditing | `runtime/identity.py`, `rollouts/audit.py` | Do source snapshots and logs bind the actual run and consumed cohorts? |
 | Installation and deployment | `scripts/bootstrap.py`, `scripts/package.py`, `scripts/cluster_prepare.py`, `scripts/gpu_health.py` | Can dependencies, assets and hardware be checked without launching the study? |
 
-Files without a directory prefix are under `src/deepseek_study/`. The taskset package is `src/deepseek_deepscaler/`. Tests mirror these concerns under `tests/`; `configs/` holds the schema and an intentionally incomplete template whose lag must be chosen.
+Python module paths in this table are relative to `src/deepseek_study/`, except the taskset package at `src/deepseek_deepscaler/`. `scripts/`, `manifests/` and `assets/` are relative to the experiment root. Tests mirror these concerns under `tests/`; `configs/` holds the schema and an intentionally incomplete template whose lag must be chosen. The [architecture](architecture.md) includes the full tree; the [integration guide](upstream-integration.md) identifies every library customization.
 
 ## Algorithm contract
 
@@ -39,7 +39,7 @@ The initial k updates are explicitly on-policy, not exact-k. The default 1,000-u
 
 ## Validation and limits
 
-The suite passed all 103 tests locally and on the cluster (preparation job `2144915`). It covers scheduling across multiple k values and horizons, queue recovery, duplicate/version rejection, official packing and transport serialization, GRPO gradients and masking, grading timeouts, data contracts, tokenizer parity, source snapshots, checkpoint integrity and configuration resolution.
+The organized layout passed all 103 tests locally. The preceding layout passed the same suite on the cluster (preparation job `2144915`); that receipt is not a rerun of the organized source. The suite covers scheduling across multiple k values and horizons, queue recovery, duplicate/version rejection, official packing and transport serialization, GRPO gradients and masking, grading timeouts, data contracts, tokenizer parity, source snapshots, checkpoint integrity and configuration resolution.
 
 Cluster preparation verified all 11 pinned model files and five native-tokenizer probes. GPU diagnostic `2144920` passed on eight A100 80GB GPUs: NCCL all-reduce returned 36 on every rank, BF16 and Flash Attention backward passed, and vLLM RMSNorm matched its Torch reference. The diagnostic does not load or train the 14B model. See [validation evidence](../diagnostics/cluster-validation.json) and [cluster operations](cluster.md).
 

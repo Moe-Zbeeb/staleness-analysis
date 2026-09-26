@@ -2,8 +2,8 @@ import asyncio
 
 import pytest
 
-from deepseek_study import checkpoints
-from deepseek_study.queue import Cohort, QueueState, run
+from deepseek_study.runtime import checkpoints
+from deepseek_study.rollouts.queue import Cohort, QueueState, run
 
 
 class Backend:

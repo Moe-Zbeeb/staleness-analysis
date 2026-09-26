@@ -4,7 +4,7 @@ import random
 import numpy as np
 import torch
 
-from deepseek_study.checkpoints import atomic_write
+from deepseek_study.runtime.checkpoints import atomic_write
 
 
 def capture_rng():

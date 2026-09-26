@@ -3,7 +3,7 @@ from pathlib import Path
 
 import pytest
 
-from deepseek_study import data
+from deepseek_study.dataset import prepare as data
 from deepseek_study.recipe import baseline
 
 

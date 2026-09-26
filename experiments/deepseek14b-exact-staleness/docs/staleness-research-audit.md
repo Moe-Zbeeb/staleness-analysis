@@ -2,6 +2,8 @@
 
 Reviewed 2026-09-26 against study commit `039936f3c5938b8ef9c4ee8b52fae45051ece43f` and official PrimeRL `ab5de8fff44b2c4a5c85e24b6e6e3f7d57eee7b1`. The subject is DeepSeek-R1-Distill-Qwen-14B on the pinned cleaned DeepScaleR release. Each requested run has one exact integer lag; this document does not schedule a sweep.
 
+Source links were updated for the subsequent module organization. The scientific behavior audited here is unchanged; see the [layout and integration notes](upstream-integration.md#upgrades-and-layout-migration).
+
 **The key distinction is between rollout age, policy difference, and learning quality.** Exact age makes an experiment interpretable, but does not establish that the model tolerates that age. No training or model generation was started for this audit, and there is no measured maximum tolerable lag for this model yet.
 
 The scan traced the authored configuration, queue, controller, loss, data preparation, grader, launcher, provenance and recovery paths; the pinned PrimeRL trainer, loss reduction, optimizer, scheduler, metrics, weight watcher and transport; and primary literature and released M2PO code. This is a source and contract audit, not a proof of distributed execution.
@@ -94,7 +96,7 @@ These are audit findings and hypotheses. “Hold fixed” means fixed within a c
 | Generation timing | Current weights generate a future cohort; queue delays use | Wall-clock delay does not itself change optimizer-update age |
 | Recovery | Pending cohorts preserved; original horizon/layout required | Regenerating pending data or reusing already consumed samples changes the treatment |
 
-Evidence: [queue][queue], [controller][controller], [configuration][config], [recovery](../src/deepseek_study/checkpoints.py).
+Evidence: [queue][queue], [controller][controller], [configuration][config], [recovery](../src/deepseek_study/runtime/checkpoints.py).
 
 ### What determines policy movement and sensitivity to old data
 
@@ -134,7 +136,7 @@ For independent binary responses with per-prompt success probability `p`, the pr
 | Grader deadlines/retries | 8s internal, 10s outer, four workers, one identical-input retry | Distinguish infrastructure failures from wrong answers; do not hide failures as zero reward or replacement sampling |
 | Seeds | Seed 42 baseline; seeded data/trainer/inference | Same integer seed does not guarantee paired generations across different schedules or hardware |
 
-Evidence: [taskset](../src/deepseek_deepscaler/__init__.py), [data contract](../src/deepseek_study/data.py), [reward implementation](../src/deepseek_study/rewards.py), [build][build], [vLLM 0.26 sampling defaults](https://github.com/vllm-project/vllm/blob/v0.26.0/vllm/sampling_params.py#L218).
+Evidence: [taskset](../src/deepseek_deepscaler/__init__.py), [data contract](../src/deepseek_study/dataset/prepare.py), [reward implementation](../src/deepseek_study/dataset/rewards.py), [build][build], [vLLM 0.26 sampling defaults](https://github.com/vllm-project/vllm/blob/v0.26.0/vllm/sampling_params.py#L218).
 
 Unique question IDs and a “dedup” dataset name do not establish benchmark decontamination. Audit exact/normalized prompt overlap and available source provenance against the frozen evaluation artifacts before calling results held out.
 
@@ -153,7 +155,7 @@ Unique question IDs and a “dedup” dataset name do not establish benchmark de
 | Runtime provenance | Source/dependency/data identities, GPU details | Record driver/CUDA/kernel settings and inherited numerical environment too; a package lock alone does not describe all execution conditions |
 | Storage/logging | Pending payloads plus rollout journals and checkpoint bundles | Larger `k` increases resident queue state; storage stalls affect efficiency, not intended age; include checkpoint/evaluation overhead in wall-time comparisons |
 
-Evidence: [recipe][recipe], [launcher](../src/deepseek_study/launcher.py), [identity](../src/deepseek_study/identity.py), [trainer RNG](../src/deepseek_study/trainer_state.py), [weight watcher][watcher], [NCCL transport][nccl].
+Evidence: [recipe][recipe], [launcher](../src/deepseek_study/runtime/launcher.py), [identity](../src/deepseek_study/runtime/identity.py), [trainer RNG](../src/deepseek_study/runtime/trainer_state.py), [weight watcher][watcher], [NCCL transport][nccl].
 
 ## 4. Metrics needed for a defensible result
 
@@ -214,13 +216,13 @@ The audit resolved the actual baseline without starting processes: no evaluator,
 
 Previously recorded validation remains 103 tests on macOS and Linux plus cluster component probes. No runtime source or scientific settings were changed during this research scan. The immediate deliverable is this reviewable research specification; the evaluator, richer diagnostics and live end-to-end checks are outstanding work, not completed features.
 
-[queue]: ../src/deepseek_study/queue.py
-[controller]: ../src/deepseek_study/controller.py
+[queue]: ../src/deepseek_study/rollouts/queue.py
+[controller]: ../src/deepseek_study/rollouts/controller.py
 [recipe]: ../src/deepseek_study/recipe.py
 [config]: ../src/deepseek_study/config.py
-[build]: ../src/deepseek_study/build.py
-[advantages]: ../src/deepseek_study/algorithm.py
-[loss]: ../src/deepseek_study/loss.py
+[build]: ../src/deepseek_study/runtime/build.py
+[advantages]: ../src/deepseek_study/learning/advantages.py
+[loss]: ../src/deepseek_study/learning/loss.py
 [trainer]: https://github.com/PrimeIntellect-ai/prime-rl/blob/ab5de8fff44b2c4a5c85e24b6e6e3f7d57eee7b1/src/prime_rl/trainer/rl/train.py
 [reduction]: https://github.com/PrimeIntellect-ai/prime-rl/blob/ab5de8fff44b2c4a5c85e24b6e6e3f7d57eee7b1/src/prime_rl/trainer/rl/loss.py
 [scheduler]: https://github.com/PrimeIntellect-ai/prime-rl/blob/ab5de8fff44b2c4a5c85e24b6e6e3f7d57eee7b1/src/prime_rl/trainer/scheduler.py

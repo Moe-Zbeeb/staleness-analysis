@@ -6,8 +6,8 @@ import shutil
 from pathlib import Path
 
 from deepseek_study import PRIME_COMMIT
-from deepseek_study.checkpoints import atomic_write
-from deepseek_study.data import digest, load_manifest
+from deepseek_study.runtime.checkpoints import atomic_write
+from deepseek_study.dataset.prepare import digest, load_manifest
 
 
 def source_files(root):

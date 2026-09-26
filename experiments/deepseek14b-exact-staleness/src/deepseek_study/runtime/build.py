@@ -1,7 +1,7 @@
 import json
 from pathlib import Path
 
-from deepseek_study.checkpoints import atomic_write
+from deepseek_study.runtime.checkpoints import atomic_write
 from prime_rl.configs.rl import RLConfig
 from prime_rl.entrypoints.rl import write_subconfigs
 
@@ -59,7 +59,7 @@ def resolve(study, resume=None):
                 },
                 "loss": {
                     "type": "custom",
-                    "import_path": "deepseek_study.loss.clipped_grpo",
+                    "import_path": "deepseek_study.learning.loss.clipped_grpo",
                     "kwargs": {"clip_epsilon": study.clip_epsilon},
                 },
                 "optim": {

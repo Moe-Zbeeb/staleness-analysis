@@ -7,9 +7,9 @@ from pathlib import Path
 
 
 def main():
-    from deepseek_study.assets import prepare, validate_prepared
-    from deepseek_study.build import build
-    from deepseek_study.identity import capture
+    from deepseek_study.dataset.assets import prepare, validate_prepared
+    from deepseek_study.runtime.build import build
+    from deepseek_study.runtime.identity import capture
     from deepseek_study.recipe import baseline
 
     root = Path(__file__).resolve().parents[1]

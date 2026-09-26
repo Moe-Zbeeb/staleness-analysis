@@ -4,9 +4,9 @@ from typing import Literal
 
 import verifiers.v1 as vf
 
-from deepseek_study.data import prepared_rows
-from deepseek_study.grading import GraderFailure, get_pool
-from deepseek_study.rewards import completion_tokens, tokenizer
+from deepseek_study.dataset.prepare import prepared_rows
+from deepseek_study.dataset.grading import GraderFailure, get_pool
+from deepseek_study.dataset.rewards import completion_tokens, tokenizer
 
 __all__ = ["DeepScaleRTaskset"]
 

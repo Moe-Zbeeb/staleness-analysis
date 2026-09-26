@@ -2,7 +2,7 @@ import json
 
 import pytest
 
-from deepseek_study.audit import audit
+from deepseek_study.rollouts.audit import audit
 
 
 def write_run(path, lag, starting, end):

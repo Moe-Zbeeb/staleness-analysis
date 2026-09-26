@@ -1,8 +1,8 @@
 import pytest
 import torch
 
-from deepseek_study.algorithm import group_advantages
-from deepseek_study.loss import clipped_grpo
+from deepseek_study.learning.advantages import group_advantages
+from deepseek_study.learning.loss import clipped_grpo
 from prime_rl.trainer.rl.loss import LossInputs
 
 

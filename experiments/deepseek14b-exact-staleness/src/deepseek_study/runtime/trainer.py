@@ -12,7 +12,7 @@ def main():
     torch.manual_seed(seed)
     torch.cuda.manual_seed_all(seed)
     from prime_rl.trainer.rl import train
-    from deepseek_study.trainer_state import CheckpointWithRNG
+    from deepseek_study.runtime.trainer_state import CheckpointWithRNG
 
     setup = train.setup_ckpt_manager
 

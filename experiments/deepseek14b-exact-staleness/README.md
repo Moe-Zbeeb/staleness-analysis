@@ -2,13 +2,42 @@
 
 One run at a time, with the exact nonnegative integer `k` you request. This package composes official PrimeRL v0.9.0 at `ab5de8fff44b2c4a5c85e24b6e6e3f7d57eee7b1`; it does not import the teammate fork or edit upstream files.
 
-**Status:** deployed on the cluster; all 103 tests passed locally and on Linux. Runtime checks passed on eight A100 80GB GPUs for NCCL, BF16 backward, Flash Attention backward and vLLM RMSNorm. Full 14B training, live model-weight transfer, memory fit and training/resume execution remain unverified. No study training has been launched. See [validation evidence](diagnostics/cluster-validation.json).
+**Status:** the organized package passes all 103 tests locally. The earlier deployed layout passed the same suite on Linux, plus checks on eight A100 80GB GPUs for NCCL, BF16 backward, Flash Attention backward and vLLM RMSNorm. Those cluster receipts describe the earlier deployment, not a new test of this layout. Full 14B training, live model-weight transfer, memory fit and training/resume execution remain unverified. No study training has been launched. See [validation evidence](diagnostics/cluster-validation.json).
 
 ## Review and organization
 
-Start with the [review guide](docs/review-guide.md) for the module map and a worked exact-k example. Runtime source lives in `src/`, installation and health tools in `scripts/`, focused checks in `tests/`, and configuration contracts in `configs/`. Pinned model hashes are in `manifests/`; deterministic preparation writes the question-selection record to `assets/train-manifest.json`. Model weights, raw datasets, generated manifests, environments, caches, run outputs and job logs are excluded from Git. The small preparation summary and exclusion report remain reviewable in `diagnostics/`.
+Start with the [architecture](docs/architecture.md) for the directory tree and execution flow, then the [review guide](docs/review-guide.md) for the exact-k contract and checks.
+
+| Concern | Location | Edit here when… |
+| --- | --- | --- |
+| Baseline values | [recipe.py](src/deepseek_study/recipe.py) | Choosing the explicit settings for a run |
+| Supported settings | [config.py](src/deepseek_study/config.py) | Defining or validating a scientific setting |
+| Command interface | [cli.py](src/deepseek_study/cli.py) | Working on setup, build, check, run or audit commands |
+| Advantages and loss | [learning/](src/deepseek_study/learning/) | Changing the learning algorithm |
+| Exact-age cohorts and audit | [rollouts/](src/deepseek_study/rollouts/) | Changing generation, queueing or consumption |
+| Assets, preparation and grading | [dataset/](src/deepseek_study/dataset/) | Working on the dataset or reward policy |
+| PrimeRL configuration, processes and recovery | [runtime/](src/deepseek_study/runtime/) | Working on the library integration or checkpoint lifecycle |
+| Taskset plugin | [deepseek_deepscaler/](src/deepseek_deepscaler/) | Connecting prepared questions and rewards to Verifiers |
+| Installation and health checks | [scripts/](scripts/) | Preparing dependencies, packaging or checking hardware |
+| Tests and evidence | [tests/](tests/), [diagnostics/](diagnostics/) | Reviewing validated behavior and limits |
+
+Configuration templates/schema live in `configs/`; pinned model hashes are in `manifests/`. Preparation writes the question-selection record to `assets/train-manifest.json`. Weights, raw datasets, generated manifests, environments, caches, run outputs and job logs are excluded from Git.
 
 The [staleness research audit](docs/staleness-research-audit.md) separates exact age, policy difference, learning quality and throughput. It maps the relevant knobs, differences from the cited paper, current measurement gaps and a proposed research protocol. It does not launch experiments or change the baseline.
+
+## Imported libraries: what we change
+
+**No tracked source files in official PrimeRL or its imported submodules are modified.** We pin PrimeRL v0.9.0 at `ab5de8fff44b2c4a5c85e24b6e6e3f7d57eee7b1` and install its frozen dependency lock. The launcher rejects tracked changes or a different dependency revision.
+
+We do customize behavior through our package: a configured loss, a group-advantage algorithm, a finite rollout source and explicit weight synchronization. In each trainer process, `runtime/trainer.py` temporarily replaces PrimeRL's checkpoint-manager factory with our RNG-saving adapter and restores the factory on exit. This is an in-memory override, not a source patch. A separate prepared model view changes only tokenizer-class metadata for compatibility; the original model files remain untouched.
+
+The [integration guide](docs/upstream-integration.md) lists every customization, the dependency pins, and what must be reviewed when upgrading the library. These internal interfaces are version-sensitive; the package does not automatically follow upstream changes.
+
+## Source-layout update
+
+Implementation files now live under four concern-specific subpackages. The `deepseek-study` command, configuration fields, taskset name, scientific defaults and training algorithm are unchanged. Both hardware profiles resolve identically to the previous layout except for the custom loss import path, now `deepseek_study.learning.loss.clipped_grpo`. Advantage, loss, queue and reward implementation files retain their previous bytes; the grader identity and prepared dataset manifest are unchanged.
+
+Regenerate resolved configs from the study JSON using `deepseek-study build`; do not reuse old resolved files with the flat loss import path. Source fingerprints and pickled module paths changed, so old source snapshots/checkpoints require their original code. Use a fresh source deployment for this layout; do not overlay it onto an old source tree and leave obsolete modules behind. [Upgrade and deployment notes](docs/upstream-integration.md#upgrades-and-layout-migration).
 
 ## Training contract
 

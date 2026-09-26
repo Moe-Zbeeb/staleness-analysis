@@ -1,15 +1,95 @@
-# Exact-staleness implementation
+# Code layout and execution flow
 
-The public configuration accepts one explicit nonnegative integer lag. A fresh run has lag on-policy bootstrap updates, followed by the exact-lag phase. The total horizon includes bootstrap. Each complete cohort causes one optimizer update after all packed microbatches accumulate.
+The public entry point is `deepseek-study`. Run settings live in `recipe.py` and `config.py`; implementation is grouped by concern. Files under `vendor/` are imported dependencies and are not edited by this package.
 
-`recipe.py` writes the reviewed baseline; `config.py` rejects incompatible horizons, layouts, deadlines and request concurrency. `build.py` resolves the pinned official PrimeRL configuration. `queue.py` selects cohorts by behavior-policy version and overlaps generation with training; every response is consumed once, and the tail drains without unused generation. The finite source addresses the official cyclic sampler by target consumption cohort, preserving prompt assignments across lag choices.
+```text
+deepseek14b-exact-staleness/
+├── src/
+│   ├── deepseek_study/
+│   │   ├── __init__.py
+│   │   ├── cli.py
+│   │   ├── config.py
+│   │   ├── recipe.py
+│   │   ├── learning/
+│   │   │   ├── advantages.py
+│   │   │   └── loss.py
+│   │   ├── rollouts/
+│   │   │   ├── queue.py
+│   │   │   ├── controller.py
+│   │   │   └── audit.py
+│   │   ├── dataset/
+│   │   │   ├── assets.py
+│   │   │   ├── prepare.py
+│   │   │   ├── rewards.py
+│   │   │   ├── grading.py
+│   │   │   └── worker.py
+│   │   └── runtime/
+│   │       ├── build.py
+│   │       ├── launcher.py
+│   │       ├── trainer.py
+│   │       ├── trainer_state.py
+│   │       ├── checkpoints.py
+│   │       └── identity.py
+│   └── deepseek_deepscaler/
+│       └── __init__.py
+├── configs/
+├── manifests/
+├── scripts/
+├── tests/
+├── diagnostics/
+└── docs/
+```
 
-`controller.py` composes the official orchestrator, dispatcher, training sink, packer and transport. It does not start the automatic newest-weight watcher. It explicitly applies the next policy only after the finite generation cohort completes. It verifies per-response start/end versions, payload hashes and exact consumption age. Raw token/log-probability payloads and grading evidence are journaled.
+Each subpackage also has an empty `__init__.py`. `vendor/`, `assets/`, `outputs/` and `dist/` are local generated directories excluded from Git.
 
-`algorithm.py` assigns explicit group advantages. `loss.py` implements the clipped GRPO surrogate from original behavior log-probabilities, with token masks, distinct clipping metrics and a nonfinite-value guard. The official trainer supplies global token normalization, accumulation, optimizer updates and distributed training.
+## Where each responsibility lives
 
-`assets.py` verifies source model/data identity and native-tokenizer parity. `data.py` records deterministic prompt/reference exclusions without modifying the source dataset. `rewards.py` defines the pinned strict-box policy; `grading.py` manages persistent isolated workers with deadlines and retry-on-identical-input semantics. `deepseek_deepscaler` integrates these with the official taskset API.
+| Area | Responsibility | Boundary |
+| --- | --- | --- |
+| `cli.py`, `config.py`, `recipe.py` | Commands, validated settings and baseline values | Choosing a lag does not schedule a sweep |
+| `learning/` | Group advantages and clipped GRPO loss | Does not schedule rollouts or launch processes |
+| `rollouts/queue.py` | Exact-k state machine and finite horizon | Uses a backend interface; contains no PrimeRL imports |
+| `rollouts/controller.py` | Implements that backend with official PrimeRL components | Checks provenance and applies weights at explicit barriers |
+| `rollouts/audit.py` | Validates recorded update ages and accounting | Reads completed-update evidence; does not train |
+| `dataset/` | Asset identity, prepared question selection, reward policy and isolated grading workers | Infrastructure failures are distinct from incorrect answers |
+| `deepseek_deepscaler/` | Verifiers taskset adapter | Connects questions/rewards to the official task API |
+| `runtime/build.py` | Converts the study config to real PrimeRL configs | Config resolution launches no workers |
+| `runtime/launcher.py` | Preflight, source snapshot, process startup and shutdown | Only the `run` command starts training |
+| `runtime/trainer.py`, `trainer_state.py` | Trainer entry point, seed setup and RNG checkpoint adapter | Official trainer still performs forward/backward and optimizer steps |
+| `runtime/checkpoints.py`, `identity.py` | Atomic state bundles, retention and immutable source/runtime identity | Recovery requires the same scientific/source identity |
 
-`identity.py` creates an immutable source snapshot for child processes and binds the source, upstream dependency lockfile, runtime and prepared data. `trainer_state.py` adds rank-local RNG save/restore around the official checkpoint manager through the study entrypoint; upstream source is unmodified. `checkpoints.py` commits the full trainer/sampler/queue bundle and prunes only completed run checkpoints. `audit.py` validates the requested lag and update/cohort accounting, including resumed output directories.
+## Execution flow
 
-The extension uses pinned internal PrimeRL interfaces; an upstream upgrade requires rerunning contract tests. CPU validation does not establish real GPU memory fit, NCCL transfer, live inference numerical parity or bitwise inference recovery. Automatic benchmark evaluation and cross-hardware resume are not implemented.
+```mermaid
+flowchart TD
+    A[Study JSON] --> B[Config validation and asset checks]
+    B --> C[Runtime launcher and source snapshot]
+    C --> D[Official inference and task servers]
+    C --> E[Rollout controller]
+    C --> F[Trainer entry point]
+    D --> G[Graded response groups]
+    E --> I[Exact-k queue]
+    G --> H[Learning advantages and training samples]
+    H --> I
+    I --> P[Official sample packing and transport]
+    P --> F
+    F --> J[Custom loss inside official trainer]
+    J --> K[One optimizer update]
+    K --> L[Weight synchronization barrier]
+    L --> D
+    L --> M[Update receipt and checkpoint bundle]
+```
+
+Generation of a future cohort can overlap the current update. Inference weights change only after that cohort finishes. Every consumed cohort causes one optimizer update after all packed microbatches accumulate. The first `k` updates are labeled on-policy bootstrap; subsequent cohorts have exact age `k`. The tail drains without unused generation.
+
+The controller composes the official dispatcher, sink, packer, transports and watcher. It does not start the automatic newest-weight watcher or the stock orchestrator training/evaluation loop. See [imported-library integration](upstream-integration.md) for the exact boundaries and runtime override.
+
+## Read and change in this order
+
+1. Read [recipe.py](../src/deepseek_study/recipe.py) and [config.py](../src/deepseek_study/config.py) to understand the fixed experiment.
+2. Read [queue.py](../src/deepseek_study/rollouts/queue.py) and the [worked example](review-guide.md#algorithm-contract) to understand age.
+3. Read [advantages.py](../src/deepseek_study/learning/advantages.py), [loss.py](../src/deepseek_study/learning/loss.py) and [rewards.py](../src/deepseek_study/dataset/rewards.py) to understand the learning signal.
+4. Read [controller.py](../src/deepseek_study/rollouts/controller.py), then [runtime/](../src/deepseek_study/runtime/), to review execution and recovery.
+5. Read the [research audit](staleness-research-audit.md) before interpreting training logs as scientific results.
+
+The CPU suite checks contracts and behavior. Full 14B execution, live model-weight transfer, memory fit and actual training/resume remain unverified. Held-out evaluation, richer tail diagnostics and explicit sample-to-response mapping remain research work; reorganizing the modules does not implement them.
