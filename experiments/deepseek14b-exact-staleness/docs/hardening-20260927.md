@@ -39,6 +39,8 @@ The saved first 3B warmup cohort was regraded offline, preserving explicit sampl
 
 ## Deployment and next validation
 
+See the [deployment record](deployment-v3-20260927.md) for the exact source import command and the outstanding NFS import/preflight limitation.
+
 The new cluster release is `releases/correctness-v3-20260927` under `/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study`. It includes the v3 data manifest and hash inventory. Old v2 releases, output snapshots and launch controls must remain unchanged as historical evidence.
 
 New runs require newly generated configurations/manifests and fresh output directories. The `init` command now selects `assets/train-manifest-v3.json`. Historical `exact256-*-v2.json` files and small-model launch controls refer to the old source/data contract and must not be reused. Prepare each small-model adapter against the new frozen release; its tokenizer/model and reasoning format must match. Old checkpoints cannot be relabeled as v3.

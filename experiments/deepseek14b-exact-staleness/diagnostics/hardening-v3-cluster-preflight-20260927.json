@@ -1,0 +1,30 @@
+{
+  "clock_probe": {
+    "reward": 1.0,
+    "reason": "correct",
+    "extracted": "6:00\\ \\text{pm}",
+    "policy": "strict-final-box-v3-context-clock-native-reasoning"
+  },
+  "plain_base_probe": {
+    "reward": 1.0,
+    "reason": "correct",
+    "extracted": "42",
+    "policy": "strict-final-box-v3-context-clock-native-reasoning"
+  },
+  "manifest_hash": "c86db656d027e582ad712f8c100f17a5f6c75b54fea7e795f4e1fca6e3a5c90f",
+  "included_rows": 37696,
+  "reward_identity": {
+    "policy": "strict-final-box-v3-context-clock-native-reasoning",
+    "source_sha256": "1efc5e898c499e3102c506efc3f459ab55ff1b4839b112c1a59edf132ee82235",
+    "dependencies": {
+      "math-verify": "0.9.0",
+      "latex2sympy2-extended": "1.11.0",
+      "sympy": "1.14.0",
+      "antlr4-python3-runtime": "4.13.2"
+    }
+  },
+  "full_asset_preflight": "unverified: earlier180seconddeadline exceeded",
+  "narrowed_preflight_trace": "NFS-backed Python importlib get_data while importing asyncio at55seconds",
+  "training_started": false,
+  "gpu_training_validation": false
+}

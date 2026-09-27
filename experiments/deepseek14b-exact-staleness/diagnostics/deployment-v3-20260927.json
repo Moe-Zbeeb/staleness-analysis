@@ -1,0 +1,11 @@
+{
+  "release": "/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/releases/correctness-v3-20260927",
+  "git_commit": "f369137be8e7f505ca588038bf59382e7403bb47",
+  "package_sha256": "6cf2cd092acf65c79c7eaab55d898e1f408518db1a6568d162bd3c80a8c5793c",
+  "verified_files": 111,
+  "current": "releases/correctness-v3-20260927",
+  "legacy_root_preserved": true,
+  "historical_outputs_preserved": true,
+  "training_started": false,
+  "command_prefix": "PYTHONPATH=/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/releases/correctness-v3-20260927/src /mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/vendor/prime-rl/.venv/bin/python -m deepseek_study.cli"
+}
