@@ -1,0 +1,35 @@
+{
+  "comparison_job": "2145258",
+  "comparison_study": "/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/launches/deepseek15b-full-hp-opt-20260927/study.json",
+  "comparison_study_sha256": "b66841f2016c3bae5c9a121d2b2805a42de9cca0a30059d0264eaa222510d2ff",
+  "configuration_changes": {
+    "output_dir": [
+      "/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/outputs/deepseek15b-exact256-80gb-seed42-v3-opt",
+      "/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/outputs/deepseek15b-onpolicy-80gb-seed42-v1-opt"
+    ],
+    "lag": [
+      256,
+      0
+    ]
+  },
+  "shared_frozen_release": "/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/launches/deepseek15b-full-hp-opt-20260927/release",
+  "source_manifest_sha256": "40953eac70f45275572126dc4a964da661cb8857df390abfdfe1f6b332d3c0ab",
+  "training_source_modified": false,
+  "priority": "normal",
+  "partition": "low-priority",
+  "initial_weights": "deepseek-ai/DeepSeek-R1-Distill-Qwen-1.5B",
+  "total_updates": 1000,
+  "job_id": "2145261",
+  "last_verified_state": "PENDING",
+  "pending_reason": "Nodes required are down, drained or reserved for higher priority partitions",
+  "tests": {
+    "queue_config_audit": 61,
+    "passed": true
+  },
+  "allowed_gpu_nodes": [
+    "deep-chungus-9",
+    "deep-chungus-10",
+    "deep-chungus-11"
+  ],
+  "automatic_requeue": false
+}
