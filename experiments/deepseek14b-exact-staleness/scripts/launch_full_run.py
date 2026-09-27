@@ -33,6 +33,16 @@ def write(path, value):
         stream.write(json.dumps(value, indent=2) + "\n")
 
 
+def validate_node(manifest, environment):
+    nodes = manifest.get("allowed_nodes", [manifest["node"]] if "node" in manifest else [])
+    if not isinstance(nodes, list) or not nodes or any(not isinstance(node, str) for node in nodes):
+        raise ValueError("Invalid prepared node allowlist")
+    node = environment["SLURMD_NODENAME"]
+    if node not in nodes or int(environment.get("SLURM_RESTART_COUNT", "0")):
+        raise ValueError("Unexpected node or unsafe automatic restart")
+    return node
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--control", type=Path, required=True)
@@ -42,8 +52,7 @@ def main():
     for name, expected in {"study.json": manifest["study_sha256"], **manifest["scripts_sha256"]}.items():
         if hashlib.sha256((control / name).read_bytes()).hexdigest() != expected:
             raise ValueError(f"Full-run launch artifact changed: {name}")
-    if os.environ["SLURMD_NODENAME"] != manifest["node"] or int(os.environ.get("SLURM_RESTART_COUNT", "0")):
-        raise ValueError("Unexpected node or unsafe automatic restart")
+    node = validate_node(manifest, os.environ)
     release = Path(manifest["release"])
     sys.path.insert(0, str(release / "src"))
     from deepseek_study.config import StudyConfig
@@ -61,7 +70,8 @@ def main():
     allocated = os.environ["CUDA_VISIBLE_DEVICES"].split(",")
     subprocess.run(
         [sys.executable, str(control / "probe_allocated_gpus.py"), "--output", str(job / "device-probes.json")],
-        check=True, timeout=180,
+        check=True,
+        timeout=180,
     )
     probes = json.loads((job / "device-probes.json").read_text())
     if probes["allocated_devices"] != allocated:
@@ -72,11 +82,19 @@ def main():
     os.environ["PYTHONPATH"] = str(release / "src")
     subprocess.run(
         [
-            sys.executable, "-m", "torch.distributed.run", "--standalone", f"--nproc-per-node={count}",
-            str(release / "scripts/gpu_health.py"), "--expected-gpus", str(count),
-            "--receipt", str(job / "hardware.json"),
+            sys.executable,
+            "-m",
+            "torch.distributed.run",
+            "--standalone",
+            f"--nproc-per-node={count}",
+            str(release / "scripts/gpu_health.py"),
+            "--expected-gpus",
+            str(count),
+            "--receipt",
+            str(job / "hardware.json"),
         ],
-        check=True, timeout=330,
+        check=True,
+        timeout=330,
     )
     hardware = json.loads((job / "hardware.json").read_text())
     if hardware["world_size"] != count or len(hardware["devices"]) != count:
@@ -87,12 +105,18 @@ def main():
     write(
         job / "launch.json",
         {
-            "job_id": os.environ["SLURM_JOB_ID"], "node": manifest["node"],
-            "allocated_devices": allocated, "visible_devices": visible,
+            "job_id": os.environ["SLURM_JOB_ID"],
+            "node": node,
+            "allocated_devices": allocated,
+            "visible_devices": visible,
             "unused_devices": [device for device in allocated if device not in visible],
-            "inference_devices": visible[:study.inference_gpus], "trainer_devices": visible[study.inference_gpus:],
-            "maximum_updates": study.max_steps, "lag": study.lag, "command": command,
-            "config_sha256": manifest["config_sha256"], "identity_sha256": manifest["identity_sha256"],
+            "inference_devices": visible[: study.inference_gpus],
+            "trainer_devices": visible[study.inference_gpus :],
+            "maximum_updates": study.max_steps,
+            "lag": study.lag,
+            "command": command,
+            "config_sha256": manifest["config_sha256"],
+            "identity_sha256": manifest["identity_sha256"],
         },
     )
     os.chdir(release)

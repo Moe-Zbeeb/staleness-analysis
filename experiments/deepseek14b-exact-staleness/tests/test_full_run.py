@@ -45,6 +45,7 @@ def test_full_run_rejects_wrong_protocol(key, value, tmp_path):
 
 
 def test_all_nine_gpus_and_authorized_seven_gpu_fallback():
+    assert LAUNCH.select_devices(probes(8), 8, 8) == [str(i) for i in range(8)]
     assert LAUNCH.select_devices(probes(9), 9, 9) == [str(i) for i in range(9)]
     assert LAUNCH.select_devices(probes(8, {7}), 8, 7) == [str(i) for i in range(7)]
 
@@ -66,3 +67,224 @@ def test_full_run_rejects_duplicate_gpu_aliases():
 def test_full_run_never_silently_discards_healthy_gpus():
     with pytest.raises(ValueError, match="topology"):
         LAUNCH.select_devices(probes(9), 9, 8)
+
+
+@pytest.mark.parametrize("inference_gpus", [3, 4])
+def test_fresh_study_uses_full_eight_gpu_allocation_with_only_authorized_fallback(tmp_path, inference_gpus):
+    baseline = json.loads((SCRIPTS.parent / "configs/exact256-80gb-seed42-v2.json").read_text())
+    result = PREPARE.fresh_config(baseline, tmp_path / "full", inference_gpus, 8, 79_000_000_000)
+    assert result["trainer_gpus"] == 4
+    assert result["inference_gpus"] == inference_gpus
+    assert result["max_steps"] == 1000 and result["lag"] == 256
+
+
+@pytest.mark.parametrize(
+    "inference_gpus,allocated_gpus,minimum_bytes",
+    [(5, 9, 79_000_000_000), (3, 7, 79_000_000_000), (4, 8, 39_000_000_000)],
+)
+def test_fresh_study_rejects_unrequested_hardware_layout(tmp_path, inference_gpus, allocated_gpus, minimum_bytes):
+    baseline = json.loads((SCRIPTS.parent / "configs/exact256-80gb-seed42-v2.json").read_text())
+    with pytest.raises(ValueError, match="exclusive eight-A100-80GB"):
+        PREPARE.fresh_config(baseline, tmp_path / "full", inference_gpus, allocated_gpus, minimum_bytes)
+
+
+def test_prepared_nodes_accept_repeat_or_comma_but_not_slurm_expressions():
+    assert PREPARE.allowed_nodes(["deep-chungus-9,deep-chungus-10", "deep-chungus-11"]) == [
+        "deep-chungus-9",
+        "deep-chungus-10",
+        "deep-chungus-11",
+    ]
+    with pytest.raises(ValueError, match="explicit candidate"):
+        PREPARE.allowed_nodes(["deep-chungus-[9-11]"])
+
+
+def test_launcher_accepts_only_prepared_nodes_and_never_an_automatic_restart():
+    manifest = {"allowed_nodes": ["deep-chungus-9", "deep-chungus-11"]}
+    assert LAUNCH.validate_node(manifest, {"SLURMD_NODENAME": "deep-chungus-11"}) == "deep-chungus-11"
+    assert LAUNCH.validate_node({"node": "deep-chungus-7"}, {"SLURMD_NODENAME": "deep-chungus-7"}) == "deep-chungus-7"
+    for environment in (
+        {"SLURMD_NODENAME": "deep-chungus-10"},
+        {"SLURMD_NODENAME": "deep-chungus-9", "SLURM_RESTART_COUNT": "1"},
+    ):
+        with pytest.raises(ValueError, match="Unexpected node or unsafe automatic restart"):
+            LAUNCH.validate_node(manifest, environment)
+    with pytest.raises(ValueError, match="Invalid prepared node allowlist"):
+        LAUNCH.validate_node({"allowed_nodes": "deep-chungus-9"}, {"SLURMD_NODENAME": "deep"})
+
+
+def test_control_accepts_preparation_artifacts_but_not_existing_run_state(tmp_path):
+    for name in (
+        "launch_full_run.py",
+        "full_run_job.sh",
+        "probe_allocated_gpus.py",
+        "prepare_cached_full_run.py",
+        "prelaunch.json",
+    ):
+        (tmp_path / name).write_text("frozen")
+    (tmp_path / "work").mkdir()
+    cache = tmp_path / "__pycache__"
+    cache.mkdir()
+    (cache / "prepare_small_model_profile.cpython-312.pyc").write_bytes(b"python import cache")
+    (tmp_path / "device-probes-preparation.json").write_text("receipt")
+    hashes = PREPARE.control_scripts(tmp_path)
+    assert "prepare_cached_full_run.py" in hashes and "prelaunch.json" in hashes
+    assert "device-probes-preparation.json" not in hashes
+    (tmp_path / "study.json").write_text("old")
+    with pytest.raises(FileExistsError, match="existing run"):
+        PREPARE.control_scripts(tmp_path)
+
+
+@pytest.mark.parametrize("invalid", [None, "format", "pin"])
+def test_fresh_preparation_validates_assets_and_identity_without_a_profile(study, tmp_path, monkeypatch, invalid):
+    import deepseek_study
+    from deepseek_study.dataset import assets
+    from deepseek_study.runtime import identity
+
+    release = tmp_path / "release"
+    release.mkdir()
+    (release / "pyproject.toml").write_text("locked")
+    (release / "PACKAGE_SHA256.json").write_text(
+        json.dumps({"pyproject.toml": PREPARE.digest(release / "pyproject.toml")})
+    )
+    control = tmp_path / "control"
+    control.mkdir()
+    for name in ("launch_full_run.py", "full_run_job.sh", "probe_allocated_gpus.py"):
+        (control / name).write_text("frozen launcher")
+    config = study.model_copy(
+        update={
+            "max_steps": 1000,
+            "lag": 256,
+            "checkpoint_interval": 100,
+            "trainer_gpus": 4,
+            "inference_gpus": 4,
+            "inference_tensor_parallel": 1,
+            "reasoning_required": invalid == "format",
+        }
+    )
+    source = tmp_path / "input.json"
+    source.write_text(config.model_dump_json())
+    model = "Qwen/Qwen2.5-3B"
+    revision = "wrong" if invalid == "pin" else PREPARE.PROFILE_MODELS[model][0]
+    monkeypatch.setattr(deepseek_study, "MODEL_ID", model)
+    monkeypatch.setattr(deepseek_study, "MODEL_REVISION", revision)
+    monkeypatch.setattr(assets, "MODEL_ID", model)
+    validated = []
+
+    def validate(value):
+        assets.validate_grading_format(value)
+        validated.append(value)
+        return {"rows": 37696}
+
+    monkeypatch.setattr(assets, "validate_prepared", validate)
+    monkeypatch.setattr(identity, "capture", lambda path, value: {"sha256": "fresh-source-data-runtime"})
+    monkeypatch.setattr(sys, "path", list(sys.path))
+    monkeypatch.setattr(
+        sys,
+        "argv",
+        [
+            "prepare_full_run.py",
+            "--study",
+            str(source),
+            "--release",
+            str(release),
+            "--control",
+            str(control),
+            "--output",
+            str(config.output_dir),
+            "--inference-gpus",
+            "4",
+            "--allocated-gpus",
+            "8",
+            "--node",
+            "deep-chungus-9,deep-chungus-11",
+            "--minimum-gpu-bytes",
+            "79000000000",
+        ],
+    )
+    if invalid:
+        with pytest.raises(ValueError, match="pinned"):
+            PREPARE.main()
+        assert not (control / "full-run.json").exists()
+        assert not (control / "study.json").exists()
+    else:
+        PREPARE.main()
+        manifest = json.loads((control / "full-run.json").read_text())
+        assert len(validated) == 1
+        assert manifest["preparation_mode"] == "fresh_study" and manifest["profile"] is None
+        assert manifest["identity_sha256"] == "fresh-source-data-runtime"
+        assert manifest["asset_preflight"] == {"rows": 37696}
+        assert manifest["allowed_nodes"] == ["deep-chungus-9", "deep-chungus-11"]
+        assert manifest["maximum_updates"] == 1000 and manifest["lag"] == 256
+        assert "node" not in manifest
+        assert not config.output_dir.exists()
+
+
+def test_verified_profile_preparation_remains_supported(study, tmp_path, monkeypatch):
+    import deepseek_study
+    from deepseek_study.runtime import identity
+
+    profile = tmp_path / "profile"
+    release = profile / "release"
+    release.mkdir(parents=True)
+    (release / "pyproject.toml").write_text("frozen")
+    (release / "PACKAGE_SHA256.json").write_text(
+        json.dumps({"pyproject.toml": PREPARE.digest(release / "pyproject.toml")})
+    )
+    model = "Qwen/Qwen3-1.7B"
+    revision = PREPARE.PROFILE_MODELS[model][0]
+    (profile / "preparation.json").write_text(
+        json.dumps(
+            {
+                "model_id": model,
+                "model_revision": revision,
+                "same_question_membership_and_order": True,
+                "prime_rl_modified": False,
+            }
+        )
+    )
+    baseline = study.model_copy(update={"max_steps": 1000, "lag": 256, "checkpoint_interval": 100, "trainer_gpus": 4})
+    (profile / "study.json").write_text(baseline.model_dump_json())
+    control = tmp_path / "control"
+    control.mkdir()
+    for name in ("launch_full_run.py", "full_run_job.sh", "probe_allocated_gpus.py"):
+        (control / name).write_text("frozen launcher")
+    monkeypatch.setattr(deepseek_study, "MODEL_ID", model)
+    monkeypatch.setattr(deepseek_study, "MODEL_REVISION", revision)
+    monkeypatch.setattr(identity, "capture", lambda path, value: {"sha256": "profile-source-data-runtime"})
+    requested_identities = []
+
+    def read_identity(path):
+        requested_identities.append(path)
+        return {"sha256": "profile-source-data-runtime"}
+
+    monkeypatch.setattr(identity, "read_identity", read_identity)
+    monkeypatch.setattr(sys, "path", list(sys.path))
+    monkeypatch.setattr(
+        sys,
+        "argv",
+        [
+            "prepare_full_run.py",
+            "--profile",
+            str(profile),
+            "--control",
+            str(control),
+            "--output",
+            str(tmp_path / "new-output"),
+            "--inference-gpus",
+            "4",
+            "--allocated-gpus",
+            "8",
+            "--node",
+            "deep-chungus-11",
+            "--minimum-gpu-bytes",
+            "79000000000",
+        ],
+    )
+    PREPARE.main()
+    manifest = json.loads((control / "full-run.json").read_text())
+    assert requested_identities == [baseline.output_dir / "source/identity.json"]
+    assert manifest["preparation_mode"] == "verified_profile"
+    assert manifest["profile"] == str(profile)
+    assert manifest["node"] == "deep-chungus-11"
+    assert manifest["allowed_nodes"] == ["deep-chungus-11"]
+    assert manifest["asset_preflight"] is None
