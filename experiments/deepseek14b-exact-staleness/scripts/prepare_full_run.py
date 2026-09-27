@@ -93,6 +93,8 @@ def main():
     if output.exists() or (control / "full-run.json").exists():
         raise FileExistsError("Full run already prepared or output already exists")
     scripts_sha256 = control_scripts(control)
+    from launch_full_run import startup_deadlines
+
     profile = args.profile.resolve() if args.profile else None
     release = profile / "release" if profile else args.release.resolve()
     for name, expected in json.loads((release / "PACKAGE_SHA256.json").read_text()).items():
@@ -161,6 +163,7 @@ def main():
                 if baseline.model_dump(mode="json")[key] != value
             },
             "scripts_sha256": scripts_sha256,
+            "startup_deadlines": startup_deadlines(),
             "asset_preflight": preflight,
             "starts_from_initial_model": True,
             "profile_updates_reused": 0,

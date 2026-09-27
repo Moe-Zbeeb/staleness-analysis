@@ -177,3 +177,33 @@ def test_release_freeze_excludes_vendor_and_bytecode(tmp_path):
     assert not any("vendor" in name or "pycache" in name for name in files)
     with pytest.raises(FileExistsError):
         CACHED.freeze_release(tmp_path)
+
+
+def test_cached_preparation_passes_cold_start_deadline_to_child_probe(tmp_path, monkeypatch):
+    control = tmp_path / "control"
+    control.mkdir()
+    verified = []
+
+    def verify(control):
+        verified.append(control)
+        return specification(tmp_path)
+
+    class ProbeInspected(Exception):
+        pass
+
+    def inspect_stage(name, command, environment, timeout, cwd):
+        assert verified == [control]
+        assert name == "probe_all_allocated_gpus"
+        assert command[command.index("--timeout") + 1] == "300"
+        assert timeout == 360
+        assert environment["CUDA_DEVICE_ORDER"] == "PCI_BUS_ID"
+        raise ProbeInspected
+
+    monkeypatch.setattr(CACHED, "verify_prelaunch", verify)
+    monkeypatch.setattr(CACHED, "run_stage", inspect_stage)
+    monkeypatch.setenv("SLURMD_NODENAME", "deep-chungus-7")
+    monkeypatch.setenv("SLURM_JOB_ID", "123")
+    monkeypatch.setenv("SLURM_RESTART_COUNT", "0")
+    monkeypatch.setenv("CUDA_VISIBLE_DEVICES", "0,1,2,3,4,5,6,7")
+    with pytest.raises(ProbeInspected):
+        CACHED.prepare(control)

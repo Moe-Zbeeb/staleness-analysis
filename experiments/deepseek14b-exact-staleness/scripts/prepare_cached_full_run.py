@@ -164,6 +164,8 @@ def run_stage(name, command, environment, timeout, cwd):
 def prepare(control):
     control = control.resolve()
     specification = verify_prelaunch(control)
+    from launch_full_run import GPU_PROBE_PARENT_MARGIN_SECONDS, GPU_PROBE_TIMEOUT_SECONDS
+
     node, allocated = validate_specification(specification, os.environ)
     source = Path(specification["source"]).resolve()
     old_profile = Path(specification["old_profile"]).resolve()
@@ -181,9 +183,11 @@ def prepare(control):
             str(control / "probe_allocated_gpus.py"),
             "--output",
             str(control / "device-probes-preparation.json"),
+            "--timeout",
+            str(GPU_PROBE_TIMEOUT_SECONDS),
         ],
         environment,
-        180,
+        GPU_PROBE_TIMEOUT_SECONDS + GPU_PROBE_PARENT_MARGIN_SECONDS,
         control,
     )
     probes = json.loads((control / "device-probes-preparation.json").read_text())

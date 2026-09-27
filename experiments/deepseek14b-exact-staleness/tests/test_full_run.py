@@ -215,6 +215,7 @@ def test_fresh_preparation_validates_assets_and_identity_without_a_profile(study
         assert manifest["asset_preflight"] == {"rows": 37696}
         assert manifest["allowed_nodes"] == ["deep-chungus-9", "deep-chungus-11"]
         assert manifest["maximum_updates"] == 1000 and manifest["lag"] == 256
+        assert manifest["startup_deadlines"] == LAUNCH.startup_deadlines()
         assert "node" not in manifest
         assert not config.output_dir.exists()
 
@@ -288,3 +289,55 @@ def test_verified_profile_preparation_remains_supported(study, tmp_path, monkeyp
     assert manifest["node"] == "deep-chungus-11"
     assert manifest["allowed_nodes"] == ["deep-chungus-11"]
     assert manifest["asset_preflight"] is None
+
+
+def test_full_launch_preserves_cold_start_probe_and_collective_deadlines(study, tmp_path, monkeypatch):
+    from deepseek_study.runtime import identity
+
+    control = tmp_path / "control"
+    control.mkdir()
+    release = tmp_path / "release"
+    release.mkdir()
+    study = study.model_copy(update={"trainer_gpus": 4, "inference_gpus": 4})
+    (control / "study.json").write_text(study.model_dump_json())
+    manifest = {
+        "study_sha256": PREPARE.digest(control / "study.json"), "scripts_sha256": {},
+        "node": "deep-chungus-11", "release": str(release), "config_sha256": study.fingerprint(),
+        "identity_sha256": "source", "allocated_gpus": 8, "minimum_gpu_bytes": 79_000_000_000,
+        "startup_deadlines": LAUNCH.startup_deadlines(),
+    }
+    (control / "full-run.json").write_text(json.dumps(manifest))
+    calls = []
+    commands = []
+
+    def run(command, **kwargs):
+        calls.append((command, kwargs))
+        if "--output" in command:
+            assert command[command.index("--timeout") + 1] == "300"
+            assert kwargs["timeout"] == 360
+            Path(command[command.index("--output") + 1]).write_text(json.dumps(probes(8)))
+        else:
+            assert "torch.distributed.run" in command
+            assert kwargs["timeout"] == 900
+            Path(command[command.index("--receipt") + 1]).write_text(json.dumps({
+                "world_size": 8, "devices": [{"name": "NVIDIA A100 80GB", "bytes": 85_000_000_000}] * 8,
+            }))
+
+    monkeypatch.setattr(identity, "capture", lambda *args: {"sha256": "source"})
+    monkeypatch.setattr(LAUNCH.subprocess, "run", run)
+    monkeypatch.setattr(LAUNCH.os, "execv", lambda executable, command: commands.append(command))
+    monkeypatch.setattr(LAUNCH.os, "chdir", lambda path: None)
+    monkeypatch.setattr(sys, "path", list(sys.path))
+    monkeypatch.setattr(sys, "argv", ["launch_full_run.py", "--control", str(control)])
+    monkeypatch.setenv("SLURMD_NODENAME", "deep-chungus-11")
+    monkeypatch.setenv("SLURM_JOB_ID", "123")
+    monkeypatch.setenv("SLURM_RESTART_COUNT", "0")
+    monkeypatch.setenv("CUDA_VISIBLE_DEVICES", "0,1,2,3,4,5,6,7")
+    LAUNCH.main()
+    assert len(calls) == 2
+    assert commands == [[sys.executable, "-m", "deepseek_study.cli", "run", str(control / "study.json")]]
+    receipt = json.loads((control / "job-123/launch.json").read_text())
+    assert receipt["startup_deadlines"] == {
+        "gpu_probe_seconds": 300, "gpu_probe_parent_margin_seconds": 60,
+        "gpu_probe_parent_seconds": 360, "collective_health_seconds": 900,
+    }

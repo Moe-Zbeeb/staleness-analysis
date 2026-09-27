@@ -7,6 +7,20 @@ import sys
 from pathlib import Path
 
 
+GPU_PROBE_TIMEOUT_SECONDS = 300
+GPU_PROBE_PARENT_MARGIN_SECONDS = 60
+COLLECTIVE_HEALTH_TIMEOUT_SECONDS = 900
+
+
+def startup_deadlines():
+    return {
+        "gpu_probe_seconds": GPU_PROBE_TIMEOUT_SECONDS,
+        "gpu_probe_parent_margin_seconds": GPU_PROBE_PARENT_MARGIN_SECONDS,
+        "gpu_probe_parent_seconds": GPU_PROBE_TIMEOUT_SECONDS + GPU_PROBE_PARENT_MARGIN_SECONDS,
+        "collective_health_seconds": COLLECTIVE_HEALTH_TIMEOUT_SECONDS,
+    }
+
+
 def select_devices(probes, allocated_count, participating_count):
     allocated, healthy = probes["allocated_devices"], probes["healthy_devices"]
     if len(allocated) != allocated_count or len(set(allocated)) != allocated_count:
@@ -52,6 +66,8 @@ def main():
     for name, expected in {"study.json": manifest["study_sha256"], **manifest["scripts_sha256"]}.items():
         if hashlib.sha256((control / name).read_bytes()).hexdigest() != expected:
             raise ValueError(f"Full-run launch artifact changed: {name}")
+    if manifest.get("startup_deadlines", startup_deadlines()) != startup_deadlines():
+        raise ValueError("Full-run startup deadlines changed")
     node = validate_node(manifest, os.environ)
     release = Path(manifest["release"])
     sys.path.insert(0, str(release / "src"))
@@ -69,9 +85,12 @@ def main():
     job.mkdir(exist_ok=False)
     allocated = os.environ["CUDA_VISIBLE_DEVICES"].split(",")
     subprocess.run(
-        [sys.executable, str(control / "probe_allocated_gpus.py"), "--output", str(job / "device-probes.json")],
+        [
+            sys.executable, str(control / "probe_allocated_gpus.py"),
+            "--output", str(job / "device-probes.json"), "--timeout", str(GPU_PROBE_TIMEOUT_SECONDS),
+        ],
         check=True,
-        timeout=180,
+        timeout=GPU_PROBE_TIMEOUT_SECONDS + GPU_PROBE_PARENT_MARGIN_SECONDS,
     )
     probes = json.loads((job / "device-probes.json").read_text())
     if probes["allocated_devices"] != allocated:
@@ -94,7 +113,7 @@ def main():
             str(job / "hardware.json"),
         ],
         check=True,
-        timeout=330,
+        timeout=COLLECTIVE_HEALTH_TIMEOUT_SECONDS,
     )
     hardware = json.loads((job / "hardware.json").read_text())
     if hardware["world_size"] != count or len(hardware["devices"]) != count:
@@ -117,6 +136,7 @@ def main():
             "command": command,
             "config_sha256": manifest["config_sha256"],
             "identity_sha256": manifest["identity_sha256"],
+            "startup_deadlines": startup_deadlines(),
         },
     )
     os.chdir(release)
