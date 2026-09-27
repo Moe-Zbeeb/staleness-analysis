@@ -1,0 +1,528 @@
+{
+  "job_id": 2145014,
+  "recorded_utc": "2026-09-27T00:14:38.792489+00:00",
+  "command": "sbatch --parsable --account=grad-students --partition=background --qos=background --nodes=1 --ntasks=1 --exclusive --gres=gpu:a100:8 --nodelist=deep-chungus-5 --cpus-per-task=96 --mem=0 --time=06:00:00 --no-requeue --job-name=deepseek15b-timing --chdir=/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/profiling/20260927-deepseek15b-node5-v2 --output=/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/profiling/20260927-deepseek15b-node5-v2/slurm-%j.log /mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/profiling/20260927-deepseek15b-node5-v2/profile_small_model_job.sh /mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/profiling/20260927-deepseek15b-node5-v2",
+  "scheduler": {
+    "JobId": "2145014",
+    "JobName": "deepseek15b-timing",
+    "UserId": "mohamadzbib(29562)",
+    "GroupId": "mohamadzbib(29562)",
+    "MCS_label": "N/A",
+    "Priority": "70",
+    "Nice": "0",
+    "Account": "grad-students",
+    "QOS": "background",
+    "JobState": "RUNNING",
+    "Reason": "None",
+    "Dependency": "(null)",
+    "Requeue": "0",
+    "Restarts": "0",
+    "BatchFlag": "1",
+    "Reboot": "0",
+    "ExitCode": "0:0",
+    "RunTime": "00:00:37",
+    "TimeLimit": "06:00:00",
+    "TimeMin": "N/A",
+    "SubmitTime": "2026-09-26T20:08:58",
+    "EligibleTime": "2026-09-26T20:08:58",
+    "AccrueTime": "2026-09-26T20:08:58",
+    "StartTime": "2026-09-26T20:08:58",
+    "EndTime": "2026-09-27T02:08:58",
+    "Deadline": "N/A",
+    "PreemptEligibleTime": "2026-09-26T20:08:58",
+    "PreemptTime": "None",
+    "SuspendTime": "None",
+    "SecsPreSuspend": "0",
+    "LastSchedEval": "2026-09-26T20:08:58",
+    "Scheduler": "Main",
+    "Partition": "background",
+    "Sid": "mslurm:3755051",
+    "ReqNodeList": "deep-chungus-5",
+    "ExcNodeList": "(null)",
+    "NodeList": "deep-chungus-5",
+    "BatchHost": "deep-chungus-5",
+    "NumNodes": "1",
+    "NumCPUs": "96",
+    "NumTasks": "1",
+    "Task": "96",
+    "T": "0:0:*:*",
+    "TRES": "cpu=96,node=1,billing=96,gres/gpu=9,gres/gpu:a100=9",
+    "Node": "*",
+    "C": "0:0:*:*",
+    "CoreSpec": "*",
+    "MinCPUsNode": "96",
+    "MinMemoryNode": "0",
+    "MinTmpDiskNode": "0",
+    "Features": "(null)",
+    "DelayBoot": "00:00:00",
+    "OverSubscribe": "NO",
+    "Contiguous": "0",
+    "Licenses": "(null)",
+    "Network": "(null)",
+    "Command": "/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/profiling/20260927-deepseek15b-node5-v2/profile_small_model_job.sh",
+    "WorkDir": "/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/profiling/20260927-deepseek15b-node5-v2",
+    "StdErr": "/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/profiling/20260927-deepseek15b-node5-v2/slurm-2145014.log",
+    "StdIn": "/dev/null",
+    "StdOut": "/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/profiling/20260927-deepseek15b-node5-v2/slurm-2145014.log",
+    "TresPerNode": "gres:gpu:a100:8"
+  },
+  "source_commit": "57250ec",
+  "production_job": 2144963,
+  "production_modified": false,
+  "model_id": "deepseek-ai/DeepSeek-R1-Distill-Qwen-1.5B",
+  "model_revision": "ad9f0ae0864d7fbcd1cd905e3c6c5b069cc8b562",
+  "completed_updates_bound": 4,
+  "run_timeout_seconds": 18000,
+  "allocated_gpus": 9,
+  "participating_gpus": 8,
+  "trainer_gpus": 4,
+  "inference_gpus": 4,
+  "unused_allocated_gpus": 1,
+  "hardware_difference_authorized": true,
+  "script_sha256": {
+    "prepare_small_model_profile.py": "e767fc950e3d40d00f2b14bbb7592d94e1529c6df28a39e1699bb6d6a2890ede",
+    "profile_small_model_job.sh": "4fa6c2038f1e2929d7611698cacf95dcf3689472e4d38d3c3d998a536a2c17be",
+    "run_bounded_profile.py": "0dde216f307965d351f91e028d8561a3aac7f6014eb1a081cbd820e827a655e6"
+  },
+  "hardware": {
+    "job_id": "2145014",
+    "node": "deep-chungus-5",
+    "slurm_job_gpus": "0,1,2,3,4,5,6,7,8",
+    "world_size": 8,
+    "expected_all_reduce": 36.0,
+    "torch": "2.11.0+cu128",
+    "cuda_runtime": "12.8",
+    "devices": [
+      {
+        "rank": 0,
+        "visible_device": "0",
+        "name": "NVIDIA A100-PCIE-40GB",
+        "bytes": 42429251584,
+        "capability": [
+          8,
+          0
+        ],
+        "all_reduce": 36.0,
+        "bf16_backward": true,
+        "flash_attention_backward": true,
+        "vllm_rms_norm": true
+      },
+      {
+        "rank": 1,
+        "visible_device": "1",
+        "name": "NVIDIA A100-PCIE-40GB",
+        "bytes": 42429251584,
+        "capability": [
+          8,
+          0
+        ],
+        "all_reduce": 36.0,
+        "bf16_backward": true,
+        "flash_attention_backward": true,
+        "vllm_rms_norm": true
+      },
+      {
+        "rank": 2,
+        "visible_device": "2",
+        "name": "NVIDIA A100-PCIE-40GB",
+        "bytes": 42429251584,
+        "capability": [
+          8,
+          0
+        ],
+        "all_reduce": 36.0,
+        "bf16_backward": true,
+        "flash_attention_backward": true,
+        "vllm_rms_norm": true
+      },
+      {
+        "rank": 3,
+        "visible_device": "3",
+        "name": "NVIDIA A100-PCIE-40GB",
+        "bytes": 42429251584,
+        "capability": [
+          8,
+          0
+        ],
+        "all_reduce": 36.0,
+        "bf16_backward": true,
+        "flash_attention_backward": true,
+        "vllm_rms_norm": true
+      },
+      {
+        "rank": 4,
+        "visible_device": "4",
+        "name": "NVIDIA A100-PCIE-40GB",
+        "bytes": 42429251584,
+        "capability": [
+          8,
+          0
+        ],
+        "all_reduce": 36.0,
+        "bf16_backward": true,
+        "flash_attention_backward": true,
+        "vllm_rms_norm": true
+      },
+      {
+        "rank": 5,
+        "visible_device": "5",
+        "name": "NVIDIA A100-PCIE-40GB",
+        "bytes": 42429251584,
+        "capability": [
+          8,
+          0
+        ],
+        "all_reduce": 36.0,
+        "bf16_backward": true,
+        "flash_attention_backward": true,
+        "vllm_rms_norm": true
+      },
+      {
+        "rank": 6,
+        "visible_device": "6",
+        "name": "NVIDIA A100-PCIE-40GB",
+        "bytes": 42429251584,
+        "capability": [
+          8,
+          0
+        ],
+        "all_reduce": 36.0,
+        "bf16_backward": true,
+        "flash_attention_backward": true,
+        "vllm_rms_norm": true
+      },
+      {
+        "rank": 7,
+        "visible_device": "7",
+        "name": "NVIDIA A100-PCIE-40GB",
+        "bytes": 42429251584,
+        "capability": [
+          8,
+          0
+        ],
+        "all_reduce": 36.0,
+        "bf16_backward": true,
+        "flash_attention_backward": true,
+        "vllm_rms_norm": true
+      }
+    ]
+  },
+  "allocation": {
+    "job_id": "2145014",
+    "node": "deep-chungus-5",
+    "visible_devices": [
+      "0",
+      "1",
+      "2",
+      "3",
+      "4",
+      "5",
+      "6",
+      "7"
+    ],
+    "allocated_devices": [
+      "0",
+      "1",
+      "2",
+      "3",
+      "4",
+      "5",
+      "6",
+      "7",
+      "8"
+    ],
+    "unused_devices": [
+      "8"
+    ],
+    "inference_devices": [
+      "0",
+      "1",
+      "2",
+      "3"
+    ],
+    "trainer_devices": [
+      "4",
+      "5",
+      "6",
+      "7"
+    ]
+  },
+  "last_observed_stage": "Learner loading model weights; four inference API workers started; Runboard registered",
+  "training_update_completed": false,
+  "attempts": [
+    {
+      "job_id": 2145012,
+      "node": "deep-chungus-7",
+      "state": "FAILED",
+      "elapsed_seconds": 151,
+      "stage": "GPU health",
+      "error": "CUDA device=7, num_gpus=7",
+      "training_started": false
+    },
+    {
+      "job_id": 2145013,
+      "node": "deep-chungus-5",
+      "state": "FAILED",
+      "elapsed_seconds": 13,
+      "stage": "GPU allocation guard",
+      "error": "Exclusive allocation exposed 9 GPUs, expected 8; subsequent wrapper records and masks the unused device",
+      "training_started": false
+    }
+  ],
+  "validation": {
+    "profile_tests_passed": 4,
+    "ruff": "passed",
+    "shell_syntax": "passed",
+    "eight_participating_gpu_health": "passed"
+  },
+  "preparation": {
+    "model_id": "deepseek-ai/DeepSeek-R1-Distill-Qwen-1.5B",
+    "model_revision": "ad9f0ae0864d7fbcd1cd905e3c6c5b069cc8b562",
+    "baseline": "/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/launches/exact256-v2-seed42-20260926T173508Z/study.json",
+    "baseline_sha256": "0a19f699172d050a73dd0078dbd0a23daf5029545b498743d277cece36d5ab59",
+    "baseline_source": "/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/releases/correctness-v2-20260926",
+    "baseline_package_sha256": "213ce411ff2f86f5347a151e21a978378f965b82a1c5bfc7b113c5ec86468171",
+    "changed_runtime_files": [
+      "src/deepseek_study/__init__.py"
+    ],
+    "changed_runtime_values": [
+      "MODEL_ID",
+      "MODEL_REVISION"
+    ],
+    "config_changes": {
+      "model_path": {
+        "before": "/mnt/nfs/home/mohamadzbib/projects/models/exact-age-14b/deepseek-r1-distill-qwen-14b",
+        "after": "/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/profiling/20260927-deepseek15b-node5-v2/work/assets/model"
+      },
+      "data_manifest": {
+        "before": "/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/assets/train-manifest-v2.json",
+        "after": "/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/profiling/20260927-deepseek15b-node5-v2/work/assets/train-manifest.json"
+      },
+      "prepared_model_path": {
+        "before": "/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/assets/native-model",
+        "after": "/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/profiling/20260927-deepseek15b-node5-v2/work/assets/native-model"
+      },
+      "output_dir": {
+        "before": "/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/outputs/exact256-80gb-seed42-v2",
+        "after": "/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/profiling/20260927-deepseek15b-node5-v2/work/deepseek15b-exact256-timing-2145014"
+      }
+    },
+    "same_question_membership_and_order": true,
+    "included_questions": 37703,
+    "prime_rl_modified": false,
+    "timing_only": true
+  },
+  "comparison_baseline": {
+    "job_id": 2144963,
+    "model_id": "deepseek-ai/DeepSeek-R1-Distill-Qwen-14B",
+    "source": "/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/outputs/exact256-80gb-seed42-v2",
+    "recorded_utc": "2026-09-27T00:11:47.043950+00:00",
+    "updates": [
+      {
+        "step": 1,
+        "warmup": true,
+        "age_min": 0,
+        "age_max": 0,
+        "responses": 512,
+        "step_wall_seconds": 4385.320046028122,
+        "weight_transfer_seconds": 20.99868677603081
+      },
+      {
+        "step": 2,
+        "warmup": true,
+        "age_min": 0,
+        "age_max": 0,
+        "responses": 512,
+        "step_wall_seconds": 4138.853172790958,
+        "weight_transfer_seconds": 20.939436991000548
+      },
+      {
+        "step": 3,
+        "warmup": true,
+        "age_min": 0,
+        "age_max": 0,
+        "responses": 512,
+        "step_wall_seconds": 4492.848020084901,
+        "weight_transfer_seconds": 20.97771939402446
+      },
+      {
+        "step": 4,
+        "warmup": true,
+        "age_min": 0,
+        "age_max": 0,
+        "responses": 512,
+        "step_wall_seconds": 4400.464734741021,
+        "weight_transfer_seconds": 20.988854635041207
+      }
+    ],
+    "generations": [
+      {
+        "policy_version": 0,
+        "purpose": "warmup",
+        "output_tokens": 2721696,
+        "generation_wall_seconds": 1820.1134356639814
+      },
+      {
+        "policy_version": 0,
+        "purpose": "deferred",
+        "output_tokens": 2494876,
+        "generation_wall_seconds": 1547.3257648721337
+      },
+      {
+        "policy_version": 1,
+        "purpose": "warmup",
+        "output_tokens": 2606904,
+        "generation_wall_seconds": 1712.1602785759605
+      },
+      {
+        "policy_version": 1,
+        "purpose": "deferred",
+        "output_tokens": 2816110,
+        "generation_wall_seconds": 1764.2829738771543
+      },
+      {
+        "policy_version": 2,
+        "purpose": "warmup",
+        "output_tokens": 2778132,
+        "generation_wall_seconds": 1893.434521868825
+      },
+      {
+        "policy_version": 2,
+        "purpose": "deferred",
+        "output_tokens": 2801426,
+        "generation_wall_seconds": 1813.134515044978
+      },
+      {
+        "policy_version": 3,
+        "purpose": "warmup",
+        "output_tokens": 2779349,
+        "generation_wall_seconds": 1768.173004866112
+      },
+      {
+        "policy_version": 3,
+        "purpose": "deferred",
+        "output_tokens": 2809812,
+        "generation_wall_seconds": 1766.7029777569696
+      }
+    ],
+    "trainer": [
+      {
+        "step": 1,
+        "perf/throughput": 1192.9136580832267,
+        "perf/throughput_per_gpu": 298.22841452080667,
+        "perf/mfu": 10.91045144949048,
+        "perf/peak_memory": 58.2734375
+      },
+      {
+        "step": 1
+      },
+      {
+        "step": 1
+      },
+      {
+        "step": 1,
+        "time/step": 4406.333445925964,
+        "time/wait_for_batch": 1821.8856983350124,
+        "time/load_data": 0.3190412581898272,
+        "time/broadcast_weights": 21.59596966393292,
+        "time/save_ckpt": 0,
+        "time/forward_backward": 2540.8712352830917
+      },
+      {
+        "step": 1
+      },
+      {
+        "step": 2,
+        "perf/throughput": 1185.6384235420626,
+        "perf/throughput_per_gpu": 296.40960588551565,
+        "perf/mfu": 10.843911769349198,
+        "perf/peak_memory": 69.775390625
+      },
+      {
+        "step": 2
+      },
+      {
+        "step": 2
+      },
+      {
+        "step": 2,
+        "time/step": 4138.760923743015,
+        "time/wait_for_batch": 1713.1373480320908,
+        "time/load_data": 0.32486068503931165,
+        "time/broadcast_weights": 21.97059515910223,
+        "time/save_ckpt": 0,
+        "time/forward_backward": 2402.4525044409093
+      },
+      {
+        "step": 2
+      },
+      {
+        "step": 3,
+        "perf/throughput": 1193.182490153451,
+        "perf/throughput_per_gpu": 298.29562253836275,
+        "perf/mfu": 10.912910201832172,
+        "perf/peak_memory": 69.77734375
+      },
+      {
+        "step": 3
+      },
+      {
+        "step": 3
+      },
+      {
+        "step": 3,
+        "time/step": 4492.854139403207,
+        "time/wait_for_batch": 1895.2213809450623,
+        "time/load_data": 0.3531195179093629,
+        "time/broadcast_weights": 21.9622609030921,
+        "time/save_ckpt": 0,
+        "time/forward_backward": 2574.375693029957
+      },
+      {
+        "step": 3
+      },
+      {
+        "step": 4,
+        "perf/throughput": 970.7336179722223,
+        "perf/throughput_per_gpu": 242.68340449305558,
+        "perf/mfu": 8.87838104418388,
+        "perf/peak_memory": 69.7578125
+      },
+      {
+        "step": 4
+      },
+      {
+        "step": 4
+      },
+      {
+        "step": 4,
+        "time/step": 4400.538326740032,
+        "time/wait_for_batch": 1769.8834035960026,
+        "time/load_data": 0.352898120181635,
+        "time/broadcast_weights": 21.96815012092702,
+        "time/save_ckpt": 0,
+        "time/forward_backward": 2607.41356139211
+      },
+      {
+        "step": 4
+      }
+    ],
+    "measures_exact256_phase": false,
+    "checkpoint_timing_measured": false
+  },
+  "runboard": {
+    "url": "https://runboard-cloudflare.mbz02.workers.dev",
+    "run_id": "3b1f416da98c4de3b6f4af76afb15b56",
+    "project": "staleness-analysis",
+    "name": "deepseek15b-exact256-timing-2145014",
+    "mode": "http"
+  },
+  "run_identity": {
+    "config_sha256": "1c171bab1f894a63b968690e16e52882707359e08b84a39ed3b057c16f6e2c44",
+    "identity_sha256": "0335ceb26a6d903f0741fbb25b93c64df296032d56b5ed268f8a045566b9eb2e",
+    "nccl_transport": {
+      "NCCL_P2P_DISABLE": "1",
+      "NCCL_SHM_DISABLE": "1"
+    }
+  }
+}
