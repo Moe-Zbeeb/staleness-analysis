@@ -183,3 +183,34 @@ def test_shared_checkpoint_restores_exact_pending_cohorts(tmp_path):
     restored = checkpoints.load(target / "study", "config", "identity")
     assert restored == state
     restored.validate()
+
+
+@pytest.mark.parametrize("external_dependency", [False, True])
+def test_runtime_relocation_rewrites_entrypoints_and_fails_on_external_dependencies(tmp_path, external_dependency):
+    runtime, shared, release = [tmp_path / name for name in ("runtime", "shared-prime", "release")]
+    source_python = tmp_path / "shared-python/bin/python3.12"
+    source_python.parent.mkdir(parents=True)
+    source_python.write_text("binary-placeholder")
+    (shared / ".venv/bin").mkdir(parents=True)
+    (shared / ".venv/bin/python").symlink_to(source_python)
+    venv = runtime / "prime-rl/.venv"
+    site = venv / "lib/python3.12/site-packages"
+    site.mkdir(parents=True)
+    (venv / "bin").mkdir()
+    (venv / "pyvenv.cfg").write_text(f"home = {source_python.parent}\ninclude-system-site-packages = false\n")
+    (venv / "bin/ninja").write_text(f"#!{shared}/.venv/bin/python\nprint('entrypoint')\n")
+    (site / "prime.pth").write_text(str(shared / "src") + "\n")
+    (site / "_editable_impl_deepseek_staleness_study.pth").write_text("/mnt/nfs/old-release/src\n")
+    if external_dependency:
+        (site / "unknown.pth").write_text("/mnt/nfs/unmapped-package\n")
+    BACKUP.atomic_json(runtime / "PRESTAGED_RUNTIME.json", {"source": str(shared)})
+    if external_dependency:
+        with pytest.raises(ValueError, match="still references shared"):
+            LOCAL.relocate_runtime(runtime, shared, release)
+    else:
+        python = LOCAL.relocate_runtime(runtime, shared, release)
+        assert python.is_symlink()
+        assert str(runtime / "python/bin") in (venv / "pyvenv.cfg").read_text()
+        assert str(venv / "bin/python") in (venv / "bin/ninja").read_text()
+        assert (site / "prime.pth").read_text() == str(runtime / "prime-rl/src") + "\n"
+        assert (site / "_editable_impl_deepseek_staleness_study.pth").read_text() == str(release / "src") + "\n"
