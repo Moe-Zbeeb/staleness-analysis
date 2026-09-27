@@ -10,6 +10,8 @@ The diagnostic found and fixed two integration bugs: NCCL transport settings wer
 
 ## Review and organization
 
+The [node-local storage guide](docs/node-local-storage.md) describes local runtime/assets, active run files and verified background backups. This storage-only launcher preserves the frozen algorithm and keeps shared storage out of frequent training operations.
+
 The [throughput profiling record](docs/profiling.md) documents the measured production bottlenecks, bounded diagnostic jobs, reusable profilers and their validation limits. Profiling tools do not modify the production run or imported library files.
 
 The historical [1.5B timing profile](docs/profiling-small-model.md) uses an isolated copy of the frozen 14B adapter with only its model pin changed. It preserves the training settings and stops after four bootstrap updates. Official PrimeRL and the frozen 14B source remain unchanged.
