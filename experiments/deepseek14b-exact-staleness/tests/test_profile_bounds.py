@@ -10,8 +10,8 @@ import pytest
 SCRIPTS = Path(__file__).resolve().parents[1] / "scripts"
 
 
-@pytest.mark.parametrize("qwen", [False, True])
-def test_profile_source_changes_only_model_pin(tmp_path, qwen):
+@pytest.mark.parametrize("model_key", ["MODEL_ID", "QWEN_MODEL_ID", "QWEN3_MODEL_ID"])
+def test_profile_source_changes_only_model_pin(tmp_path, model_key):
     spec = importlib.util.spec_from_file_location("small_profile", SCRIPTS / "prepare_small_model_profile.py")
     module = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(module)
@@ -30,8 +30,9 @@ def test_profile_source_changes_only_model_pin(tmp_path, qwen):
     hashes = {str(path.relative_to(source)): module.digest(path) for path in (init, other, assets)}
     (source / "PACKAGE_SHA256.json").write_text(json.dumps(hashes))
     destination = tmp_path / "profile"
-    model_id = module.QWEN_MODEL_ID if qwen else module.MODEL_ID
-    revision = module.QWEN_MODEL_REVISION if qwen else module.MODEL_REVISION
+    model_id = getattr(module, model_key)
+    revision = module.PROFILE_MODELS[model_id][0]
+    qwen = model_id in {module.QWEN_MODEL_ID, module.QWEN3_MODEL_ID}
     expected = ["src/deepseek_study/__init__.py"]
     if qwen:
         expected.append("src/deepseek_study/dataset/assets.py")

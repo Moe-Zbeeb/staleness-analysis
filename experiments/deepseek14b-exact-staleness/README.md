@@ -16,6 +16,8 @@ The [1.5B timing profile](docs/profiling-small-model.md) uses an isolated copy o
 
 The [Qwen2.5-3B timing profile](docs/profiling-qwen3b.md) uses the requested base checkpoint and native tokenizer, with an explicitly authorized seven-GPU fallback on node 7. Its isolated adapter changes are documented separately.
 
+The [Qwen3-1.7B timing profile](docs/profiling-qwen3-1p7b.md) uses native thinking mode on node 4 with four trainers and five inference workers. It preserves the learner settings and the same four-update bound.
+
 Start with the [architecture](docs/architecture.md) for the directory tree and execution flow, then the [review guide](docs/review-guide.md) for the exact-k contract and checks.
 
 | Concern | Location | Edit here when… |
