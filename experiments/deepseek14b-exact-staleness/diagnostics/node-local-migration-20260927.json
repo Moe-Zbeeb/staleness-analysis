@@ -127,5 +127,135 @@
     "data_manifest_content_sha256": "482d936173ef35799594751331a701e4f581402c09c51dbfb8d2185e0c0d12cd",
     "runtime_imports": "verified node-local",
     "prime_rl_changes": false
+  },
+  "startup_status": "inference healthy; first batch generation requests returning HTTP 200",
+  "inference_health_http": 200,
+  "run_uuid": "e56e90901cee45a4b35b5ab2a46c00aa",
+  "completed_updates_at_startup_check": 0,
+  "gpu_health": {
+    "job_id": "2145184",
+    "node": "deep-chungus-7",
+    "slurm_job_gpus": "0,1,2,3,4,5,6,7",
+    "world_size": 7,
+    "expected_all_reduce": 28.0,
+    "torch": "2.11.0+cu128",
+    "cuda_runtime": "12.8",
+    "devices": [
+      {
+        "rank": 0,
+        "visible_device": "0",
+        "name": "NVIDIA A100 80GB PCIe",
+        "bytes": 85097971712,
+        "capability": [
+          8,
+          0
+        ],
+        "all_reduce": 28.0,
+        "bf16_backward": true,
+        "flash_attention_backward": true,
+        "vllm_rms_norm": true
+      },
+      {
+        "rank": 1,
+        "visible_device": "1",
+        "name": "NVIDIA A100 80GB PCIe",
+        "bytes": 85097971712,
+        "capability": [
+          8,
+          0
+        ],
+        "all_reduce": 28.0,
+        "bf16_backward": true,
+        "flash_attention_backward": true,
+        "vllm_rms_norm": true
+      },
+      {
+        "rank": 2,
+        "visible_device": "2",
+        "name": "NVIDIA A100 80GB PCIe",
+        "bytes": 85097971712,
+        "capability": [
+          8,
+          0
+        ],
+        "all_reduce": 28.0,
+        "bf16_backward": true,
+        "flash_attention_backward": true,
+        "vllm_rms_norm": true
+      },
+      {
+        "rank": 3,
+        "visible_device": "3",
+        "name": "NVIDIA A100 80GB PCIe",
+        "bytes": 85097971712,
+        "capability": [
+          8,
+          0
+        ],
+        "all_reduce": 28.0,
+        "bf16_backward": true,
+        "flash_attention_backward": true,
+        "vllm_rms_norm": true
+      },
+      {
+        "rank": 4,
+        "visible_device": "4",
+        "name": "NVIDIA A100 80GB PCIe",
+        "bytes": 85097971712,
+        "capability": [
+          8,
+          0
+        ],
+        "all_reduce": 28.0,
+        "bf16_backward": true,
+        "flash_attention_backward": true,
+        "vllm_rms_norm": true
+      },
+      {
+        "rank": 5,
+        "visible_device": "5",
+        "name": "NVIDIA A100 80GB PCIe",
+        "bytes": 85097971712,
+        "capability": [
+          8,
+          0
+        ],
+        "all_reduce": 28.0,
+        "bf16_backward": true,
+        "flash_attention_backward": true,
+        "vllm_rms_norm": true
+      },
+      {
+        "rank": 6,
+        "visible_device": "6",
+        "name": "NVIDIA A100 80GB PCIe",
+        "bytes": 85097971712,
+        "capability": [
+          8,
+          0
+        ],
+        "all_reduce": 28.0,
+        "bf16_backward": true,
+        "flash_attention_backward": true,
+        "vllm_rms_norm": true
+      }
+    ]
+  },
+  "backup_status": {
+    "status": "verified",
+    "verified_at": 1790526716.4211457,
+    "new_checkpoints": [],
+    "final": false
+  },
+  "timing_limitations": {
+    "new_update_timing_measured": false,
+    "old_profile_job": "2145014",
+    "old_bootstrap_update_mean_seconds": 2319.606229662488,
+    "provisional_full_run_days_at_old_speed": [
+      24,
+      27
+    ],
+    "checkpoint_timing_measured": false,
+    "not_a_current_run_eta": true
   }
 }
