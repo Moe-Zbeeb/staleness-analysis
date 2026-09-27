@@ -1,0 +1,13 @@
+# Completing the 14B run across allocations
+
+Production job 2144963 on deep-chungus-11 has a 14-day Slurm limit. Its first six committed bootstrap updates averaged 70.96 minutes; learner computation plus weight transfer averaged 41.66 minutes. With 256 bootstrap updates and 744 subsequent updates, those measurements imply about 34.1 days for 1,000 updates before checkpoint/recovery overhead. This is an extrapolation, not a measured steady-phase duration. Response lengths and throughput can change.
+
+A request to extend the running allocation to 45 days was rejected by Slurm with `Access/permission denied`. The current job and its research configuration were left unchanged.
+
+`scripts/continue_existing_run.py` supports a dependent continuation using the existing checkpoint-resume implementation. It confirms the predecessor has terminated, checks the frozen source/runtime/data identity, selects the latest complete compatible checkpoint, verifies checkpoint components and uses a new output directory. The original launcher verifies the serialized queue checksum and restores model, optimizer, scheduler, sampler, trainer RNG and pending rollout state. The budget remains 1,000 total updates. A valid completed-run record makes the continuation exit without training; missing or incompatible checkpoints fail closed instead of restarting from initial weights.
+
+The continuation performs free-memory and collective GPU checks and requires the same four-trainer/four-inference A100 80GB layout. `scripts/continue_14b_job.sh` targets the frozen `correctness-v2-20260926` release and the original run. The helper stays outside that release, and no PrimeRL or active training source is modified. Local tests cover checkpoint selection and rejection; the existing recovery suite covers queue and checkpoint restoration.
+
+A continuation must use an `afterany` dependency on the current job to avoid concurrent writers. Its new output directory is `exact256-80gb-seed42-v2-resume-<job-id>`. The original artifacts remain intact. Future inference is not bitwise reproducible across process restarts, as documented in the main recovery instructions. Work after the last checkpoint may need repeating; checkpoints occur every 100 updates. No complete checkpoint exists before the first milestone, and a failed continuation or second time limit requires another explicit recovery decision.
+
+The scheduler submission and live validation receipt are recorded after deployment. Successful submission cannot guarantee uninterrupted cluster availability or completion.

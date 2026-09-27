@@ -179,7 +179,7 @@ uv run --no-project --python 3.12 scripts/package.py
 
 The archive under `dist/` contains source, tests, configuration/schema, manifests, reports and the prepared question manifest. It excludes model weights, raw data, virtual environments, credentials and previous runs. Bootstrap fetches the official pinned dependency sources on the destination machine. `PACKAGE_SHA256.json` records the packaged file hashes.
 
-See the [review guide](docs/review-guide.md), [architecture](docs/architecture.md) and [cluster operations](docs/cluster.md).
+See the [review guide](docs/review-guide.md), [architecture](docs/architecture.md), [cluster operations](docs/cluster.md) and [production continuation](docs/production-continuation.md).
 
 ## BAPO and M2PO research measurements
 
