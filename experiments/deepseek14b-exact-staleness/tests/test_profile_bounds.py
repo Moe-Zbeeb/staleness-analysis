@@ -52,6 +52,8 @@ def test_bounded_profile_terminates_and_distinguishes_failure(tmp_path, mode, ex
         "    raise SystemExit(7)\n"
         "if mode == 'success':\n"
         "    (output / 'updates.jsonl').write_text(json.dumps({'step': 4}) + '\\n')\n"
+        "    time.sleep(0.8)\n"
+        "    (output / 'metrics.jsonl').write_text(json.dumps({'producer': 'trainer', 'step': 4, 'time/forward_backward': 1.0}) + '\\n')\n"
         "while True:\n"
         "    time.sleep(0.1)\n"
     )

@@ -91,13 +91,22 @@ def main():
     started = time.monotonic()
     reason = "launcher_exited"
     completed = 0
+    completion_seen = None
     try:
         while process.poll() is None:
             updates = records(output / "updates.jsonl")
             completed = max((row["step"] for row in updates), default=0)
             if completed >= args.updates:
-                reason = "requested_updates_completed"
-                break
+                completion_seen = completion_seen or time.monotonic()
+                timing = summarize(output, args.updates)
+                if any(
+                    row.get("step") == args.updates and "time/forward_backward" in row for row in timing["trainer"]
+                ):
+                    reason = "requested_updates_completed"
+                    break
+                if time.monotonic() - completion_seen >= 30:
+                    reason = "missing_final_trainer_timing"
+                    break
             if interrupted:
                 reason = "interrupted"
                 break
