@@ -2,13 +2,15 @@
 
 One run at a time, with the exact nonnegative integer `k` you request. This package composes official PrimeRL v0.9.0 at `ab5de8fff44b2c4a5c85e24b6e6e3f7d57eee7b1`; it does not import the teammate fork or edit upstream files.
 
-Two full DeepSeek-R1-Distill-Qwen-1.5B runs are queued: optimized exact-k256 job **2145258** at high priority, and matching on-policy k=0 baseline **2145261** at normal priority. Both retain 1,000 updates, four training plus four inference GPUs, local storage, verified shared backups and TensorBoard. See the [optimized run](docs/runs/deepseek15b-local-v3-opt.md) and [on-policy baseline](docs/runs/deepseek15b-onpolicy-v1.md). The k=256 launch validates the combined performance settings before starting full training. Their actual startup remains unverified while resources are unavailable. Previous job `2145184` was intentionally stopped after 13 updates; historical run outputs and grading/preemption diagnostics are preserved.
+Two full DeepSeek-R1-Distill-Qwen-1.5B studies are prepared: optimized exact-k256 job **2145258** at high priority, and matching on-policy k=0 baseline **2145261** at normal priority. Both retain 1,000 updates, local storage, verified shared backups and TensorBoard. The on-policy baseline is allocated on node 7 and staging files, with four training plus three inference GPUs after the user authorized its seven-working-GPU layout. The k=256 job still requests four plus four GPUs on a healthy node. See the [optimized run](docs/runs/deepseek15b-local-v3-opt.md) and [on-policy baseline](docs/runs/deepseek15b-onpolicy-v1.md). The k=256 launch validates the combined performance settings before starting full training. Full training has not yet been verified; the baseline is preparing locally and the k=256 job is waiting for resources. Previous job `2145184` was intentionally stopped after 13 updates; historical run outputs and grading/preemption diagnostics are preserved.
 
 The preceding bounded readiness job `2144960` passed (exit `0:0`, 54m 45s), including all 129 cluster tests. The real 14B model completed three updates with ages 0, 1, 1, then resumed checkpoint 2 and reexecuted update 3 using the original queued data. Responses reached 8,192 tokens; trainer peak memory reached about 72 GiB after restart. Checkpoints are on NFS and metric evidence is mirrored to XFS. See the [readiness report](docs/readiness-test.md) and [validation evidence](diagnostics/cluster-validation.json).
 
 The diagnostic found and fixed two integration bugs: NCCL transport settings were applied too late, and the token exporter mixed CPU rollout tensors with GPU model outputs. Both fixes are in this package. The official PrimeRL checkout, GRPO objective, rollout scheduler and production configuration remain unchanged.
 
 ## Review and organization
+
+[What the two 1.5B jobs do](docs/two-1p5b-jobs.md) explains their startup, benchmarking, on-policy/exact-staleness schedules, GRPO updates and storage.
 
 The [node-local storage guide](docs/node-local-storage.md) describes local runtime/assets, active run files and verified background backups. This storage-only launcher preserves the frozen algorithm and keeps shared storage out of frequent training operations.
 

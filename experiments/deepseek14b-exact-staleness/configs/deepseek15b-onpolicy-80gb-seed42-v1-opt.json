@@ -34,7 +34,7 @@
   "checkpoint_keep_last": 4,
   "checkpoint_keep_interval": 100,
   "trainer_gpus": 4,
-  "inference_gpus": 4,
+  "inference_gpus": 3,
   "inference_tensor_parallel": 1,
   "rollout_concurrency": 256,
   "trainer_micro_batch_size": 1,
