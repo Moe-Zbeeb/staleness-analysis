@@ -21,3 +21,7 @@ For planning only, the old four-update 1.5B profile (job 2145014) measured a mea
 Update 1 completed successfully with mean reward 0.3887. The controller measured 1,055.4 seconds (17m35s) for its bootstrap cycle: initial generation 550.4 seconds, followed by deferred generation 501.9 seconds overlapping the learner. Measured learner forward/backward was 401.6 seconds (6m42s); its 100.9-second broadcast interval includes waiting for deferred generation, so it must not be counted again as independent transfer cost. The controller synchronization took 2.2 seconds.
 
 Using these fixed timings for 256 bootstrap steps, 488 overlapping exact-k steps and 256 queue-draining steps projects approximately 7.2 days before unmeasured checkpoint overhead. A provisional planning range is **7–9 days**, superseding the old-profile 24–27-day reference. This is based on only one update, is not a confidence interval, and may change with response lengths, checkpoint costs and later-phase measurements.
+
+## Live profiling follow-up
+
+The [September 27 live timing report](../live-timing-1p5b-20260927.md) measures six completed updates plus a 12-minute hardware sample without changing the running study. Generation is the current critical path, one inference GPU has confirmed software thermal slowdown, and the phase-based projection is 7.20 days of update work before unmeasured checkpoint pauses. The report separates measured components from hypothetical speedups and later-phase estimates.
