@@ -62,3 +62,13 @@ The [retry receipt](../diagnostics/profiling-20260927-qwen3b-retry.json) include
 At **2026-09-27 01:38:55 UTC**, job 2145026 completed its first full 512-response update. Controller wall time was 259.35 seconds, learner forward/backward took 86.63 seconds, and trainer peak memory was approximately 13.0 GiB. No OOM recurred. Warmup generation took 116.95 seconds for 380,493 output tokens; deferred generation took 138.11 seconds for 371,363 tokens. The completed update and paper-metric journals matched their XFS copies at 01:40 UTC. Runboard's authenticated API returned HTTP 200 with the new run marked running.
 
 All 512 first-cohort rewards and advantages were zero; grading workers returned status `ok` for all 512. The full backward/update path ran, but this batch supplied no direct GRPO learning signal. This is a timing profile of the user-requested base model, with much shorter responses than the reasoning models. Do not infer comparable learning progress or a reliable full-training duration from its speed. No model substitution, reward change, filtering or skipped update was introduced.
+
+## Completed bounded profile
+
+Job **2145026** finished at **2026-09-27 01:52:46 UTC**, with Slurm state `COMPLETED`, exit `0:0`, and exactly four committed updates. The supervisor recorded `requested_updates_completed`. The allocation lasted 32 minutes 32 seconds including preparation and startup; the four controller updates totaled 17.67 minutes.
+
+Mean update wall time was **265.00 seconds** (range 255.94-273.49). Learner forward/backward averaged **87.48 seconds**, and peak trainer memory across the profile was **17.56 GiB**. The larger learner-side `time/broadcast_weights` values include waiting for overlapping generation; controller-measured weight transfer remained approximately four seconds. No exact-256 steady-phase or checkpoint timing was measured.
+
+All 2,048 consumed responses across the four batches received zero reward, and every group had zero advantage. This validates the execution path, bounded shutdown and measured workload timing, but does not demonstrate GRPO learning progress. The requested base-model identity and study settings remain unchanged.
+
+Runboard labels the underlying interrupted 1,000-update process `killed`; this is the expected four-update supervisor stop, not another crash. The profile completion record and Slurm exit confirm successful bounded completion. SHA-256 hashes match between NFS and XFS for updates, generations, trainer metrics, paper metrics and the timing summary. See the [completion receipt](../diagnostics/profiling-20260927-qwen3b-complete.json).

@@ -1,0 +1,268 @@
+{
+  "observed_utc": "2026-09-27T01:57:47.363294+00:00",
+  "job_id": 2145026,
+  "summary": {
+    "status": "completed",
+    "reason": "requested_updates_completed",
+    "completed_updates": 4,
+    "requested_updates": 4,
+    "wall_seconds": 1614.3983122159261,
+    "launcher_returncode": 1,
+    "job_id": "2145026",
+    "node": "deep-chungus-7",
+    "updates": [
+      {
+        "step": 1,
+        "warmup": true,
+        "age_min": 0,
+        "age_max": 0,
+        "responses": 512,
+        "step_wall_seconds": 259.3528529659379,
+        "weight_transfer_seconds": 3.9850158761255443
+      },
+      {
+        "step": 2,
+        "warmup": true,
+        "age_min": 0,
+        "age_max": 0,
+        "responses": 512,
+        "step_wall_seconds": 271.20384407415986,
+        "weight_transfer_seconds": 4.2024093919899315
+      },
+      {
+        "step": 3,
+        "warmup": true,
+        "age_min": 0,
+        "age_max": 0,
+        "responses": 512,
+        "step_wall_seconds": 273.49361498001963,
+        "weight_transfer_seconds": 3.8764013769105077
+      },
+      {
+        "step": 4,
+        "warmup": true,
+        "age_min": 0,
+        "age_max": 0,
+        "responses": 512,
+        "step_wall_seconds": 255.9394846369978,
+        "weight_transfer_seconds": 4.00761336600408
+      }
+    ],
+    "generations": [
+      {
+        "policy_version": 0,
+        "purpose": "warmup",
+        "output_tokens": 380493,
+        "generation_wall_seconds": 116.95112079498358
+      },
+      {
+        "policy_version": 0,
+        "purpose": "deferred",
+        "output_tokens": 371363,
+        "generation_wall_seconds": 138.11464400985278
+      },
+      {
+        "policy_version": 1,
+        "purpose": "warmup",
+        "output_tokens": 361224,
+        "generation_wall_seconds": 127.45847982913256
+      },
+      {
+        "policy_version": 1,
+        "purpose": "deferred",
+        "output_tokens": 410266,
+        "generation_wall_seconds": 139.275236583082
+      },
+      {
+        "policy_version": 2,
+        "purpose": "warmup",
+        "output_tokens": 388913,
+        "generation_wall_seconds": 114.28951042401604
+      },
+      {
+        "policy_version": 2,
+        "purpose": "deferred",
+        "output_tokens": 402348,
+        "generation_wall_seconds": 155.08657916309312
+      },
+      {
+        "policy_version": 3,
+        "purpose": "warmup",
+        "output_tokens": 398681,
+        "generation_wall_seconds": 132.31073233508505
+      },
+      {
+        "policy_version": 3,
+        "purpose": "deferred",
+        "output_tokens": 410190,
+        "generation_wall_seconds": 119.40081719192676
+      }
+    ],
+    "trainer": [
+      {
+        "step": 1,
+        "perf/throughput": 5195.635848838198,
+        "perf/throughput_per_gpu": 1298.9089622095496,
+        "perf/mfu": 11.47542216945573,
+        "perf/peak_memory": 13.001953125
+      },
+      {
+        "step": 1
+      },
+      {
+        "step": 1
+      },
+      {
+        "step": 1,
+        "time/step": 263.5238213231787,
+        "time/wait_for_batch": 117.22624252503738,
+        "time/load_data": 0.05190576007589698,
+        "time/broadcast_weights": 55.35868070507422,
+        "time/save_ckpt": 0,
+        "time/forward_backward": 86.62577845994383
+      },
+      {
+        "step": 1
+      },
+      {
+        "step": 2,
+        "perf/throughput": 4266.320352609611,
+        "perf/throughput_per_gpu": 1066.5800881524028,
+        "perf/mfu": 9.422875001388718,
+        "perf/peak_memory": 17.560546875
+      },
+      {
+        "step": 2
+      },
+      {
+        "step": 2
+      },
+      {
+        "step": 2,
+        "time/step": 271.1511813518591,
+        "time/wait_for_batch": 127.63252554181963,
+        "time/load_data": 0.06311471806839108,
+        "time/broadcast_weights": 58.077189033152536,
+        "time/save_ckpt": 0,
+        "time/forward_backward": 85.26035785791464
+      },
+      {
+        "step": 2
+      },
+      {
+        "step": 3,
+        "perf/throughput": 5288.661468657253,
+        "perf/throughput_per_gpu": 1322.1653671643132,
+        "perf/mfu": 11.680884655868754,
+        "perf/peak_memory": 17.55859375
+      },
+      {
+        "step": 3
+      },
+      {
+        "step": 3
+      },
+      {
+        "step": 3,
+        "time/step": 273.52428865106776,
+        "time/wait_for_batch": 114.54039484099485,
+        "time/load_data": 0.054197738878428936,
+        "time/broadcast_weights": 73.66581634315662,
+        "time/save_ckpt": 0,
+        "time/forward_backward": 85.10206271801144
+      },
+      {
+        "step": 3
+      },
+      {
+        "step": 4,
+        "perf/throughput": 4324.755816207834,
+        "perf/throughput_per_gpu": 1081.1889540519585,
+        "perf/mfu": 9.551939399658165,
+        "perf/peak_memory": 17.55859375
+      },
+      {
+        "step": 4
+      },
+      {
+        "step": 4
+      },
+      {
+        "step": 4,
+        "time/step": 255.93013240909204,
+        "time/wait_for_batch": 132.52619475801475,
+        "time/load_data": 0.05469483998604119,
+        "time/broadcast_weights": 30.30850270204246,
+        "time/save_ckpt": 0,
+        "time/forward_backward": 92.93102710996754
+      },
+      {
+        "step": 4
+      }
+    ],
+    "measures_exact256_phase": false,
+    "checkpoint_timing_measured": false
+  },
+  "mirrors": {
+    "updates.jsonl": {
+      "nfs_sha256": "081e7d4d7068c8b033f10fe560fe6140b024caf6fe72257eceeda4522a53536a",
+      "xfs_sha256": "081e7d4d7068c8b033f10fe560fe6140b024caf6fe72257eceeda4522a53536a",
+      "match": true
+    },
+    "generations.jsonl": {
+      "nfs_sha256": "5396b6c9a136b3103e67090beda435f8aa0c7a4215b1be75e1f1bd021624ac2f",
+      "xfs_sha256": "5396b6c9a136b3103e67090beda435f8aa0c7a4215b1be75e1f1bd021624ac2f",
+      "match": true
+    },
+    "metrics.jsonl": {
+      "nfs_sha256": "a671e1fad24378c47eee7d0a54bd540b22d4a3632d901ff461d9cef6eb0c6964",
+      "xfs_sha256": "a671e1fad24378c47eee7d0a54bd540b22d4a3632d901ff461d9cef6eb0c6964",
+      "match": true
+    },
+    "paper-metrics.jsonl": {
+      "nfs_sha256": "2201ac213d16db471fea603085415ca4e94f9e7b6db7ed95fedeae95e1ef5470",
+      "xfs_sha256": "2201ac213d16db471fea603085415ca4e94f9e7b6db7ed95fedeae95e1ef5470",
+      "match": true
+    },
+    "timing-summary.json": {
+      "nfs_sha256": "37bbe78057d6e5996de5fcefa31d7c9431df1c1aedba86a71c47c09fe1b85e9d",
+      "xfs_sha256": "37bbe78057d6e5996de5fcefa31d7c9431df1c1aedba86a71c47c09fe1b85e9d",
+      "match": true
+    }
+  },
+  "rewards": [
+    {
+      "step": 1,
+      "responses": 512,
+      "mean_reward": 0.0,
+      "zero_advantage_fraction": 1.0
+    },
+    {
+      "step": 2,
+      "responses": 512,
+      "mean_reward": 0.0,
+      "zero_advantage_fraction": 1.0
+    },
+    {
+      "step": 3,
+      "responses": 512,
+      "mean_reward": 0.0,
+      "zero_advantage_fraction": 1.0
+    },
+    {
+      "step": 4,
+      "responses": 512,
+      "mean_reward": 0.0,
+      "zero_advantage_fraction": 1.0
+    }
+  ],
+  "slurm": "2145026|COMPLETED|0:0|2026-09-26T21:20:14|2026-09-26T21:52:46|00:32:32|deep-chungus-7",
+  "runboard_http_status": 200,
+  "runboard": [
+    {
+      "run_id": "2c44a3d122714c0d9fa3cd4aa19bfe49",
+      "name": "qwen25-3b-exact256-timing-2145026",
+      "status": "killed"
+    }
+  ]
+}
