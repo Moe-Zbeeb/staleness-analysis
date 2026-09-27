@@ -8,6 +8,7 @@ import subprocess
 import sys
 import time
 import urllib.request
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
 
 from local_backup import atomic_json, digest
@@ -99,6 +100,40 @@ def copy_tree(source, destination, exclude=()):
     command(["rsync", "-a", *["--exclude=" + x for x in exclude], str(source) + "/", str(destination) + "/"])
 
 
+def copy_environment(source, destination):
+    copy_tree(source, destination, ("site-packages",))
+    relative = Path("lib/python3.12/site-packages")
+    target = destination / relative
+    target.mkdir(parents=True, exist_ok=True)
+    entries = list((source / relative).iterdir())
+
+    def transfer(entry):
+        subprocess.run(
+            [
+                "rsync",
+                "-a",
+                "--exclude=tests",
+                "--exclude=__pycache__",
+                "--exclude=*.pyc",
+                str(entry),
+                str(target) + "/",
+            ],
+            check=True,
+            capture_output=True,
+            timeout=1800,
+        )
+
+    with ThreadPoolExecutor(max_workers=8) as pool:
+        futures = [pool.submit(transfer, entry) for entry in entries]
+        for completed, future in enumerate(as_completed(futures), start=1):
+            future.result()
+            if completed % 25 == 0 or completed == len(entries):
+                print(
+                    json.dumps({"stage": "stage_runtime", "copied_entries": completed, "total": len(entries)}),
+                    flush=True,
+                )
+
+
 def secure_local(path):
     path = Path(path)
     if not path.is_absolute() or not path.is_relative_to("/tmp") or path.is_symlink():
@@ -124,7 +159,7 @@ def relocate_runtime(runtime, shared_prime, release):
     else:
         copy_tree(shared_prime, local_prime, (".venv", ".cache", "outputs", "wandb", "__pycache__"))
         copy_tree(shared_python, runtime / "python")
-        copy_tree(shared_prime / ".venv", venv)
+        copy_environment(shared_prime / ".venv", venv)
     changed = {}
     cfg = venv / "pyvenv.cfg"
     before = cfg.read_text()
