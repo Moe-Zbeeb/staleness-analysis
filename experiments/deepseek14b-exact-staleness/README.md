@@ -12,6 +12,8 @@ The diagnostic found and fixed two integration bugs: NCCL transport settings wer
 
 The [throughput profiling record](docs/profiling.md) documents the measured production bottlenecks, bounded diagnostic jobs, reusable profilers and their validation limits. Profiling tools do not modify the production run or imported library files.
 
+The [1.5B timing profile](docs/profiling-small-model.md) uses an isolated copy of the frozen 14B adapter with only its model pin changed. It preserves the training settings and stops after four bootstrap updates. Official PrimeRL and the running 14B source remain unchanged.
+
 Start with the [architecture](docs/architecture.md) for the directory tree and execution flow, then the [review guide](docs/review-guide.md) for the exact-k contract and checks.
 
 | Concern | Location | Edit here when… |

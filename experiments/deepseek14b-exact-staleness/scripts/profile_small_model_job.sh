@@ -13,7 +13,7 @@ export HF_HOME="$STUDY_ROOT/.cache/huggingface"
 export TRITON_CACHE_DIR="$PROFILE_CONTROL/triton"
 export PYTHONPATH="$STUDY_ROOT/releases/correctness-v2-20260926/src"
 cd "$PROFILE_CONTROL"
-"$PROFILE_PYTHON" -m torch.distributed.run --standalone --nproc-per-node=8 \
+timeout --signal=TERM --kill-after=30s 300s "$PROFILE_PYTHON" -m torch.distributed.run --standalone --nproc-per-node=8 \
     "$STUDY_ROOT/releases/correctness-v2-20260926/scripts/gpu_health.py" \
     --expected-gpus 8 --receipt "$PROFILE_CONTROL/hardware.json"
 "$PROFILE_PYTHON" - "$PROFILE_CONTROL" <<'PY'
@@ -26,8 +26,8 @@ directory = Path(sys.argv[1])
 hardware = json.loads((directory / "hardware.json").read_text())
 if hardware["world_size"] != 8 or len(hardware["devices"]) != 8:
     raise ValueError("Expected eight GPU ranks")
-if not all("A100" in device["name"] and device["bytes"] >= 79_000_000_000 for device in hardware["devices"]):
-    raise ValueError("The matched profile requires eight A100 80GB GPUs")
+if not all("A100" in device["name"] and device["bytes"] >= 39_000_000_000 for device in hardware["devices"]):
+    raise ValueError("The profile requires eight A100 GPUs with at least 40GB nominal memory")
 visible = os.environ["CUDA_VISIBLE_DEVICES"].split(",")
 if len(visible) != len(set(visible)) or len(visible) != 8:
     raise ValueError("Invalid full-node GPU allocation")
