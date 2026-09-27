@@ -190,3 +190,5 @@ PrimeRL source remains unchanged. A second in-memory factory override, `setup_to
 Use `deepseek-study paper-metrics RUN_DIRECTORY --once` to replay completed raw evidence. Use `deepseek-study import-evaluation RUN_DIRECTORY predictions.jsonl protocol.json --step 100` for independently produced benchmark predictions. The importer validates coverage and provenance and logs benchmark accuracy; it is not a checkpoint exporter or evaluation inference runner.
 
 The primary inactive-token metric is `paper/gradient_signal/noncontributing_token_fraction`: zero direct GRPO coefficients divided by valid response tokens. It includes zero advantages and effective clipping, while keeping the outside-bound fraction separate. Loss values, gradients and the exact-k scheduler are unchanged by the logging addition. [Metric definition](docs/paper-metrics.md#tokens-with-no-direct-grpo-contribution).
+
+See the [three smaller-model full runs](docs/small-model-full-runs.md) for their pinned models, layouts, full budgets, launch procedure and recovery limits.
