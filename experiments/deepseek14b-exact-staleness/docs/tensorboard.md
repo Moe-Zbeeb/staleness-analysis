@@ -43,4 +43,4 @@ Runboard remains an optional dependency only for explicitly inspecting historica
 
 ## Cluster deployment
 
-`/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/current` points to the frozen `releases/tensorboard-v4-20260927` package. Previous releases and launch controls are preserved. The active Qwen2.5-3B source is an isolated model-specific clone beneath its launch controls; the current release retains the original 14B base pins for explicit future preparation. Follow the [full 3B launch record](runs/qwen25-3b-full-hp-v3.md) for the active job and output paths.
+`/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/current` points to the frozen `releases/tensorboard-v4r2-20260927` package. Previous releases and launch controls are preserved. The active Qwen2.5-3B source is an isolated model-specific clone beneath its launch controls; the current release retains the original 14B base pins for explicit future preparation. Follow the [full 3B launch record](runs/qwen25-3b-full-hp-v3.md) for the active job and output paths.

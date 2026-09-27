@@ -667,5 +667,52 @@
     "elapsed_seconds": 7,
     "reason": "Batch wrapper used Slurm spool instead of explicit script directory; corrected in2145146",
     "training_started": false
+  },
+  "current_submission": {
+    "submitted_at": "2026-09-27T13:37:59.391354+00:00",
+    "job_id": "2145148",
+    "command": [
+      "sbatch",
+      "--parsable",
+      "--account=grad-students",
+      "--partition=high-priority",
+      "--qos=high-priority",
+      "--nodes=1",
+      "--ntasks=1",
+      "--cpus-per-task=128",
+      "--mem=0",
+      "--exclusive",
+      "--gres=gpu:a100:8",
+      "--nodelist=deep-chungus-7",
+      "--time=45-00:00:00",
+      "--no-requeue",
+      "--signal=B:TERM@120",
+      "--job-name=q25-3b-k256-tb",
+      "--chdir=/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/launches/qwen25-3b-full-hp-tb-warm-20260927",
+      "--output=/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/launches/qwen25-3b-full-hp-tb-warm-20260927-logs/slurm-%j.out",
+      "--error=/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/launches/qwen25-3b-full-hp-tb-warm-20260927-logs/slurm-%j.err",
+      "/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/launches/qwen25-3b-full-hp-tb-warm-20260927/cached_full_run_job.sh",
+      "/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/launches/qwen25-3b-full-hp-tb-warm-20260927"
+    ],
+    "source_commit": "ca49388",
+    "release": "/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/releases/tensorboard-v4r2-20260927",
+    "control": "/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/launches/qwen25-3b-full-hp-tb-warm-20260927",
+    "output": "/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/outputs/qwen25-3b-exact256-80gb-seed42-v3-tb",
+    "supersedes_job_id": "2145142",
+    "import_diagnostic_job_id": "2145146",
+    "backend": "tensorboard",
+    "runboard_enabled": false,
+    "max_steps": 1000,
+    "lag": 256,
+    "checkpoint_interval": 100,
+    "scientific_source_files_verified_unchanged": 17,
+    "prelaunch_sha256": "949347976ca247d88b9dd79e0f690d576c7f07c03e43b9af73813fb599578980",
+    "package_sha256": "151e0f2c464848b06c78e5fb9b04be4ffc78b3f610f7601f99afb4a94a4c9edb"
+  },
+  "final_startup_fix_validation": {
+    "tests_passed": 66,
+    "ruff": "passed",
+    "diff_check": "passed",
+    "scientific_recipe_changed": false
   }
 }
