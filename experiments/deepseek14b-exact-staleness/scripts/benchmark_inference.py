@@ -88,6 +88,16 @@ def main():
                 "shard": args.shard,
                 "shards": args.shards,
                 "device": os.environ["CUDA_VISIBLE_DEVICES"],
+                "environment": {
+                    key: os.environ.get(key)
+                    for key in (
+                        "PYTORCH_CUDA_ALLOC_CONF",
+                        "VLLM_WORKER_MULTIPROC_METHOD",
+                        "OMP_NUM_THREADS",
+                        "NCCL_P2P_DISABLE",
+                        "NCCL_SHM_DISABLE",
+                    )
+                },
                 "initialization_seconds": initialized - started,
                 "warmup_seconds": warm - initialized,
                 "generation_seconds": elapsed,

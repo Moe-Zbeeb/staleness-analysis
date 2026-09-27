@@ -1,6 +1,8 @@
 # Bounded 1.5B optimization benchmarks
 
-This work follows the [live timing measurements](live-timing-1p5b-20260927.md). Production job `2145184` continues with its frozen configuration while job `2145232` tests candidates on `deep-chungus-1`. The benchmark has an exclusive eight-A100 allocation, 96 CPUs and a three-hour limit. It uses the normal-priority fallback because an additional full node would exceed the available high-priority GPU quota. These diagnostics are not another study run.
+This work follows the [live timing measurements](live-timing-1p5b-20260927.md). Production job `2145184` continues with its frozen configuration while corrected benchmark job `2145240` tests candidates on `deep-chungus-1`. The benchmark has an exclusive eight-A100 allocation, 96 CPUs and a three-hour limit. It uses the normal-priority fallback because an additional full node would exceed the available high-priority GPU quota. These diagnostics are not another study run.
+
+Initial job `2145232` staged the runtime and passed health checks on all eight A100 PCIe 40 GB GPUs. It was deliberately cancelled when an environment mismatch was found: inference inherited the trainer allocator setting. The corrected harness imports PrimeRL's separate inference defaults, including `expandable_segments:False` and multiprocessing `spawn`, and records the effective inference environment. Job `2145240` reuses the staged files but creates fresh job-specific result directories and repeats the health check and complete matrix. No timing from the cancelled attempt is accepted as an optimization result. The intervening launch `2145239` exited before GPU work because the system Python lacked `hashlib.file_digest`; the cache-reuse wrapper now uses the existing streaming hash helper.
 
 ## Preserved experiment
 
@@ -28,7 +30,8 @@ CUDA synchronization used for phase measurements adds overhead. The bounded repl
 
 - Cluster controls: `/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/profiling/optimize-1p5b-20260927/control`
 - Job-local workspace: `/tmp/staleness-opt-1p5b-2145232`
-- Shared receipts: `/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/profiling/optimize-1p5b-20260927/results-2145232`
+- Local receipts: `/tmp/staleness-opt-1p5b-2145232/results-2145240`
+- Shared receipts: `/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/profiling/optimize-1p5b-20260927/results-2145240`
 
 The baseline and candidate results were pending when this record was created. No speedup or candidate acceptance is claimed here.
 

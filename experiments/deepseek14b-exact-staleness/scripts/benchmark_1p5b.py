@@ -95,12 +95,12 @@ def matrix(args):
     from prime_rl.configs.orchestrator import OrchestratorConfig
     from prime_rl.orchestrator.packing import BatchPacker
     from prime_rl.transports.batch import TrainingSample
-    from prime_rl.utils.process import DEFAULT_COMMON_ENV_VARS, DEFAULT_TRAINER_ENV_VARS
+    from prime_rl.utils.process import DEFAULT_COMMON_ENV_VARS, DEFAULT_INFERENCE_ENV_VARS, DEFAULT_TRAINER_ENV_VARS
 
     workspace = args.workspace
     os.chdir(workspace)
     scripts = workspace / "scripts"
-    results = workspace / "results"
+    results = workspace / ("results-" + os.environ["SLURM_JOB_ID"])
     results.mkdir(exist_ok=False)
     devices = os.environ["CUDA_VISIBLE_DEVICES"].split(",")
     if len(devices) != 8 or len(set(devices)) != 8:
@@ -185,6 +185,7 @@ def matrix(args):
                 for shard, device in enumerate(devices[:4]):
                     env = {
                         **environment,
+                        **DEFAULT_INFERENCE_ENV_VARS,
                         "CUDA_VISIBLE_DEVICES": device,
                         "VLLM_CACHE_ROOT": str(workspace / "cache" / f"vllm-{label}-{shard}"),
                         "TRITON_CACHE_DIR": str(workspace / "cache" / f"triton-{label}-{shard}"),
