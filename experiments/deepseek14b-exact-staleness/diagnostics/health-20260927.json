@@ -1,29 +1,29 @@
 {
-  "observed_utc": "2026-09-27T01:26:28.488092+00:00",
+  "observed_utc": "2026-09-27T01:41:45.281932+00:00",
   "runs": {
     "14b": {
       "job_id": 2144963,
       "output": "/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/outputs/exact256-80gb-seed42-v2",
-      "slurm": "2144963|RUNNING|07:50:37|14-00:00:00|deep-chungus-11|0:0",
+      "slurm": "2144963|RUNNING|08:05:54|14-00:00:00|deep-chungus-11|0:0",
       "updates.jsonl": {
         "rows": 6,
         "mtime": 1790469872.0269084,
-        "age_seconds": 2516.58389377594
+        "age_seconds": 3433.371767759323
       },
       "generations.jsonl": {
-        "rows": 13,
-        "mtime": 1790471619.160218,
-        "age_seconds": 769.4581413269043
+        "rows": 14,
+        "mtime": 1790473123.3302603,
+        "age_seconds": 182.08235692977905
       },
       "metrics.jsonl": {
         "rows": 6,
-        "mtime": 1790472391.6491582,
-        "age_seconds": 3.1024646759033203
+        "mtime": 1790473310.4975216,
+        "age_seconds": 1.5896172523498535
       },
       "paper-metrics.jsonl": {
         "rows": 6,
         "mtime": 1790469874.778898,
-        "age_seconds": 2519.978610277176
+        "age_seconds": 3437.316582918167
       },
       "completed_steps": 6,
       "update_timings": [
@@ -34,7 +34,9 @@
           "age_max": 0,
           "responses": 512,
           "step_wall_seconds": 4385.320046028122,
-          "queue_payload_bytes": 77009610
+          "queue_payload_bytes": 77009610,
+          "mean_reward": 0.58203125,
+          "zero_advantage_fraction": 0.609375
         },
         {
           "step": 2,
@@ -43,7 +45,9 @@
           "age_max": 0,
           "responses": 512,
           "step_wall_seconds": 4138.853172790958,
-          "queue_payload_bytes": 163850284
+          "queue_payload_bytes": 163850284,
+          "mean_reward": 0.66015625,
+          "zero_advantage_fraction": 0.71875
         },
         {
           "step": 3,
@@ -52,7 +56,9 @@
           "age_max": 0,
           "responses": 512,
           "step_wall_seconds": 4492.848020084901,
-          "queue_payload_bytes": 250150197
+          "queue_payload_bytes": 250150197,
+          "mean_reward": 0.580078125,
+          "zero_advantage_fraction": 0.640625
         },
         {
           "step": 4,
@@ -61,7 +67,9 @@
           "age_max": 0,
           "responses": 512,
           "step_wall_seconds": 4400.464734741021,
-          "queue_payload_bytes": 336618109
+          "queue_payload_bytes": 336618109,
+          "mean_reward": 0.62109375,
+          "zero_advantage_fraction": 0.625
         },
         {
           "step": 5,
@@ -70,7 +78,9 @@
           "age_max": 0,
           "responses": 512,
           "step_wall_seconds": 4357.18331942684,
-          "queue_payload_bytes": 416402157
+          "queue_payload_bytes": 416402157,
+          "mean_reward": 0.681640625,
+          "zero_advantage_fraction": 0.59375
         },
         {
           "step": 6,
@@ -79,7 +89,9 @@
           "age_max": 0,
           "responses": 512,
           "step_wall_seconds": 3769.5050843048375,
-          "queue_payload_bytes": 499378921
+          "queue_payload_bytes": 499378921,
+          "mean_reward": 0.759765625,
+          "zero_advantage_fraction": 0.65625
         }
       ],
       "learner_timings": [
@@ -122,12 +134,6 @@
       ],
       "recent_generations": [
         {
-          "policy_version": 4,
-          "purpose": "deferred",
-          "output_tokens": 2581153,
-          "generation_wall_seconds": 1605.1795477098785
-        },
-        {
           "policy_version": 5,
           "purpose": "warmup",
           "output_tokens": 2417774,
@@ -144,6 +150,12 @@
           "purpose": "warmup",
           "output_tokens": 2757087,
           "generation_wall_seconds": 1747.1168659150135
+        },
+        {
+          "policy_version": 6,
+          "purpose": "deferred",
+          "output_tokens": 2581846,
+          "generation_wall_seconds": 1503.8573732450604
         }
       ],
       "conditional_full_1000_days": 34.13797810045576,
@@ -153,28 +165,28 @@
     "1p5b": {
       "job_id": 2145014,
       "output": "/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/profiling/20260927-deepseek15b-node5-v2/work/deepseek15b-exact256-timing-2145014",
-      "slurm": "2145014|RUNNING|01:17:36|06:00:00|deep-chungus-5|0:0",
+      "slurm": "2145014|RUNNING|01:32:54|06:00:00|deep-chungus-5|0:0",
       "updates.jsonl": {
-        "rows": 1,
-        "mtime": 1790470757.5515149,
-        "age_seconds": 1637.371089220047
+        "rows": 2,
+        "mtime": 1790472961.7788987,
+        "age_seconds": 350.50994873046875
       },
       "generations.jsonl": {
         "rows": 4,
         "mtime": 1790471501.7366674,
-        "age_seconds": 893.1975679397583
+        "age_seconds": 1810.560225725174
       },
       "metrics.jsonl": {
-        "rows": 1,
-        "mtime": 1790472392.8091536,
-        "age_seconds": 2.827688455581665
+        "rows": 2,
+        "mtime": 1790473310.2335227,
+        "age_seconds": 3.003398895263672
       },
       "paper-metrics.jsonl": {
-        "rows": 1,
-        "mtime": 1790470766.151482,
-        "age_seconds": 1629.5018756389618
+        "rows": 2,
+        "mtime": 1790472970.278865,
+        "age_seconds": 342.9674391746521
       },
-      "completed_steps": 1,
+      "completed_steps": 2,
       "update_timings": [
         {
           "step": 1,
@@ -183,7 +195,20 @@
           "age_max": 0,
           "responses": 512,
           "step_wall_seconds": 2331.2431948750746,
-          "queue_payload_bytes": 87995300
+          "queue_payload_bytes": 87995300,
+          "mean_reward": 0.435546875,
+          "zero_advantage_fraction": 0.40625
+        },
+        {
+          "step": 2,
+          "warmup": true,
+          "age_min": 0,
+          "age_max": 0,
+          "responses": 512,
+          "step_wall_seconds": 2204.1996436279733,
+          "queue_payload_bytes": 186180730,
+          "mean_reward": 0.5234375,
+          "zero_advantage_fraction": 0.5
         }
       ],
       "learner_timings": [
@@ -191,6 +216,12 @@
           "step": 1,
           "time/forward_backward": 1931.495468209032,
           "time/broadcast_weights": 10.924511123914272,
+          "time/save_ckpt": 0
+        },
+        {
+          "step": 2,
+          "time/forward_backward": 1826.2520813629963,
+          "time/broadcast_weights": 11.056805392960086,
           "time/save_ckpt": 0
         }
       ],
@@ -220,35 +251,35 @@
           "generation_wall_seconds": 387.9026063741185
         }
       ],
-      "conditional_full_1000_days": 23.633781510552442,
-      "mean_bootstrap_seconds": 2331.2431948750746,
-      "mean_learner_broadcast_seconds": 1942.4199793329462,
-      "conditional_profile_finish_utc": "2026-09-27T02:55:51.281100+00:00",
-      "conditional_profile_remaining_minutes": 89.2604525287946
+      "conditional_full_1000_days": 22.993007193442846,
+      "mean_bootstrap_seconds": 2267.721419251524,
+      "mean_learner_broadcast_seconds": 1889.8644330444513,
+      "conditional_profile_finish_utc": "2026-09-27T02:51:37.221737+00:00",
+      "conditional_profile_remaining_minutes": 69.73291466236114
     },
     "1p7b": {
       "job_id": 2145018,
       "output": "/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/profiling/20260927-qwen3-1p7b-node4/work/qwen3-1p7b-exact256-timing-2145018",
-      "slurm": "2145018|RUNNING|00:41:23|06:00:00|deep-chungus-4|0:0",
+      "slurm": "2145018|RUNNING|00:56:41|06:00:00|deep-chungus-4|0:0",
       "updates.jsonl": {
         "rows": 2,
         "mtime": 1790472391.6211584,
-        "age_seconds": 4.201195001602173
+        "age_seconds": 921.7984266281128
       },
       "generations.jsonl": {
-        "rows": 4,
-        "mtime": 1790472349.6893249,
-        "age_seconds": 46.151586055755615
+        "rows": 5,
+        "mtime": 1790472912.1230953,
+        "age_seconds": 401.3072819709778
       },
       "metrics.jsonl": {
         "rows": 2,
-        "mtime": 1790472395.8851414,
-        "age_seconds": 0.501814603805542
+        "mtime": 1790473314.1295073,
+        "age_seconds": 0.07088756561279297
       },
       "paper-metrics.jsonl": {
         "rows": 2,
         "mtime": 1790472395.037145,
-        "age_seconds": 1.3677301406860352
+        "age_seconds": 919.17067527771
       },
       "completed_steps": 2,
       "update_timings": [
@@ -259,7 +290,9 @@
           "age_max": 0,
           "responses": 512,
           "step_wall_seconds": 1110.0856397310272,
-          "queue_payload_bytes": 94228957
+          "queue_payload_bytes": 94228957,
+          "mean_reward": 0.423828125,
+          "zero_advantage_fraction": 0.609375
         },
         {
           "step": 2,
@@ -268,7 +301,9 @@
           "age_max": 0,
           "responses": 512,
           "step_wall_seconds": 1057.7070792918094,
-          "queue_payload_bytes": 195175438
+          "queue_payload_bytes": 195175438,
+          "mean_reward": 0.49609375,
+          "zero_advantage_fraction": 0.609375
         }
       ],
       "learner_timings": [
@@ -288,12 +323,6 @@
       "recent_generations": [
         {
           "policy_version": 0,
-          "purpose": "warmup",
-          "output_tokens": 3263314,
-          "generation_wall_seconds": 517.0861968840472
-        },
-        {
-          "policy_version": 0,
           "purpose": "deferred",
           "output_tokens": 3058225,
           "generation_wall_seconds": 491.4975358489901
@@ -309,22 +338,91 @@
           "purpose": "deferred",
           "output_tokens": 3279562,
           "generation_wall_seconds": 519.1805718159303
+        },
+        {
+          "policy_version": 2,
+          "purpose": "warmup",
+          "output_tokens": 3288027,
+          "generation_wall_seconds": 520.3777767338324
         }
       ],
       "conditional_full_1000_days": 8.146613396545591,
       "mean_bootstrap_seconds": 1083.8963595114183,
       "mean_learner_broadcast_seconds": 573.1047438529786,
       "conditional_profile_finish_utc": "2026-09-27T02:02:39.413877+00:00",
-      "conditional_profile_remaining_minutes": 36.050143647193906
+      "conditional_profile_remaining_minutes": 20.75342696905136
     },
     "3b": {
       "job_id": 2145026,
       "output": "/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/profiling/20260927-qwen3b-node7-v2/work/qwen25-3b-exact256-timing-2145026",
-      "slurm": "2145026|RUNNING|00:06:22|06:00:00|deep-chungus-7|0:0",
-      "completed_steps": 0,
-      "update_timings": [],
-      "learner_timings": [],
-      "recent_generations": []
+      "slurm": "2145026|RUNNING|00:21:40|06:00:00|deep-chungus-7|0:0",
+      "updates.jsonl": {
+        "rows": 1,
+        "mtime": 1790473135.7342114,
+        "age_seconds": 178.64127922058105
+      },
+      "generations.jsonl": {
+        "rows": 3,
+        "mtime": 1790473263.3137076,
+        "age_seconds": 51.07950401306152
+      },
+      "metrics.jsonl": {
+        "rows": 1,
+        "mtime": 1790473314.3135064,
+        "age_seconds": 0.19264984130859375
+      },
+      "paper-metrics.jsonl": {
+        "rows": 1,
+        "mtime": 1790473136.9262066,
+        "age_seconds": 177.5885591506958
+      },
+      "completed_steps": 1,
+      "update_timings": [
+        {
+          "step": 1,
+          "warmup": true,
+          "age_min": 0,
+          "age_max": 0,
+          "responses": 512,
+          "step_wall_seconds": 259.3528529659379,
+          "queue_payload_bytes": 12974407,
+          "mean_reward": 0.0,
+          "zero_advantage_fraction": 1.0
+        }
+      ],
+      "learner_timings": [
+        {
+          "step": 1,
+          "time/forward_backward": 86.62577845994383,
+          "time/broadcast_weights": 55.35868070507422,
+          "time/save_ckpt": 0
+        }
+      ],
+      "recent_generations": [
+        {
+          "policy_version": 0,
+          "purpose": "warmup",
+          "output_tokens": 380493,
+          "generation_wall_seconds": 116.95112079498358
+        },
+        {
+          "policy_version": 0,
+          "purpose": "deferred",
+          "output_tokens": 371363,
+          "generation_wall_seconds": 138.11464400985278
+        },
+        {
+          "policy_version": 1,
+          "purpose": "warmup",
+          "output_tokens": 361224,
+          "generation_wall_seconds": 127.45847982913256
+        }
+      ],
+      "full_run_projection_withheld": "All measured advantages are zero; profile has not demonstrated a learning signal",
+      "mean_bootstrap_seconds": 259.3528529659379,
+      "mean_learner_broadcast_seconds": 141.98445916501805,
+      "conditional_profile_finish_utc": "2026-09-27T01:51:53.792770+00:00",
+      "conditional_profile_remaining_minutes": 9.987960437933603
     }
   },
   "storage": "Filesystem                            Size  Used Avail Use% Mounted on\nrobust-storage.csail.mit.edu:/robust  140T  126T   14T  91% /mnt/nfs\nfast-storage.csail.mit.edu:/fast      112T  109T  2.7T  98% /mnt/xfs\n",
@@ -332,11 +430,12 @@
   "estimate_limits": [
     "Only bootstrap updates measured; no exact256 steady-phase or checkpoint duration measured",
     "Small models have 1-2 observed updates at this snapshot; compilation and model response-length differences affect comparisons",
-    "Profiles stop after four updates; full1000 durations are conditional projections, not scheduled full runs"
+    "Profiles stop after four updates; full1000 durations are conditional projections, not scheduled full runs",
+    "Withhold the 3B full-1000 projection because its first measured cohort has zero rewards and advantages; the four-update profile ETA remains a timing estimate"
   ],
   "additional_observations": {
     "14b_thermal": "At approximately 01:08 UTC, three inference GPUs reported software thermal slowdown; temperatures 84-85C. No hardware thermal slowdown reported. No thermal or driver settings were changed.",
-    "storage": "Shared filesystem availability, not personal quotas: NFS about14TiB, XFS about2.7TiB. XFS98%full requires continued monitoring.",
+    "storage": "Shared filesystem availability, not personal quotas: NFS about 14 TiB, XFS about 2.7 TiB. XFS 98% full requires continued monitoring.",
     "monitor": "30-minute heartbeat staleness-runs-health created; relies on existing authenticated SSH socket and stops reconnection attempts if authentication is lost."
   }
 }

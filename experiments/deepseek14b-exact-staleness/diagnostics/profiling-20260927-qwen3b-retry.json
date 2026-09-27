@@ -331,6 +331,96 @@
   "verification": {
     "hardware": "seven A10080GB passed freememory, BF16 backward, collective28, FlashAttention backward, RMSNorm",
     "model_and_data": "five native tokenizer probes and identical37703-question membership/order passed",
-    "first_optimizer_update": "pending at startup record"
-  }
+    "first_optimizer_update": "Completed: full512-response update, 259.353s controller wall time, 86.626s learner forward/backward, about13GiB peak trainer memory; no OOM"
+  },
+  "first_update_health": {
+    "observed_utc": "2026-09-27T01:40:05.160419+00:00",
+    "job_id": 2145026,
+    "first_update": {
+      "step": 1,
+      "learner_version": 0,
+      "behavior_version": 0,
+      "age_min": 0,
+      "age_max": 0,
+      "warmup": true,
+      "responses": 512,
+      "generated_cohorts": 2,
+      "generated_responses": 1024,
+      "generated_output_tokens": 751856,
+      "payload_digest": "31c242946fe1761f08e3f5275b1b4ffdd79bed0453970d4140f4a7c465d2ad0c",
+      "mean_reward": 0.0,
+      "truncation_fraction": 0.001953125,
+      "consumed_prompt_position": 64,
+      "generation_prompt_cursor": 16448,
+      "zero_advantage_fraction": 1.0,
+      "step_wall_seconds": 259.3528529659379,
+      "queue_payload_bytes": 12974407,
+      "training_wait_seconds": 0.0005889642052352428,
+      "weight_transfer_seconds": 3.9850158761255443
+    },
+    "learner": [
+      {
+        "step": 1,
+        "time": 1790473135.8193636,
+        "time/step": 263.5238213231787,
+        "time/wait_for_batch": 117.22624252503738,
+        "time/load_data": 0.05190576007589698,
+        "time/broadcast_weights": 55.35868070507422,
+        "time/save_ckpt": 0,
+        "time/forward_backward": 86.62577845994383
+      }
+    ],
+    "mirrors": {
+      "updates.jsonl": {
+        "nfs_bytes": 53924,
+        "xfs_bytes": 53924
+      },
+      "paper-metrics.jsonl": {
+        "nfs_bytes": 19181,
+        "xfs_bytes": 19181
+      }
+    }
+  },
+  "runboard_health": {
+    "observed_utc": "2026-09-27T01:30:17.915499+00:00",
+    "status_code": 200,
+    "runs": [
+      {
+        "id": null,
+        "run_id": "2c44a3d122714c0d9fa3cd4aa19bfe49",
+        "name": "qwen25-3b-exact256-timing-2145026",
+        "status": "running",
+        "updated_at": null
+      },
+      {
+        "id": null,
+        "run_id": "f2ee3b9b7ae64ec09c960ded2bbfd112",
+        "name": "qwen3-1p7b-exact256-timing-2145018",
+        "status": "running",
+        "updated_at": null
+      },
+      {
+        "id": null,
+        "run_id": "f52d563535754063b5afcbe07f26e30a",
+        "name": "qwen25-3b-exact256-timing-2145015",
+        "status": "crashed",
+        "updated_at": null
+      },
+      {
+        "id": null,
+        "run_id": "3b1f416da98c4de3b6f4af76afb15b56",
+        "name": "deepseek15b-exact256-timing-2145014",
+        "status": "running",
+        "updated_at": null
+      },
+      {
+        "id": null,
+        "run_id": "d729172f680449f7a9194d0f8c69d799",
+        "name": "exact256-80gb-seed42-v2",
+        "status": "running",
+        "updated_at": null
+      }
+    ]
+  },
+  "learning_signal_caveat": "All512 responses in the first cohort received reward0 and all advantages were0. Grading workers reported status ok for all512. The step exercises the full backward/update path but supplies no direct GRPO learning signal. Preserve requested base model and settings; do not treat short-response timing as comparable learning progress."
 }
