@@ -257,5 +257,22 @@
     ],
     "checkpoint_timing_measured": false,
     "not_a_current_run_eta": true
+  },
+  "first_update_timing": {
+    "completed_updates": 1,
+    "bootstrap_step_seconds": 1055.3696255369578,
+    "warmup_generation_seconds": 550.4261883639265,
+    "deferred_generation_seconds": 501.89827366778627,
+    "forward_backward_seconds": 401.6498476569541,
+    "load_data_seconds": 0.40271696192212403,
+    "trainer_broadcast_seconds_including_overlap_wait": 100.85534209106117,
+    "controller_sync_seconds": 2.197685274994001,
+    "mean_reward": 0.388671875,
+    "projected_total_days_at_fixed_phase_timings": 7.172008287897786,
+    "provisional_planning_days": [
+      7,
+      9
+    ],
+    "limitations": "Only first bootstrap update measured; subsequent response lengths, steady exact-k phase and checkpoints not measured. Range is a planning allowance, not a confidence interval."
   }
 }
