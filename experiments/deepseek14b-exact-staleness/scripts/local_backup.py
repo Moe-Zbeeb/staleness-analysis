@@ -21,6 +21,7 @@ METRIC_NAMES = {
     "run-status.json",
     "study-complete.json",
     "preflight.json",
+    "deployment.json",
 }
 
 

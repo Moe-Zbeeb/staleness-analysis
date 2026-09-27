@@ -59,6 +59,14 @@ def resume_step(directory, study, identity_hash):
 
 
 def launch(study, root, resume=None):
+    from deepseek_study.runtime.deployment import RemoteInference
+
+    remote_path = os.environ.get("DEEPSEEK_STUDY_REMOTE_INFERENCE")
+    remote = RemoteInference.read(remote_path) if remote_path else None
+    if remote is not None:
+        remote.validate_study(study)
+        if resume:
+            raise ValueError("Multi-node recovery requires an explicitly validated recovery launch")
     verify_upstream(root)
     configure_nccl_transport()
     preflight = validate_prepared(study)
@@ -70,7 +78,7 @@ def launch(study, root, resume=None):
     import torch
 
     count = torch.cuda.device_count()
-    total = study.trainer_gpus + study.inference_gpus
+    total = study.trainer_gpus if remote else study.trainer_gpus + study.inference_gpus
     if not torch.cuda.is_available() or count != total:
         raise ValueError(f"Allocate exactly {total} visible GPUs for this configuration; found {count}")
     if identity["runtime"]["vllm"] is None:
@@ -85,7 +93,9 @@ def launch(study, root, resume=None):
     output.mkdir(parents=True, exist_ok=False)
     snapshot(root, output / "source", identity)
     config_dir = output / "configs"
-    config = build(study, config_dir, resume)
+    config = build(study, config_dir, resume, remote)
+    if remote is not None:
+        checkpoints.atomic_write(output / "deployment.json", remote.model_dump_json(indent=2).encode())
     checkpoints.atomic_write(output / "preflight.json", json.dumps(preflight, indent=2).encode())
     hardware = [
         {
@@ -190,11 +200,12 @@ def launch(study, root, resume=None):
             print(
                 f"TensorBoard observer could not start ({type(error).__name__}); training continues", file=sys.stderr
             )
-        start(
-            "inference",
-            [sys.executable, "-m", "prime_rl.entrypoints.inference", "@", str(config_dir / "inference.json")],
-            {**DEFAULT_INFERENCE_ENV_VARS, "CUDA_VISIBLE_DEVICES": ",".join(gpu_ids[: study.inference_gpus])},
-        )
+        if remote is None:
+            start(
+                "inference",
+                [sys.executable, "-m", "prime_rl.entrypoints.inference", "@", str(config_dir / "inference.json")],
+                {**DEFAULT_INFERENCE_ENV_VARS, "CUDA_VISIBLE_DEVICES": ",".join(gpu_ids[: study.inference_gpus])},
+            )
         for split, source, _ in env_servers(config):
             start(
                 f"env-{source.resolved_name}",
@@ -232,7 +243,10 @@ def launch(study, root, resume=None):
                 "@",
                 str(config_dir / "trainer.json"),
             ],
-            {**DEFAULT_TRAINER_ENV_VARS, "CUDA_VISIBLE_DEVICES": ",".join(gpu_ids[study.inference_gpus :])},
+            {
+                **DEFAULT_TRAINER_ENV_VARS,
+                "CUDA_VISIBLE_DEVICES": ",".join(gpu_ids if remote else gpu_ids[study.inference_gpus :]),
+            },
         )
         trainer_exit_deadline = None
         while True:
@@ -248,7 +262,10 @@ def launch(study, root, resume=None):
                     continue
                 if name == "tensorboard":
                     if code is not None and not observer_warned:
-                        print("TensorBoard observer exited; training continues. See logs/tensorboard.log", file=sys.stderr)
+                        print(
+                            "TensorBoard observer exited; training continues. See logs/tensorboard.log",
+                            file=sys.stderr,
+                        )
                         observer_warned = True
                     continue
                 if code is not None and (code != 0 or name not in {"controller", "trainer"}):
@@ -309,7 +326,10 @@ def launch(study, root, resume=None):
             drained, errors = drain_process("tensorboard", observer)
             cleanup_errors.extend(errors)
             if not drained:
-                print("TensorBoard observer exceeded shutdown deadline; replay saved metrics with track --once", file=sys.stderr)
+                print(
+                    "TensorBoard observer exceeded shutdown deadline; replay saved metrics with track --once",
+                    file=sys.stderr,
+                )
         if cleanup_errors:
             for error in cleanup_errors:
                 print(f"Cleanup warning: {error}", file=sys.stderr)

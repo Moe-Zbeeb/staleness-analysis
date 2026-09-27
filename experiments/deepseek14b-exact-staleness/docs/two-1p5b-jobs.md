@@ -1,5 +1,7 @@
 # What the two 1.5B jobs do
 
+Historical description: the user stopped k=0 and replaced the eight-GPU k256 job with the [twelve-GPU high-priority study](runs/deepseek15b-multinode-12gpu.md). The schedules below explain the earlier jobs.
+
 Both studies start from the same pinned `deepseek-ai/DeepSeek-R1-Distill-Qwen-1.5B` weights, use the same cleaned DeepScaleR questions and grader, and target 1,000 optimizer updates. They are separate runs with separate optimizer states and output directories. Neither resumes the 13 updates from the stopped job `2145184`.
 
 | Job | Purpose | Priority | Startup | Study |

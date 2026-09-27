@@ -6,7 +6,7 @@ from prime_rl.configs.rl import RLConfig
 from prime_rl.entrypoints.rl import write_subconfigs
 
 
-def resolve(study, resume=None):
+def resolve(study, resume=None, remote=None):
     directory = study.output_dir.resolve()
     model = str(study.prepared_model_path.resolve())
     scheduler = {"type": "constant"}
@@ -162,14 +162,20 @@ def resolve(study, resume=None):
             },
         }
     )
+    if remote is not None:
+        remote.validate_study(study)
+        config.trainer.weight_broadcast.host = remote.trainer_host
+        config.orchestrator.weight_broadcast.host = remote.trainer_host
+        config.orchestrator.model.client.base_url = remote.router_url
+        config.orchestrator.model.client.admin_base_url = remote.worker_urls
     if config.trainer.output_dir.resolve() != directory or config.orchestrator.output_dir.resolve() != directory:
         raise ValueError("Upstream run directory resolution changed")
     return config
 
 
-def build(study, destination, resume=None):
+def build(study, destination, resume=None, remote=None):
     destination = Path(destination)
-    config = resolve(study, resume)
+    config = resolve(study, resume, remote)
     write_subconfigs(config, destination)
     atomic_write(destination / "study.json", study.model_dump_json(indent=2).encode())
     atomic_write(destination / "rl.json", config.model_dump_json(indent=2).encode())

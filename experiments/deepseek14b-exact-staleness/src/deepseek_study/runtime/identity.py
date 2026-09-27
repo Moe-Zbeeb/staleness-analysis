@@ -31,6 +31,7 @@ def capture(root, study):
         "msgspec",
         "pyarrow",
         "tensorboard",
+        "vllm-router",
     )
     versions = {}
     for name in packages:
