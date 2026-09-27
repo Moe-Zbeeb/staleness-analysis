@@ -26,4 +26,6 @@ Submit with explicit `--account=grad-students --partition=background --qos=backg
 
 The first attempt, job `2145012` on `deep-chungus-7`, failed its startup probe after 151 seconds with CUDA reporting `device=7, num_gpus=7`. It completed no model preparation or training. Its logs and original submitted scripts remain under `profiling/20260927-deepseek15b`; the replacement uses a separate control directory.
 
+On node 5, Slurm's exclusive reservation accounts for all nine GPUs despite the eight-GPU request. Job `2145013` was stopped during preflight when this mismatch was observed. The corrected wrapper selects eight entries from Slurm's actual `CUDA_VISIBLE_DEVICES` list before starting any CUDA process and records the complete allocation and unused device separately. It never invents physical device indices or accesses a GPU outside the allocation.
+
 Validation: wrapper source isolation and tamper detection, successful four-update stop, early launcher failure, and time bound are covered by `tests/test_profile_bounds.py`. These tests do not establish CUDA readiness; the allocated job must pass its hardware and real model startup checks.

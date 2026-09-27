@@ -4,6 +4,17 @@ PROFILE_CONTROL=$(cd "${1:?control directory required}" && pwd)
 STUDY_ROOT=/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study
 PROFILE_DIR="$PROFILE_CONTROL/work"
 PROFILE_PYTHON="$STUDY_ROOT/vendor/prime-rl/.venv/bin/python"
+export PROFILE_ALLOCATED_DEVICES="${CUDA_VISIBLE_DEVICES:?Slurm GPU allocation required}"
+export CUDA_VISIBLE_DEVICES
+CUDA_VISIBLE_DEVICES=$("$PROFILE_PYTHON" - <<'PY'
+import os
+
+devices = os.environ["PROFILE_ALLOCATED_DEVICES"].split(",")
+if len(devices) not in {8, 9} or len(devices) != len(set(devices)):
+    raise ValueError("Expected a unique eight- or nine-GPU allocation")
+print(",".join(devices[:8]))
+PY
+)
 export PYTHONUNBUFFERED=1
 export OMP_NUM_THREADS=4
 export RUNBOARD_HOME=/mnt/xfs/home/mohamadzbib/.runboard
@@ -35,6 +46,8 @@ record = {
     "job_id": os.environ["SLURM_JOB_ID"],
     "node": os.environ["SLURMD_NODENAME"],
     "visible_devices": visible,
+    "allocated_devices": os.environ["PROFILE_ALLOCATED_DEVICES"].split(","),
+    "unused_devices": os.environ["PROFILE_ALLOCATED_DEVICES"].split(",")[8:],
     "inference_devices": visible[:4],
     "trainer_devices": visible[4:],
 }
