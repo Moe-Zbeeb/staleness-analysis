@@ -50,6 +50,7 @@ class StudyConfig(BaseModel):
     trainer_micro_batch_size: Literal[1]
     trainer_attention: Literal["fa2", "fa3", "fa4"]
     trainer_compile: bool
+    trainer_reshard_after_forward: bool = True
     optimizer_cpu_offload: bool
     activation_checkpointing: bool
     activation_cpu_offload: bool = False

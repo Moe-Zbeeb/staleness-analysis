@@ -50,6 +50,17 @@ def test_resume_paths_are_propagated(study, tmp_path):
     assert config.orchestrator.resume.dir == checkpoint
 
 
+def test_resharding_override_changes_only_the_official_execution_setting(study):
+    changed = StudyConfig.model_validate(study.model_dump() | {"trainer_reshard_after_forward": False})
+    original_config = resolve(study).model_dump()
+    changed_config = resolve(changed).model_dump()
+    assert original_config["trainer"]["model"]["reshard_after_forward"] is True
+    assert changed_config["trainer"]["model"]["reshard_after_forward"] is False
+    changed_config["trainer"]["model"]["reshard_after_forward"] = True
+    assert changed_config == original_config
+    assert changed.fingerprint() != study.fingerprint()
+
+
 @pytest.mark.parametrize("lag", [0, 1, 8, 32, 64])
 @pytest.mark.parametrize("profile", ["80gb", "40gb"])
 def test_baseline_profiles_resolve_without_changing_scientific_recipe(lag, profile):

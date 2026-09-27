@@ -1,0 +1,83 @@
+{
+  "job_id": 2145240,
+  "node": "deep-chungus-1",
+  "gpu_class": "A100 PCIe 40 GB",
+  "inference_gpus": 4,
+  "trainer_gpus": 4,
+  "production_modified": false,
+  "production_speedup_established": false,
+  "collection_status": "partial; SSH control connection closed before remaining cases were collected",
+  "shared_results": "/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/profiling/optimize-1p5b-20260927/results-2145240",
+  "inference": {
+    "baseline_16": {
+      "responses": 512,
+      "output_tokens": 3122423,
+      "median_tokens_per_second_per_gpu": 2560.906857596085,
+      "slowest_shard_generation_seconds": 309.2294491971843,
+      "case_seconds_including_startup": 385.0625991821289,
+      "errors": []
+    },
+    "sequences_32": {
+      "responses": 512,
+      "output_tokens": 3125491,
+      "median_tokens_per_second_per_gpu": 3820.3646348717484,
+      "slowest_shard_generation_seconds": 205.4950039421674,
+      "case_seconds_including_startup": 310.308474779129,
+      "errors": []
+    },
+    "environment": {
+      "PYTORCH_CUDA_ALLOC_CONF": "expandable_segments:False",
+      "VLLM_WORKER_MULTIPROC_METHOD": "spawn",
+      "OMP_NUM_THREADS": "1",
+      "NCCL_P2P_DISABLE": "1",
+      "NCCL_SHM_DISABLE": "1"
+    },
+    "sequences_64": "not collected",
+    "baseline_repeat": "not collected"
+  },
+  "trainer": {
+    "baseline_forward_backward_seconds": [52.19961799890734, 50.52685144892894, 50.72212132788263],
+    "baseline_peak_memory_gib_rounded": 11.2,
+    "baseline_repeat": {
+      "completed_updates": 3,
+      "static_columns_equal": true,
+      "outputs_bitwise_equal": false,
+      "surrogate_clipped_differences": 21,
+      "zero_policy_signal_differences": 21,
+      "median_step_speedup": 1.0028817704529371
+    },
+    "no_activation_checkpointing": {
+      "completed_updates": 3,
+      "static_columns_equal": true,
+      "outputs_bitwise_equal": false,
+      "surrogate_clipped_differences": 15,
+      "zero_policy_signal_differences": 15,
+      "median_step_speedup": 1.0234615295265101,
+      "peak_memory_gib_rounded": 38.0,
+      "decision": "not recommended; small observed timing benefit and substantially higher memory"
+    },
+    "no_forward_resharding": {
+      "completed_updates": 3,
+      "static_columns_equal": true,
+      "outputs_bitwise_equal": false,
+      "surrogate_clipped_differences": 18,
+      "zero_policy_signal_differences": 18,
+      "median_step_speedup": 1.2577883432838155,
+      "decision": "candidate for full-pipeline validation; not deployed"
+    },
+    "no_checkpointing_and_no_resharding": {
+      "status": "failed",
+      "cause": "CUDA out of memory on the 40 GB diagnostic GPUs",
+      "decision": "not accepted"
+    },
+    "compile": "not collected"
+  },
+  "limitations": [
+    "Learner replay uses eight archived micro-batches per rank, not a full production update.",
+    "Inference capacity tests bypass the production router, dispatcher, grader and weight handoff.",
+    "Diagnostic inference uses four 40 GB GPUs; production uses three 80 GB GPUs.",
+    "The repeated inference baseline and remaining candidate results are not yet collected.",
+    "Clipping-mask differences are evidence of numerical variation, not a validated equivalence tolerance.",
+    "A compatible complete checkpoint and healthy replacement hardware are required for a lossless production transition."
+  ]
+}

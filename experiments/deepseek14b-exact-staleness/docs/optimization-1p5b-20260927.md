@@ -33,7 +33,21 @@ CUDA synchronization used for phase measurements adds overhead. The bounded repl
 - Local receipts: `/tmp/staleness-opt-1p5b-2145232/results-2145240`
 - Shared receipts: `/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/profiling/optimize-1p5b-20260927/results-2145240`
 
-The baseline and candidate results were pending when this record was created. No speedup or candidate acceptance is claimed here.
+## Collected results
+
+The [partial results receipt](../diagnostics/optimization-1p5b-20260927-partial.json) records measurements collected before the SSH control connection closed. The benchmark's remaining completion state has not been verified.
+
+| Candidate | Measured result | Decision |
+| --- | --- | --- |
+| 32 active inference sequences | Median per-GPU throughput increased from 2,561 to 3,820 output tokens/s, about 49%; both cases completed 512 responses and about 3.12 million output tokens | Promising; dispatcher concurrency and full-pipeline performance still require validation |
+| Disable activation checkpointing | Median learner replay speedup 1.023×; peak memory rose from approximately 11.2 to 38.0 GiB | Keep activation checkpointing enabled |
+| Disable forward resharding | Median learner replay speedup 1.258×; all three updates completed | Candidate for full-size and full-pipeline validation |
+| Disable both | CUDA out of memory on the 40 GB diagnostic GPUs | Not accepted |
+| 64 sequences, repeated inference baseline and compilation | Results not yet collected | No decision |
+
+The identical learner baseline repeat had speedup 1.003× but was not bitwise identical: 21 clipping/no-signal decisions differed across the three updates. The no-checkpointing and no-resharding cases had 15 and 18 differences respectively, with archived inputs equal. These counts do not define an equivalence tolerance or prove identical learning trajectories. No candidate is deployed, and the measured component speedups are not a revised production ETA.
+
+The adapter now exposes `trainer_reshard_after_forward`, defaulting to `true`, and passes it through to the existing official PrimeRL option. Setting it to `false` keeps gathered parameters after forward computation and was the tested resharding candidate. It changes the configuration fingerprint; existing runs must continue with their frozen release until an explicit compatible transition is validated. Tests verify that this switch changes only the corresponding official execution setting. Imported library source is unchanged.
 
 ## Production transition requirements
 

@@ -1,6 +1,7 @@
 import argparse
 import copy
 import json
+import math
 import statistics
 from pathlib import Path
 
@@ -94,6 +95,12 @@ def compare(baseline, candidate, ranks, steps, allowed_model_changes=()):
     timing_rows = []
     for step in range(1, steps + 1):
         left, right = [metrics[step] for metrics in metric_sets]
+        for values in (left, right):
+            for key in ("time/forward_backward", "optim/grad_norm", "loss/mean", "perf/peak_memory"):
+                if key not in values or not math.isfinite(values[key]):
+                    raise ValueError(f"Replay metric is missing or non-finite: step {step}, {key}")
+            if values["time/forward_backward"] <= 0:
+                raise ValueError("Replay timing must be positive")
         timing_rows.append(
             {
                 "step": step,
@@ -104,6 +111,8 @@ def compare(baseline, candidate, ranks, steps, allowed_model_changes=()):
                 "candidate_grad_norm": right.get("optim/grad_norm"),
                 "baseline_loss": left.get("loss/mean"),
                 "candidate_loss": right.get("loss/mean"),
+                "baseline_peak_memory": left["perf/peak_memory"],
+                "candidate_peak_memory": right["perf/peak_memory"],
             }
         )
     return {

@@ -61,7 +61,7 @@ def resolve(study, resume=None):
                     "ac_offloading": {} if study.activation_cpu_offload else None,
                     "fused_lm_head_token_chunk_size": study.lm_head_chunk_size,
                     "dp_replicate": 1,
-                    "reshard_after_forward": True,
+                    "reshard_after_forward": study.trainer_reshard_after_forward,
                     "optim_cpu_offload": study.optimizer_cpu_offload,
                     "fsdp_cpu_offload": False,
                     "optimization_dtype": "float32",
