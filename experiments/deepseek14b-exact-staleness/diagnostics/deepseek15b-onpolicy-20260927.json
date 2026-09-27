@@ -35,7 +35,7 @@
   },
   "job_id": "2145261",
   "last_verified_state": "RUNNING",
-  "last_verified_phase": "Staging node-local source and runtime; no training updates yet",
+  "last_verified_phase": "Seven-GPU collective and kernel checks passed; training supervisor started; no completed update yet",
   "tests": {
     "queue_config_audit": 61,
     "passed": true
@@ -43,5 +43,6 @@
   "allowed_gpu_nodes": [
     "deep-chungus-7"
   ],
-  "automatic_requeue": false
+  "automatic_requeue": false,
+  "gpu_health_receipt": "onpolicy-node7-health-2145261.json"
 }

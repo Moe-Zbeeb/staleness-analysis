@@ -1,0 +1,109 @@
+{
+  "job_id": "2145261",
+  "node": "deep-chungus-7",
+  "slurm_job_gpus": "0,1,2,3,4,5,6,7",
+  "world_size": 7,
+  "expected_all_reduce": 28.0,
+  "torch": "2.11.0+cu128",
+  "cuda_runtime": "12.8",
+  "devices": [
+    {
+      "rank": 0,
+      "visible_device": "0",
+      "name": "NVIDIA A100 80GB PCIe",
+      "bytes": 85097971712,
+      "capability": [
+        8,
+        0
+      ],
+      "all_reduce": 28.0,
+      "bf16_backward": true,
+      "flash_attention_backward": true,
+      "vllm_rms_norm": true
+    },
+    {
+      "rank": 1,
+      "visible_device": "1",
+      "name": "NVIDIA A100 80GB PCIe",
+      "bytes": 85097971712,
+      "capability": [
+        8,
+        0
+      ],
+      "all_reduce": 28.0,
+      "bf16_backward": true,
+      "flash_attention_backward": true,
+      "vllm_rms_norm": true
+    },
+    {
+      "rank": 2,
+      "visible_device": "2",
+      "name": "NVIDIA A100 80GB PCIe",
+      "bytes": 85097971712,
+      "capability": [
+        8,
+        0
+      ],
+      "all_reduce": 28.0,
+      "bf16_backward": true,
+      "flash_attention_backward": true,
+      "vllm_rms_norm": true
+    },
+    {
+      "rank": 3,
+      "visible_device": "3",
+      "name": "NVIDIA A100 80GB PCIe",
+      "bytes": 85097971712,
+      "capability": [
+        8,
+        0
+      ],
+      "all_reduce": 28.0,
+      "bf16_backward": true,
+      "flash_attention_backward": true,
+      "vllm_rms_norm": true
+    },
+    {
+      "rank": 4,
+      "visible_device": "4",
+      "name": "NVIDIA A100 80GB PCIe",
+      "bytes": 85097971712,
+      "capability": [
+        8,
+        0
+      ],
+      "all_reduce": 28.0,
+      "bf16_backward": true,
+      "flash_attention_backward": true,
+      "vllm_rms_norm": true
+    },
+    {
+      "rank": 5,
+      "visible_device": "5",
+      "name": "NVIDIA A100 80GB PCIe",
+      "bytes": 85097971712,
+      "capability": [
+        8,
+        0
+      ],
+      "all_reduce": 28.0,
+      "bf16_backward": true,
+      "flash_attention_backward": true,
+      "vllm_rms_norm": true
+    },
+    {
+      "rank": 6,
+      "visible_device": "6",
+      "name": "NVIDIA A100 80GB PCIe",
+      "bytes": 85097971712,
+      "capability": [
+        8,
+        0
+      ],
+      "all_reduce": 28.0,
+      "bf16_backward": true,
+      "flash_attention_backward": true,
+      "vllm_rms_norm": true
+    }
+  ]
+}
