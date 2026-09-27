@@ -12,6 +12,8 @@ MODEL_ID = "deepseek-ai/DeepSeek-R1-Distill-Qwen-1.5B"
 MODEL_REVISION = "ad9f0ae0864d7fbcd1cd905e3c6c5b069cc8b562"
 BASE_MODEL_ID = "deepseek-ai/DeepSeek-R1-Distill-Qwen-14B"
 BASE_MODEL_REVISION = "1df8507178afcc1bef68cd8c393f61a886323761"
+QWEN_MODEL_ID = "Qwen/Qwen2.5-3B"
+QWEN_MODEL_REVISION = "3aab1f1954e9cc14eb9509a215f9e5ca08227a9b"
 
 
 def digest(path):
@@ -28,7 +30,9 @@ def write(path, value):
         stream.write(json.dumps(value, indent=2) + "\n")
 
 
-def clone_source(source, destination):
+def clone_source(source, destination, model_id=MODEL_ID, model_revision=MODEL_REVISION):
+    if (model_id, model_revision) not in {(MODEL_ID, MODEL_REVISION), (QWEN_MODEL_ID, QWEN_MODEL_REVISION)}:
+        raise ValueError("Unknown profiling model pin")
     checksums = json.loads((source / "PACKAGE_SHA256.json").read_text())
     for name, expected in checksums.items():
         if digest(source / name) != expected:
@@ -41,14 +45,36 @@ def clone_source(source, destination):
     original = init.read_text()
     replacement = original
     for key, old, new in (
-        ("MODEL_ID", BASE_MODEL_ID, MODEL_ID),
-        ("MODEL_REVISION", BASE_MODEL_REVISION, MODEL_REVISION),
+        ("MODEL_ID", BASE_MODEL_ID, model_id),
+        ("MODEL_REVISION", BASE_MODEL_REVISION, model_revision),
     ):
         before = f'{key} = "{old}"'
         if replacement.count(before) != 1:
             raise ValueError(f"Unexpected baseline model pin: {key}")
         replacement = replacement.replace(before, f'{key} = "{new}"')
     init.write_text(replacement)
+    expected_changes = ["src/deepseek_study/__init__.py"]
+    if model_id == QWEN_MODEL_ID:
+        assets = destination / "src/deepseek_study/dataset/assets.py"
+        contents = assets.read_text()
+        replacements = [
+            (
+                'if actual != expected_prompt or not loaded.decode(actual).endswith("<think>\\n"):',
+                "if actual != expected_prompt:",
+            ),
+            ("Renderer changed the native DeepSeek thinking prompt", "Renderer changed the native Qwen prompt"),
+            (
+                "if (loaded.bos_token_id, loaded.eos_token_id) != (151646, 151643):",
+                "if (loaded.bos_token_id, loaded.eos_token_id) != (original.bos_token_id, original.eos_token_id):",
+            ),
+            ("Unexpected DeepSeek BOS/EOS tokens", "Prepared tokenizer changed native Qwen BOS/EOS tokens"),
+        ]
+        for before, after in replacements:
+            if contents.count(before) != 1:
+                raise ValueError("Unexpected frozen tokenizer parity implementation")
+            contents = contents.replace(before, after)
+        assets.write_text(contents)
+        expected_changes.append("src/deepseek_study/dataset/assets.py")
     (destination / "vendor").mkdir()
     (destination / "vendor/prime-rl").symlink_to((source / "vendor/prime-rl").resolve())
     changed = []
@@ -56,7 +82,7 @@ def clone_source(source, destination):
         name = str(path.relative_to(destination))
         if digest(path) != digest(source / name):
             changed.append(name)
-    if changed != ["src/deepseek_study/__init__.py"]:
+    if changed != expected_changes:
         raise ValueError(f"Unexpected runtime source differences: {changed}")
     return changed
 
@@ -67,24 +93,29 @@ def main():
     parser.add_argument("--baseline", type=Path, required=True)
     parser.add_argument("--directory", type=Path, required=True)
     parser.add_argument("--mirror-root", type=Path, required=True)
+    parser.add_argument("--model", choices=[MODEL_ID, QWEN_MODEL_ID], default=MODEL_ID)
+    parser.add_argument("--inference-gpus", type=int, choices=[3, 4], default=4)
     args = parser.parse_args()
     source, directory = args.source.resolve(), args.directory.resolve()
     directory.mkdir(parents=True, exist_ok=False)
     baseline = json.loads(args.baseline.read_text())
+    model_id = args.model
+    model_revision = QWEN_MODEL_REVISION if model_id == QWEN_MODEL_ID else MODEL_REVISION
+    run_prefix = "qwen25-3b" if model_id == QWEN_MODEL_ID else "deepseek15b"
     release = directory / "release"
-    changed = clone_source(source, release)
+    changed = clone_source(source, release, model_id, model_revision)
     from huggingface_hub import snapshot_download
 
     model = directory / "assets/model"
     snapshot_download(
-        MODEL_ID,
-        revision=MODEL_REVISION,
+        model_id,
+        revision=model_revision,
         local_dir=model,
-        allow_patterns=["*.json", "*.safetensors", "LICENSE", "README.md"],
+        allow_patterns=["*.json", "*.safetensors", "*.txt", "*.jinja", "LICENSE", "README.md"],
     )
     manifest = {
-        "repo_id": MODEL_ID,
-        "revision": MODEL_REVISION,
+        "repo_id": model_id,
+        "revision": model_revision,
         "path": str(model),
         "files": [
             {"name": path.name, "size": path.stat().st_size, "sha256": digest(path)}
@@ -99,9 +130,10 @@ def main():
         "prepared_model_path": str(directory / "assets/native-model"),
         "data_manifest": str(directory / "assets/train-manifest.json"),
         "output_dir": str(
-            directory / f"deepseek15b-exact256-timing-{os.environ.get('SLURM_JOB_ID', directory.parent.name)}"
+            directory / f"{run_prefix}-exact256-timing-{os.environ.get('SLURM_JOB_ID', directory.parent.name)}"
         ),
         "metrics_mirror_root": str(args.mirror_root.resolve()),
+        "inference_gpus": args.inference_gpus,
     }
     config_changes = {
         key: {"before": baseline[key], "after": value} for key, value in study.items() if baseline[key] != value
@@ -112,6 +144,7 @@ def main():
         "data_manifest",
         "output_dir",
         "metrics_mirror_root",
+        "inference_gpus",
     }:
         raise ValueError("Timing profile changed a training setting")
     write(directory / "study.json", study)
@@ -146,14 +179,15 @@ def main():
     write(
         directory / "preparation.json",
         {
-            "model_id": MODEL_ID,
-            "model_revision": MODEL_REVISION,
+            "model_id": model_id,
+            "model_revision": model_revision,
             "baseline": str(args.baseline.resolve()),
             "baseline_sha256": digest(args.baseline),
             "baseline_source": str(source),
             "baseline_package_sha256": digest(source / "PACKAGE_SHA256.json"),
             "changed_runtime_files": changed,
             "changed_runtime_values": ["MODEL_ID", "MODEL_REVISION"],
+            "native_tokenizer_parity_adapted": model_id == QWEN_MODEL_ID,
             "config_changes": config_changes,
             "same_question_membership_and_order": True,
             "included_questions": len(after_ids),
@@ -161,7 +195,7 @@ def main():
             "timing_only": True,
         },
     )
-    print(json.dumps({"prepared": str(directory), "model_id": MODEL_ID}), flush=True)
+    print(json.dumps({"prepared": str(directory), "model_id": model_id}), flush=True)
 
 
 if __name__ == "__main__":

@@ -10,7 +10,8 @@ import pytest
 SCRIPTS = Path(__file__).resolve().parents[1] / "scripts"
 
 
-def test_profile_source_changes_only_model_pin(tmp_path):
+@pytest.mark.parametrize("qwen", [False, True])
+def test_profile_source_changes_only_model_pin(tmp_path, qwen):
     spec = importlib.util.spec_from_file_location("small_profile", SCRIPTS / "prepare_small_model_profile.py")
     module = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(module)
@@ -22,13 +23,24 @@ def test_profile_source_changes_only_model_pin(tmp_path):
     init.write_text(f'MODEL_ID = "{module.BASE_MODEL_ID}"\nMODEL_REVISION = "{module.BASE_MODEL_REVISION}"\n')
     other = source / "src/deepseek_study/loss.py"
     other.write_text("value = 1\n")
+    assets = source / "src/deepseek_study/dataset/assets.py"
+    assets.parent.mkdir()
+    assets.write_bytes((SCRIPTS.parent / "src/deepseek_study/dataset/assets.py").read_bytes())
     (source / "pyproject.toml").write_text("")
-    hashes = {str(path.relative_to(source)): module.digest(path) for path in (init, other)}
+    hashes = {str(path.relative_to(source)): module.digest(path) for path in (init, other, assets)}
     (source / "PACKAGE_SHA256.json").write_text(json.dumps(hashes))
     destination = tmp_path / "profile"
-    assert module.clone_source(source, destination) == ["src/deepseek_study/__init__.py"]
+    model_id = module.QWEN_MODEL_ID if qwen else module.MODEL_ID
+    revision = module.QWEN_MODEL_REVISION if qwen else module.MODEL_REVISION
+    expected = ["src/deepseek_study/__init__.py"]
+    if qwen:
+        expected.append("src/deepseek_study/dataset/assets.py")
+    assert module.clone_source(source, destination, model_id, revision) == expected
     assert (destination / "src/deepseek_study/loss.py").read_bytes() == other.read_bytes()
-    assert module.MODEL_ID in (destination / "src/deepseek_study/__init__.py").read_text()
+    assert model_id in (destination / "src/deepseek_study/__init__.py").read_text()
+    generated = (destination / "src/deepseek_study/dataset/assets.py").read_text()
+    assert ('endswith("<think>\\n")' in generated) == (not qwen)
+    assert ("original.bos_token_id, original.eos_token_id" in generated) == qwen
     assert module.BASE_MODEL_ID in init.read_text()
     other.write_text("value = 2\n")
     with pytest.raises(ValueError, match="Frozen baseline source changed"):
