@@ -716,6 +716,35 @@
     "scientific_recipe_changed": false
   },
   "latest_status": {
+    "observed_at_utc": "2026-09-27T13:57:13.238578+00:00",
+    "job_id": "2145148",
+    "scheduler_state": "RUNNING",
+    "node": "deep-chungus-7",
+    "phase": "training_launcher_started",
+    "collective_health_passed": true,
+    "world_size": 7,
+    "all_reduce_expected_and_observed": 28,
+    "bf16_backward": true,
+    "flash_attention_backward": true,
+    "vllm_rms_norm": true,
+    "inference_devices": [
+      0,
+      1,
+      2
+    ],
+    "trainer_devices": [
+      3,
+      4,
+      5,
+      6
+    ],
+    "unused_unhealthy_device": 7,
+    "launch_receipt_created": true,
+    "training_output_created": false,
+    "committed_updates": 0,
+    "tensorboard_events_created": false
+  },
+  "earlier_io_wait_snapshot": {
     "job_id": "2145148",
     "scheduler_state": "RUNNING",
     "node": "deep-chungus-7",
