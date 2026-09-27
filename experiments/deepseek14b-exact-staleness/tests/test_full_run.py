@@ -126,6 +126,7 @@ def test_control_accepts_preparation_artifacts_but_not_existing_run_state(tmp_pa
     cache.mkdir()
     (cache / "prepare_small_model_profile.cpython-312.pyc").write_bytes(b"python import cache")
     (tmp_path / "device-probes-preparation.json").write_text("receipt")
+    (tmp_path / "import-warmup-preparation.json").write_text("receipt")
     hashes = PREPARE.control_scripts(tmp_path)
     assert "prepare_cached_full_run.py" in hashes and "prelaunch.json" in hashes
     assert "device-probes-preparation.json" not in hashes
@@ -301,16 +302,23 @@ def test_full_launch_preserves_cold_start_probe_and_collective_deadlines(study, 
     study = study.model_copy(update={"trainer_gpus": 4, "inference_gpus": 4})
     (control / "study.json").write_text(study.model_dump_json())
     manifest = {
-        "study_sha256": PREPARE.digest(control / "study.json"), "scripts_sha256": {},
-        "node": "deep-chungus-11", "release": str(release), "config_sha256": study.fingerprint(),
-        "identity_sha256": "source", "allocated_gpus": 8, "minimum_gpu_bytes": 79_000_000_000,
+        "study_sha256": PREPARE.digest(control / "study.json"),
+        "scripts_sha256": {},
+        "node": "deep-chungus-11",
+        "release": str(release),
+        "config_sha256": study.fingerprint(),
+        "identity_sha256": "source",
+        "allocated_gpus": 8,
+        "minimum_gpu_bytes": 79_000_000_000,
         "startup_deadlines": LAUNCH.startup_deadlines(),
     }
     (control / "full-run.json").write_text(json.dumps(manifest))
     calls = []
     commands = []
+    warmed = []
 
     def run(command, **kwargs):
+        assert warmed == [control / "job-123/import-warmup.json"]
         calls.append((command, kwargs))
         if "--output" in command:
             assert command[command.index("--timeout") + 1] == "300"
@@ -319,12 +327,18 @@ def test_full_launch_preserves_cold_start_probe_and_collective_deadlines(study, 
         else:
             assert "torch.distributed.run" in command
             assert kwargs["timeout"] == 900
-            Path(command[command.index("--receipt") + 1]).write_text(json.dumps({
-                "world_size": 8, "devices": [{"name": "NVIDIA A100 80GB", "bytes": 85_000_000_000}] * 8,
-            }))
+            Path(command[command.index("--receipt") + 1]).write_text(
+                json.dumps(
+                    {
+                        "world_size": 8,
+                        "devices": [{"name": "NVIDIA A100 80GB", "bytes": 85_000_000_000}] * 8,
+                    }
+                )
+            )
 
     monkeypatch.setattr(identity, "capture", lambda *args: {"sha256": "source"})
     monkeypatch.setattr(LAUNCH.subprocess, "run", run)
+    monkeypatch.setattr(LAUNCH, "warm_torch_import", lambda path: warmed.append(path))
     monkeypatch.setattr(LAUNCH.os, "execv", lambda executable, command: commands.append(command))
     monkeypatch.setattr(LAUNCH.os, "chdir", lambda path: None)
     monkeypatch.setattr(sys, "path", list(sys.path))
@@ -338,6 +352,10 @@ def test_full_launch_preserves_cold_start_probe_and_collective_deadlines(study, 
     assert commands == [[sys.executable, "-m", "deepseek_study.cli", "run", str(control / "study.json")]]
     receipt = json.loads((control / "job-123/launch.json").read_text())
     assert receipt["startup_deadlines"] == {
-        "gpu_probe_seconds": 300, "gpu_probe_parent_margin_seconds": 60,
-        "gpu_probe_parent_seconds": 360, "collective_health_seconds": 900,
+        "torch_import_seconds": 180,
+        "torch_import_trace_after_seconds": 30,
+        "gpu_probe_seconds": 300,
+        "gpu_probe_parent_margin_seconds": 60,
+        "gpu_probe_parent_seconds": 360,
+        "collective_health_seconds": 900,
     }

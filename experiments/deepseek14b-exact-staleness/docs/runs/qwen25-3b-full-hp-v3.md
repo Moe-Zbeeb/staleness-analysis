@@ -36,3 +36,19 @@ Replacement job **2145130** was submitted at **2026-09-27 12:53:26 UTC**, using 
 ## User-requested tracking change
 
 Job **2145130** was canceled at the user's request to switch to TensorBoard only. Slurm confirms cancellation after 7m33s; the training output directory had not been created, and zero training updates were committed. Preparation completed, but training did not begin. Its launch controls and preparation artifacts are retained unchanged. The replacement uses a new frozen source/control directory, with Runboard disabled and TensorBoard event logs mirrored to XFS.
+
+## TensorBoard-only replacement
+
+Job **2145141** was submitted at **2026-09-27 13:14:43 UTC** on `deep-chungus-9`, which became idle and previously passed eight-A100-80GB checks. This job requires all eight cards to pass current allocation health checks, with four trainers and four inference workers. Scheduler admission confirms high-priority partition/QoS, the `grad-students` account, exclusive full-node allocation, 128 CPUs, a 45-day wall limit and no requeue.
+
+The frozen source is `releases/tensorboard-v4-20260927`, from commit `d6e8747`. All 17 files implementing the loss/advantages, rollout schedule, dataset/grader, task adapter, config and recipe were compared byte-for-byte with the corrected v3 release and matched. The grading policy remains v3. This change replaces tracking with TensorBoard and gives this fresh full-node run four inference workers.
+
+Controls are `launches/qwen25-3b-full-hp-tb-20260927`; logs are in the sibling `-logs` directory. Output is `outputs/qwen25-3b-exact256-80gb-seed42-v3-tb`. TensorBoard events go under its `tensorboard/` directory and the corresponding XFS metric mirror. The launcher never starts Runboard. See the [TensorBoard guide](../tensorboard.md) and [submission receipt](../../diagnostics/qwen25-3b-tensorboard-full-hp-20260927.json).
+
+The full local suite passed 348 tests with one CUDA-only skip. After the final bounded-memory replay implementation, 35 focused logging, mirror, paper-metric and launcher tests passed, with the same CUDA-only skip. Cluster startup verification is recorded in the receipt as it becomes available.
+
+Node 9 acquired an unrelated CPU-only job before the exclusive allocation could start. Job 2145141 was canceled while pending, with no output or training. Replacement **2145142** was submitted at **13:18:31 UTC** on idle node 7 using the same frozen TensorBoard source and the previously authorized seven-healthy-GPU fallback. Its fresh controls are `launches/qwen25-3b-full-hp-tb-node7-20260927`. The eight configured GPUs are allocated exclusively; if the known unusable eighth card fails again, all seven healthy cards are assigned once, four to training and three to inference. No unrelated job was altered.
+
+Job 2145142 stopped safely before training after 5m13s: all eight health-probe children timed out during `import torch`, before CUDA was reached. The single-process diagnostic 2145146 completed in 2m19s. Its CPU-only Torch import took 12.37s, subsequent parallel imports took 1.59–1.78s, and GPUs 0–6 passed A100-80GB/BF16 checks in about 102.5s. GPU 7 retained its known `No CUDA GPUs are available` error. These measurements support a bounded single import before the parallel checks, but do not establish shared-storage contention as the original stall's cause. An earlier diagnostic wrapper path error (2145145) was corrected before these measurements.
+
+The launch path now imports Torch once in a CPU-only subprocess before each parallel GPU probe. This uses the same interpreter, hides GPUs only for that child, has a 180-second deadline and records traceback stacks every 30 seconds. Failed imports block the GPU fan-out and leave an exclusive diagnostic receipt. GPU deadlines remain 300/360 seconds, collective checks remain 900 seconds, and the training recipe is unchanged. This startup change passed 45 targeted tests before deployment.

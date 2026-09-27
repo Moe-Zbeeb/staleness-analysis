@@ -180,9 +180,12 @@ def test_release_freeze_excludes_vendor_and_bytecode(tmp_path):
 
 
 def test_cached_preparation_passes_cold_start_deadline_to_child_probe(tmp_path, monkeypatch):
+    import launch_full_run
+
     control = tmp_path / "control"
     control.mkdir()
     verified = []
+    warmed = []
 
     def verify(control):
         verified.append(control)
@@ -193,6 +196,7 @@ def test_cached_preparation_passes_cold_start_deadline_to_child_probe(tmp_path, 
 
     def inspect_stage(name, command, environment, timeout, cwd):
         assert verified == [control]
+        assert warmed == [control / "import-warmup-preparation.json"]
         assert name == "probe_all_allocated_gpus"
         assert command[command.index("--timeout") + 1] == "300"
         assert timeout == 360
@@ -200,6 +204,7 @@ def test_cached_preparation_passes_cold_start_deadline_to_child_probe(tmp_path, 
         raise ProbeInspected
 
     monkeypatch.setattr(CACHED, "verify_prelaunch", verify)
+    monkeypatch.setattr(launch_full_run, "warm_torch_import", lambda path, environment: warmed.append(path))
     monkeypatch.setattr(CACHED, "run_stage", inspect_stage)
     monkeypatch.setenv("SLURMD_NODENAME", "deep-chungus-7")
     monkeypatch.setenv("SLURM_JOB_ID", "123")
@@ -207,3 +212,27 @@ def test_cached_preparation_passes_cold_start_deadline_to_child_probe(tmp_path, 
     monkeypatch.setenv("CUDA_VISIBLE_DEVICES", "0,1,2,3,4,5,6,7")
     with pytest.raises(ProbeInspected):
         CACHED.prepare(control)
+
+
+def test_failed_import_warmup_never_starts_parallel_gpu_probes(tmp_path, monkeypatch):
+    import launch_full_run
+
+    control = tmp_path / "control"
+    control.mkdir()
+    stages = []
+
+    def fail_import(path, environment):
+        assert path == control / "import-warmup-preparation.json"
+        raise RuntimeError("Torch import warmup failed")
+
+    monkeypatch.setattr(CACHED, "verify_prelaunch", lambda path: specification(tmp_path))
+    monkeypatch.setattr(launch_full_run, "warm_torch_import", fail_import)
+    monkeypatch.setattr(CACHED, "run_stage", lambda *args: stages.append(args))
+    monkeypatch.setenv("SLURMD_NODENAME", "deep-chungus-7")
+    monkeypatch.setenv("SLURM_JOB_ID", "123")
+    monkeypatch.setenv("SLURM_RESTART_COUNT", "0")
+    monkeypatch.setenv("CUDA_VISIBLE_DEVICES", "0,1,2,3,4,5,6,7")
+    with pytest.raises(RuntimeError, match="Torch import warmup failed"):
+        CACHED.prepare(control)
+    assert stages == []
+    assert not (control / "work").exists()

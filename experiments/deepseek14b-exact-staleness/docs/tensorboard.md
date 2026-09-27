@@ -40,3 +40,7 @@ All finite numeric trainer and paper diagnostics are exported. This includes `pa
 The launcher stops training services, records terminal status, drains paper calculations, then lets TensorBoard flush the final events. An observer failure is reported in its log/status and does not modify training. Journals remain available for replay. Training progress must still be checked through committed update receipts and Slurm state; a dashboard process or event file alone does not prove training is healthy.
 
 Runboard remains an optional dependency only for explicitly inspecting historical artifacts. Its old observer and documentation are retained; it is absent from the default installation and new launch path.
+
+## Cluster deployment
+
+`/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/current` points to the frozen `releases/tensorboard-v4-20260927` package. Previous releases and launch controls are preserved. The active Qwen2.5-3B source is an isolated model-specific clone beneath its launch controls; the current release retains the original 14B base pins for explicit future preparation. Follow the [full 3B launch record](runs/qwen25-3b-full-hp-v3.md) for the active job and output paths.

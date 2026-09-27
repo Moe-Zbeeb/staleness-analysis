@@ -4,21 +4,131 @@ import json
 import os
 import subprocess
 import sys
+import time
 from pathlib import Path
 
 
 GPU_PROBE_TIMEOUT_SECONDS = 300
 GPU_PROBE_PARENT_MARGIN_SECONDS = 60
 COLLECTIVE_HEALTH_TIMEOUT_SECONDS = 900
+TORCH_IMPORT_TIMEOUT_SECONDS = 180
+TORCH_IMPORT_TRACE_AFTER_SECONDS = 30
+
+TORCH_IMPORT = """
+import faulthandler
+import json
+import os
+import sys
+import time
+
+started = time.monotonic()
+
+def stage(name):
+    print('[torch-import-stage]' + json.dumps({'stage': name, 'seconds': time.monotonic() - started}), file=sys.stderr, flush=True)
+
+faulthandler.dump_traceback_later(int(os.environ['DEEPSEEK_STUDY_TORCH_IMPORT_TRACE_AFTER']), repeat=True)
+stage('before_torch_import')
+import torch
+stage('after_torch_import')
+faulthandler.cancel_dump_traceback_later()
+print(json.dumps({'torch_version': torch.__version__, 'torch_file': torch.__file__, 'cuda_visible_devices': os.environ.get('CUDA_VISIBLE_DEVICES')}), flush=True)
+"""
 
 
 def startup_deadlines():
     return {
+        "torch_import_seconds": TORCH_IMPORT_TIMEOUT_SECONDS,
+        "torch_import_trace_after_seconds": TORCH_IMPORT_TRACE_AFTER_SECONDS,
         "gpu_probe_seconds": GPU_PROBE_TIMEOUT_SECONDS,
         "gpu_probe_parent_margin_seconds": GPU_PROBE_PARENT_MARGIN_SECONDS,
         "gpu_probe_parent_seconds": GPU_PROBE_TIMEOUT_SECONDS + GPU_PROBE_PARENT_MARGIN_SECONDS,
         "collective_health_seconds": COLLECTIVE_HEALTH_TIMEOUT_SECONDS,
     }
+
+
+def warm_torch_import(receipt, environment=None):
+    receipt = Path(receipt)
+    if receipt.exists():
+        raise FileExistsError("Torch import receipt already exists; use a fresh launch attempt")
+    environment = {
+        **(os.environ if environment is None else environment),
+        "CUDA_VISIBLE_DEVICES": "",
+        "OMP_NUM_THREADS": "1",
+        "DEEPSEEK_STUDY_TORCH_IMPORT_TRACE_AFTER": str(TORCH_IMPORT_TRACE_AFTER_SECONDS),
+    }
+    record = {
+        "stage": "warm_torch_import",
+        "status": "failed",
+        "interpreter": sys.executable,
+        "job_id": environment.get("SLURM_JOB_ID"),
+        "node": environment.get("SLURMD_NODENAME"),
+        "timeout_seconds": TORCH_IMPORT_TIMEOUT_SECONDS,
+        "trace_after_seconds": TORCH_IMPORT_TRACE_AFTER_SECONDS,
+        "cuda_visible_devices": "",
+        "omp_num_threads": "1",
+    }
+    stdout, stderr = "", ""
+    print(
+        json.dumps({"stage": record["stage"], "status": "starting", "timeout_seconds": TORCH_IMPORT_TIMEOUT_SECONDS}),
+        flush=True,
+    )
+    started = time.monotonic()
+    try:
+        result = subprocess.run(
+            [sys.executable, "-c", TORCH_IMPORT],
+            env=environment,
+            capture_output=True,
+            text=True,
+            timeout=TORCH_IMPORT_TIMEOUT_SECONDS,
+        )
+        stdout, stderr = result.stdout, result.stderr
+        record["returncode"] = result.returncode
+        if result.returncode:
+            record["error"] = f"Torch import process exited with status {result.returncode}"
+        else:
+            try:
+                details = json.loads(stdout.splitlines()[-1])
+                if (
+                    not isinstance(details, dict)
+                    or details.get("cuda_visible_devices") != ""
+                    or not isinstance(details.get("torch_version"), str)
+                    or not details["torch_version"]
+                    or not isinstance(details.get("torch_file"), str)
+                    or not details["torch_file"]
+                ):
+                    raise ValueError("Incomplete Torch import result")
+                record.update(status="complete", result=details)
+            except (ValueError, IndexError) as error:
+                record["error"] = f"Invalid Torch import acknowledgement: {error}"
+    except subprocess.TimeoutExpired as error:
+        stdout, stderr = error.stdout or "", error.stderr or ""
+        record.update(status="timeout", error="Torch import exceeded its startup deadline")
+    except OSError as error:
+        record["error"] = f"Torch import process could not start: {type(error).__name__}: {error}"
+    stdout = stdout.decode(errors="replace") if isinstance(stdout, bytes) else stdout
+    stderr = stderr.decode(errors="replace") if isinstance(stderr, bytes) else stderr
+    stages = []
+    for line in stderr.splitlines():
+        if line.startswith("[torch-import-stage]"):
+            try:
+                stage = json.loads(line.removeprefix("[torch-import-stage]"))
+            except ValueError:
+                continue
+            if isinstance(stage, dict) and isinstance(stage.get("stage"), str):
+                stages.append(stage)
+    record.update(
+        elapsed_seconds=time.monotonic() - started,
+        stdout_tail=stdout[-4000:],
+        stderr_tail=stderr[-8000:],
+        stages=stages[-32:],
+        last_stage=stages[-1]["stage"] if stages else None,
+    )
+    receipt.parent.mkdir(parents=True, exist_ok=True)
+    write(receipt, record)
+    print(json.dumps({"stage": record["stage"], "status": record["status"], "receipt": str(receipt)}), flush=True)
+    if record["status"] != "complete":
+        raise RuntimeError(f"Torch import warmup failed; see {receipt}: {record['error']}")
+    return record
 
 
 def select_devices(probes, allocated_count, participating_count):
@@ -83,11 +193,16 @@ def main():
         raise FileExistsError("Refusing to overwrite or silently restart an existing run")
     job = control / f"job-{os.environ['SLURM_JOB_ID']}"
     job.mkdir(exist_ok=False)
+    warm_torch_import(job / "import-warmup.json")
     allocated = os.environ["CUDA_VISIBLE_DEVICES"].split(",")
     subprocess.run(
         [
-            sys.executable, str(control / "probe_allocated_gpus.py"),
-            "--output", str(job / "device-probes.json"), "--timeout", str(GPU_PROBE_TIMEOUT_SECONDS),
+            sys.executable,
+            str(control / "probe_allocated_gpus.py"),
+            "--output",
+            str(job / "device-probes.json"),
+            "--timeout",
+            str(GPU_PROBE_TIMEOUT_SECONDS),
         ],
         check=True,
         timeout=GPU_PROBE_TIMEOUT_SECONDS + GPU_PROBE_PARENT_MARGIN_SECONDS,

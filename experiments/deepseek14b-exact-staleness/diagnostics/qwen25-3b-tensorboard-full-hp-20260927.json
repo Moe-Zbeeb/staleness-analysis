@@ -1,0 +1,671 @@
+{
+  "submitted_at": "2026-09-27T13:14:43.741114+00:00",
+  "job_id": "2145141",
+  "command": [
+    "sbatch",
+    "--parsable",
+    "--account=grad-students",
+    "--partition=high-priority",
+    "--qos=high-priority",
+    "--nodes=1",
+    "--ntasks=1",
+    "--cpus-per-task=128",
+    "--mem=0",
+    "--exclusive",
+    "--gres=gpu:a100:8",
+    "--nodelist=deep-chungus-9",
+    "--time=45-00:00:00",
+    "--no-requeue",
+    "--signal=B:TERM@120",
+    "--job-name=q25-3b-k256-tb",
+    "--chdir=/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/launches/qwen25-3b-full-hp-tb-20260927",
+    "--output=/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/launches/qwen25-3b-full-hp-tb-20260927-logs/slurm-%j.out",
+    "--error=/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/launches/qwen25-3b-full-hp-tb-20260927-logs/slurm-%j.err",
+    "/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/launches/qwen25-3b-full-hp-tb-20260927/cached_full_run_job.sh",
+    "/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/launches/qwen25-3b-full-hp-tb-20260927"
+  ],
+  "source_commit": "d6e8747",
+  "release": "/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/releases/tensorboard-v4-20260927",
+  "control": "/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/launches/qwen25-3b-full-hp-tb-20260927",
+  "output": "/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/outputs/qwen25-3b-exact256-80gb-seed42-v3-tb",
+  "backend": "tensorboard",
+  "runboard_enabled": false,
+  "max_steps": 1000,
+  "lag": 256,
+  "checkpoint_interval": 100,
+  "scientific_source_files_verified_unchanged": 17,
+  "prelaunch_sha256": "d0c948cb47e5ecdb889c21649893a4a07ba5dbf10d0ac16f4b2c94699032ed14",
+  "package_sha256": "34dcaa623a58dff22b7c3b922df28d711f9eb9f679a7d1bef931cefd41727050",
+  "verification": {
+    "scheduler_account": "grad-students",
+    "scheduler_partition": "high-priority",
+    "scheduler_qos": "high-priority",
+    "node": "deep-chungus-9",
+    "allocated_gpus": 8,
+    "required_healthy_gpus": 8,
+    "trainer_gpus": 4,
+    "inference_gpus": 4,
+    "startup_health": "pending"
+  },
+  "result": {
+    "state": "CANCELLED",
+    "was_pending": true,
+    "completed_updates": 0,
+    "reason": "Unrelated CPU-only job2145135 blocks exclusive node9 allocation"
+  },
+  "replacement": {
+    "submitted_at": "2026-09-27T13:18:31.276891+00:00",
+    "job_id": "2145142",
+    "command": [
+      "sbatch",
+      "--parsable",
+      "--account=grad-students",
+      "--partition=high-priority",
+      "--qos=high-priority",
+      "--nodes=1",
+      "--ntasks=1",
+      "--cpus-per-task=128",
+      "--mem=0",
+      "--exclusive",
+      "--gres=gpu:a100:8",
+      "--nodelist=deep-chungus-7",
+      "--time=45-00:00:00",
+      "--no-requeue",
+      "--signal=B:TERM@120",
+      "--job-name=q25-3b-k256-tb",
+      "--chdir=/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/launches/qwen25-3b-full-hp-tb-node7-20260927",
+      "--output=/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/launches/qwen25-3b-full-hp-tb-node7-20260927-logs/slurm-%j.out",
+      "--error=/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/launches/qwen25-3b-full-hp-tb-node7-20260927-logs/slurm-%j.err",
+      "/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/launches/qwen25-3b-full-hp-tb-node7-20260927/cached_full_run_job.sh",
+      "/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/launches/qwen25-3b-full-hp-tb-node7-20260927"
+    ],
+    "source_commit": "d6e8747",
+    "release": "/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/releases/tensorboard-v4-20260927",
+    "control": "/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/launches/qwen25-3b-full-hp-tb-node7-20260927",
+    "output": "/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/outputs/qwen25-3b-exact256-80gb-seed42-v3-tb",
+    "supersedes_job_id": "2145141",
+    "superseded_reason": "Node9 acquired an unrelated CPU-only job; use previously authorized node7 seven-healthy-GPU fallback",
+    "backend": "tensorboard",
+    "runboard_enabled": false,
+    "max_steps": 1000,
+    "lag": 256,
+    "checkpoint_interval": 100,
+    "scientific_source_files_verified_unchanged": 17,
+    "prelaunch_sha256": "bee509c96ccf417a756af17d614cdd755db82ba3254c2dfca9d42868ffcd0a30",
+    "package_sha256": "34dcaa623a58dff22b7c3b922df28d711f9eb9f679a7d1bef931cefd41727050",
+    "result": {
+      "state": "FAILED",
+      "elapsed_seconds": 313,
+      "completed_updates": 0,
+      "training_output_created": false,
+      "reason": "All eight per-device processes exceeded300seconds atbefore_torch_import; CUDAwasnotreached",
+      "diagnostic_job_id": "2145145"
+    }
+  },
+  "import_diagnostic": {
+    "job_id": "2145146",
+    "directory": "/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/diagnostics/tensorboard-import-20260927-v2",
+    "state": "COMPLETED",
+    "elapsed_seconds": 139,
+    "single_import": {
+      "exit_code": 0,
+      "seconds": 14.163335053017363
+    },
+    "single_import_output": "{\"stage\": \"before_torch_import\"}\n{\"stage\": \"after_torch_import\", \"seconds\": 12.367683625780046, \"version\": \"2.11.0+cu128\"}\n",
+    "allocated_devices": [
+      "0",
+      "1",
+      "2",
+      "3",
+      "4",
+      "5",
+      "6",
+      "7"
+    ],
+    "healthy_devices": [
+      "0",
+      "1",
+      "2",
+      "3",
+      "4",
+      "5",
+      "6"
+    ],
+    "gpu_checks": [
+      {
+        "device": "0",
+        "healthy": true,
+        "name": "NVIDIA A100 80GB PCIe",
+        "bytes": 85097971712,
+        "uuid": "903e8a7b-ff3e-02cb-6a4d-0b7ab16b5027",
+        "initial_free_bytes": 84654424064,
+        "initial_total_bytes": 85097971712,
+        "bf16_backward": true,
+        "stdout_tail": "{\"name\": \"NVIDIA A100 80GB PCIe\", \"bytes\": 85097971712, \"uuid\": \"903e8a7b-ff3e-02cb-6a4d-0b7ab16b5027\", \"initial_free_bytes\": 84654424064, \"initial_total_bytes\": 85097971712, \"bf16_backward\": true}\n",
+        "stderr_tail": "[gpu-probe-stage]{\"stage\": \"before_torch_import\", \"seconds\": 5.3371069952845573e-05}\n[gpu-probe-stage]{\"stage\": \"after_torch_import\", \"seconds\": 1.5995847641024739}\n[gpu-probe-stage]{\"stage\": \"before_device_count\", \"seconds\": 1.5996109840925783}\n[gpu-probe-stage]{\"stage\": \"after_device_count\", \"seconds\": 16.75777656608261}\n[gpu-probe-stage]{\"stage\": \"before_set_device\", \"seconds\": 16.757932250155136}\nTimeout (0:01:30)!\nThread 0x00007f07ee164740 (most recent call first):\n  File \"/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/vendor/prime-rl/.venv/lib/python3.12/site-packages/torch/cuda/__init__.py\", line 478 in _lazy_init\n  File \"/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/vendor/prime-rl/.venv/lib/python3.12/site-packages/torch/cuda/__init__.py\", line 638 in set_device\n  File \"<string>\", line 26 in <module>\n[gpu-probe-stage]{\"stage\": \"after_set_device\", \"seconds\": 102.34543935605325}\n[gpu-probe-stage]{\"stage\": \"before_mem_info\", \"seconds\": 102.34554009698331}\n[gpu-probe-stage]{\"stage\": \"after_mem_info\", \"seconds\": 102.34629222913645}\n[gpu-probe-stage]{\"stage\": \"before_bf16_allocation\", \"seconds\": 102.34630697709508}\n[gpu-probe-stage]{\"stage\": \"before_bf16_backward\", \"seconds\": 102.35445027798414}\n[gpu-probe-stage]{\"stage\": \"before_cuda_synchronize\", \"seconds\": 102.5545667631086}\n[gpu-probe-stage]{\"stage\": \"after_cuda_synchronize\", \"seconds\": 102.55476923612878}\n[gpu-probe-stage]{\"stage\": \"before_device_properties\", \"seconds\": 102.5782930450514}\n[gpu-probe-stage]{\"stage\": \"complete\", \"seconds\": 102.5785628859885}\n",
+        "last_stage": "complete",
+        "stages": [
+          {
+            "stage": "before_torch_import",
+            "seconds": 5.3371069952845573e-05
+          },
+          {
+            "stage": "after_torch_import",
+            "seconds": 1.5995847641024739
+          },
+          {
+            "stage": "before_device_count",
+            "seconds": 1.5996109840925783
+          },
+          {
+            "stage": "after_device_count",
+            "seconds": 16.75777656608261
+          },
+          {
+            "stage": "before_set_device",
+            "seconds": 16.757932250155136
+          },
+          {
+            "stage": "after_set_device",
+            "seconds": 102.34543935605325
+          },
+          {
+            "stage": "before_mem_info",
+            "seconds": 102.34554009698331
+          },
+          {
+            "stage": "after_mem_info",
+            "seconds": 102.34629222913645
+          },
+          {
+            "stage": "before_bf16_allocation",
+            "seconds": 102.34630697709508
+          },
+          {
+            "stage": "before_bf16_backward",
+            "seconds": 102.35445027798414
+          },
+          {
+            "stage": "before_cuda_synchronize",
+            "seconds": 102.5545667631086
+          },
+          {
+            "stage": "after_cuda_synchronize",
+            "seconds": 102.55476923612878
+          },
+          {
+            "stage": "before_device_properties",
+            "seconds": 102.5782930450514
+          },
+          {
+            "stage": "complete",
+            "seconds": 102.5785628859885
+          }
+        ]
+      },
+      {
+        "device": "1",
+        "healthy": true,
+        "name": "NVIDIA A100 80GB PCIe",
+        "bytes": 85097971712,
+        "uuid": "b03bc3ba-472c-8081-1374-cfb54402f3ac",
+        "initial_free_bytes": 84654424064,
+        "initial_total_bytes": 85097971712,
+        "bf16_backward": true,
+        "stdout_tail": "{\"name\": \"NVIDIA A100 80GB PCIe\", \"bytes\": 85097971712, \"uuid\": \"b03bc3ba-472c-8081-1374-cfb54402f3ac\", \"initial_free_bytes\": 84654424064, \"initial_total_bytes\": 85097971712, \"bf16_backward\": true}\n",
+        "stderr_tail": "[gpu-probe-stage]{\"stage\": \"before_torch_import\", \"seconds\": 6.433110684156418e-05}\n[gpu-probe-stage]{\"stage\": \"after_torch_import\", \"seconds\": 1.5949429760221392}\n[gpu-probe-stage]{\"stage\": \"before_device_count\", \"seconds\": 1.5949715301394463}\n[gpu-probe-stage]{\"stage\": \"after_device_count\", \"seconds\": 16.74245987716131}\n[gpu-probe-stage]{\"stage\": \"before_set_device\", \"seconds\": 16.742625871207565}\nTimeout (0:01:30)!\nThread 0x00007fc06a6f3740 (most recent call first):\n  File \"/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/vendor/prime-rl/.venv/lib/python3.12/site-packages/torch/cuda/__init__.py\", line 478 in _lazy_init\n  File \"/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/vendor/prime-rl/.venv/lib/python3.12/site-packages/torch/cuda/__init__.py\", line 638 in set_device\n  File \"<string>\", line 26 in <module>\n[gpu-probe-stage]{\"stage\": \"after_set_device\", \"seconds\": 102.32657173206098}\n[gpu-probe-stage]{\"stage\": \"before_mem_info\", \"seconds\": 102.32668730104342}\n[gpu-probe-stage]{\"stage\": \"after_mem_info\", \"seconds\": 102.32739971810952}\n[gpu-probe-stage]{\"stage\": \"before_bf16_allocation\", \"seconds\": 102.32741488702595}\n[gpu-probe-stage]{\"stage\": \"before_bf16_backward\", \"seconds\": 102.3330134851858}\n[gpu-probe-stage]{\"stage\": \"before_cuda_synchronize\", \"seconds\": 102.53780516213737}\n[gpu-probe-stage]{\"stage\": \"after_cuda_synchronize\", \"seconds\": 102.53806359111331}\n[gpu-probe-stage]{\"stage\": \"before_device_properties\", \"seconds\": 102.56179623608477}\n[gpu-probe-stage]{\"stage\": \"complete\", \"seconds\": 102.56206729821861}\n",
+        "last_stage": "complete",
+        "stages": [
+          {
+            "stage": "before_torch_import",
+            "seconds": 6.433110684156418e-05
+          },
+          {
+            "stage": "after_torch_import",
+            "seconds": 1.5949429760221392
+          },
+          {
+            "stage": "before_device_count",
+            "seconds": 1.5949715301394463
+          },
+          {
+            "stage": "after_device_count",
+            "seconds": 16.74245987716131
+          },
+          {
+            "stage": "before_set_device",
+            "seconds": 16.742625871207565
+          },
+          {
+            "stage": "after_set_device",
+            "seconds": 102.32657173206098
+          },
+          {
+            "stage": "before_mem_info",
+            "seconds": 102.32668730104342
+          },
+          {
+            "stage": "after_mem_info",
+            "seconds": 102.32739971810952
+          },
+          {
+            "stage": "before_bf16_allocation",
+            "seconds": 102.32741488702595
+          },
+          {
+            "stage": "before_bf16_backward",
+            "seconds": 102.3330134851858
+          },
+          {
+            "stage": "before_cuda_synchronize",
+            "seconds": 102.53780516213737
+          },
+          {
+            "stage": "after_cuda_synchronize",
+            "seconds": 102.53806359111331
+          },
+          {
+            "stage": "before_device_properties",
+            "seconds": 102.56179623608477
+          },
+          {
+            "stage": "complete",
+            "seconds": 102.56206729821861
+          }
+        ]
+      },
+      {
+        "device": "2",
+        "healthy": true,
+        "name": "NVIDIA A100 80GB PCIe",
+        "bytes": 85097971712,
+        "uuid": "f12c8a0e-d339-efb5-a82a-3da130030298",
+        "initial_free_bytes": 84654424064,
+        "initial_total_bytes": 85097971712,
+        "bf16_backward": true,
+        "stdout_tail": "{\"name\": \"NVIDIA A100 80GB PCIe\", \"bytes\": 85097971712, \"uuid\": \"f12c8a0e-d339-efb5-a82a-3da130030298\", \"initial_free_bytes\": 84654424064, \"initial_total_bytes\": 85097971712, \"bf16_backward\": true}\n",
+        "stderr_tail": "[gpu-probe-stage]{\"stage\": \"before_torch_import\", \"seconds\": 4.4994987547397614e-05}\n[gpu-probe-stage]{\"stage\": \"after_torch_import\", \"seconds\": 1.593377334997058}\n[gpu-probe-stage]{\"stage\": \"before_device_count\", \"seconds\": 1.5934145860373974}\n[gpu-probe-stage]{\"stage\": \"after_device_count\", \"seconds\": 16.75690032890998}\n[gpu-probe-stage]{\"stage\": \"before_set_device\", \"seconds\": 16.757093994878232}\nTimeout (0:01:30)!\nThread 0x00007f5c1728a740 (most recent call first):\n  File \"/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/vendor/prime-rl/.venv/lib/python3.12/site-packages/torch/cuda/__init__.py\", line 478 in _lazy_init\n  File \"/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/vendor/prime-rl/.venv/lib/python3.12/site-packages/torch/cuda/__init__.py\", line 638 in set_device\n  File \"<string>\", line 26 in <module>\n[gpu-probe-stage]{\"stage\": \"after_set_device\", \"seconds\": 102.2978359060362}\n[gpu-probe-stage]{\"stage\": \"before_mem_info\", \"seconds\": 102.29798600985669}\n[gpu-probe-stage]{\"stage\": \"after_mem_info\", \"seconds\": 102.29905838798732}\n[gpu-probe-stage]{\"stage\": \"before_bf16_allocation\", \"seconds\": 102.2990761520341}\n[gpu-probe-stage]{\"stage\": \"before_bf16_backward\", \"seconds\": 102.31557600782253}\n[gpu-probe-stage]{\"stage\": \"before_cuda_synchronize\", \"seconds\": 102.53314639185555}\n[gpu-probe-stage]{\"stage\": \"after_cuda_synchronize\", \"seconds\": 102.53342782403342}\n[gpu-probe-stage]{\"stage\": \"before_device_properties\", \"seconds\": 102.55715557001531}\n[gpu-probe-stage]{\"stage\": \"complete\", \"seconds\": 102.55744182085618}\n",
+        "last_stage": "complete",
+        "stages": [
+          {
+            "stage": "before_torch_import",
+            "seconds": 4.4994987547397614e-05
+          },
+          {
+            "stage": "after_torch_import",
+            "seconds": 1.593377334997058
+          },
+          {
+            "stage": "before_device_count",
+            "seconds": 1.5934145860373974
+          },
+          {
+            "stage": "after_device_count",
+            "seconds": 16.75690032890998
+          },
+          {
+            "stage": "before_set_device",
+            "seconds": 16.757093994878232
+          },
+          {
+            "stage": "after_set_device",
+            "seconds": 102.2978359060362
+          },
+          {
+            "stage": "before_mem_info",
+            "seconds": 102.29798600985669
+          },
+          {
+            "stage": "after_mem_info",
+            "seconds": 102.29905838798732
+          },
+          {
+            "stage": "before_bf16_allocation",
+            "seconds": 102.2990761520341
+          },
+          {
+            "stage": "before_bf16_backward",
+            "seconds": 102.31557600782253
+          },
+          {
+            "stage": "before_cuda_synchronize",
+            "seconds": 102.53314639185555
+          },
+          {
+            "stage": "after_cuda_synchronize",
+            "seconds": 102.53342782403342
+          },
+          {
+            "stage": "before_device_properties",
+            "seconds": 102.55715557001531
+          },
+          {
+            "stage": "complete",
+            "seconds": 102.55744182085618
+          }
+        ]
+      },
+      {
+        "device": "3",
+        "healthy": true,
+        "name": "NVIDIA A100 80GB PCIe",
+        "bytes": 85097971712,
+        "uuid": "1a580dec-5dbf-b233-37d0-ad28d7816c96",
+        "initial_free_bytes": 84654424064,
+        "initial_total_bytes": 85097971712,
+        "bf16_backward": true,
+        "stdout_tail": "{\"name\": \"NVIDIA A100 80GB PCIe\", \"bytes\": 85097971712, \"uuid\": \"1a580dec-5dbf-b233-37d0-ad28d7816c96\", \"initial_free_bytes\": 84654424064, \"initial_total_bytes\": 85097971712, \"bf16_backward\": true}\n",
+        "stderr_tail": "[gpu-probe-stage]{\"stage\": \"before_torch_import\", \"seconds\": 5.515385419130325e-05}\n[gpu-probe-stage]{\"stage\": \"after_torch_import\", \"seconds\": 1.7813701790291816}\n[gpu-probe-stage]{\"stage\": \"before_device_count\", \"seconds\": 1.7814072188921273}\n[gpu-probe-stage]{\"stage\": \"after_device_count\", \"seconds\": 25.95050618890673}\n[gpu-probe-stage]{\"stage\": \"before_set_device\", \"seconds\": 25.950636374996975}\nTimeout (0:01:30)!\nThread 0x00007ff4117b3740 (most recent call first):\n  File \"/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/vendor/prime-rl/.venv/lib/python3.12/site-packages/torch/cuda/__init__.py\", line 478 in _lazy_init\n  File \"/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/vendor/prime-rl/.venv/lib/python3.12/site-packages/torch/cuda/__init__.py\", line 638 in set_device\n  File \"<string>\", line 26 in <module>\n[gpu-probe-stage]{\"stage\": \"after_set_device\", \"seconds\": 102.20291603705846}\n[gpu-probe-stage]{\"stage\": \"before_mem_info\", \"seconds\": 102.20312120486051}\n[gpu-probe-stage]{\"stage\": \"after_mem_info\", \"seconds\": 102.20971816102974}\n[gpu-probe-stage]{\"stage\": \"before_bf16_allocation\", \"seconds\": 102.20973837887868}\n[gpu-probe-stage]{\"stage\": \"before_bf16_backward\", \"seconds\": 102.22825346700847}\n[gpu-probe-stage]{\"stage\": \"before_cuda_synchronize\", \"seconds\": 102.47927527688444}\n[gpu-probe-stage]{\"stage\": \"after_cuda_synchronize\", \"seconds\": 102.47958732699044}\n[gpu-probe-stage]{\"stage\": \"before_device_properties\", \"seconds\": 102.50332514103502}\n[gpu-probe-stage]{\"stage\": \"complete\", \"seconds\": 102.5037532208953}\n",
+        "last_stage": "complete",
+        "stages": [
+          {
+            "stage": "before_torch_import",
+            "seconds": 5.515385419130325e-05
+          },
+          {
+            "stage": "after_torch_import",
+            "seconds": 1.7813701790291816
+          },
+          {
+            "stage": "before_device_count",
+            "seconds": 1.7814072188921273
+          },
+          {
+            "stage": "after_device_count",
+            "seconds": 25.95050618890673
+          },
+          {
+            "stage": "before_set_device",
+            "seconds": 25.950636374996975
+          },
+          {
+            "stage": "after_set_device",
+            "seconds": 102.20291603705846
+          },
+          {
+            "stage": "before_mem_info",
+            "seconds": 102.20312120486051
+          },
+          {
+            "stage": "after_mem_info",
+            "seconds": 102.20971816102974
+          },
+          {
+            "stage": "before_bf16_allocation",
+            "seconds": 102.20973837887868
+          },
+          {
+            "stage": "before_bf16_backward",
+            "seconds": 102.22825346700847
+          },
+          {
+            "stage": "before_cuda_synchronize",
+            "seconds": 102.47927527688444
+          },
+          {
+            "stage": "after_cuda_synchronize",
+            "seconds": 102.47958732699044
+          },
+          {
+            "stage": "before_device_properties",
+            "seconds": 102.50332514103502
+          },
+          {
+            "stage": "complete",
+            "seconds": 102.5037532208953
+          }
+        ]
+      },
+      {
+        "device": "4",
+        "healthy": true,
+        "name": "NVIDIA A100 80GB PCIe",
+        "bytes": 85097971712,
+        "uuid": "ba431598-b47d-7149-ba8a-09d754f3ed55",
+        "initial_free_bytes": 84654424064,
+        "initial_total_bytes": 85097971712,
+        "bf16_backward": true,
+        "stdout_tail": "{\"name\": \"NVIDIA A100 80GB PCIe\", \"bytes\": 85097971712, \"uuid\": \"ba431598-b47d-7149-ba8a-09d754f3ed55\", \"initial_free_bytes\": 84654424064, \"initial_total_bytes\": 85097971712, \"bf16_backward\": true}\n",
+        "stderr_tail": "[gpu-probe-stage]{\"stage\": \"before_torch_import\", \"seconds\": 5.068513564765453e-05}\n[gpu-probe-stage]{\"stage\": \"after_torch_import\", \"seconds\": 1.6945860260166228}\n[gpu-probe-stage]{\"stage\": \"before_device_count\", \"seconds\": 1.69462497998029}\n[gpu-probe-stage]{\"stage\": \"after_device_count\", \"seconds\": 25.9426589270588}\n[gpu-probe-stage]{\"stage\": \"before_set_device\", \"seconds\": 25.94293054100126}\nTimeout (0:01:30)!\nThread 0x00007f75fae3d740 (most recent call first):\n  File \"/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/vendor/prime-rl/.venv/lib/python3.12/site-packages/torch/cuda/__init__.py\", line 478 in _lazy_init\n  File \"/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/vendor/prime-rl/.venv/lib/python3.12/site-packages/torch/cuda/__init__.py\", line 638 in set_device\n  File \"<string>\", line 26 in <module>\n[gpu-probe-stage]{\"stage\": \"after_set_device\", \"seconds\": 102.37251215800643}\n[gpu-probe-stage]{\"stage\": \"before_mem_info\", \"seconds\": 102.37263395800255}\n[gpu-probe-stage]{\"stage\": \"after_mem_info\", \"seconds\": 102.37293473700993}\n[gpu-probe-stage]{\"stage\": \"before_bf16_allocation\", \"seconds\": 102.37295231013559}\n[gpu-probe-stage]{\"stage\": \"before_bf16_backward\", \"seconds\": 102.3769433889538}\n[gpu-probe-stage]{\"stage\": \"before_cuda_synchronize\", \"seconds\": 102.5690095780883}\n[gpu-probe-stage]{\"stage\": \"after_cuda_synchronize\", \"seconds\": 102.56919629103504}\n[gpu-probe-stage]{\"stage\": \"before_device_properties\", \"seconds\": 102.59192856401205}\n[gpu-probe-stage]{\"stage\": \"complete\", \"seconds\": 102.59222221910022}\n",
+        "last_stage": "complete",
+        "stages": [
+          {
+            "stage": "before_torch_import",
+            "seconds": 5.068513564765453e-05
+          },
+          {
+            "stage": "after_torch_import",
+            "seconds": 1.6945860260166228
+          },
+          {
+            "stage": "before_device_count",
+            "seconds": 1.69462497998029
+          },
+          {
+            "stage": "after_device_count",
+            "seconds": 25.9426589270588
+          },
+          {
+            "stage": "before_set_device",
+            "seconds": 25.94293054100126
+          },
+          {
+            "stage": "after_set_device",
+            "seconds": 102.37251215800643
+          },
+          {
+            "stage": "before_mem_info",
+            "seconds": 102.37263395800255
+          },
+          {
+            "stage": "after_mem_info",
+            "seconds": 102.37293473700993
+          },
+          {
+            "stage": "before_bf16_allocation",
+            "seconds": 102.37295231013559
+          },
+          {
+            "stage": "before_bf16_backward",
+            "seconds": 102.3769433889538
+          },
+          {
+            "stage": "before_cuda_synchronize",
+            "seconds": 102.5690095780883
+          },
+          {
+            "stage": "after_cuda_synchronize",
+            "seconds": 102.56919629103504
+          },
+          {
+            "stage": "before_device_properties",
+            "seconds": 102.59192856401205
+          },
+          {
+            "stage": "complete",
+            "seconds": 102.59222221910022
+          }
+        ]
+      },
+      {
+        "device": "5",
+        "healthy": true,
+        "name": "NVIDIA A100 80GB PCIe",
+        "bytes": 85097971712,
+        "uuid": "99e6d841-8f03-96c4-7573-c45c3e4026cc",
+        "initial_free_bytes": 84654424064,
+        "initial_total_bytes": 85097971712,
+        "bf16_backward": true,
+        "stdout_tail": "{\"name\": \"NVIDIA A100 80GB PCIe\", \"bytes\": 85097971712, \"uuid\": \"99e6d841-8f03-96c4-7573-c45c3e4026cc\", \"initial_free_bytes\": 84654424064, \"initial_total_bytes\": 85097971712, \"bf16_backward\": true}\n",
+        "stderr_tail": "[gpu-probe-stage]{\"stage\": \"before_torch_import\", \"seconds\": 6.086495704948902e-05}\n[gpu-probe-stage]{\"stage\": \"after_torch_import\", \"seconds\": 1.7825371860526502}\n[gpu-probe-stage]{\"stage\": \"before_device_count\", \"seconds\": 1.7825910379178822}\n[gpu-probe-stage]{\"stage\": \"after_device_count\", \"seconds\": 25.938052596058697}\n[gpu-probe-stage]{\"stage\": \"before_set_device\", \"seconds\": 25.938340269960463}\nTimeout (0:01:30)!\nThread 0x00007f48d6b1b740 (most recent call first):\n  File \"/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/vendor/prime-rl/.venv/lib/python3.12/site-packages/torch/cuda/__init__.py\", line 478 in _lazy_init\n  File \"/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/vendor/prime-rl/.venv/lib/python3.12/site-packages/torch/cuda/__init__.py\", line 638 in set_device\n  File \"<string>\", line 26 in <module>\n[gpu-probe-stage]{\"stage\": \"after_set_device\", \"seconds\": 102.39104672288522}\n[gpu-probe-stage]{\"stage\": \"before_mem_info\", \"seconds\": 102.39118783990853}\n[gpu-probe-stage]{\"stage\": \"after_mem_info\", \"seconds\": 102.39134186087176}\n[gpu-probe-stage]{\"stage\": \"before_bf16_allocation\", \"seconds\": 102.39135581697337}\n[gpu-probe-stage]{\"stage\": \"before_bf16_backward\", \"seconds\": 102.39548411499709}\n[gpu-probe-stage]{\"stage\": \"before_cuda_synchronize\", \"seconds\": 102.58525922102854}\n[gpu-probe-stage]{\"stage\": \"after_cuda_synchronize\", \"seconds\": 102.58544331905432}\n[gpu-probe-stage]{\"stage\": \"before_device_properties\", \"seconds\": 102.60825928999111}\n[gpu-probe-stage]{\"stage\": \"complete\", \"seconds\": 102.60853090393357}\n",
+        "last_stage": "complete",
+        "stages": [
+          {
+            "stage": "before_torch_import",
+            "seconds": 6.086495704948902e-05
+          },
+          {
+            "stage": "after_torch_import",
+            "seconds": 1.7825371860526502
+          },
+          {
+            "stage": "before_device_count",
+            "seconds": 1.7825910379178822
+          },
+          {
+            "stage": "after_device_count",
+            "seconds": 25.938052596058697
+          },
+          {
+            "stage": "before_set_device",
+            "seconds": 25.938340269960463
+          },
+          {
+            "stage": "after_set_device",
+            "seconds": 102.39104672288522
+          },
+          {
+            "stage": "before_mem_info",
+            "seconds": 102.39118783990853
+          },
+          {
+            "stage": "after_mem_info",
+            "seconds": 102.39134186087176
+          },
+          {
+            "stage": "before_bf16_allocation",
+            "seconds": 102.39135581697337
+          },
+          {
+            "stage": "before_bf16_backward",
+            "seconds": 102.39548411499709
+          },
+          {
+            "stage": "before_cuda_synchronize",
+            "seconds": 102.58525922102854
+          },
+          {
+            "stage": "after_cuda_synchronize",
+            "seconds": 102.58544331905432
+          },
+          {
+            "stage": "before_device_properties",
+            "seconds": 102.60825928999111
+          },
+          {
+            "stage": "complete",
+            "seconds": 102.60853090393357
+          }
+        ]
+      },
+      {
+        "device": "6",
+        "healthy": true,
+        "name": "NVIDIA A100 80GB PCIe",
+        "bytes": 85097971712,
+        "uuid": "21dae0b4-8feb-1aeb-a298-58e0f7cd24d5",
+        "initial_free_bytes": 84654424064,
+        "initial_total_bytes": 85097971712,
+        "bf16_backward": true,
+        "stdout_tail": "{\"name\": \"NVIDIA A100 80GB PCIe\", \"bytes\": 85097971712, \"uuid\": \"21dae0b4-8feb-1aeb-a298-58e0f7cd24d5\", \"initial_free_bytes\": 84654424064, \"initial_total_bytes\": 85097971712, \"bf16_backward\": true}\n",
+        "stderr_tail": "[gpu-probe-stage]{\"stage\": \"before_torch_import\", \"seconds\": 5.488400347530842e-05}\n[gpu-probe-stage]{\"stage\": \"after_torch_import\", \"seconds\": 1.5999381230212748}\n[gpu-probe-stage]{\"stage\": \"before_device_count\", \"seconds\": 1.599975333083421}\n[gpu-probe-stage]{\"stage\": \"after_device_count\", \"seconds\": 16.758850906975567}\n[gpu-probe-stage]{\"stage\": \"before_set_device\", \"seconds\": 16.758999889018014}\nTimeout (0:01:30)!\nThread 0x00007f5119e19740 (most recent call first):\n  File \"/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/vendor/prime-rl/.venv/lib/python3.12/site-packages/torch/cuda/__init__.py\", line 478 in _lazy_init\n  File \"/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/vendor/prime-rl/.venv/lib/python3.12/site-packages/torch/cuda/__init__.py\", line 638 in set_device\n  File \"<string>\", line 26 in <module>\n[gpu-probe-stage]{\"stage\": \"after_set_device\", \"seconds\": 102.28922968893312}\n[gpu-probe-stage]{\"stage\": \"before_mem_info\", \"seconds\": 102.28937080595642}\n[gpu-probe-stage]{\"stage\": \"after_mem_info\", \"seconds\": 102.29125111200847}\n[gpu-probe-stage]{\"stage\": \"before_bf16_allocation\", \"seconds\": 102.29127849405631}\n[gpu-probe-stage]{\"stage\": \"before_bf16_backward\", \"seconds\": 102.29819974396378}\n[gpu-probe-stage]{\"stage\": \"before_cuda_synchronize\", \"seconds\": 102.53400016599335}\n[gpu-probe-stage]{\"stage\": \"after_cuda_synchronize\", \"seconds\": 102.53427253104746}\n[gpu-probe-stage]{\"stage\": \"before_device_properties\", \"seconds\": 102.55769924796186}\n[gpu-probe-stage]{\"stage\": \"complete\", \"seconds\": 102.55793502391316}\n",
+        "last_stage": "complete",
+        "stages": [
+          {
+            "stage": "before_torch_import",
+            "seconds": 5.488400347530842e-05
+          },
+          {
+            "stage": "after_torch_import",
+            "seconds": 1.5999381230212748
+          },
+          {
+            "stage": "before_device_count",
+            "seconds": 1.599975333083421
+          },
+          {
+            "stage": "after_device_count",
+            "seconds": 16.758850906975567
+          },
+          {
+            "stage": "before_set_device",
+            "seconds": 16.758999889018014
+          },
+          {
+            "stage": "after_set_device",
+            "seconds": 102.28922968893312
+          },
+          {
+            "stage": "before_mem_info",
+            "seconds": 102.28937080595642
+          },
+          {
+            "stage": "after_mem_info",
+            "seconds": 102.29125111200847
+          },
+          {
+            "stage": "before_bf16_allocation",
+            "seconds": 102.29127849405631
+          },
+          {
+            "stage": "before_bf16_backward",
+            "seconds": 102.29819974396378
+          },
+          {
+            "stage": "before_cuda_synchronize",
+            "seconds": 102.53400016599335
+          },
+          {
+            "stage": "after_cuda_synchronize",
+            "seconds": 102.53427253104746
+          },
+          {
+            "stage": "before_device_properties",
+            "seconds": 102.55769924796186
+          },
+          {
+            "stage": "complete",
+            "seconds": 102.55793502391316
+          }
+        ]
+      },
+      {
+        "device": "7",
+        "healthy": false,
+        "error": "[gpu-probe-stage]{\"stage\": \"before_torch_import\", \"seconds\": 6.510294042527676e-05}\n[gpu-probe-stage]{\"stage\": \"after_torch_import\", \"seconds\": 1.5911906990222633}\n[gpu-probe-stage]{\"stage\": \"before_device_count\", \"seconds\": 1.5912313659209758}\n[gpu-probe-stage]{\"stage\": \"after_device_count\", \"seconds\": 16.7729570758529}\n[gpu-probe-stage]{\"stage\": \"before_set_device\", \"seconds\": 16.7730883739423}\nTimeout (0:01:30)!\nThread 0x00007fe114f84740 (most recent call first):\n  File \"/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/vendor/prime-rl/.venv/lib/python3.12/site-packages/torch/cuda/__init__.py\", line 478 in _lazy_init\n  File \"/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/vendor/prime-rl/.venv/lib/python3.12/site-packages/torch/cuda/__init__.py\", line 638 in set_device\n  File \"<string>\", line 26 in <module>\nTraceback (most recent call last):\n  File \"<string>\", line 26, in <module>\n  File \"/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/vendor/prime-rl/.venv/lib/python3.12/site-packages/torch/cuda/__init__.py\", line 638, in set_device\n    torch._C._cuda_setDevice(device)\n  File \"/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/vendor/prime-rl/.venv/lib/python3.12/site-packages/torch/cuda/__init__.py\", line 478, in _lazy_init\n    torch._C._cuda_init()\nRuntimeError: No CUDA GPUs are available\n",
+        "stdout_tail": "",
+        "stderr_tail": "[gpu-probe-stage]{\"stage\": \"before_torch_import\", \"seconds\": 6.510294042527676e-05}\n[gpu-probe-stage]{\"stage\": \"after_torch_import\", \"seconds\": 1.5911906990222633}\n[gpu-probe-stage]{\"stage\": \"before_device_count\", \"seconds\": 1.5912313659209758}\n[gpu-probe-stage]{\"stage\": \"after_device_count\", \"seconds\": 16.7729570758529}\n[gpu-probe-stage]{\"stage\": \"before_set_device\", \"seconds\": 16.7730883739423}\nTimeout (0:01:30)!\nThread 0x00007fe114f84740 (most recent call first):\n  File \"/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/vendor/prime-rl/.venv/lib/python3.12/site-packages/torch/cuda/__init__.py\", line 478 in _lazy_init\n  File \"/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/vendor/prime-rl/.venv/lib/python3.12/site-packages/torch/cuda/__init__.py\", line 638 in set_device\n  File \"<string>\", line 26 in <module>\nTraceback (most recent call last):\n  File \"<string>\", line 26, in <module>\n  File \"/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/vendor/prime-rl/.venv/lib/python3.12/site-packages/torch/cuda/__init__.py\", line 638, in set_device\n    torch._C._cuda_setDevice(device)\n  File \"/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/vendor/prime-rl/.venv/lib/python3.12/site-packages/torch/cuda/__init__.py\", line 478, in _lazy_init\n    torch._C._cuda_init()\nRuntimeError: No CUDA GPUs are available\n",
+        "last_stage": "before_set_device",
+        "stages": [
+          {
+            "stage": "before_torch_import",
+            "seconds": 6.510294042527676e-05
+          },
+          {
+            "stage": "after_torch_import",
+            "seconds": 1.5911906990222633
+          },
+          {
+            "stage": "before_device_count",
+            "seconds": 1.5912313659209758
+          },
+          {
+            "stage": "after_device_count",
+            "seconds": 16.7729570758529
+          },
+          {
+            "stage": "before_set_device",
+            "seconds": 16.7730883739423
+          }
+        ]
+      }
+    ],
+    "interpretation": "Single CPU import followed by parallel health checks succeeded; this does not establish the root cause of the preceding import stalls."
+  },
+  "failed_diagnostic": {
+    "job_id": "2145145",
+    "elapsed_seconds": 7,
+    "reason": "Batch wrapper used Slurm spool instead of explicit script directory; corrected in2145146",
+    "training_started": false
+  }
+}

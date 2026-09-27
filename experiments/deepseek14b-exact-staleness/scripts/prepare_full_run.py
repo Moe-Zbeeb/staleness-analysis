@@ -52,7 +52,13 @@ def control_scripts(control):
         "prelaunch.json",
         "preparation-input.json",
     )
-    permitted = {*required, *optional, "preparation.json", "device-probes-preparation.json"}
+    permitted = {
+        *required,
+        *optional,
+        "preparation.json",
+        "device-probes-preparation.json",
+        "import-warmup-preparation.json",
+    }
     if control.exists():
         for path in control.iterdir():
             if path.name == "work" and path.is_dir() and not path.is_symlink():

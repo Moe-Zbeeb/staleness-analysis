@@ -164,7 +164,7 @@ def run_stage(name, command, environment, timeout, cwd):
 def prepare(control):
     control = control.resolve()
     specification = verify_prelaunch(control)
-    from launch_full_run import GPU_PROBE_PARENT_MARGIN_SECONDS, GPU_PROBE_TIMEOUT_SECONDS
+    from launch_full_run import GPU_PROBE_PARENT_MARGIN_SECONDS, GPU_PROBE_TIMEOUT_SECONDS, warm_torch_import
 
     node, allocated = validate_specification(specification, os.environ)
     source = Path(specification["source"]).resolve()
@@ -176,6 +176,7 @@ def prepare(control):
     if output.is_relative_to(control) or control.is_relative_to(output):
         raise ValueError("Training output and launch control must be separate")
     environment = {**os.environ, "CUDA_DEVICE_ORDER": "PCI_BUS_ID"}
+    warm_torch_import(control / "import-warmup-preparation.json", environment)
     run_stage(
         "probe_all_allocated_gpus",
         [
