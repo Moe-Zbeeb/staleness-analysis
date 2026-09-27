@@ -86,3 +86,24 @@ def test_overflow_is_rejected_before_an_optimizer_update(advantage):
     with pytest.raises(FloatingPointError):
         clipped_grpo(inputs, 0.2)
     assert current.grad is None
+
+
+@pytest.mark.parametrize("column", ["current", "behavior"])
+@pytest.mark.parametrize("invalid", [float("inf"), float("-inf"), float("nan")])
+def test_nonfinite_trainable_logprob_is_rejected_before_backward(column, invalid):
+    current = torch.tensor([invalid if column == "current" else -1.0], requires_grad=True)
+    behavior = torch.tensor([invalid if column == "behavior" else -1.0])
+    inputs = LossInputs(current, behavior, None, torch.zeros(1), torch.tensor([True]))
+    with pytest.raises(FloatingPointError, match="Nonfinite GRPO log-probability"):
+        clipped_grpo(inputs, 0.2)
+    assert current.grad is None
+
+
+def test_nonfinite_masked_prompt_logprob_does_not_change_grpo():
+    current = torch.tensor([float("-inf"), -1.0], requires_grad=True)
+    behavior = torch.tensor([float("nan"), -1.0])
+    inputs = LossInputs(current, behavior, None, torch.tensor([0.0, 1.0]), torch.tensor([False, True]))
+    result = clipped_grpo(inputs, 0.2)
+    result.loss.backward()
+    assert result.loss.item() == -1.0
+    assert current.grad.tolist() == [0.0, -1.0]

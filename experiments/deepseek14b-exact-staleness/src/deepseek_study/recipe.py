@@ -11,7 +11,7 @@ def baseline(lag, profile="80gb", max_steps=1000, seed=42, root=None):
     return StudyConfig(
         model_path="/mnt/nfs/home/mohamadzbib/projects/models/exact-age-14b/deepseek-r1-distill-qwen-14b",
         dataset_path="/mnt/nfs/home/mohamadzbib/projects/exact-age-14b/release/deepscaler/data/train.parquet",
-        data_manifest=root / "assets" / "train-manifest.json",
+        data_manifest=root / "assets" / "train-manifest-v3.json",
         prepared_model_path=root / "assets" / "native-model",
         output_dir=root / "outputs" / f"exact{lag}-{profile}-seed{seed}",
         metrics_mirror_root=(

@@ -6,13 +6,15 @@ import subprocess
 import sys
 import time
 import uuid
+from datetime import datetime, timezone
 from pathlib import Path
 
-from deepseek_study import PRIME_COMMIT
+from deepseek_study import MODEL_ID, MODEL_REVISION, PRIME_COMMIT
 from deepseek_study.runtime import checkpoints
 from deepseek_study.dataset.assets import validate_prepared
 from deepseek_study.runtime.build import build
 from deepseek_study.runtime.identity import capture, snapshot
+from deepseek_study.runtime.processes import drain_process, stop_process_groups
 from deepseek_study.tracking.archive import reserve_mirror
 from prime_rl.entrypoints.rl import env_servers
 from prime_rl.utils.process import DEFAULT_COMMON_ENV_VARS, DEFAULT_INFERENCE_ENV_VARS, DEFAULT_TRAINER_ENV_VARS
@@ -99,6 +101,8 @@ def launch(study, root, resume=None):
         json.dumps(
             {
                 "run_uuid": uuid.uuid4().hex,
+                "model_id": MODEL_ID,
+                "model_revision": MODEL_REVISION,
                 "starting_step": starting_step,
                 "resume_from": str(Path(resume).resolve()) if resume else None,
                 "config_sha256": study.fingerprint(),
@@ -126,20 +130,38 @@ def launch(study, root, resume=None):
         + (os.pathsep + os.environ["PYTHONPATH"] if os.environ.get("PYTHONPATH") else ""),
     }
     processes = {}
-    previous_term = signal.getsignal(signal.SIGTERM)
+    previous_signals = {signum: signal.getsignal(signum) for signum in (signal.SIGTERM, signal.SIGINT)}
+    received_signal = None
+    received_signum = None
+    registering_process = False
 
     def interrupted(signum, frame):
-        raise KeyboardInterrupt
+        nonlocal received_signal, received_signum
+        if received_signum is None:
+            received_signum = signum
+            received_signal = signal.Signals(signum).name
+        if registering_process:
+            return
+        raise KeyboardInterrupt(f"Launcher received {received_signal}")
 
-    signal.signal(signal.SIGTERM, interrupted)
+    for signum in previous_signals:
+        signal.signal(signum, interrupted)
 
     def start(name, args, env):
+        nonlocal registering_process
         with (logs / f"{name}.log").open("w") as stream:
-            processes[name] = subprocess.Popen(
-                args, env={**base_env, **env}, stdout=stream, stderr=subprocess.STDOUT, start_new_session=True
-            )
+            registering_process = True
+            try:
+                processes[name] = subprocess.Popen(
+                    args, env={**base_env, **env}, stdout=stream, stderr=subprocess.STDOUT, start_new_session=True
+                )
+            finally:
+                registering_process = False
+            if received_signum is not None:
+                raise KeyboardInterrupt(f"Launcher received {received_signal}")
 
     run_status = "crashed"
+    failure = None
     observer_warned = False
     paper_warned = False
     try:
@@ -240,53 +262,56 @@ def launch(study, root, resume=None):
                 if time.monotonic() > trainer_exit_deadline:
                     raise RuntimeError("Trainer failed to exit after the controller completed")
             time.sleep(1)
-    except KeyboardInterrupt:
+    except KeyboardInterrupt as error:
         run_status = "killed"
+        failure = {"type": type(error).__name__, "message": str(error)}
+        raise
+    except BaseException as error:
+        failure = {"type": type(error).__name__, "message": str(error)}
         raise
     finally:
+        for signum in previous_signals:
+            signal.signal(signum, signal.SIG_IGN)
+        exit_codes = {name: process.poll() for name, process in processes.items()}
         observer = processes.pop("runboard", None)
         paper_observer = processes.pop("paper-metrics", None)
-        for process in processes.values():
-            try:
-                os.killpg(process.pid, signal.SIGTERM)
-            except ProcessLookupError:
-                pass
-        deadline = time.monotonic() + 20
-        for process in processes.values():
-            try:
-                process.wait(timeout=max(0, deadline - time.monotonic()))
-            except subprocess.TimeoutExpired:
-                pass
-        for process in processes.values():
-            try:
-                os.killpg(process.pid, signal.SIGKILL)
-            except ProcessLookupError:
-                pass
-            process.wait()
+        cleanup_errors = stop_process_groups(processes)
+        status_record = {
+            "status": run_status,
+            "finished_at": datetime.now(timezone.utc).isoformat(),
+            "error": failure,
+            "received_signal": received_signal,
+            "received_signum": received_signum,
+            "process_exit_codes_before_cleanup": exit_codes,
+            "slurm_job_id": os.environ.get("SLURM_JOB_ID"),
+            "maximum_updates": study.max_steps,
+            "checkpoint_interval": study.checkpoint_interval,
+            "cleanup_errors": list(cleanup_errors),
+        }
         try:
-            checkpoints.atomic_write(output / "run-status.json", json.dumps({"status": run_status}).encode())
+            checkpoints.atomic_write(output / "run-status.json", json.dumps(status_record, indent=2).encode())
         except Exception as error:
             print(f"Could not record launcher status ({type(error).__name__})", file=sys.stderr)
         if paper_observer is not None:
-            try:
-                paper_observer.wait(timeout=20)
-            except subprocess.TimeoutExpired:
-                os.killpg(paper_observer.pid, signal.SIGKILL)
-                paper_observer.wait()
-                checkpoints.atomic_write(
-                    output / "paper-status.json",
-                    b'{"status":"interrupted","error":"Replay with paper-metrics --once"}',
-                )
+            drained, errors = drain_process("paper-metrics", paper_observer)
+            cleanup_errors.extend(errors)
+            if not drained:
+                try:
+                    checkpoints.atomic_write(
+                        output / "paper-status.json",
+                        b'{"status":"interrupted","error":"Replay with paper-metrics --once"}',
+                    )
+                except Exception as error:
+                    print(f"Could not record paper status ({type(error).__name__})", file=sys.stderr)
                 print("Paper metrics need offline replay after the shutdown deadline", file=sys.stderr)
         if observer is not None:
-            try:
-                observer.wait(timeout=20)
-            except subprocess.TimeoutExpired:
-                try:
-                    os.killpg(observer.pid, signal.SIGKILL)
-                except ProcessLookupError:
-                    pass
-                observer.wait()
+            drained, errors = drain_process("runboard", observer)
+            cleanup_errors.extend(errors)
+            if not drained:
                 print("Runboard observer exceeded shutdown deadline; original logs remain available", file=sys.stderr)
-        signal.signal(signal.SIGTERM, previous_term)
+        if cleanup_errors:
+            for error in cleanup_errors:
+                print(f"Cleanup warning: {error}", file=sys.stderr)
+        for signum, handler in previous_signals.items():
+            signal.signal(signum, handler)
     return output

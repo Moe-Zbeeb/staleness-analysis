@@ -163,6 +163,11 @@
       "title": "Truncated Reward",
       "type": "string"
     },
+    "reasoning_required": {
+      "default": true,
+      "title": "Reasoning Required",
+      "type": "boolean"
+    },
     "seed": {
       "minimum": 0,
       "title": "Seed",
@@ -274,6 +279,12 @@
       "default": 14400,
       "minimum": 1,
       "title": "Training Timeout Seconds",
+      "type": "integer"
+    },
+    "dispatch_timeout_seconds": {
+      "default": 1800,
+      "minimum": 1,
+      "title": "Dispatch Timeout Seconds",
       "type": "integer"
     },
     "weight_transfer_timeout_seconds": {

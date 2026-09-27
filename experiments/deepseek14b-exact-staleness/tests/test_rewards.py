@@ -77,3 +77,115 @@ def test_comparison_failure_propagates_instead_of_becoming_a_wrong_answer(monkey
 )
 def test_structure_and_case_safeguards(answer, prediction, expected):
     assert grade("</think>\\boxed{" + prediction + "}", answer, False, "grade_final", 8) == expected
+
+
+@pytest.mark.parametrize(
+    "response,reasoning_required,expected",
+    [
+        (r"Final answer: \boxed{4}", False, 1),
+        (r"Final answer: \boxed{4}", True, 0),
+        (r"<think>work \boxed{4}", False, 0),
+        (r"<think><think>work</think>\boxed{4}", False, 0),
+        (r"</think><think><think>work</think>\boxed{4}", False, 0),
+        (r"<think>work \boxed{5}</think>\boxed{4}", False, 1),
+        (r"<think>work \boxed{4}</think>\boxed{5}", False, 0),
+        (r"\boxed{4}</think>no final answer", False, 0),
+        (r"</think>\boxed{4}<think>more work", False, 0),
+        (r"</think>\boxed{4}<think>more work</think>\boxed{5}", False, 0),
+    ],
+)
+def test_native_reasoning_requirement_and_explicit_thinking_boundaries(response, reasoning_required, expected):
+    assert grade(response, "4", False, "zero", 5, reasoning_required=reasoning_required) == expected
+
+
+@pytest.mark.parametrize("answer", [r"\frac{1}{0}", r"\frac{0}{0}", r"(1,\frac{1}{0})", "6:00"])
+def test_undefined_references_are_rejected_before_training(answer):
+    with pytest.raises(ReferenceRejected, match="undefined"):
+        parse_gold(answer, 5)
+
+
+@pytest.mark.parametrize("prediction", [r"\frac{1}{0}", r"\frac{0}{0}", r"(1,\frac{1}{0})", "6:00"])
+def test_undefined_prediction_is_logged_as_wrong_instead_of_crashing(prediction):
+    from deepseek_study.dataset.rewards import grade_result
+
+    result = grade_result("</think>\\boxed{" + prediction + "}", "4", False, "zero", 5)
+    assert result["reward"] == 0
+    assert result["reason"] in {"undefined_prediction", "unsupported_prediction"}
+
+
+@pytest.mark.parametrize("answer", [r"\infty", r"(-\infty,1)"])
+def test_supported_infinity_notation_remains_verifiable(answer):
+    assert grade("</think>\\boxed{" + answer + "}", answer, False, "zero", 5) == 1
+
+
+def test_reference_validation_checks_verifiability_not_only_parsing(monkeypatch):
+    import deepseek_study.dataset.rewards as rewards
+
+    rewards.parse_gold.cache_clear()
+    monkeypatch.setattr(rewards, "verify", lambda *args, **kwargs: False)
+    with pytest.raises(ReferenceRejected, match="against itself"):
+        rewards.parse_gold("23", 5)
+    rewards.parse_gold.cache_clear()
+
+
+@pytest.mark.parametrize("stage", ["parse", "compare", "case"])
+@pytest.mark.parametrize("failure", [RuntimeError("worker failure"), OSError("worker I/O failure"), MemoryError()])
+def test_infrastructure_failures_never_become_incorrect_rewards(monkeypatch, stage, failure):
+    import deepseek_study.dataset.rewards as rewards
+
+    rewards.parse_gold("4", 5)
+
+    def fail(*args, **kwargs):
+        raise failure
+
+    if stage == "parse":
+        monkeypatch.setattr(rewards, "parse", fail)
+    elif stage == "compare":
+        monkeypatch.setattr(rewards, "verify", fail)
+    else:
+        monkeypatch.setattr(rewards, "parse", lambda *args, **kwargs: rewards.parse_gold("4", 5))
+        monkeypatch.setattr(rewards, "verify", lambda *args, **kwargs: True)
+        monkeypatch.setattr(rewards, "case_preserved", fail)
+    with pytest.raises(type(failure)):
+        rewards.grade("</think>\\boxed{A}", "4", False, "zero", 5)
+
+
+def test_math_timeout_is_worker_failure_not_incorrect_reward(monkeypatch):
+    import deepseek_study.dataset.rewards as rewards
+    from math_verify.errors import TimeoutException
+
+    rewards.parse_gold("4", 5)
+
+    def fail(*args, **kwargs):
+        raise TimeoutException("comparison timeout")
+
+    monkeypatch.setattr(rewards, "verify", fail)
+    with pytest.raises(TimeoutException):
+        rewards.grade("</think>\\boxed{4}", "4", False, "zero", 5)
+
+
+def test_signal_thread_configuration_failure_is_not_misclassified(monkeypatch):
+    import deepseek_study.dataset.rewards as rewards
+
+    rewards.parse_gold("4", 5)
+
+    def fail(*args, **kwargs):
+        raise ValueError("signal only works in main thread of the main interpreter")
+
+    monkeypatch.setattr(rewards, "verify", fail)
+    with pytest.raises(ValueError, match="signal"):
+        rewards.grade("</think>\\boxed{4}", "4", False, "zero", 5)
+
+
+def test_content_comparison_failure_is_explicit_incorrect_prediction(monkeypatch):
+    import deepseek_study.dataset.rewards as rewards
+
+    rewards.parse_gold("4", 5)
+
+    def fail(*args, **kwargs):
+        raise ValueError("invalid mathematical operand")
+
+    monkeypatch.setattr(rewards, "verify", fail)
+    result = rewards.grade_result("</think>\\boxed{4}", "4", False, "zero", 5)
+    assert result["reward"] == 0
+    assert result["reason"] == "unsupported_prediction"

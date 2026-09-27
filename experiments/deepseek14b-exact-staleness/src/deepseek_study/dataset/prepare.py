@@ -4,7 +4,7 @@ import json
 from pathlib import Path
 
 from deepseek_study import DATASET_SHA256, MODEL_REVISION
-from deepseek_study.dataset.assets import read_rows
+from deepseek_study.dataset.assets import read_rows, validate_grading_format
 from deepseek_study.runtime.checkpoints import atomic_write
 from deepseek_study.dataset.grading import GraderPool
 from deepseek_study.dataset.rewards import reward_identity, tokenizer
@@ -14,23 +14,29 @@ def digest(value):
     return hashlib.sha256(json.dumps(value, sort_keys=True, separators=(",", ":")).encode()).hexdigest()
 
 
-def data_contract(prompt_instruction, prompt_max_tokens, reward_timeout_seconds):
+def data_contract(prompt_instruction, prompt_max_tokens, reward_timeout_seconds, reasoning_required=True):
     return {
         "source_sha256": DATASET_SHA256,
         "model_revision": MODEL_REVISION,
         "prompt_instruction": prompt_instruction,
         "prompt_max_tokens": prompt_max_tokens,
         "reward_timeout_seconds": reward_timeout_seconds,
+        "reasoning_required": reasoning_required,
         "reward": reward_identity(),
         "oversized_prompts": "exclude_and_record",
         "unsupported_references": "exclude_and_record",
-        "reference_normalization": "outer_math_delimiters_only",
+        "reference_normalization": "outer_math_delimiters_and_contextual_clock_times",
+        "reference_validation": "finite_parse_and_self_verification",
     }
 
 
 async def prepare_data(study):
+    validate_grading_format(study)
     if study.data_manifest.exists():
         raise FileExistsError("Data manifest already exists; choose a new path to preserve its identity")
+    contract = data_contract(
+        study.prompt_instruction, study.prompt_max_tokens, study.reward_timeout_seconds, study.reasoning_required
+    )
     rows = read_rows(study.dataset_path)
     tok = tokenizer(str(study.prepared_model_path))
     records = [None] * len(rows)
@@ -51,6 +57,7 @@ async def prepare_data(study):
                         {
                             "operation": "reference",
                             "answer": row["answers"][0],
+                            "question": row["prompt"],
                             "timeout": study.reward_timeout_seconds,
                         }
                     )
@@ -58,6 +65,7 @@ async def prepare_data(study):
                     record.update(included=included, reason="accepted" if included else response["reason"])
                     if not included:
                         record["original_reference"] = row["answers"][0]
+                        record["reference_failure"] = response.get("message", response["reason"])
                     else:
                         record["normalized_reference_sha256"] = digest(response["result"]["normalized_reference"])
                 records[index] = record
@@ -68,9 +76,18 @@ async def prepare_data(study):
     included = sum(record["included"] for record in records)
     if not included:
         raise ValueError("No trainable questions remain after deterministic preparation")
+    if (
+        data_contract(
+            study.prompt_instruction, study.prompt_max_tokens, study.reward_timeout_seconds, study.reasoning_required
+        )
+        != contract
+    ):
+        raise ValueError(
+            "Data preparation contract changed while grading references; prepare again from frozen source"
+        )
     body = {
         "format": 1,
-        "contract": data_contract(study.prompt_instruction, study.prompt_max_tokens, study.reward_timeout_seconds),
+        "contract": contract,
         "source_rows": len(rows),
         "included_rows": included,
         "excluded_rows": len(rows) - included,
@@ -91,13 +108,21 @@ def load_manifest(path):
     return manifest
 
 
-def prepared_rows(dataset_path, manifest_path, prompt_instruction, reward_timeout_seconds, prompt_max_tokens=None):
+def prepared_rows(
+    dataset_path,
+    manifest_path,
+    prompt_instruction,
+    reward_timeout_seconds,
+    prompt_max_tokens=None,
+    reasoning_required=True,
+):
     manifest = load_manifest(manifest_path)
     contract = manifest["contract"]
     expected = data_contract(
         prompt_instruction,
         contract["prompt_max_tokens"] if prompt_max_tokens is None else prompt_max_tokens,
         reward_timeout_seconds,
+        reasoning_required,
     )
     if contract != expected:
         raise ValueError("Data preparation and run protocol disagree")

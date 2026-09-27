@@ -1,4 +1,5 @@
 import asyncio
+import json
 import sys
 
 import pytest
@@ -61,3 +62,43 @@ async def test_cancellation_terminates_the_inflight_worker():
         with pytest.raises(asyncio.CancelledError):
             await task
         assert pool.workers[0].process is None
+
+
+async def test_worker_preserves_question_context_and_explicit_response_format():
+    async with GraderPool(workers=1) as pool:
+        reference = await pool.call(
+            {
+                "operation": "reference",
+                "answer": "6:00",
+                "question": "What is the actual time on the clock?",
+                "timeout": 5,
+            }
+        )
+        assert reference["status"] == "ok"
+        request = {
+            "operation": "grade",
+            "arguments": {
+                "raw_completion": "\\boxed{6:00}",
+                "answer": "6:00",
+                "truncated": False,
+                "truncated_reward": "grade_final",
+                "timeout": 5,
+                "question": "What is the actual time on the clock?",
+                "reasoning_required": False,
+            },
+        }
+        assert (await pool.call(request))["result"]["reward"] == 1
+        request["arguments"]["reasoning_required"] = True
+        result = await pool.call(request)
+        assert result["result"]["reward"] == 0
+        assert result["result"]["reason"] == "missing_reasoning_close"
+
+
+async def test_worker_failure_retains_original_exception_details():
+    async with GraderPool(workers=1, retries=0) as pool:
+        with pytest.raises(GraderFailure) as caught:
+            await pool.call({"operation": "unknown"})
+    failure = json.loads(str(caught.value))["errors"][0]["worker"]
+    assert failure["reason"] == "ValueError"
+    assert failure["message"] == "Unknown grader operation"
+    assert "worker.py" in failure["traceback"]

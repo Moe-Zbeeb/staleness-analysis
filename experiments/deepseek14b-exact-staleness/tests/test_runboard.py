@@ -10,6 +10,7 @@ import pytest
 from runboard.server import Server
 from runboard.storage import Storage
 
+from deepseek_study import MODEL_ID
 from deepseek_study.recipe import baseline
 from deepseek_study.tracking.runboard import JsonlTail, Metrics, observe
 
@@ -143,7 +144,24 @@ def test_file_mode_import_preserves_status_and_scientific_config(recorded, statu
     assert meta["config"]["weight_decay"] == 0
     assert meta["config"]["checkpoint_interval"] == 100
     assert meta["config"]["intermediate_evaluation"] is False
+    assert meta["config"]["model_id"] == MODEL_ID
+    assert MODEL_ID in meta["tags"]
     assert "dataset_path" not in meta["config"]
+
+
+@pytest.mark.parametrize("model_id", ["Qwen/Qwen2.5-3B", "Qwen/Qwen3-1.7B"])
+def test_model_tags_use_launch_identity_without_exporting_credentials(recorded, monkeypatch, model_id):
+    launch = json.loads((recorded / "run.json").read_text())
+    write_json(recorded / "run.json", {**launch, "model_id": model_id})
+    write_json(recorded / "run-status.json", {"status": "killed"})
+    monkeypatch.setenv("RUNBOARD_TOKEN", "private-test-credential")
+    info = observe(recorded, once=True)
+    storage = Storage(recorded / "tracking/runboard-runs")
+    meta = storage.read_meta(info["project"], info["run_id"])
+    assert meta["config"]["model_id"] == model_id
+    assert model_id in meta["tags"]
+    assert "deepseek14b" not in meta["tags"]
+    assert "private-test-credential" not in json.dumps(meta)
 
 
 def test_http_backend_receives_exact_run_and_all_rows(recorded, tmp_path, monkeypatch):

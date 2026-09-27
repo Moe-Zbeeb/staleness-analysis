@@ -22,6 +22,8 @@ def clipped_grpo(inputs, clip_epsilon):
     current = inputs.trainer_logprobs[mask].float()
     behavior = inputs.inference_logprobs[mask].detach().float()
     advantages = inputs.advantages[mask].detach().float()
+    if not torch.isfinite(current).all() or not torch.isfinite(behavior).all():
+        raise FloatingPointError("Nonfinite GRPO log-probability; refusing a corrupted optimizer update")
     ratio = torch.exp(current - behavior)
     if not torch.isfinite(ratio).all() or not torch.isfinite(advantages).all():
         raise FloatingPointError("Nonfinite GRPO ratio or advantage; refusing a corrupted optimizer update")

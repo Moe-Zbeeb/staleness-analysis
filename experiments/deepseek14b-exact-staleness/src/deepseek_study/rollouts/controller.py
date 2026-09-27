@@ -231,8 +231,14 @@ class PrimeBackend:
         samples = msgspec.msgpack.decode(payload.samples, type=list[TrainingSample])
         if len(samples) != self.study.response_batch_size:
             raise RuntimeError("Stored training sample count changed")
-        grid = await asyncio.to_thread(self.orch.packer.pack, samples)
-        await self.orch.sender.send(grid)
+        try:
+            async with asyncio.timeout(self.study.dispatch_timeout_seconds):
+                grid = await asyncio.to_thread(self.orch.packer.pack, samples)
+                await self.orch.sender.send(grid)
+        except TimeoutError as error:
+            raise TimeoutError(
+                f"Cohort for learner policy {learner_version} exceeded the batch-dispatch deadline"
+            ) from error
         self.orch.progress.step += 1
         self.orch.progress.total_samples += len(samples)
         self.orch.progress.total_problems += self.study.prompts_per_update

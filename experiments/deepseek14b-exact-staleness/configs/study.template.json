@@ -1,7 +1,7 @@
 {
   "model_path": "/mnt/nfs/home/mohamadzbib/projects/models/exact-age-14b/deepseek-r1-distill-qwen-14b",
   "dataset_path": "/mnt/nfs/home/mohamadzbib/projects/exact-age-14b/release/deepscaler/data/train.parquet",
-  "data_manifest": "/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/assets/train-manifest.json",
+  "data_manifest": "/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/assets/train-manifest-v3.json",
   "prepared_model_path": "/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/assets/native-model",
   "output_dir": "/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/outputs/choose-a-new-run-name",
   "prompts_per_update": 64,
@@ -55,5 +55,7 @@
   "metrics_mirror_root": "/mnt/xfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/metrics",
   "training_timeout_seconds": 14400,
   "weight_transfer_timeout_seconds": 1800,
-  "checkpoint_timeout_seconds": 7200
+  "checkpoint_timeout_seconds": 7200,
+  "reasoning_required": true,
+  "dispatch_timeout_seconds": 1800
 }

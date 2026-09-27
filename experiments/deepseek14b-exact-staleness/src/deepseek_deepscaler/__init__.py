@@ -13,9 +13,11 @@ __all__ = ["DeepScaleRTaskset"]
 
 class DeepScaleRData(vf.TaskData):
     question_id: str
+    reference_question: str
     answer: str
     tokenizer_path: str
     truncated_reward: Literal["zero", "grade_final"]
+    reasoning_required: bool = True
     reward_timeout_seconds: int
     reward_outer_timeout_seconds: int
     reward_workers: int
@@ -37,6 +39,8 @@ class DeepScaleRTask(vf.Task[DeepScaleRData]):
                 "arguments": {
                     "raw_completion": raw,
                     "answer": self.data.answer,
+                    "question": self.data.reference_question,
+                    "reasoning_required": self.data.reasoning_required,
                     "truncated": trace.is_truncated,
                     "truncated_reward": self.data.truncated_reward,
                     "timeout": self.data.reward_timeout_seconds,
@@ -55,6 +59,7 @@ class DeepScaleRConfig(vf.TasksetConfig):
     tokenizer_path: str
     prompt_instruction: str
     truncated_reward: Literal["zero", "grade_final"]
+    reasoning_required: bool = True
     reward_timeout_seconds: int
     reward_outer_timeout_seconds: int
     reward_workers: int
@@ -69,6 +74,7 @@ class DeepScaleRTaskset(vf.Taskset[DeepScaleRTask, DeepScaleRConfig]):
             Path(self.config.data_manifest),
             self.config.prompt_instruction,
             self.config.reward_timeout_seconds,
+            reasoning_required=self.config.reasoning_required,
         )
         random.Random(self.config.seed).shuffle(rows)
         return [
@@ -76,11 +82,13 @@ class DeepScaleRTaskset(vf.Taskset[DeepScaleRTask, DeepScaleRConfig]):
                 DeepScaleRData(
                     idx=index,
                     question_id=row["id"],
+                    reference_question=row["prompt"],
                     prompt=row["prompt"]
                     + ("\n\n" + self.config.prompt_instruction if self.config.prompt_instruction else ""),
                     answer=row["answers"][0],
                     tokenizer_path=self.config.tokenizer_path,
                     truncated_reward=self.config.truncated_reward,
+                    reasoning_required=self.config.reasoning_required,
                     reward_timeout_seconds=self.config.reward_timeout_seconds,
                     reward_outer_timeout_seconds=self.config.reward_outer_timeout_seconds,
                     reward_workers=self.config.reward_workers,

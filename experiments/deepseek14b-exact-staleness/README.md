@@ -2,7 +2,7 @@
 
 One run at a time, with the exact nonnegative integer `k` you request. This package composes official PrimeRL v0.9.0 at `ab5de8fff44b2c4a5c85e24b6e6e3f7d57eee7b1`; it does not import the teammate fork or edit upstream files.
 
-**Status:** replacement production job **2144963** is running on `deep-chungus-11`, an exclusive eight-A100-80GB PCIe node at high priority. All 170 cluster tests, eight-rank GPU health checks and asset preflight passed. The corrected fresh run uses [exact256-80gb-seed42-v2.json](configs/exact256-80gb-seed42-v2.json), with the same 1,000-update budget and exact lag 256. Job **2144962** was stopped before any completed optimizer update was recorded; its outputs are preserved. See the [relaunch record](docs/runs/exact256-v2.md) and [grading review](docs/grading-review.md) for timestamped evidence and validation limits.
+**Status (September 27, 2026): all four full studies are stopped and monitoring is paused.** The 14B and Qwen3-1.7B jobs failed on a clock reference during update 8; the 1.5B job was preempted before its first completed update; the base Qwen2.5-3B job was cancelled after 77 updates. None reached a complete checkpoint. The [hardening report](docs/hardening-20260927.md) documents the fixes and offline validation. The new code has not yet completed a GPU training pilot. Previous run records remain historical evidence.
 
 The preceding bounded readiness job `2144960` passed (exit `0:0`, 54m 45s), including all 129 cluster tests. The real 14B model completed three updates with ages 0, 1, 1, then resumed checkpoint 2 and reexecuted update 3 using the original queued data. Responses reached 8,192 tokens; trainer peak memory reached about 72 GiB after restart. Checkpoints are on NFS and metric evidence is mirrored to XFS. See the [readiness report](docs/readiness-test.md) and [validation evidence](diagnostics/cluster-validation.json).
 
@@ -12,7 +12,7 @@ The diagnostic found and fixed two integration bugs: NCCL transport settings wer
 
 The [throughput profiling record](docs/profiling.md) documents the measured production bottlenecks, bounded diagnostic jobs, reusable profilers and their validation limits. Profiling tools do not modify the production run or imported library files.
 
-The [1.5B timing profile](docs/profiling-small-model.md) uses an isolated copy of the frozen 14B adapter with only its model pin changed. It preserves the training settings and stops after four bootstrap updates. Official PrimeRL and the running 14B source remain unchanged.
+The historical [1.5B timing profile](docs/profiling-small-model.md) uses an isolated copy of the frozen 14B adapter with only its model pin changed. It preserves the training settings and stops after four bootstrap updates. Official PrimeRL and the frozen 14B source remain unchanged.
 
 The [Qwen2.5-3B timing profile](docs/profiling-qwen3b.md) uses the requested base checkpoint and native tokenizer, with an explicitly authorized seven-GPU fallback on node 7. Its isolated adapter changes are documented separately.
 
@@ -34,7 +34,7 @@ Start with the [architecture](docs/architecture.md) for the directory tree and e
 | Installation and health checks | [scripts/](scripts/) | Preparing dependencies, packaging or checking hardware |
 | Tests and evidence | [tests/](tests/), [diagnostics/](diagnostics/) | Reviewing validated behavior and limits |
 
-Configuration templates/schema live in `configs/`; pinned model hashes are in `manifests/`. Preparation writes the question-selection record to `assets/train-manifest.json`. Weights, raw datasets, generated manifests, environments, caches, run outputs and job logs are excluded from Git.
+Configuration templates/schema live in `configs/`; pinned model hashes are in `manifests/`. Preparation writes the question-selection record to `assets/train-manifest-v3.json`. Weights, raw datasets, generated manifests, environments, caches, run outputs and job logs are excluded from Git.
 
 The [staleness research audit](docs/staleness-research-audit.md) separates exact age, policy difference, learning quality and throughput. It maps the relevant knobs, differences from the cited paper, current measurement gaps and a proposed research protocol. It does not launch experiments or change the baseline.
 
@@ -60,9 +60,9 @@ A fresh run first performs `k` explicitly labeled on-policy bootstrap updates wh
 
 Generation uses frozen current inference weights and queues its original responses until the prescribed update. Training and generation overlap where possible. Inference weights change only after the complete cohort finishes. Tail generation stops early enough that no extra cohorts remain after the final update. Cohort prompts are indexed by their intended consumption update, so changing k does not change the assigned prompt stream.
 
-## Selected first run: exact 256
+## Historical first run: exact 256
 
-The corrected run is prepared in [configs/exact256-80gb-seed42-v2.json](configs/exact256-80gb-seed42-v2.json): exact lag 256, the 80 GB profile, seed 42 and 1,000 total optimizer updates. This means 256 on-policy bootstrap updates followed by 744 exact-256 updates; update 257 first consumes a queued cohort generated by `theta_0` while training `theta_256`. No training job is submitted by preparing this configuration.
+The stopped v2 run is recorded in [configs/exact256-80gb-seed42-v2.json](configs/exact256-80gb-seed42-v2.json): exact lag 256, the 80 GB profile, seed 42 and 1,000 total optimizer updates. This means 256 on-policy bootstrap updates followed by 744 exact-256 updates; update 257 first consumes a queued cohort generated by `theta_0` while training `theta_256`. This historical configuration refers to its original grading/data contract. Create a new configuration with `init` for v3; do not reuse its old manifest.
 
 See the [relaunch record](docs/runs/exact256-v2.md) for corrected deadlines, source and reward identities, and cluster paths. The model, optimizer, loss and exact-age schedule are unchanged; the corrected reward policy requires a fresh run.
 
@@ -108,7 +108,7 @@ vendor/prime-rl/.venv/bin/deepseek-study prepare \
   --manifest manifests/model.json
 ```
 
-Preparation never overwrites an existing model view. The package includes `assets/train-manifest.json` when built after local data validation. If that manifest is missing, prepare it using the configured native tokenizer:
+Preparation never overwrites an existing model view. The package includes `assets/train-manifest-v3.json` when built after local data validation. If that manifest is missing, prepare it using the configured native tokenizer:
 
 ```bash
 vendor/prime-rl/.venv/bin/deepseek-study prepare-data configs/run.json
@@ -116,11 +116,11 @@ vendor/prime-rl/.venv/bin/deepseek-study prepare-data configs/run.json
 
 A changed prompt, token limit, grader source or grader dependency version requires a newly prepared manifest at a new path. The command refuses to replace an existing manifest.
 
-The original cleaned dataset is pinned by revision and SHA256 and remains unchanged. Deterministic preparation accepts **37,703 of 37,713 questions**. Ten unsupported references are excluded with original IDs, reference text and reasons; no labels are rewritten. No questions exceeded the 2,048-token prompt cap; the corrected run's longest retained prompt is 793 tokens. See `diagnostics/prepared-data-exclusions.json` and `diagnostics/prepared-data-summary.json` for the original preparation reports. This validation does not itself establish benchmark decontamination.
+The original cleaned dataset is pinned by revision and SHA256 and remains unchanged. The v3 preparation accepts **37,696 of 37,713 questions** and records 17 exclusions, including seven newly excluded structured time/score references. No labels are rewritten. The v2 reports in `diagnostics/prepared-data-*.json` describe the previous 37,703-question selection; the new selection and delta are recorded in [hardening-20260927.json](diagnostics/hardening-20260927.json). A changed selection changes prompt indexing and must be treated as a new study protocol. Preparation does not establish benchmark decontamination.
 
-The local grader uses the last complete boxed answer after the closing thinking tag, strips only outer math delimiters from references, disables permissive parse fallback, and gives binary correctness reward. A complete correct final answer may earn reward on a truncated response. Persistent isolated workers have an eight-second internal timeout and ten-second outer deadline, with one retry on the identical saved response. Infrastructure failures stop the cohort rather than becoming zero rewards. The teammate's v3.2 grader is not required or used.
+The local grader uses the last complete boxed answer after the closing thinking tag for native DeepSeek/Qwen3 reasoning. For base Qwen2.5-3B, `reasoning_required=false` permits a plain final box; any generated reasoning section must still close. This explicit model-format setting is bound into the prepared manifest and run configuration. A complete correct final answer may earn reward on a truncated response. Persistent isolated workers have an eight-second internal timeout and ten-second outer deadline, with one retry on the identical saved response. Infrastructure failures stop the cohort rather than becoming zero rewards. The teammate's v3.2 grader is not required or used.
 
-The current reward policy is `strict-final-box-v2-structure-case`. It rejects tuple/set mismatches and enforces symbol case on otherwise accepted comparisons. The rebuilt manifest selects exactly the same 37,703 question IDs as before. Targeted regression probes cover additional items from the teammate's grading snag list, but do not establish an overall error rate or reproduce the v3.2 benchmark-specific policy. See the [grading review](docs/grading-review.md) for evidence and limits.
+The current reward policy is `strict-final-box-v3-context-clock-native-reasoning`. It preserves the structure/case safeguards and adds contextual clock comparison, finite-reference checks and self-verification during preparation. See [grading policy v3](docs/grading-v3.md) for exact boundaries, the limitation of references without AM/PM, and migration requirements. The stored 14B and 1.7B failed responses now grade correctly; a saved base-3B cohort has 76/512 correct responses and 30/64 groups with mixed rewards under the corrected format policy. This replay is not a new training run or an estimate of benchmark accuracy.
 
 ## Resolve, check and launch
 
@@ -130,11 +130,11 @@ vendor/prime-rl/.venv/bin/deepseek-study check configs/run.json
 vendor/prime-rl/.venv/bin/deepseek-study run configs/run.json
 ```
 
-`build` resolves real official configurations without starting training. `check` verifies original asset identity, native tokenizer parity and the prepared data contract. `run` requires a new output directory, a Linux GPU runtime and exactly the configured visible GPUs. Execute inside the matching Slurm allocation. The launcher starts the official inference and environment servers, the controller, and the official trainer through a small RNG-checkpoint adapter. It terminates its process groups on failure or interruption.
+`build` resolves real official configurations without starting training. `check` verifies original asset identity, native tokenizer parity and the prepared data contract. `run` requires a new output directory, a Linux GPU runtime and exactly the configured visible GPUs. Execute inside the matching Slurm allocation. The launcher starts the official inference and environment servers, the controller, and the official trainer through a small RNG-checkpoint adapter. It terminates its registered process groups on failure or interruption with bounded shutdown waits. Structured final status retains the original error, signal, Slurm job identity and child exit codes; late observer cleanup warnings remain in the launcher log.
 
 Each run copies the authored source into `output/source` and executes children from that snapshot. The run identity binds source files, the official lockfile/commit, runtime versions and the prepared data hash. The original official checkout remains unchanged.
 
-Controller deadlines are separate: up to four hours waiting for the next learner publication, 30 minutes for weight transfer, and two hours for checkpoint completion. The upstream publication/collective timeout also covers a legitimate generation wait and is therefore at least the 24-hour generation budget. `study/training_wait_seconds` measures the remaining wait after cohort generation, not total GPU training time.
+Controller deadlines are separate: 30 minutes for packing/batch dispatch, up to four hours waiting for the next learner publication, 30 minutes for weight transfer, and two hours for checkpoint completion. The upstream publication/collective timeout also covers a legitimate generation wait and is therefore at least the 24-hour generation budget. `study/training_wait_seconds` measures the remaining wait after cohort generation, not total GPU training time.
 
 ## Recovery and evidence
 

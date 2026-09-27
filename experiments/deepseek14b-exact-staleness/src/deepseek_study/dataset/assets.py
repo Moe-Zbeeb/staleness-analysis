@@ -102,7 +102,13 @@ def prepare(model_path, dataset_path, destination, manifest_path):
     return receipt
 
 
+def validate_grading_format(study):
+    if study.reasoning_required != (MODEL_ID != "Qwen/Qwen2.5-3B"):
+        raise ValueError("Grader reasoning format differs from the pinned model contract")
+
+
 def validate_prepared(study):
+    validate_grading_format(study)
     directory = study.prepared_model_path.resolve()
     receipt = json.loads((directory / "study-assets.json").read_text())
     if receipt["source"] != str(study.model_path.resolve()) or receipt["revision"] != MODEL_REVISION:
@@ -124,6 +130,7 @@ def validate_prepared(study):
         study.prompt_instruction,
         study.reward_timeout_seconds,
         study.prompt_max_tokens,
+        study.reasoning_required,
     )
     manifest = load_manifest(study.data_manifest)
     longest = max(record["prompt_tokens"] for record in manifest["records"] if record["included"])

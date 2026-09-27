@@ -38,6 +38,7 @@ class StudyConfig(BaseModel):
     updates_per_cohort: Literal[1]
     prompt_instruction: str
     truncated_reward: Literal["zero", "grade_final"]
+    reasoning_required: bool = True
     seed: int = Field(ge=0)
     checkpoint_interval: int = Field(ge=1)
     checkpoint_keep_last: int = Field(default=4, ge=1)
@@ -58,6 +59,7 @@ class StudyConfig(BaseModel):
     lag: int = Field(ge=0, strict=True)
     timeout_seconds: int = Field(default=1800, ge=1)
     training_timeout_seconds: int = Field(default=14400, ge=1)
+    dispatch_timeout_seconds: int = Field(default=1800, ge=1)
     weight_transfer_timeout_seconds: int = Field(default=1800, ge=1)
     checkpoint_timeout_seconds: int = Field(default=7200, ge=1)
     generation_timeout_seconds: int = Field(default=86400, ge=1)

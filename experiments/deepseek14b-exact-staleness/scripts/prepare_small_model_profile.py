@@ -140,9 +140,12 @@ def main():
         ),
         "metrics_mirror_root": str(args.mirror_root.resolve()),
         "inference_gpus": args.inference_gpus,
+        "reasoning_required": model_id != QWEN_MODEL_ID,
     }
     config_changes = {
-        key: {"before": baseline[key], "after": value} for key, value in study.items() if baseline[key] != value
+        key: {"before": baseline.get(key), "after": value}
+        for key, value in study.items()
+        if baseline.get(key) != value
     }
     if set(config_changes) - {
         "model_path",
@@ -151,6 +154,7 @@ def main():
         "output_dir",
         "metrics_mirror_root",
         "inference_gpus",
+        "reasoning_required",
     }:
         raise ValueError("Timing profile changed a training setting")
     write(directory / "study.json", study)

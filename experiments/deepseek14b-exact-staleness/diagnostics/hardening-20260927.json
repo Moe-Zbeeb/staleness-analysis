@@ -1,0 +1,315 @@
+{
+  "date": "2026-09-27",
+  "training_launched": false,
+  "source_prime_rl_modified": false,
+  "prime_rl_commit": "ab5de8fff44b2c4a5c85e24b6e6e3f7d57eee7b1",
+  "reward_identity": {
+    "policy": "strict-final-box-v3-context-clock-native-reasoning",
+    "source_sha256": "1efc5e898c499e3102c506efc3f459ab55ff1b4839b112c1a59edf132ee82235",
+    "dependencies": {
+      "math-verify": "0.9.0",
+      "latex2sympy2-extended": "1.11.0",
+      "sympy": "1.14.0",
+      "antlr4-python3-runtime": "4.13.2"
+    }
+  },
+  "prepared_data": {
+    "sha256": "c86db656d027e582ad712f8c100f17a5f6c75b54fea7e795f4e1fca6e3a5c90f",
+    "source_rows": 37713,
+    "included_rows": 37696,
+    "excluded_rows": 17
+  },
+  "excluded_references": [
+    {
+      "id": "c4359d018a5c30fa1aaf3dacfc88bad02f26cefd0c987f34e5bdd8e401d4866b",
+      "prompt_tokens": 61,
+      "included": false,
+      "reason": "unsupported_reference",
+      "original_reference": "7: 23 and 7: 53",
+      "reference_failure": "Clock reference must contain a complete, valid hour and two-digit minute"
+    },
+    {
+      "id": "83c14b329eb135cf2a3a02cfdc52a75e5ed3d7b25f54ffcc968b6ae80330c677",
+      "prompt_tokens": 54,
+      "included": false,
+      "reason": "unsupported_reference",
+      "original_reference": "$11\\frac{1}{9} \\%$",
+      "reference_failure": "Reference answer is unparseable or contains undefined mathematical values"
+    },
+    {
+      "id": "b07ee6ccf74887c64d0f0cfb255ef2f31b95bbc8e5ccd26cd4ae175c821791f0",
+      "prompt_tokens": 137,
+      "included": false,
+      "reason": "unsupported_reference",
+      "original_reference": "33\\frac{1}{3}\\%",
+      "reference_failure": "Reference answer is unparseable or contains undefined mathematical values"
+    },
+    {
+      "id": "00541f891341a17607ef2073fbec58296c7f9494458b22b7d230d6959ff31fc7",
+      "prompt_tokens": 81,
+      "included": false,
+      "reason": "unsupported_reference",
+      "original_reference": "\\[ n \\in \\{ \\mathbf{N} \\equiv 0, 3 \\pmod{8} \\} \\]",
+      "reference_failure": "Reference answer is unparseable or contains undefined mathematical values"
+    },
+    {
+      "id": "b75dc38c74d996bb17ee7a713098e352e664f5558a56d21eff3b6c6cf142cca9",
+      "prompt_tokens": 91,
+      "included": false,
+      "reason": "unsupported_reference",
+      "original_reference": "3,-\\frac{3}{2}+\\frac{3i\\sqrt{3}}{2},-\\frac{3}{2}-\\frac{3i\\sqrt{3}}{2",
+      "reference_failure": "Reference answer is unparseable or contains undefined mathematical values"
+    },
+    {
+      "id": "21ee39f457870333e63a01d156e32921b55e278b7555ee454d24d118f1939180",
+      "prompt_tokens": 75,
+      "included": false,
+      "reason": "unsupported_reference",
+      "original_reference": "\\frac{-9}{2} \\leq x \\leq -2 \\cup \\frac{1-\\sqrt{5}}{2} < x < \\frac{1+\\sqrt{5}}{2}",
+      "reference_failure": "Reference answer is unparseable or contains undefined mathematical values"
+    },
+    {
+      "id": "a0fc1b93aa8fcdb66484339cbfb6aaf14461654afaaf131b2db94920ac43c0fc",
+      "prompt_tokens": 73,
+      "included": false,
+      "reason": "unsupported_reference",
+      "original_reference": "$\\frac{1}{2}, \\frac{-1 \\pm \\sqrt{13}}{4}$",
+      "reference_failure": "Reference answer is unparseable or contains undefined mathematical values"
+    },
+    {
+      "id": "2593496e16842ed3849005420db9ff591b4f1416658cb9202a52a8bc4aeba05c",
+      "prompt_tokens": 97,
+      "included": false,
+      "reason": "unsupported_reference",
+      "original_reference": "$x = -\\frac{1}{2} (\\sqrt6 \\pm \\sqrt 2)$",
+      "reference_failure": "Reference answer is unparseable or contains undefined mathematical values"
+    },
+    {
+      "id": "5f52c36286489815f10589e01d1fdb4ec521fc987a02ef4880cd2e486256b258",
+      "prompt_tokens": 66,
+      "included": false,
+      "reason": "unsupported_reference",
+      "original_reference": "(0, 0, 0)\\left(-\\frac{1}{2}, -\\frac{1}{2}, -\\frac{1}{2}\\right)",
+      "reference_failure": "Reference answer is unparseable or contains undefined mathematical values"
+    },
+    {
+      "id": "37d679adff67eb32ae6932b5932b7caa4b67d23a907e67ef4fdc1fbba9666347",
+      "prompt_tokens": 75,
+      "included": false,
+      "reason": "unsupported_reference",
+      "original_reference": "f(x) = 0, \\quad f(x) = \\frac{1}{2}, \\quad f(x) = x^2.",
+      "reference_failure": "Reference answer is unparseable or contains undefined mathematical values"
+    },
+    {
+      "id": "b00c9c658355543408e818af623fbf1a3682828ded51981abe71370672cc12cf",
+      "prompt_tokens": 128,
+      "included": false,
+      "reason": "unsupported_reference",
+      "original_reference": "12:26:40",
+      "reference_failure": "Clock reference must contain a complete, valid hour and two-digit minute"
+    },
+    {
+      "id": "c9354d2aa867e7cb4ca265cfd2947aa62911505aa66ba6b6639063283facb4e3",
+      "prompt_tokens": 129,
+      "included": false,
+      "reason": "unsupported_reference",
+      "original_reference": "14:24",
+      "reference_failure": "Minute-second duration answers require a separate grading contract"
+    },
+    {
+      "id": "259e2ef435286030c6defe0939c9f47b45c64c6a52af6e334572b8868ca75764",
+      "prompt_tokens": 68,
+      "included": false,
+      "reason": "unsupported_reference",
+      "original_reference": "4:26.8",
+      "reference_failure": "Clock reference must contain a complete, valid hour and two-digit minute"
+    },
+    {
+      "id": "54c121fc2ce37ce520ceca5019722d4acb46d040ddda3f056b896af86f917012",
+      "prompt_tokens": 115,
+      "included": false,
+      "reason": "unsupported_reference",
+      "original_reference": "1:2",
+      "reference_failure": "Match-score answers require a separate grading contract"
+    },
+    {
+      "id": "b40de2a8619d3031b146385f5a18ea2dc97d2a338d995cdd84df7fc0c22aa7c6",
+      "prompt_tokens": 80,
+      "included": false,
+      "reason": "unsupported_reference",
+      "original_reference": "4:45\\frac{3}{11}",
+      "reference_failure": "Clock reference must contain a complete, valid hour and two-digit minute"
+    },
+    {
+      "id": "01aea5296f0002603958886423a6e958f7680a58539c0fde91a65c8b730ad672",
+      "prompt_tokens": 65,
+      "included": false,
+      "reason": "unsupported_reference",
+      "original_reference": "-\\frac{5}{3}.",
+      "reference_failure": "Reference answer is unparseable or contains undefined mathematical values"
+    },
+    {
+      "id": "288ebf854a143e2e535aa3f4e11c077fedd7759e76e49def9d6753a8cc0b007e",
+      "prompt_tokens": 85,
+      "included": false,
+      "reason": "unsupported_reference",
+      "original_reference": "4\\!:\\!51\\!:\\!06 \\text{ p.m.}",
+      "reference_failure": "Minute-second duration answers require a separate grading contract"
+    }
+  ],
+  "newly_excluded_vs_v2": [
+    {
+      "id": "c4359d018a5c30fa1aaf3dacfc88bad02f26cefd0c987f34e5bdd8e401d4866b",
+      "prompt_tokens": 61,
+      "included": false,
+      "reason": "unsupported_reference",
+      "original_reference": "7: 23 and 7: 53",
+      "reference_failure": "Clock reference must contain a complete, valid hour and two-digit minute"
+    },
+    {
+      "id": "b00c9c658355543408e818af623fbf1a3682828ded51981abe71370672cc12cf",
+      "prompt_tokens": 128,
+      "included": false,
+      "reason": "unsupported_reference",
+      "original_reference": "12:26:40",
+      "reference_failure": "Clock reference must contain a complete, valid hour and two-digit minute"
+    },
+    {
+      "id": "c9354d2aa867e7cb4ca265cfd2947aa62911505aa66ba6b6639063283facb4e3",
+      "prompt_tokens": 129,
+      "included": false,
+      "reason": "unsupported_reference",
+      "original_reference": "14:24",
+      "reference_failure": "Minute-second duration answers require a separate grading contract"
+    },
+    {
+      "id": "259e2ef435286030c6defe0939c9f47b45c64c6a52af6e334572b8868ca75764",
+      "prompt_tokens": 68,
+      "included": false,
+      "reason": "unsupported_reference",
+      "original_reference": "4:26.8",
+      "reference_failure": "Clock reference must contain a complete, valid hour and two-digit minute"
+    },
+    {
+      "id": "54c121fc2ce37ce520ceca5019722d4acb46d040ddda3f056b896af86f917012",
+      "prompt_tokens": 115,
+      "included": false,
+      "reason": "unsupported_reference",
+      "original_reference": "1:2",
+      "reference_failure": "Match-score answers require a separate grading contract"
+    },
+    {
+      "id": "b40de2a8619d3031b146385f5a18ea2dc97d2a338d995cdd84df7fc0c22aa7c6",
+      "prompt_tokens": 80,
+      "included": false,
+      "reason": "unsupported_reference",
+      "original_reference": "4:45\\frac{3}{11}",
+      "reference_failure": "Clock reference must contain a complete, valid hour and two-digit minute"
+    },
+    {
+      "id": "288ebf854a143e2e535aa3f4e11c077fedd7759e76e49def9d6753a8cc0b007e",
+      "prompt_tokens": 85,
+      "included": false,
+      "reason": "unsupported_reference",
+      "original_reference": "4\\!:\\!51\\!:\\!06 \\text{ p.m.}",
+      "reference_failure": "Minute-second duration answers require a separate grading contract"
+    }
+  ],
+  "newly_included_vs_v2": [],
+  "saved_clock_response_replay": {
+    "14b": {
+      "question_id": "911402f493b4c9e4a1aa54774e8f51a56774fe19c49cc21448c8a45270aaf328",
+      "sampled_tokens": 2346,
+      "response": {
+        "id": "44c6b954a26848b88a000a54ae6d50fd",
+        "status": "ok",
+        "result": {
+          "reward": 1.0,
+          "reason": "correct",
+          "extracted": "6:00\\ \\text{pm}",
+          "policy": "strict-final-box-v3-context-clock-native-reasoning"
+        },
+        "attempts": 1,
+        "errors": [],
+        "seconds": 0.13418345899845008
+      }
+    },
+    "1p7b": {
+      "question_id": "911402f493b4c9e4a1aa54774e8f51a56774fe19c49cc21448c8a45270aaf328",
+      "sampled_tokens": 1702,
+      "response": {
+        "id": "ae6bceb04abc44f48ac826824910ef31",
+        "status": "ok",
+        "result": {
+          "reward": 1.0,
+          "reason": "correct",
+          "extracted": "6:00",
+          "policy": "strict-final-box-v3-context-clock-native-reasoning"
+        },
+        "attempts": 1,
+        "errors": [],
+        "seconds": 0.1375360410020221
+      }
+    }
+  },
+  "saved_qwen25_3b_cohort_replay": {
+    "analysis": "Offline replay of saved Qwen2.5-3B first warmup cohort; no training",
+    "archive_sha256": "71a2587e21d6d67398a29ef9f76c4e85767b12836b2d3eb43090ca6564729c72",
+    "tokenizer_sha256": "c0382117ea329cdf097041132f6d735924b697924d6f6fc3945713e96ce87539",
+    "behavior_version": 0,
+    "purpose": "warmup",
+    "policy": {
+      "policy": "strict-final-box-v3-context-clock-native-reasoning",
+      "source_sha256": "1efc5e898c499e3102c506efc3f459ab55ff1b4839b112c1a59edf132ee82235",
+      "dependencies": {
+        "math-verify": "0.9.0",
+        "latex2sympy2-extended": "1.11.0",
+        "sympy": "1.14.0",
+        "antlr4-python3-runtime": "4.13.2"
+      }
+    },
+    "question_context_provided": true,
+    "reasoning_required": false,
+    "truncated_reward": "grade_final",
+    "timeout_seconds": 8,
+    "workers": 4,
+    "responses": 512,
+    "prompts": 64,
+    "original_correct": 0,
+    "regraded_correct": 76,
+    "regraded_correct_fraction": 0.1484375,
+    "reason_counts": {
+      "not_verified_correct": 324,
+      "missing_complete_final_box": 104,
+      "correct": 76,
+      "answer_structure_mismatch": 4,
+      "unsupported_prediction": 4
+    },
+    "failure_counts": {},
+    "attempt_counts": {
+      "1": 512
+    },
+    "truncated_responses": 5,
+    "responses_with_reasoning_close": 0,
+    "fully_graded_groups": 64,
+    "mixed_reward_groups": 30,
+    "groups_with_nonzero_centered_advantages": 30,
+    "responses_with_nonzero_centered_advantages": 240,
+    "elapsed_seconds": 0.7041193339973688
+  },
+  "gpu_pilot_completed_for_v3": false,
+  "limitations": [
+    "Offline replay is not a training run or benchmark accuracy estimate.",
+    "All full runs stopped before checkpoint100; none has a complete recovery checkpoint.",
+    "New reward and dataset identities require fresh runs.",
+    "Unqualified clock references do not validate AM/PM."
+  ],
+  "local_validation": {
+    "pytest_passed": 298,
+    "pytest_skipped": 1,
+    "skipped_reason": "CUDA-only test; local machine has no CUDA",
+    "ruff_check": "passed",
+    "full_dataset_preparation": "passed",
+    "git_diff_check": "passed"
+  }
+}

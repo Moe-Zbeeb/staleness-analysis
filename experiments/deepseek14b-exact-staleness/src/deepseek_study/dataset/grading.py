@@ -7,7 +7,9 @@ import weakref
 
 
 class GraderFailure(RuntimeError):
-    pass
+    def __init__(self, message, details=None):
+        super().__init__(message)
+        self.details = details
 
 
 class Worker:
@@ -74,11 +76,18 @@ class GraderPool:
                 try:
                     response = await worker.call(request, self.timeout)
                     if response["status"] == "error":
-                        raise GraderFailure(response["reason"])
+                        raise GraderFailure(response["reason"], response)
                     response.update(attempts=attempt + 1, errors=errors, seconds=time.monotonic() - started)
                     return response
                 except (Exception,) as error:
-                    errors.append({"type": type(error).__name__, "reason": str(error)[:256]})
+                    record = {"type": type(error).__name__, "reason": str(error)[:256]}
+                    if isinstance(error, GraderFailure) and error.details:
+                        record["worker"] = {
+                            key: error.details[key]
+                            for key in ("reason", "message", "traceback")
+                            if key in error.details
+                        }
+                    errors.append(record)
                     await worker.close()
             raise GraderFailure(json.dumps({"message": "Persistent grader failure on saved input", "errors": errors}))
         finally:

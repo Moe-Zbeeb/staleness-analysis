@@ -182,6 +182,7 @@ def create_run(output, run_id):
 
     study = read_json(output / "configs" / "study.json")
     launch = read_json(output / "run.json")
+    model_id = launch.get("model_id", MODEL_ID)
     config = {
         key: value
         for key, value in study.items()
@@ -196,7 +197,7 @@ def create_run(output, run_id):
         }
     }
     config.update(
-        model_id=MODEL_ID,
+        model_id=model_id,
         dataset_id=DATASET_ID,
         prime_commit=PRIME_COMMIT,
         source_identity=launch["identity_sha256"],
@@ -246,7 +247,7 @@ def create_run(output, run_id):
         name=output.name,
         config=config,
         run_id=run_id,
-        tags=["deepseek14b", "exact-staleness", f"lag-{study['lag']}", f"seed-{study['seed']}"],
+        tags=[model_id, "exact-staleness", f"lag-{study['lag']}", f"seed-{study['seed']}"],
         **options,
     )
 
