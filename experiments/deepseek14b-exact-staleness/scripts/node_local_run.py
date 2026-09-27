@@ -67,8 +67,18 @@ def relocate_study(baseline, workspace, name):
     return result
 
 
+def socket_directory(workspace):
+    identity = hashlib.sha256(str(Path(workspace).resolve()).encode()).hexdigest()[:16]
+    return Path("/tmp") / f"st-{os.getuid()}-{identity}"
+
+
 def local_environment(runtime, workspace, release):
     cache = Path(workspace) / "cache"
+    ipc = socket_directory(workspace)
+    ipc.mkdir(parents=True, exist_ok=True, mode=0o700)
+    if ipc.is_symlink() or ipc.stat().st_uid != os.getuid():
+        raise ValueError("Unsafe local socket directory")
+    os.chmod(ipc, 0o700)
     environment = dict(os.environ)
     for key in list(environment):
         if key.startswith("RUNBOARD_") or key in {"PYTHONHOME", "PYTHONPATH", "VIRTUAL_ENV"}:
@@ -88,7 +98,8 @@ def local_environment(runtime, workspace, release):
             "TRANSFORMERS_OFFLINE": "1",
             "CUDA_DEVICE_ORDER": "PCI_BUS_ID",
             "TOKENIZERS_PARALLELISM": "false",
-            "TMPDIR": str(cache / "tmp"),
+            "TMPDIR": str(ipc),
+            "VLLM_RPC_BASE_PATH": str(ipc),
             "XDG_CACHE_HOME": str(cache / "xdg"),
             "HF_HOME": str(cache / "huggingface"),
             "CUDA_CACHE_PATH": str(cache / "cuda"),
@@ -363,6 +374,19 @@ def seal_staging(spec, control):
     python = runtime / "prime-rl/.venv/bin/python"
     env = local_environment(runtime, workspace, release)
     configure_local_git(runtime)
+    command(
+        [
+            python,
+            "-c",
+            "import os, uuid, zmq; from pathlib import Path; "
+            "path = str(Path(os.environ['VLLM_RPC_BASE_PATH']) / str(uuid.uuid4())); "
+            "ctx = zmq.Context(); sock = ctx.socket(zmq.PULL); sock.bind('ipc://' + path); "
+            "sock.close(); ctx.term(); Path(path).unlink(missing_ok=True); print('Local IPC bind passed')",
+        ],
+        env=env,
+        cwd=release,
+        timeout=60,
+    )
     command(
         [
             python,

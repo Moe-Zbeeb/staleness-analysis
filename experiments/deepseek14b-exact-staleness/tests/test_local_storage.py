@@ -38,6 +38,7 @@ def test_relocation_preserves_every_scientific_field(tmp_path):
 
 
 def test_cache_and_editable_environment_is_local(tmp_path, monkeypatch):
+    monkeypatch.setattr(LOCAL, "socket_directory", lambda workspace: tmp_path / "ipc")
     monkeypatch.setenv("RUNBOARD_TOKEN", "unused")
     monkeypatch.setenv("PYTHONHOME", "/old/python")
     environment = LOCAL.local_environment(tmp_path / "runtime", tmp_path / "work", tmp_path / "release")
@@ -253,3 +254,10 @@ def test_local_git_rejects_wrong_archive_before_extracting(tmp_path):
     with pytest.raises(ValueError, match="checksum"):
         LOCAL.configure_local_git(tmp_path)
     assert not (tmp_path / "prime-rl/.venv/bin/git-lfs").exists()
+
+
+def test_socket_paths_fit_linux_unix_domain_limit():
+    path = LOCAL.socket_directory(Path("/tmp") / ("long-workspace-" * 15))
+    address = path / "4af5fcfb-7ecd-4e1f-b72a-863e7c9a295d"
+    assert len(str(address).encode()) <= 107
+    assert path != LOCAL.socket_directory("/tmp/another-workspace")
