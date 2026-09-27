@@ -25,7 +25,7 @@ def mocked_launch(study, monkeypatch):
     monkeypatch.setattr(torch.cuda, "get_device_properties", lambda index: SimpleNamespace(total_memory=1))
     monkeypatch.setattr(torch.cuda, "get_device_capability", lambda index: (8, 0))
     monkeypatch.delenv("CUDA_VISIBLE_DEVICES", raising=False)
-    monkeypatch.delenv("DEEPSEEK_STUDY_RUNBOARD", raising=False)
+    monkeypatch.setenv("DEEPSEEK_STUDY_RUNBOARD", "1")
     monkeypatch.setenv("SLURM_JOB_ID", "1234")
     return study
 
@@ -43,6 +43,8 @@ def test_launcher_retains_failure_and_finishes_owned_cleanup_after_repeated_sign
     class Process:
         def __init__(self, args, **kwargs):
             assert kwargs["start_new_session"] is True
+            assert "deepseek_study.tracking.runboard" not in args
+            assert kwargs["env"]["DEEPSEEK_STUDY_RUNBOARD"] == "0"
             self.pid = 12340 + len(started)
             self.controller = "controller" in args
             self.observer = "deepseek_study.tracking.observer" in args
@@ -130,10 +132,54 @@ def test_signal_during_spawn_is_deferred_until_child_is_registered(mocked_launch
     assert status["status"] == "killed"
     assert status["received_signum"] == signum
     assert status["received_signal"] == signal.Signals(signum).name
-    assert set(status["process_exit_codes_before_cleanup"]) == {"paper-metrics", "runboard", "inference"}
+    assert set(status["process_exit_codes_before_cleanup"]) == {"paper-metrics", "tensorboard", "inference"}
     assert len(started) == 3 and all(process.waits for process in started)
     assert signalled == [(started[-1].pid, signal.SIGTERM), (started[-1].pid, signal.SIGKILL)]
     assert signal.pthread_sigmask(signal.SIG_BLOCK, []) == previous_mask
+
+
+def test_tensorboard_drains_after_terminal_state_and_final_paper_metrics(mocked_launch, tmp_path, monkeypatch):
+    study = mocked_launch
+    started = []
+    signalled = []
+    drained = []
+
+    class Process:
+        def __init__(self, args, **kwargs):
+            assert "deepseek_study.tracking.runboard" not in args
+            self.pid = 12340 + len(started)
+            self.name = (
+                "paper" if "deepseek_study.tracking.observer" in args else
+                "tensorboard" if "deepseek_study.tracking.tensorboard" in args else
+                "controller" if "controller" in args else
+                "trainer" if "deepseek_study.runtime.trainer" in args else "inference"
+            )
+            if self.name == "controller":
+                (study.output_dir / "study-complete.json").write_text(json.dumps({"step": study.max_steps}))
+            started.append(self)
+
+        def poll(self):
+            return 0 if self.name in {"controller", "trainer"} else None
+
+        def wait(self, timeout=None):
+            assert timeout is not None
+            if self.name == "paper":
+                assert json.loads((study.output_dir / "run-status.json").read_text())["status"] == "finished"
+                (study.output_dir / "paper-metrics.jsonl").write_text('{"step":70,"metrics":{"reward":1}}\n')
+                (study.output_dir / "paper-status.json").write_text('{"status":"complete"}')
+                drained.append("paper")
+            elif self.name == "tensorboard":
+                assert drained == ["paper"]
+                assert json.loads((study.output_dir / "paper-status.json").read_text())["status"] == "complete"
+                assert json.loads((study.output_dir / "paper-metrics.jsonl").read_text())["step"] == 70
+                drained.append("tensorboard")
+            return 0
+
+    monkeypatch.setattr(launcher.subprocess, "Popen", Process)
+    monkeypatch.setattr(processes.os, "killpg", lambda pid, signum: signalled.append(pid))
+    launcher.launch(study, tmp_path)
+    assert drained == ["paper", "tensorboard"]
+    assert all(process.pid not in signalled for process in started if process.name in {"paper", "tensorboard"})
 
 
 def test_owned_cleanup_is_bounded_even_when_a_process_does_not_exit(monkeypatch):

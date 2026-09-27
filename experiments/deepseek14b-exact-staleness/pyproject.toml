@@ -8,6 +8,11 @@ version = "0.1.0"
 requires-python = ">=3.12,<3.13"
 dependencies = [
     "prime-rl==0.9.0",
+    "tensorboard==2.20.0",
+]
+
+[project.optional-dependencies]
+legacy-runboard = [
     "runboard @ git+https://github.com/Moe-Zbeeb/runboard.git@74b21564d586e43d165d19d2b844ec6cac4deb95",
 ]
 

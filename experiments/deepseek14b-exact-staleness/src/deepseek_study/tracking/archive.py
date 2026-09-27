@@ -2,6 +2,7 @@ import hashlib
 import json
 import os
 import shutil
+import uuid
 from pathlib import Path
 
 from deepseek_study.runtime.checkpoints import atomic_write
@@ -40,7 +41,7 @@ def reserve_mirror(output, root):
     else:
         destination.mkdir(parents=True, exist_ok=False)
         atomic_write(marker, json.dumps(identity).encode())
-    probe = destination / ".write-probe"
+    probe = destination / f".write-probe-{uuid.uuid4().hex}"
     atomic_write(probe, b"metric archive preflight\n")
     probe.unlink()
     return destination
@@ -116,6 +117,71 @@ class MetricMirror:
             manifest[name] = {"bytes": target.stat().st_size, "sha256": digest}
         atomic_write(
             self.destination / "mirror-manifest.json",
+            json.dumps({"schema_version": 1, "verified_files": manifest}, indent=2).encode(),
+        )
+        return {"directory": str(self.destination), "verified_files": len(manifest)}
+
+
+class TensorBoardMirror:
+    def __init__(self, output, root):
+        self.output = Path(output)
+        self.destination = reserve_mirror(output, root)
+        self.checked = set()
+
+    def poll(self):
+        if self.destination is None:
+            return
+        for source in sorted((self.output / "tensorboard").rglob("events.out.tfevents.*")):
+            if source.is_symlink() or not source.is_file():
+                raise ValueError("TensorBoard mirror requires regular event files")
+            relative = source.relative_to(self.output)
+            target = self.destination / relative
+            target.parent.mkdir(parents=True, exist_ok=True)
+            offset = target.stat().st_size if target.exists() else 0
+            size = source.stat().st_size
+            if offset > size:
+                raise ValueError("TensorBoard mirror is ahead of its append-only source")
+            with source.open("rb") as incoming:
+                if relative not in self.checked and offset:
+                    remaining = offset
+                    with target.open("rb") as previous:
+                        while remaining:
+                            count = min(remaining, 4 * 1024 * 1024)
+                            if incoming.read(count) != previous.read(count):
+                                raise ValueError("TensorBoard mirror prefix differs from its source")
+                            remaining -= count
+                self.checked.add(relative)
+                incoming.seek(offset)
+                with target.open("ab") as outgoing:
+                    remaining = size - offset
+                    while remaining:
+                        block = incoming.read(min(remaining, 4 * 1024 * 1024))
+                        if not block:
+                            raise ValueError("TensorBoard source shrank during copying")
+                        outgoing.write(block)
+                        remaining -= len(block)
+                    outgoing.flush()
+                    os.fsync(outgoing.fileno())
+        status = self.output / "tracking/tensorboard.json"
+        if status.is_file():
+            target = self.destination / "tracking/tensorboard.json"
+            target.parent.mkdir(parents=True, exist_ok=True)
+            atomic_write(target, status.read_bytes())
+
+    def finish(self):
+        if self.destination is None:
+            return None
+        self.poll()
+        manifest = {}
+        for source in sorted((self.output / "tensorboard").rglob("events.out.tfevents.*")):
+            relative = str(source.relative_to(self.output))
+            target = self.destination / relative
+            digest = sha256(target)
+            if digest != sha256(source):
+                raise ValueError(f"TensorBoard mirror checksum mismatch: {relative}")
+            manifest[relative] = {"bytes": target.stat().st_size, "sha256": digest}
+        atomic_write(
+            self.destination / "tensorboard-mirror-manifest.json",
             json.dumps({"schema_version": 1, "verified_files": manifest}, indent=2).encode(),
         )
         return {"directory": str(self.destination), "verified_files": len(manifest)}

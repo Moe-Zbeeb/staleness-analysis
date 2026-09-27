@@ -30,7 +30,7 @@ def capture(root, study):
         "sympy",
         "msgspec",
         "pyarrow",
-        "runboard",
+        "tensorboard",
     )
     versions = {}
     for name in packages:

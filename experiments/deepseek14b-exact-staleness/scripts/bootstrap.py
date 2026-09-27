@@ -64,8 +64,8 @@ def main():
     if not args.gpu:
         run("uv", "pip", "install", "--python", python, "torch==2.11.0", "prometheus-client==0.25.0")
     dependencies = tomllib.loads((root / "pyproject.toml").read_text())["project"]["dependencies"]
-    runboard = next(requirement for requirement in dependencies if requirement.startswith("runboard @ "))
-    run("uv", "pip", "install", "--python", python, "--no-deps", runboard)
+    tensorboard = next(requirement for requirement in dependencies if requirement.startswith("tensorboard=="))
+    run("uv", "pip", "install", "--python", python, tensorboard)
     run("uv", "pip", "install", "--python", python, "--no-deps", "-e", str(root))
     print(f"Ready: {vendor / '.venv' / 'bin' / 'deepseek-study'}")
 

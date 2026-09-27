@@ -1,0 +1,17 @@
+{
+  "tracking_backend": "tensorboard",
+  "tensorboard_version": "2.20.0",
+  "runboard_enabled": false,
+  "stopped_job_id": "2145130",
+  "stopped_before_training": true,
+  "completed_updates_before_cancellation": 0,
+  "scientific_settings_changed": false,
+  "official_prime_rl_modified": false,
+  "event_mirror": "NFS and XFS",
+  "local_validation": {
+    "full_suite_passed": 348,
+    "skipped": 1,
+    "skip_reason": "CUDA-only test on local machine"
+  },
+  "final_replay_index_validation": "12 observer tests passed after the bounded-memory SQLite replay index"
+}

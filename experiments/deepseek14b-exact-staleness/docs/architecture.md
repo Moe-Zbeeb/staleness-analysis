@@ -24,7 +24,10 @@ deepseek14b-exact-staleness/
 │   │   │   ├── grading.py
 │   │   │   └── worker.py
 │   │   ├── tracking/
-│   │   │   └── runboard.py
+│   │   │   ├── tensorboard.py
+│   │   │   ├── readers.py
+│   │   │   ├── observer.py
+│   │   │   └── archive.py
 │   │   └── runtime/
 │   │       ├── build.py
 │   │       ├── launcher.py
@@ -59,7 +62,7 @@ Each subpackage also has an empty `__init__.py`. `vendor/`, `assets/`, `outputs/
 | `runtime/launcher.py` | Preflight, source snapshot, process startup and shutdown | Only the `run` command starts training |
 | `runtime/trainer.py`, `trainer_state.py` | Trainer entry point, seed setup and RNG checkpoint adapter | Official trainer still performs forward/backward and optimizer steps |
 | `runtime/checkpoints.py`, `identity.py` | Atomic state bundles, retention and immutable source/runtime identity | Recovery requires the same scientific/source identity |
-| `tracking/runboard.py` | Runboard observer, metric mapping and saved-log imports | Reads journals and completion markers in a separate CPU process; does not call training or evaluation |
+| `tracking/tensorboard.py` | TensorBoard observer, metric mapping and saved-log imports | Reads journals and completion markers in a separate CPU process; does not call training or evaluation |
 
 ## Execution flow
 
@@ -87,7 +90,7 @@ Generation of a future cohort can overlap the current update. Inference weights 
 
 The controller composes the official dispatcher, sink, packer, transports and watcher. It does not start the automatic newest-weight watcher or the stock orchestrator training/evaluation loop. See [imported-library integration](upstream-integration.md) for the exact boundaries and runtime override.
 
-The launcher also starts a Runboard observer from the source snapshot. Existing file-monitor metrics, study journals and completed-checkpoint markers feed this process; its failure does not fail training. Runboard performs delivery in its own sender thread. The launcher records terminal status after stopping training services, then allows a bounded observer drain. See [tracking behavior and metric clocks](runboard.md).
+The launcher starts a TensorBoard observer from the source snapshot. Existing file-monitor metrics, study journals and completed-checkpoint markers feed this process; its failure does not fail training. The launcher records terminal status after stopping training services, drains the paper observer, then drains TensorBoard. The paper observer owns raw XFS copies; TensorBoard owns only event-file copies. See [tracking behavior and metric clocks](tensorboard.md).
 
 ## Read and change in this order
 
@@ -101,4 +104,4 @@ The CPU suite checks contracts and behavior. The later [bounded GPU readiness te
 
 ## Paper diagnostics data path
 
-`tracking/tokens.py` observes detached tensors at PrimeRL's existing export hook and atomically writes one compressed shard per rank/update. `tracking/observer.py` waits for the controller's completed-update receipt; `tracking/paper.py` then computes global statistics over the union of trainer shards. `tracking/archive.py` mirrors journals and immutable metric artifacts to XFS. `tracking/runboard.py` sends the scalar results to the dashboard. `tracking/evaluation.py` imports independently generated offline predictions with benchmark and checkpoint provenance. None of these modules adds a term to the GRPO loss.
+`tracking/tokens.py` observes detached tensors at PrimeRL's existing export hook and atomically writes one compressed shard per rank/update. `tracking/observer.py` waits for the controller's completed-update receipt; `tracking/paper.py` then computes global statistics over the union of trainer shards. `tracking/archive.py` mirrors journals and immutable metric artifacts to XFS. `tracking/tensorboard.py` records scalar results and mirrors the event files to XFS. `tracking/evaluation.py` imports independently generated offline predictions with benchmark and checkpoint provenance. None of these modules adds a term to the GRPO loss.

@@ -23,7 +23,7 @@ The first live 14B diagnostic, job `2144957` on eight A100 80 GB PCIe GPUs, load
 
 The unused prime-kernels submodule remains uninitialized. No teammate fork is imported. Installation uses `uv sync --frozen`; the bootstrap and runtime constants must agree on the PrimeRL commit. Local source verification during this organization pass found the expected commit, lock digest, submodule revisions and no tracked changes.
 
-The study additionally installs [Runboard](https://github.com/Moe-Zbeeb/runboard) from commit `74b21564d586e43d165d19d2b844ec6cac4deb95` (version 0.2.0), as a direct dependency in the study's `pyproject.toml`. Bootstrap installs it with `--no-deps` after PrimeRL's frozen sync, without modifying PrimeRL's lockfile or source. Runboard's dashboard has been extended in its own repository with generic binned relationship charts; both dashboard asset copies are kept byte-identical. Run identity captures the installed Runboard version; the source snapshot binds the exact dependency requirement. This new dependency and tracking source change require matching source/runtime identities on resume.
+The study pins TensorBoard 2.20.0 in its own `pyproject.toml`; bootstrap installs it after PrimeRL's frozen sync. PrimeRL's source and lockfile are unchanged. The run identity records TensorBoard's installed version. A separate CPU observer reads the existing file-monitor output and study journals, without a trainer callback. Runboard remains an optional `legacy-runboard` extra for historical artifacts, and is disabled by the current launcher. The tracking source/dependency change requires a fresh compatible source/runtime identity.
 
 `runtime/launcher.py::verify_upstream` checks the checkout, submodule state and where the key Python packages were imported from. The run identity records the upstream lockfile and runtime versions. This is a pinned integration, not a promise that a future PrimeRL release will work unchanged.
 
@@ -44,7 +44,7 @@ The study additionally installs [Runboard](https://github.com/Moe-Zbeeb/runboard
 | [runtime/checkpoints.py](../src/deepseek_study/runtime/checkpoints.py) | Official trainer/orchestrator checkpoint output | Commits queue/state metadata and prunes only completed study bundles | No |
 | [deepseek_deepscaler/](../src/deepseek_deepscaler/) | Verifiers `Taskset`, `Task`, reward API | Adds the cleaned DeepScaleR taskset and strict math grader | No |
 | [dataset/assets.py](../src/deepseek_study/dataset/assets.py) | Transformers tokenizer loading and Renderers | Creates a separate model view with `tokenizer_class=TokenizersBackend`; verifies native token/template parity | No; only generated tokenizer metadata changes |
-| [tracking/runboard.py](../src/deepseek_study/tracking/runboard.py) | PrimeRL file-monitor JSONL; Runboard `Run` and saved connection discovery | A separate observer forwards scalar trainer/study metrics and checkpoint completion events; no new trainer callback | No |
+| [tracking/tensorboard.py](../src/deepseek_study/tracking/tensorboard.py) | PrimeRL file-monitor JSONL; TensorBoard event writer | A separate observer records scalar trainer/study metrics and checkpoint completion events; no new trainer callback | No |
 
 The official trainer owns model loading, FSDP, forward/backward, token normalization, accumulation, AdamW, scheduling and weight publication. The study does not patch their implementations. It does change the data supplied to them and the configured objective, so “unmodified library source” must not be interpreted as “all default PrimeRL behavior.”
 
@@ -52,7 +52,7 @@ The custom controller does not run the stock evaluation loop. Adding evaluation 
 
 The correctness relaunch separates learner-publication, weight-transfer and checkpoint deadlines. PrimeRL's NCCL broadcast timeout also governs waiting for the inference receiver, and trainer ranks may wait at a collective while generation finishes. `runtime/build.py` therefore sets broadcast and distributed timeouts to cover legitimate phase waits (24 hours in this configuration); the controller still bounds the actual transfer to 30 minutes. The new sink subclass relies on pinned internal object identities. Tests exercise the real upstream sink with interleaved arrivals at both 8 and 512 responses. These changes require revalidation on an upstream upgrade.
 
-Runboard does not change this boundary. Intermediate evaluation remains disabled, and checkpoint files stay on NFS. Its separate process is excluded from the launcher's training-failure checks and receives final status after training-service shutdown. See the [Runboard guide](runboard.md) for clocks, delivery limits and configuration.
+TensorBoard does not change this boundary. Intermediate evaluation remains disabled and checkpoints stay on NFS. Its observer receives final status after training services stop and drains after the paper observer. See the [TensorBoard guide](tensorboard.md).
 
 ## Upgrades and layout migration
 

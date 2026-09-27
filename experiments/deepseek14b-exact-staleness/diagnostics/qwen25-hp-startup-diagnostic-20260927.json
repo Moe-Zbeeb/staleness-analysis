@@ -1,0 +1,292 @@
+{
+  "job_id": "2145128",
+  "state": "COMPLETED",
+  "exit_code": "0:0",
+  "allocation_seconds": 182,
+  "purpose": "Bounded diagnosis after all device probes exceeded120seconds; no training",
+  "results": [
+    {
+      "device": "0",
+      "exit_code": 0,
+      "seconds": 171.90299051185139,
+      "stages": [
+        {
+          "stage": "python_started_before_torch",
+          "seconds": 2.133892849087715e-06
+        },
+        {
+          "stage": "torch_imported",
+          "seconds": 41.630054068984464
+        },
+        {
+          "stage": "device_count_ready",
+          "seconds": 65.88493008096702
+        },
+        {
+          "stage": "cuda_initialized",
+          "seconds": 142.46000161301345
+        },
+        {
+          "stage": "memory_guard_passed",
+          "seconds": 142.46024979208596
+        },
+        {
+          "stage": "bf16_backward_passed",
+          "seconds": 142.68278415407985
+        }
+      ],
+      "hardware": {
+        "name": "NVIDIA A100 80GB PCIe",
+        "bytes": 85097971712,
+        "uuid": "903e8a7b-ff3e-02cb-6a4d-0b7ab16b5027"
+      }
+    },
+    {
+      "device": "1",
+      "exit_code": 0,
+      "seconds": 169.75916103296913,
+      "stages": [
+        {
+          "stage": "python_started_before_torch",
+          "seconds": 2.1441373974084854e-06
+        },
+        {
+          "stage": "torch_imported",
+          "seconds": 41.60615926817991
+        },
+        {
+          "stage": "device_count_ready",
+          "seconds": 65.86716829915531
+        },
+        {
+          "stage": "cuda_initialized",
+          "seconds": 142.43513236916624
+        },
+        {
+          "stage": "memory_guard_passed",
+          "seconds": 142.4353317960631
+        },
+        {
+          "stage": "bf16_backward_passed",
+          "seconds": 142.66001129406504
+        }
+      ],
+      "hardware": {
+        "name": "NVIDIA A100 80GB PCIe",
+        "bytes": 85097971712,
+        "uuid": "b03bc3ba-472c-8081-1374-cfb54402f3ac"
+      }
+    },
+    {
+      "device": "2",
+      "exit_code": 0,
+      "seconds": 163.36187260807492,
+      "stages": [
+        {
+          "stage": "python_started_before_torch",
+          "seconds": 2.333894371986389e-06
+        },
+        {
+          "stage": "torch_imported",
+          "seconds": 41.61025781999342
+        },
+        {
+          "stage": "device_count_ready",
+          "seconds": 54.78798449691385
+        },
+        {
+          "stage": "cuda_initialized",
+          "seconds": 142.27645208290778
+        },
+        {
+          "stage": "memory_guard_passed",
+          "seconds": 142.28036133595742
+        },
+        {
+          "stage": "bf16_backward_passed",
+          "seconds": 142.60726292291656
+        }
+      ],
+      "hardware": {
+        "name": "NVIDIA A100 80GB PCIe",
+        "bytes": 85097971712,
+        "uuid": "f12c8a0e-d339-efb5-a82a-3da130030298"
+      }
+    },
+    {
+      "device": "3",
+      "exit_code": 0,
+      "seconds": 173.94315663608722,
+      "stages": [
+        {
+          "stage": "python_started_before_torch",
+          "seconds": 1.2828968465328217e-06
+        },
+        {
+          "stage": "torch_imported",
+          "seconds": 41.598541009938344
+        },
+        {
+          "stage": "device_count_ready",
+          "seconds": 65.86076051997952
+        },
+        {
+          "stage": "cuda_initialized",
+          "seconds": 142.4068000758998
+        },
+        {
+          "stage": "memory_guard_passed",
+          "seconds": 142.40714946598746
+        },
+        {
+          "stage": "bf16_backward_passed",
+          "seconds": 142.63877707486972
+        }
+      ],
+      "hardware": {
+        "name": "NVIDIA A100 80GB PCIe",
+        "bytes": 85097971712,
+        "uuid": "1a580dec-5dbf-b233-37d0-ad28d7816c96"
+      }
+    },
+    {
+      "device": "4",
+      "exit_code": 0,
+      "seconds": 165.54568950412795,
+      "stages": [
+        {
+          "stage": "python_started_before_torch",
+          "seconds": 1.8728896975517273e-06
+        },
+        {
+          "stage": "torch_imported",
+          "seconds": 41.65362774278037
+        },
+        {
+          "stage": "device_count_ready",
+          "seconds": 65.90887513686903
+        },
+        {
+          "stage": "cuda_initialized",
+          "seconds": 142.47997121000662
+        },
+        {
+          "stage": "memory_guard_passed",
+          "seconds": 142.48030233685859
+        },
+        {
+          "stage": "bf16_backward_passed",
+          "seconds": 142.70176844694652
+        }
+      ],
+      "hardware": {
+        "name": "NVIDIA A100 80GB PCIe",
+        "bytes": 85097971712,
+        "uuid": "ba431598-b47d-7149-ba8a-09d754f3ed55"
+      }
+    },
+    {
+      "device": "5",
+      "exit_code": 0,
+      "seconds": 169.8117014898453,
+      "stages": [
+        {
+          "stage": "python_started_before_torch",
+          "seconds": 1.933891326189041e-06
+        },
+        {
+          "stage": "torch_imported",
+          "seconds": 41.60275606182404
+        },
+        {
+          "stage": "device_count_ready",
+          "seconds": 65.8703170849476
+        },
+        {
+          "stage": "cuda_initialized",
+          "seconds": 142.43134349398315
+        },
+        {
+          "stage": "memory_guard_passed",
+          "seconds": 142.43182751885615
+        },
+        {
+          "stage": "bf16_backward_passed",
+          "seconds": 142.65847245394252
+        }
+      ],
+      "hardware": {
+        "name": "NVIDIA A100 80GB PCIe",
+        "bytes": 85097971712,
+        "uuid": "99e6d841-8f03-96c4-7573-c45c3e4026cc"
+      }
+    },
+    {
+      "device": "6",
+      "exit_code": 0,
+      "seconds": 176.007463427959,
+      "stages": [
+        {
+          "stage": "python_started_before_torch",
+          "seconds": 2.3138709366321564e-06
+        },
+        {
+          "stage": "torch_imported",
+          "seconds": 41.61638039909303
+        },
+        {
+          "stage": "device_count_ready",
+          "seconds": 65.88944876706228
+        },
+        {
+          "stage": "cuda_initialized",
+          "seconds": 142.46000854601152
+        },
+        {
+          "stage": "memory_guard_passed",
+          "seconds": 142.4603291519452
+        },
+        {
+          "stage": "bf16_backward_passed",
+          "seconds": 142.70887384586968
+        }
+      ],
+      "hardware": {
+        "name": "NVIDIA A100 80GB PCIe",
+        "bytes": 85097971712,
+        "uuid": "21dae0b4-8feb-1aeb-a298-58e0f7cd24d5"
+      }
+    },
+    {
+      "device": "7",
+      "exit_code": 1,
+      "seconds": 159.50910953595303,
+      "stages": [
+        {
+          "stage": "python_started_before_torch",
+          "seconds": 1.7040874809026718e-06
+        },
+        {
+          "stage": "torch_imported",
+          "seconds": 41.66638733516447
+        },
+        {
+          "stage": "device_count_ready",
+          "seconds": 56.852152560139075
+        }
+      ],
+      "error": "RuntimeError: No CUDA GPUs are available"
+    }
+  ],
+  "healthy_devices": [
+    "0",
+    "1",
+    "2",
+    "3",
+    "4",
+    "5",
+    "6"
+  ],
+  "old_probe_timeout_seconds": 120,
+  "new_full_run_probe_timeout_seconds": 300
+}

@@ -1,5 +1,7 @@
 # Runboard integration
 
+> Historical integration: new launches use [TensorBoard](tensorboard.md) only. The legacy observer can still be invoked explicitly as `python -m deepseek_study.tracking.runboard RUN_DIRECTORY --once` after installing the optional `legacy-runboard` extra. `deepseek-study track` now means TensorBoard.
+
 The study uses [Runboard](https://github.com/Moe-Zbeeb/runboard) at commit `74b21564d586e43d165d19d2b844ec6cac4deb95` (package version 0.2.0). Bootstrap installs this exact revision into the study environment with `--no-deps`, after installing PrimeRL's frozen environment. Neither dependency's source is modified. Runboard is an additional study dependency; it is not inserted into PrimeRL's lockfile. Its installed version is recorded in the run identity.
 
 ## Execution boundary

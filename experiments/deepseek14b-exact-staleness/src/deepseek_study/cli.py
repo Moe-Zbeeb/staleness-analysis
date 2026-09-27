@@ -61,7 +61,7 @@ def main():
         print(json.dumps(StudyConfig.model_json_schema(), indent=2))
         return
     if args.command == "track":
-        from deepseek_study.tracking.runboard import observe
+        from deepseek_study.tracking.tensorboard import observe
 
         print(json.dumps(observe(args.directory, once=args.once), indent=2))
         return

@@ -17,8 +17,7 @@ PY
 )
 export PYTHONUNBUFFERED=1
 export OMP_NUM_THREADS=4
-export RUNBOARD_HOME=/mnt/xfs/home/mohamadzbib/.runboard
-export RUNBOARD_PROJECT=staleness-analysis
+export DEEPSEEK_STUDY_RUNBOARD=0
 export XDG_CACHE_HOME="$STUDY_ROOT/.cache"
 export HF_HOME="$STUDY_ROOT/.cache/huggingface"
 export TRITON_CACHE_DIR="$PROFILE_CONTROL/triton"

@@ -103,6 +103,7 @@ def launch(study, root, resume=None):
                 "run_uuid": uuid.uuid4().hex,
                 "model_id": MODEL_ID,
                 "model_revision": MODEL_REVISION,
+                "tracking_backend": "tensorboard",
                 "starting_step": starting_step,
                 "resume_from": str(Path(resume).resolve()) if resume else None,
                 "config_sha256": study.fingerprint(),
@@ -123,6 +124,7 @@ def launch(study, root, resume=None):
         "PRL_RUN_ID": uuid.uuid4().hex,
         "PRL_RUN_NAME": output.name,
         "DEEPSEEK_STUDY_SEED": str(study.seed),
+        "DEEPSEEK_STUDY_RUNBOARD": "0",
         "PYTHONHASHSEED": str(study.seed),
         "WANDB_MODE": "disabled",
         "TOKENIZERS_PARALLELISM": "false",
@@ -171,24 +173,23 @@ def launch(study, root, resume=None):
             [sys.executable, "-m", "deepseek_study.tracking.observer", str(output), "--parent-pid", str(os.getpid())],
             {"CUDA_VISIBLE_DEVICES": "", "RANK": "0", "LOCAL_RANK": "0"},
         )
-        if os.environ.get("DEEPSEEK_STUDY_RUNBOARD", "1") != "0":
-            try:
-                start(
-                    "runboard",
-                    [
-                        sys.executable,
-                        "-m",
-                        "deepseek_study.tracking.runboard",
-                        str(output),
-                        "--parent-pid",
-                        str(os.getpid()),
-                    ],
-                    {"CUDA_VISIBLE_DEVICES": "", "RANK": "0", "LOCAL_RANK": "0"},
-                )
-            except Exception as error:
-                print(
-                    f"Runboard observer could not start ({type(error).__name__}); training continues", file=sys.stderr
-                )
+        try:
+            start(
+                "tensorboard",
+                [
+                    sys.executable,
+                    "-m",
+                    "deepseek_study.tracking.tensorboard",
+                    str(output),
+                    "--parent-pid",
+                    str(os.getpid()),
+                ],
+                {"CUDA_VISIBLE_DEVICES": "", "RANK": "0", "LOCAL_RANK": "0"},
+            )
+        except Exception as error:
+            print(
+                f"TensorBoard observer could not start ({type(error).__name__}); training continues", file=sys.stderr
+            )
         start(
             "inference",
             [sys.executable, "-m", "prime_rl.entrypoints.inference", "@", str(config_dir / "inference.json")],
@@ -245,9 +246,9 @@ def launch(study, root, resume=None):
                         )
                         paper_warned = True
                     continue
-                if name == "runboard":
+                if name == "tensorboard":
                     if code is not None and not observer_warned:
-                        print("Runboard observer exited; training continues. See logs/runboard.log", file=sys.stderr)
+                        print("TensorBoard observer exited; training continues. See logs/tensorboard.log", file=sys.stderr)
                         observer_warned = True
                     continue
                 if code is not None and (code != 0 or name not in {"controller", "trainer"}):
@@ -273,7 +274,7 @@ def launch(study, root, resume=None):
         for signum in previous_signals:
             signal.signal(signum, signal.SIG_IGN)
         exit_codes = {name: process.poll() for name, process in processes.items()}
-        observer = processes.pop("runboard", None)
+        observer = processes.pop("tensorboard", None)
         paper_observer = processes.pop("paper-metrics", None)
         cleanup_errors = stop_process_groups(processes)
         status_record = {
@@ -305,10 +306,10 @@ def launch(study, root, resume=None):
                     print(f"Could not record paper status ({type(error).__name__})", file=sys.stderr)
                 print("Paper metrics need offline replay after the shutdown deadline", file=sys.stderr)
         if observer is not None:
-            drained, errors = drain_process("runboard", observer)
+            drained, errors = drain_process("tensorboard", observer)
             cleanup_errors.extend(errors)
             if not drained:
-                print("Runboard observer exceeded shutdown deadline; original logs remain available", file=sys.stderr)
+                print("TensorBoard observer exceeded shutdown deadline; replay saved metrics with track --once", file=sys.stderr)
         if cleanup_errors:
             for error in cleanup_errors:
                 print(f"Cleanup warning: {error}", file=sys.stderr)

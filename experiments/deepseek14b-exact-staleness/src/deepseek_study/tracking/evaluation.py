@@ -8,7 +8,7 @@ from pathlib import Path
 from deepseek_study.runtime.checkpoints import atomic_write
 from deepseek_study.tracking.archive import MetricMirror, sha256
 from deepseek_study.config import StudyConfig
-from deepseek_study.tracking.runboard import terminal_status
+from deepseek_study.tracking.readers import terminal_status
 
 
 SUITES = {

@@ -12,7 +12,7 @@ experiment; it does not claim to reproduce either paper's training protocol.
 
 ## Coverage inventory
 
-Runboard prefixes all new training diagnostics with `paper/`. Existing
+TensorBoard prefixes all derived training diagnostics with `paper/`. New launches use TensorBoard only; Runboard-specific chart/deployment details below describe historical runs. Each binned diagnostic is available as a scalar series, while raw arrays remain on NFS/XFS. Existing
 `trainer/optim/grad_norm` is the global gradient norm before norm clipping;
 `rollout/consumed_reward_mean` is the reward of the cohort being trained on.
 

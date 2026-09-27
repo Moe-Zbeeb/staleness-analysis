@@ -10,7 +10,7 @@ from deepseek_study.config import StudyConfig
 from deepseek_study.runtime.checkpoints import atomic_write
 from deepseek_study.tracking.archive import MetricMirror
 from deepseek_study.tracking.paper import process_step
-from deepseek_study.tracking.runboard import JsonlTail, terminal_status, warn
+from deepseek_study.tracking.readers import JsonlTail, terminal_status, warn
 
 
 def observe_papers(output, once=False, parent_pid=None, stop=None):

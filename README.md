@@ -4,7 +4,7 @@ Research code for studying how rollout staleness affects reinforcement learning.
 
 ## Start here: exact-staleness DeepSeek 14B
 
-[DeepSeek 14B on cleaned DeepScaleR](experiments/deepseek14b-exact-staleness/README.md) is the current study. Each invocation prepares one explicit exact lag `k`; it does not schedule a sweep. All full studies are now stopped. The [September 27 hardening report](experiments/deepseek14b-exact-staleness/docs/hardening-20260927.md) records the observed grading failures, fixes and offline validation. A new GPU pilot is still required before production restart. The [v2 relaunch record](experiments/deepseek14b-exact-staleness/docs/runs/exact256-v2.md) is historical. A separate [bounded GPU readiness test](experiments/deepseek14b-exact-staleness/docs/readiness-test.md) records the preceding real-model diagnostic.
+[DeepSeek 14B on cleaned DeepScaleR](experiments/deepseek14b-exact-staleness/README.md) is the current study. Each invocation prepares one explicit exact lag `k`; it does not schedule a sweep. The 3B startup was stopped before training to switch to TensorBoard; the other full studies remain stopped. See the [3B launch record](experiments/deepseek14b-exact-staleness/docs/runs/qwen25-3b-full-hp-v3.md). The [September 27 hardening report](experiments/deepseek14b-exact-staleness/docs/hardening-20260927.md) records the observed grading failures, fixes and offline validation. The user selected the full run with allocation-level health checks. The [v2 relaunch record](experiments/deepseek14b-exact-staleness/docs/runs/exact256-v2.md) is historical. A separate [bounded GPU readiness test](experiments/deepseek14b-exact-staleness/docs/readiness-test.md) records the preceding real-model diagnostic.
 
 | What you need | Where to go |
 | --- | --- |
@@ -18,7 +18,7 @@ Research code for studying how rollout staleness affects reinforcement learning.
 | Cluster paths, installation and validation evidence | [Cluster guide](experiments/deepseek14b-exact-staleness/docs/cluster.md) |
 | Bounded 14B test, fixes and production limits | [Readiness test](experiments/deepseek14b-exact-staleness/docs/readiness-test.md) |
 | BAPO/M2PO metric coverage, plots and XFS archive | [Paper metrics](experiments/deepseek14b-exact-staleness/docs/paper-metrics.md) |
-| Runboard setup, metrics and delivery | [Runboard integration](experiments/deepseek14b-exact-staleness/docs/runboard.md) |
+| TensorBoard metrics and NFS/XFS event logs | [TensorBoard guide](experiments/deepseek14b-exact-staleness/docs/tensorboard.md) |
 
 The code is separated into `learning/`, `rollouts/`, `dataset/`, `runtime/` and `tracking/`. Official PrimeRL source files are not edited. There are explicit process-local checkpoint and token-export factory overrides, documented with the other integration points in the [dependency guide](experiments/deepseek14b-exact-staleness/docs/upstream-integration.md).
 

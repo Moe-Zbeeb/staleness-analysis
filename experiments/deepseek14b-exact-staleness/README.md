@@ -2,7 +2,7 @@
 
 One run at a time, with the exact nonnegative integer `k` you request. This package composes official PrimeRL v0.9.0 at `ab5de8fff44b2c4a5c85e24b6e6e3f7d57eee7b1`; it does not import the teammate fork or edit upstream files.
 
-**Status (September 27, 2026): all four full studies are stopped and monitoring is paused.** The 14B and Qwen3-1.7B jobs failed on a clock reference during update 8; the 1.5B job was preempted before its first completed update; the base Qwen2.5-3B job was cancelled after 77 updates. None reached a complete checkpoint. The [hardening report](docs/hardening-20260927.md) documents the fixes and offline validation. The new code has not yet completed a GPU training pilot. Previous run records remain historical evidence.
+**Status (September 27, 2026): startup job 2145130 was canceled before training for the requested switch to TensorBoard; the other full studies remain stopped.** The user selected a fresh 1,000-update k=256 run with the corrected v3 grader. See the [3B launch record](docs/runs/qwen25-3b-full-hp-v3.md) for the initial startup timeout, measured correction, new job and verified startup state. The [hardening report](docs/hardening-20260927.md) documents the preceding fixes and offline validation. Historical 14B/1.7B grading failures, 1.5B preemption and stopped 3B outputs are preserved.
 
 The preceding bounded readiness job `2144960` passed (exit `0:0`, 54m 45s), including all 129 cluster tests. The real 14B model completed three updates with ages 0, 1, 1, then resumed checkpoint 2 and reexecuted update 3 using the original queued data. Responses reached 8,192 tokens; trainer peak memory reached about 72 GiB after restart. Checkpoints are on NFS and metric evidence is mirrored to XFS. See the [readiness report](docs/readiness-test.md) and [validation evidence](diagnostics/cluster-validation.json).
 
@@ -29,7 +29,7 @@ Start with the [architecture](docs/architecture.md) for the directory tree and e
 | Exact-age cohorts and audit | [rollouts/](src/deepseek_study/rollouts/) | Changing generation, queueing or consumption |
 | Assets, preparation and grading | [dataset/](src/deepseek_study/dataset/) | Working on the dataset or reward policy |
 | PrimeRL configuration, processes and recovery | [runtime/](src/deepseek_study/runtime/) | Working on the library integration or checkpoint lifecycle |
-| Runboard metrics and dashboard delivery | [tracking/](src/deepseek_study/tracking/) | Observing existing logs without changing training |
+| TensorBoard metrics and event archives | [tracking/](src/deepseek_study/tracking/) | Observing existing logs without changing training |
 | Taskset plugin | [deepseek_deepscaler/](src/deepseek_deepscaler/) | Connecting prepared questions and rewards to Verifiers |
 | Installation and health checks | [scripts/](scripts/) | Preparing dependencies, packaging or checking hardware |
 | Tests and evidence | [tests/](tests/), [diagnostics/](diagnostics/) | Reviewing validated behavior and limits |
@@ -48,7 +48,7 @@ The [integration guide](docs/upstream-integration.md) lists every customization,
 
 ## Source-layout update
 
-The original module reorganization moved implementation files into four concern-specific subpackages without changing scientific behavior; `tracking/` now adds the Runboard observer. The original reorganization changed the resolved custom-loss import path to `deepseek_study.learning.loss.clipped_grpo`. The original reorganization preserved the advantage, loss, queue and reward implementation bytes; the grader identity and prepared dataset manifest are unchanged. Subsequent baseline changes to weight decay and checkpoint cadence are described below. Runboard adds the `track` command and a pinned dependency while preserving the scientific recipe.
+The original module reorganization moved implementation files into four concern-specific subpackages without changing scientific behavior; `tracking/` contains independent TensorBoard and paper-metric observers. The original reorganization changed the resolved custom-loss import path to `deepseek_study.learning.loss.clipped_grpo`. The original reorganization preserved the advantage, loss, queue and reward implementation bytes; the grader identity and prepared dataset manifest are unchanged. Subsequent baseline changes to weight decay and checkpoint cadence are described below. The `track` command now exports TensorBoard events; Runboard is an optional historical dependency and is never started by the current launcher.
 
 Regenerate resolved configs from the study JSON using `deepseek-study build`; do not reuse old resolved files with the flat loss import path. Source fingerprints and pickled module paths changed, so old source snapshots/checkpoints require their original code. Use a fresh source deployment for this layout; do not overlay it onto an old source tree and leave obsolete modules behind. [Upgrade and deployment notes](docs/upstream-integration.md#upgrades-and-layout-migration).
 
@@ -155,19 +155,17 @@ vendor/prime-rl/.venv/bin/deepseek-study audit /absolute/path/to/new-run
 
 Changed source, runtime identity, data or configuration is rejected. The original GPU layout is required; cross-layout optimizer/RNG resharding is not enabled. Queued responses are preserved exactly and trainer RNG is restored. Future inference is not guaranteed bitwise identical after restart because the complete vLLM RNG state is not restored. GPU backward is not configured for strict determinism either: the readiness replay matched all saved forward log probabilities but showed small post-update weight/Adam differences, documented in the [readiness report](docs/readiness-test.md). Only load trusted project checkpoints.
 
-`updates.jsonl` records versions, exact age, bootstrap status, original question/response IDs, reward, zero-advantage fraction and queue accounting. `generations.jsonl` records generation time and provenance. `grading.jsonl` records extraction/comparison reasons and retry information. `rollouts/*.msgpack` preserves full training token/log-probability payloads; failed episodes are written under `failures/`. Original trainer metrics and process logs remain local. The Runboard observer forwards numeric metrics and run metadata to a configured backend, or stores dashboard data locally when no backend is configured; it does not upload rollout text or checkpoint files.
+`updates.jsonl` records versions, exact age, bootstrap status, original question/response IDs, reward, zero-advantage fraction and queue accounting. `generations.jsonl` records generation time and provenance. `grading.jsonl` records extraction/comparison reasons and retry information. `rollouts/*.msgpack` preserves full training token/log-probability payloads; failed episodes are written under `failures/`. Original trainer metrics and process logs remain local. The TensorBoard observer records numeric metrics locally and mirrors event files to XFS; it does not upload rollout text or checkpoint files.
 
 Rollout archive format 2 explicitly stores `sample_response_ids` and `sample_task_keys` in training-sample order. Other cohort metadata remains in arrival order and must be joined by response ID. Recovery preflight releases its temporary queue before workers start, and queue checkpoint I/O streams pickle data instead of creating a full serialized byte copy. The pending queue itself remains in CPU memory.
 
 The benchmark suite from the teammate note is not bundled or automatically run: its frozen benchmark artifacts and audited exclusions were not supplied. Training metrics are not benchmark evaluation results.
 
-## Runboard dashboard
+## TensorBoard
 
-The launcher automatically starts one separate Runboard observer. It reads existing trainer/study logs and completed-checkpoint markers, then reports staleness, consumed-rollout reward, queue size, generation timing, trainer loss/ratio/optimizer metrics and checkpoint milestones. It does not run evaluation or change the training algorithm. Observer failure does not fail training.
+The launcher starts a separate TensorBoard observer reading existing journals. It logs trainer metrics, consumed-rollout rewards, exact staleness, queue size, generation timing, inference telemetry, paper diagnostics, noncontributing-token fractions and checkpoint milestones. Runboard is disabled, including when its environment variables are inherited. Evaluation remains offline only.
 
-Bootstrap installs Runboard from pinned commit `74b21564d586e43d165d19d2b844ec6cac4deb95`. The observer uses your configured Runboard endpoint or `RUNBOARD_DIR`; without either, it writes to `<output_dir>/tracking/runboard-runs`, on NFS with the default output path. Credentials remain in Runboard's saved connection or environment. `RUNBOARD_PROJECT` selects the dashboard project; `DEEPSEEK_STUDY_RUNBOARD=0` disables the observer.
-
-See the [Runboard guide](docs/runboard.md) for setup, exact metric meanings, outage handling and importing completed logs with `deepseek-study track <run-directory> --once`. CPU-only job `2144955` completed and verified three exact metric rows against the live backend. Hosted relationship charts, static asset parity and metric pagination are also verified.
+TensorBoard 2.20.0 is pinned in this package. Events are stored in `<output_dir>/tensorboard/` on NFS and mirrored under the run's XFS metric directory. The observer does not change the training algorithm. See the [TensorBoard guide](docs/tensorboard.md) for viewing, metric clocks, replay and shutdown behavior.
 
 ## Local validation and portable package
 
@@ -183,9 +181,9 @@ See the [review guide](docs/review-guide.md), [architecture](docs/architecture.m
 
 ## BAPO and M2PO research measurements
 
-See the [complete paper metric inventory](docs/paper-metrics.md) for each figure/table, exact formulas, dashboard series and limits. Every update captures detached token ID, position, current/behavior log probabilities, advantage, full-vocabulary entropy and direct GRPO contribution masks in compressed per-rank files. A CPU observer calculates global diagnostics and feeds Runboard. It also mirrors metric evidence to `/mnt/xfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/metrics/<run-name>/`; checkpoints stay on NFS. The setting is `metrics_mirror_root`.
+See the [complete paper metric inventory](docs/paper-metrics.md) for each figure/table, exact formulas, dashboard series and limits. Every update captures detached token ID, position, current/behavior log probabilities, advantage, full-vocabulary entropy and direct GRPO contribution masks in compressed per-rank files. A CPU observer calculates global diagnostics and feeds TensorBoard. It also mirrors metric evidence to `/mnt/xfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/metrics/<run-name>/`; checkpoints stay on NFS. The setting is `metrics_mirror_root`.
 
-PrimeRL source remains unchanged. A second in-memory factory override, `setup_token_exporter`, activates compressed capture from its existing hooks. Runboard itself adds binned relationship plots in its own repository; its pinned revision is listed in `pyproject.toml`. These changes and their costs are documented in the [dependency guide](docs/upstream-integration.md). No training or intermediate evaluation is started by this integration.
+PrimeRL source remains unchanged. A second in-memory factory override, `setup_token_exporter`, activates compressed capture from its existing hooks. TensorBoard receives each bin as a scalar series; raw token arrays and frequency artifacts remain available for scientific plotting. These changes and their costs are documented in the [dependency guide](docs/upstream-integration.md). No training or intermediate evaluation is started by this integration.
 
 Use `deepseek-study paper-metrics RUN_DIRECTORY --once` to replay completed raw evidence. Use `deepseek-study import-evaluation RUN_DIRECTORY predictions.jsonl protocol.json --step 100` for independently produced benchmark predictions. The importer validates coverage and provenance and logs benchmark accuracy; it is not a checkpoint exporter or evaluation inference runner.
 

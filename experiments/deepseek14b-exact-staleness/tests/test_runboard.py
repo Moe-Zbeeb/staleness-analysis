@@ -7,12 +7,13 @@ import urllib.request
 from types import SimpleNamespace
 
 import pytest
-from runboard.server import Server
-from runboard.storage import Storage
 
 from deepseek_study import MODEL_ID
 from deepseek_study.recipe import baseline
 from deepseek_study.tracking.runboard import JsonlTail, Metrics, observe
+
+Server = pytest.importorskip("runboard.server").Server
+Storage = pytest.importorskip("runboard.storage").Storage
 
 
 @pytest.fixture(autouse=True)
@@ -248,7 +249,7 @@ def test_sidecar_waits_for_launcher_and_drains_final_trainer_metrics(recorded):
             process.wait()
 
 
-def test_launcher_observer_failure_does_not_fail_training(study, tmp_path, monkeypatch, capsys):
+def test_launcher_tensorboard_failure_does_not_fail_training(study, tmp_path, monkeypatch, capsys):
     import torch
     from deepseek_study.runtime import launcher
 
@@ -279,8 +280,10 @@ def test_launcher_observer_failure_does_not_fail_training(study, tmp_path, monke
         def __init__(self, args, **kwargs):
             assert kwargs["env"]["NCCL_P2P_DISABLE"] == "1"
             assert kwargs["env"]["NCCL_SHM_DISABLE"] == "1"
+            assert kwargs["env"]["DEEPSEEK_STUDY_RUNBOARD"] == "0"
+            assert "deepseek_study.tracking.runboard" not in args
             self.code = None
-            if "deepseek_study.tracking.runboard" in args:
+            if "deepseek_study.tracking.tensorboard" in args:
                 self.code = 1
             if "controller" in args:
                 write_json(study.output_dir / "study-complete.json", {"step": study.max_steps})
@@ -297,6 +300,7 @@ def test_launcher_observer_failure_does_not_fail_training(study, tmp_path, monke
     monkeypatch.setattr(launcher.subprocess, "Popen", Process)
     assert launcher.launch(study, tmp_path) == study.output_dir
     assert json.loads((study.output_dir / "run-status.json").read_text())["status"] == "finished"
+    assert json.loads((study.output_dir / "run.json").read_text())["tracking_backend"] == "tensorboard"
     assert "training continues" in capsys.readouterr().err
 
 
