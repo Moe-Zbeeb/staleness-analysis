@@ -1,6 +1,6 @@
 # DeepSeek 1.5B exact k=256 on twelve GPUs
 
-The user requested stopping the on-policy baseline and using the full twelve-A100 high-priority quota for one exact-k256 study. Replacement job **2145292** was admitted on `deep-chungus-3` and `deep-chungus-5`, with both partition and QoS `high-priority`, account `grad-students`, 96 CPUs, six GPUs and 200 GiB requested per node, a 45-day limit, and automatic requeue disabled. Startup validation is pending; allocation is not evidence of completed training.
+The user requested stopping the on-policy baseline and using the full twelve-A100 high-priority quota for one exact-k256 study. Replacement job **2145293** was admitted on `deep-chungus-3` and `deep-chungus-5`, with both partition and QoS `high-priority`, account `grad-students`, 96 CPUs, six GPUs and 200 GiB requested per node, a 45-day limit, and automatic requeue disabled. Startup validation is pending; allocation is not evidence of completed training.
 
 | Node | Trainer GPUs | Inference GPUs |
 | --- | ---: | ---: |
@@ -8,7 +8,7 @@ The user requested stopping the on-policy baseline and using the full twelve-A10
 | deep-chungus-5 | 0 | 6 |
 | Total | 4 | 8 |
 
-The user explicitly allowed A100 40GB and 80GB GPUs. Nodes 7 and 8 are excluded because of the known unhealthy device and unavailable node. No unrelated processes are killed by this launcher. Slurm applies its normal high-priority scheduling/preemption policy.
+The user explicitly allowed A100 40GB and 80GB GPUs. Both selected nodes expose A100 PCIe 40GB cards. Nodes 7 and 8 are excluded because of the known unhealthy device and unavailable node. No unrelated processes are killed by this launcher. Slurm applies its normal high-priority scheduling/preemption policy.
 
 ## Training contract
 
@@ -28,15 +28,15 @@ The custom launcher accepts an explicit `RemoteInference` deployment manifest. I
 
 Official PrimeRL v0.9.0 at `ab5de8fff44b2c4a5c85e24b6e6e3f7d57eee7b1` and vLLM source are unchanged. We added the official **vllm-router 0.2.0** wheel already pinned in PrimeRL's lockfile to each isolated local runtime. Its SHA256 is `bac193bedf10f9a0265fe4fdaae0f0418574cd1f15c45f27da1b4a2bae8c10b8`. The adapter records the router version in run identity; no shared environment is upgraded. P2P/SHM are disabled for the initial mixed-node PCIe-compatible NCCL setup, matching the earlier component benchmark environment; cross-node communication is measured at startup.
 
-86 local tests passed covering configuration wiring, distinct engine seeds, invalid endpoint/device rejection, exact-age queue behavior, storage and recovery. A cluster config dry-run also resolved. Actual GPU startup, cross-node weight updates and full-size training remain separate runtime gates. No speedup multiplier or completion ETA is established yet.
+87 local tests passed covering configuration wiring, distinct engine seeds, invalid endpoint/device rejection, exact-age queue behavior, storage and recovery. A cluster config dry-run also resolved. Actual GPU startup, cross-node weight updates and full-size training remain separate runtime gates. No speedup multiplier or completion ETA is established yet.
 
 ## Storage and recovery
 
-Control: `/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/launches/deepseek15b-k256-12gpu-hp-20260928-v2`.
+Control: `/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/launches/deepseek15b-k256-12gpu-hp-20260928-v3`.
 
-Local workspace on both nodes: `/tmp/staleness-storage-v2/mohamadzbib/deepseek15b-exact256-12gpu-seed42-v2`. Runtime: `/tmp/staleness-runtime/mohamadzbib/deepseek15b-12gpu-v2`.
+Local workspace on both nodes: `/tmp/staleness-storage-v2/mohamadzbib/deepseek15b-exact256-12gpu-seed42-v3`. Runtime: `/tmp/staleness-runtime/mohamadzbib/deepseek15b-12gpu-v2`.
 
-Full checkpoints remain every 100 updates. Verified background backups go to `outputs/deepseek15b-exact256-12gpu-seed42-v2` under the NFS project root; metrics and TensorBoard events also go to the matching XFS `metrics/` directory. Per-node health receipts, inference configs and termination logs are retained in the control directory. The deployment manifest is included in both shared metadata copies.
+Full checkpoints remain every 100 updates. Verified background backups go to `outputs/deepseek15b-exact256-12gpu-seed42-v3` under the NFS project root; metrics and TensorBoard events also go to the matching XFS `metrics/` directory. Per-node health receipts, inference configs and termination logs are retained in the control directory. The deployment manifest is included in both shared metadata copies.
 
 This initial multi-node launcher deliberately rejects `--resume`: a recovery launch must first validate deployment and checkpoint compatibility and stage the complete checkpoint on the trainer node. Checkpoint production is retained; unattended recovery has not been validated. Failed jobs are not automatically restarted from initial weights.
 
@@ -44,4 +44,6 @@ This initial multi-node launcher deliberately rejects `--resume`: a recovery lau
 
 On-policy job **2145261** was intentionally stopped through its supervisor; its saved run status records SIGTERM and no cleanup errors. Slurm labels this nonzero termination `FAILED`. Old queued eight-GPU k256 job **2145258** was cancelled. Twelve-GPU attempt **2145289** was cancelled during staging, before training, to give independent inference engines distinct RNG streams. All old outputs are retained.
 
-See [submission evidence](../../diagnostics/multinode-12gpu-2145292.json) for the resolved study, storage specification, launch hashes and verified Slurm fields.
+See [submission evidence](../../diagnostics/multinode-12gpu-2145293.json) for the resolved study, storage specification, launch hashes and verified Slurm fields.
+
+Network preflight in job **2145292** failed before inference/training because NCCL selected an unreachable IPv6 link-local address on `eth3`. The replacement derives the outbound IPv4 interface with `ip -j route get` for the peer node, sets `NCCL_SOCKET_FAMILY=AF_INET`, selects that exact interface, and records it per node. These are [documented NCCL settings](https://docs.nvidia.com/deeplearning/nccl/user-guide/docs/env.html). The prior runtime is reused after its source checks; new source, assets, outputs and launch receipts have separate paths. No training update was lost in that failed preflight.

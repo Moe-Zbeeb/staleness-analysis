@@ -101,9 +101,10 @@
   },
   "validation": {
     "local_tests_passed": 86,
-    "gpu_health": "pending",
-    "cross_node_nccl": "pending",
-    "first_training_update": "pending"
+    "gpu_health": "passed: six A100 PCIe40GB GPUs per node, local collectives sum21",
+    "cross_node_nccl": "failed: NCCL selected unreachable fe80:: IPv6 link-local address on eth3",
+    "first_training_update": "not started"
   },
-  "upstream_source_modified": false
+  "upstream_source_modified": false,
+  "replacement_job": 2145293
 }

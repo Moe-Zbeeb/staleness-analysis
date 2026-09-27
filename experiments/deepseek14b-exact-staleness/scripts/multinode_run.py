@@ -30,6 +30,20 @@ def layout(hosts, port):
     }
 
 
+def network_environment(hosts, rank):
+    peer = socket.gethostbyname(hosts[1 - rank])
+    routes = json.loads(subprocess.check_output(["ip", "-j", "route", "get", peer], text=True))
+    if not routes or not routes[0].get("dev") or not routes[0].get("prefsrc"):
+        raise ValueError("No explicit IPv4 route to the other allocated node")
+    route = routes[0]
+    return {
+        "NCCL_SOCKET_FAMILY": "AF_INET",
+        "NCCL_SOCKET_IFNAME": "=" + route["dev"],
+        "GLOO_SOCKET_IFNAME": route["dev"],
+        "VLLM_HOST_IP": route["prefsrc"],
+    }
+
+
 def worker_seed(seed, node_rank, worker_rank):
     count = 2 if node_rank == 0 else 6
     if node_rank not in (0, 1) or not 0 <= worker_rank < count:
@@ -156,6 +170,11 @@ def main():
         return process
 
     try:
+        cached = runtime / "relocation.json"
+        if cached.is_file() and not (workspace / "ready.json").exists():
+            if json.loads(cached.read_text())["source"] != spec["shared_prime"]:
+                raise ValueError("Cached runtime came from another upstream installation")
+            atomic_json(runtime / "PRESTAGED_RUNTIME.json", {"source": spec["shared_prime"]})
         stage(spec, node_control)
         guard()
         install_router(control, runtime)
@@ -163,6 +182,14 @@ def main():
         python = runtime / "prime-rl/.venv/bin/python"
         environment = local_environment(runtime, workspace, release)
         environment.update(NCCL_P2P_DISABLE="1", NCCL_SHM_DISABLE="1")
+        environment.update(network_environment(hosts, rank))
+        atomic_json(
+            node_control / "network-environment.json",
+            {
+                key: environment[key]
+                for key in ("NCCL_SOCKET_FAMILY", "NCCL_SOCKET_IFNAME", "GLOO_SOCKET_IFNAME", "VLLM_HOST_IP")
+            },
+        )
         command(
             [
                 python,
