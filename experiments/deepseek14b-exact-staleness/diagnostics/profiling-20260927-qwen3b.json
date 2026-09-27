@@ -1,0 +1,457 @@
+{
+  "job_id": 2145015,
+  "recorded_utc": "2026-09-27T00:29:35.387901+00:00",
+  "command": "sbatch --parsable --account=grad-students --partition=background --qos=background --nodes=1 --ntasks=1 --exclusive --gres=gpu:a100:8 --nodelist=deep-chungus-7 --cpus-per-task=128 --mem=0 --time=06:00:00 --no-requeue --job-name=qwen25-3b-timing --chdir=/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/profiling/20260927-qwen3b-node7 --output=/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/profiling/20260927-qwen3b-node7/slurm-%j.log /mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/profiling/20260927-qwen3b-node7/profile_qwen3b_job.sh /mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/profiling/20260927-qwen3b-node7",
+  "scheduler": {
+    "JobId": "2145015",
+    "JobName": "qwen25-3b-timing",
+    "UserId": "mohamadzbib(29562)",
+    "GroupId": "mohamadzbib(29562)",
+    "MCS_label": "N/A",
+    "Priority": "70",
+    "Nice": "0",
+    "Account": "grad-students",
+    "QOS": "background",
+    "JobState": "RUNNING",
+    "Reason": "None",
+    "Dependency": "(null)",
+    "Requeue": "0",
+    "Restarts": "0",
+    "BatchFlag": "1",
+    "Reboot": "0",
+    "ExitCode": "0:0",
+    "RunTime": "00:00:50",
+    "TimeLimit": "06:00:00",
+    "TimeMin": "N/A",
+    "SubmitTime": "2026-09-26T20:28:44",
+    "EligibleTime": "2026-09-26T20:28:44",
+    "AccrueTime": "2026-09-26T20:28:44",
+    "StartTime": "2026-09-26T20:28:45",
+    "EndTime": "2026-09-27T02:28:45",
+    "Deadline": "N/A",
+    "PreemptEligibleTime": "2026-09-26T20:28:45",
+    "PreemptTime": "None",
+    "SuspendTime": "None",
+    "SecsPreSuspend": "0",
+    "LastSchedEval": "2026-09-26T20:28:45",
+    "Scheduler": "Main",
+    "Partition": "background",
+    "Sid": "mslurm:3761184",
+    "ReqNodeList": "deep-chungus-7",
+    "ExcNodeList": "(null)",
+    "NodeList": "deep-chungus-7",
+    "BatchHost": "deep-chungus-7",
+    "NumNodes": "1",
+    "NumCPUs": "128",
+    "NumTasks": "1",
+    "Task": "128",
+    "T": "0:0:*:*",
+    "TRES": "cpu=128,node=1,billing=128,gres/gpu=8,gres/gpu:a100=8",
+    "Node": "*",
+    "C": "0:0:*:*",
+    "CoreSpec": "*",
+    "MinCPUsNode": "128",
+    "MinMemoryNode": "0",
+    "MinTmpDiskNode": "0",
+    "Features": "(null)",
+    "DelayBoot": "00:00:00",
+    "OverSubscribe": "NO",
+    "Contiguous": "0",
+    "Licenses": "(null)",
+    "Network": "(null)",
+    "Command": "/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/profiling/20260927-qwen3b-node7/profile_qwen3b_job.sh",
+    "WorkDir": "/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/profiling/20260927-qwen3b-node7",
+    "StdErr": "/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/profiling/20260927-qwen3b-node7/slurm-2145015.log",
+    "StdIn": "/dev/null",
+    "StdOut": "/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/profiling/20260927-qwen3b-node7/slurm-2145015.log",
+    "TresPerNode": "gres:gpu:a100:8"
+  },
+  "source_commit": "a0c9e27",
+  "model_id": "Qwen/Qwen2.5-3B",
+  "model_revision": "3aab1f1954e9cc14eb9509a215f9e5ca08227a9b",
+  "requested_updates": 4,
+  "time_bound_seconds": 18000,
+  "seven_gpu_fallback_authorized": true,
+  "production_14b_modified": false,
+  "profile_15b_modified": false,
+  "validation": {
+    "tests_passed": 5,
+    "ruff": "passed",
+    "shell_syntax": "passed",
+    "seven_rank_collective_bf16_flash_attention_vllm": "passed"
+  },
+  "scripts_sha256": {
+    "prepare_small_model_profile.py": "12bf2e13141667513a015dbf95d88478b01cb7955940a45764b50f4a7dd7c681",
+    "run_bounded_profile.py": "0dde216f307965d351f91e028d8561a3aac7f6014eb1a081cbd820e827a655e6",
+    "profile_qwen3b_job.sh": "7fecb765df155dfc3d94fa3d2f36f3690125c927ebe84bf4ec39ebc12c81ac54",
+    "probe_allocated_gpus.py": "460a0d994e1a2e8178ca31a959a3605e6aaf573285a9d223461a0d267051c505"
+  },
+  "hardware": {
+    "job_id": "2145015",
+    "node": "deep-chungus-7",
+    "slurm_job_gpus": "0,1,2,3,4,5,6,7",
+    "world_size": 7,
+    "expected_all_reduce": 28.0,
+    "torch": "2.11.0+cu128",
+    "cuda_runtime": "12.8",
+    "devices": [
+      {
+        "rank": 0,
+        "visible_device": "0",
+        "name": "NVIDIA A100 80GB PCIe",
+        "bytes": 85097971712,
+        "capability": [
+          8,
+          0
+        ],
+        "all_reduce": 28.0,
+        "bf16_backward": true,
+        "flash_attention_backward": true,
+        "vllm_rms_norm": true
+      },
+      {
+        "rank": 1,
+        "visible_device": "1",
+        "name": "NVIDIA A100 80GB PCIe",
+        "bytes": 85097971712,
+        "capability": [
+          8,
+          0
+        ],
+        "all_reduce": 28.0,
+        "bf16_backward": true,
+        "flash_attention_backward": true,
+        "vllm_rms_norm": true
+      },
+      {
+        "rank": 2,
+        "visible_device": "2",
+        "name": "NVIDIA A100 80GB PCIe",
+        "bytes": 85097971712,
+        "capability": [
+          8,
+          0
+        ],
+        "all_reduce": 28.0,
+        "bf16_backward": true,
+        "flash_attention_backward": true,
+        "vllm_rms_norm": true
+      },
+      {
+        "rank": 3,
+        "visible_device": "3",
+        "name": "NVIDIA A100 80GB PCIe",
+        "bytes": 85097971712,
+        "capability": [
+          8,
+          0
+        ],
+        "all_reduce": 28.0,
+        "bf16_backward": true,
+        "flash_attention_backward": true,
+        "vllm_rms_norm": true
+      },
+      {
+        "rank": 4,
+        "visible_device": "4",
+        "name": "NVIDIA A100 80GB PCIe",
+        "bytes": 85097971712,
+        "capability": [
+          8,
+          0
+        ],
+        "all_reduce": 28.0,
+        "bf16_backward": true,
+        "flash_attention_backward": true,
+        "vllm_rms_norm": true
+      },
+      {
+        "rank": 5,
+        "visible_device": "5",
+        "name": "NVIDIA A100 80GB PCIe",
+        "bytes": 85097971712,
+        "capability": [
+          8,
+          0
+        ],
+        "all_reduce": 28.0,
+        "bf16_backward": true,
+        "flash_attention_backward": true,
+        "vllm_rms_norm": true
+      },
+      {
+        "rank": 6,
+        "visible_device": "6",
+        "name": "NVIDIA A100 80GB PCIe",
+        "bytes": 85097971712,
+        "capability": [
+          8,
+          0
+        ],
+        "all_reduce": 28.0,
+        "bf16_backward": true,
+        "flash_attention_backward": true,
+        "vllm_rms_norm": true
+      }
+    ]
+  },
+  "allocation": {
+    "job_id": "2145015",
+    "node": "deep-chungus-7",
+    "allocated_devices": [
+      "0",
+      "1",
+      "2",
+      "3",
+      "4",
+      "5",
+      "6",
+      "7"
+    ],
+    "visible_devices": [
+      "0",
+      "1",
+      "2",
+      "3",
+      "4",
+      "5",
+      "6"
+    ],
+    "unused_devices": [
+      "7"
+    ],
+    "inference_devices": [
+      "0",
+      "1",
+      "2"
+    ],
+    "trainer_devices": [
+      "3",
+      "4",
+      "5",
+      "6"
+    ],
+    "seven_gpu_fallback_authorized": true
+  },
+  "preparation": {
+    "model_id": "Qwen/Qwen2.5-3B",
+    "model_revision": "3aab1f1954e9cc14eb9509a215f9e5ca08227a9b",
+    "baseline": "/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/launches/exact256-v2-seed42-20260926T173508Z/study.json",
+    "baseline_sha256": "0a19f699172d050a73dd0078dbd0a23daf5029545b498743d277cece36d5ab59",
+    "baseline_source": "/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/releases/correctness-v2-20260926",
+    "baseline_package_sha256": "213ce411ff2f86f5347a151e21a978378f965b82a1c5bfc7b113c5ec86468171",
+    "changed_runtime_files": [
+      "src/deepseek_study/__init__.py",
+      "src/deepseek_study/dataset/assets.py"
+    ],
+    "changed_runtime_values": [
+      "MODEL_ID",
+      "MODEL_REVISION"
+    ],
+    "native_tokenizer_parity_adapted": true,
+    "config_changes": {
+      "model_path": {
+        "before": "/mnt/nfs/home/mohamadzbib/projects/models/exact-age-14b/deepseek-r1-distill-qwen-14b",
+        "after": "/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/profiling/20260927-qwen3b-node7/work/assets/model"
+      },
+      "data_manifest": {
+        "before": "/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/assets/train-manifest-v2.json",
+        "after": "/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/profiling/20260927-qwen3b-node7/work/assets/train-manifest.json"
+      },
+      "prepared_model_path": {
+        "before": "/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/assets/native-model",
+        "after": "/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/profiling/20260927-qwen3b-node7/work/assets/native-model"
+      },
+      "output_dir": {
+        "before": "/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/outputs/exact256-80gb-seed42-v2",
+        "after": "/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/profiling/20260927-qwen3b-node7/work/qwen25-3b-exact256-timing-2145015"
+      },
+      "inference_gpus": {
+        "before": 4,
+        "after": 3
+      }
+    },
+    "same_question_membership_and_order": true,
+    "included_questions": 37703,
+    "prime_rl_modified": false,
+    "timing_only": true
+  },
+  "individual_device_probes": {
+    "job_id": "2145015",
+    "node": "deep-chungus-7",
+    "allocated_devices": [
+      "0",
+      "1",
+      "2",
+      "3",
+      "4",
+      "5",
+      "6",
+      "7"
+    ],
+    "healthy_devices": [
+      "0",
+      "1",
+      "2",
+      "3",
+      "4",
+      "5",
+      "6"
+    ],
+    "results": [
+      {
+        "device": "0",
+        "healthy": true,
+        "name": "NVIDIA A100 80GB PCIe",
+        "bytes": 85097971712,
+        "uuid": "903e8a7b-ff3e-02cb-6a4d-0b7ab16b5027",
+        "bf16_backward": true
+      },
+      {
+        "device": "1",
+        "healthy": true,
+        "name": "NVIDIA A100 80GB PCIe",
+        "bytes": 85097971712,
+        "uuid": "b03bc3ba-472c-8081-1374-cfb54402f3ac",
+        "bf16_backward": true
+      },
+      {
+        "device": "2",
+        "healthy": true,
+        "name": "NVIDIA A100 80GB PCIe",
+        "bytes": 85097971712,
+        "uuid": "f12c8a0e-d339-efb5-a82a-3da130030298",
+        "bf16_backward": true
+      },
+      {
+        "device": "3",
+        "healthy": true,
+        "name": "NVIDIA A100 80GB PCIe",
+        "bytes": 85097971712,
+        "uuid": "1a580dec-5dbf-b233-37d0-ad28d7816c96",
+        "bf16_backward": true
+      },
+      {
+        "device": "4",
+        "healthy": true,
+        "name": "NVIDIA A100 80GB PCIe",
+        "bytes": 85097971712,
+        "uuid": "ba431598-b47d-7149-ba8a-09d754f3ed55",
+        "bf16_backward": true
+      },
+      {
+        "device": "5",
+        "healthy": true,
+        "name": "NVIDIA A100 80GB PCIe",
+        "bytes": 85097971712,
+        "uuid": "99e6d841-8f03-96c4-7573-c45c3e4026cc",
+        "bf16_backward": true
+      },
+      {
+        "device": "6",
+        "healthy": true,
+        "name": "NVIDIA A100 80GB PCIe",
+        "bytes": 85097971712,
+        "uuid": "21dae0b4-8feb-1aeb-a298-58e0f7cd24d5",
+        "bf16_backward": true
+      },
+      {
+        "device": "7",
+        "healthy": false,
+        "error": "Traceback (most recent call last):\n  File \"<string>\", line 7, in <module>\n  File \"/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/vendor/prime-rl/.venv/lib/python3.12/site-packages/torch/cuda/__init__.py\", line 638, in set_device\n    torch._C._cuda_setDevice(device)\n  File \"/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/vendor/prime-rl/.venv/lib/python3.12/site-packages/torch/cuda/__init__.py\", line 478, in _lazy_init\n    torch._C._cuda_init()\nRuntimeError: No CUDA GPUs are available\n"
+      }
+    ],
+    "collective_health_verified": false
+  },
+  "startup_observed_utc": "2026-09-27T00:37:36.823555+00:00",
+  "last_observed_stage": "Four-rank learner and three-worker inference startup; controller and Runboard initialized",
+  "completed_updates_at_observation": 0,
+  "run_identity": {
+    "run_uuid": "cbcd2c4354fa4754b5654d204697b467",
+    "starting_step": 0,
+    "resume_from": null,
+    "config_sha256": "2fdc54b5a2d8226206a1452b01f80f6b26da7a3403fad3eb46b8960752607dd7",
+    "identity_sha256": "b4ed921eab100e3a01b94de8455917e56453324398a9088235edee9f53254050",
+    "hardware": [
+      {
+        "index": 0,
+        "name": "NVIDIA A100 80GB PCIe",
+        "total_memory": 85097971712,
+        "capability": [
+          8,
+          0
+        ]
+      },
+      {
+        "index": 1,
+        "name": "NVIDIA A100 80GB PCIe",
+        "total_memory": 85097971712,
+        "capability": [
+          8,
+          0
+        ]
+      },
+      {
+        "index": 2,
+        "name": "NVIDIA A100 80GB PCIe",
+        "total_memory": 85097971712,
+        "capability": [
+          8,
+          0
+        ]
+      },
+      {
+        "index": 3,
+        "name": "NVIDIA A100 80GB PCIe",
+        "total_memory": 85097971712,
+        "capability": [
+          8,
+          0
+        ]
+      },
+      {
+        "index": 4,
+        "name": "NVIDIA A100 80GB PCIe",
+        "total_memory": 85097971712,
+        "capability": [
+          8,
+          0
+        ]
+      },
+      {
+        "index": 5,
+        "name": "NVIDIA A100 80GB PCIe",
+        "total_memory": 85097971712,
+        "capability": [
+          8,
+          0
+        ]
+      },
+      {
+        "index": 6,
+        "name": "NVIDIA A100 80GB PCIe",
+        "total_memory": 85097971712,
+        "capability": [
+          8,
+          0
+        ]
+      }
+    ],
+    "nccl_transport": {
+      "NCCL_P2P_DISABLE": "1",
+      "NCCL_SHM_DISABLE": "1"
+    }
+  },
+  "runboard": {
+    "project": "staleness-analysis",
+    "run_id": "f52d563535754063b5afcbe07f26e30a",
+    "mode": "http",
+    "url": "https://runboard-cloudflare.mbz02.workers.dev",
+    "name": "qwen25-3b-exact256-timing-2145015"
+  },
+  "timing_limits": {
+    "measures_exact256_phase": false,
+    "checkpoint_timing_measured": false,
+    "model_family_native_prompt_and_inference_gpu_count_differ": true
+  }
+}

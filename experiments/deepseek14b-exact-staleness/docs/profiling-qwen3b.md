@@ -21,3 +21,20 @@ Preparation downloads and hashes the pinned model, verifies native tokenizer par
 The job writes normal metrics to Runboard and XFS, with original logs and rollouts on NFS. Its name is `qwen25-3b-exact256-timing-<job-id>`. `work/timing-summary.json` distinguishes completion of the bounded profile from an early exit or timeout; it is also copied to the run's XFS mirror. Runboard can label the deliberately interrupted longer training process as killed when the four-update profile finishes. No exact-256 steady-phase or checkpoint timing is claimed from four bootstrap updates.
 
 Validation includes source-difference and tamper guards for both model profiles, successful bounded termination, early failure and timeout. Actual CUDA and model startup results must be recorded separately from these local checks.
+
+## Submitted job and startup evidence
+
+Job **2145015** started on `deep-chungus-7` under background partition/QoS with source commit `a0c9e27`. Devices 0–6 passed BF16 forward/backward; device 7 failed CUDA initialization and is unused. The selected seven A100 80GB PCIe GPUs also passed the collective sum of 28, BF16 backward, Flash Attention backward and vLLM RMSNorm probes. Inference uses devices 0–2 and training uses devices 3–6.
+
+Native Qwen tokenizer parity passed all five probes. Data preparation retained the same 37,703 questions in the same order as the 14B baseline. At **2026-09-27 00:37:36 UTC**, the four-rank learner and three-worker inference were starting, the controller had initialized, and Runboard had registered the run. No optimizer update had completed at that observation; timings and successful full-cohort execution remained unverified. This is a timestamped launch record, not a live status report.
+
+The [submission and startup receipt](../diagnostics/profiling-20260927-qwen3b.json) records allocation, device checks, pinned model revision, configuration differences and run identity. The 14B production job and 1.5B profiling job were not modified. PrimeRL itself remains unchanged.
+
+Cluster paths:
+
+- Control directory: `/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/profiling/20260927-qwen3b-node7`.
+- Isolated release and resolved configuration: `work/release` and `work/study.json` below that directory.
+- Run output: `work/qwen25-3b-exact256-timing-2145015`.
+- Bounded timing result: `work/timing-summary.json`, written when the profile exits.
+- XFS mirror: `/mnt/xfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/metrics/qwen25-3b-exact256-timing-2145015`.
+- [Runboard](https://runboard-cloudflare.mbz02.workers.dev): project `staleness-analysis`, name `qwen25-3b-exact256-timing-2145015`, run ID `f52d563535754063b5afcbe07f26e30a`.
