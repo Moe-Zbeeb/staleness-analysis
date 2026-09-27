@@ -1,0 +1,139 @@
+{
+  "mode": "full_training",
+  "validation": {
+    "local_tests_passed": 22,
+    "ruff": "passed",
+    "shell_syntax": "passed",
+    "source_revision": "34bed0f",
+    "prime_rl_modified": false
+  },
+  "submissions": [
+    {
+      "source_commit": "34bed0f",
+      "command": "sbatch --parsable --account=grad-students --partition=background --qos=background --nodes=1 --ntasks=1 --exclusive --gres=gpu:a100:9 --nodelist=deep-chungus-5 --cpus-per-task=96 --mem=0 --time=45-00:00:00 --no-requeue --job-name=deepseek15b-exact256-full --chdir=/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/launches/deepseek15b-full-20260927 --output=/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/launches/deepseek15b-full-20260927/slurm-%j.log --dependency=afterany:2145014 /mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/launches/deepseek15b-full-20260927/full_run_job.sh /mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/launches/deepseek15b-full-20260927",
+      "test_only_returncode": 0,
+      "test_only_stdout": "",
+      "test_only_stderr": "sbatch: Job 2145029 to start at 2026-09-27T02:08:58 using 96 processors on nodes deep-chungus-5 in partition background\n",
+      "prepared_utc": "2026-09-27T02:20:25.579614+00:00",
+      "job_id": 2145032,
+      "submitted_utc": "2026-09-27T02:20:50.327248+00:00",
+      "scheduler_fields": "JobId=2145032 JobName=deepseek15b-exact256-full UserId=mohamadzbib(29562) GroupId=mohamadzbib(29562) MCS_label=N/A Priority=70 Nice=0 Account=grad-students QOS=background JobState=PENDING Reason=Resources Dependency=afterany:2145014(unfulfilled) Requeue=0 Restarts=0 BatchFlag=1 Reboot=0 ExitCode=0:0 RunTime=00:00:00 TimeLimit=45-00:00:00 TimeMin=N/A SubmitTime=2026-09-26T22:20:50 EligibleTime=Unknown AccrueTime=Unknown StartTime=Unknown EndTime=Unknown Deadline=N/A SuspendTime=None SecsPreSuspend=0 LastSchedEval=2026-09-26T22:20:50 Scheduler=Main Partition=background AllocNode:Sid=mslurm:3797671 ReqNodeList=deep-chungus-5 ExcNodeList=(null) NodeList=(null) NumNodes=1-1 NumCPUs=96 NumTasks=1 CPUs/Task=96 ReqB:S:C:T=0:0:*:* TRES=cpu=96,mem=500000M,node=1,billing=96,gres/gpu=9,gres/gpu:a100=9 Socks/Node=* NtasksPerN:B:S:C=0:0:*:* CoreSpec=* MinCPUsNode=96 MinMemoryNode=0 MinTmpDiskNode=0 Features=(null) DelayBoot=00:00:00 OverSubscribe=NO Contiguous=0 Licenses=(null) Network=(null) Command=/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/launches/deepseek15b-full-20260927/full_run_job.sh /mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/launches/deepseek15b-full-20260927 WorkDir=/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/launches/deepseek15b-full-20260927 StdErr=/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/launches/deepseek15b-full-20260927/slurm-2145032.log StdIn=/dev/null StdOut=/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/launches/deepseek15b-full-20260927/slurm-2145032.log Power= TresPerNode=gres:gpu:a100:9",
+      "full_run": {
+        "mode": "full_training",
+        "model_id": "deepseek-ai/DeepSeek-R1-Distill-Qwen-1.5B",
+        "model_revision": "ad9f0ae0864d7fbcd1cd905e3c6c5b069cc8b562",
+        "profile": "/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/profiling/20260927-deepseek15b-node5-v2/work",
+        "release": "/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/profiling/20260927-deepseek15b-node5-v2/work/release",
+        "node": "deep-chungus-5",
+        "allocated_gpus": 9,
+        "minimum_gpu_bytes": 39000000000,
+        "identity_sha256": "0335ceb26a6d903f0741fbb25b93c64df296032d56b5ed268f8a045566b9eb2e",
+        "config_sha256": "199103d80e4d214036d2e57bdd73f19104201b0970bbec1656452bd41525d54c",
+        "study_sha256": "d09fae2b828db7f1702d793ef10f18fad80773c8fca359922f85c44287f6e518",
+        "config_changes": {
+          "output_dir": {
+            "before": "/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/profiling/20260927-deepseek15b-node5-v2/work/deepseek15b-exact256-timing-2145014",
+            "after": "/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/outputs/deepseek15b-exact256-seed42-v1"
+          },
+          "inference_gpus": {
+            "before": 4,
+            "after": 5
+          }
+        },
+        "scripts_sha256": {
+          "launch_full_run.py": "a1fcadba16ec5d1e13e1a7ab3a93db85022db14b8d9541738d5c7f9d167d7d84",
+          "full_run_job.sh": "43d88f87e0f4ecf2ff63d03594daabb87d10bf38b7b3b327aed42d4e874b3a56",
+          "probe_allocated_gpus.py": "c668475882ceed0ddb8b2035a5a8d6a8a07f944988b4d16c549a455bf4e1f63d"
+        },
+        "starts_from_initial_model": true,
+        "profile_updates_reused": 0,
+        "checkpoint_interval": 100,
+        "maximum_updates": 1000,
+        "lag": 256,
+        "bounded_profile_supervisor": false
+      }
+    },
+    {
+      "source_commit": "34bed0f",
+      "command": "sbatch --parsable --account=grad-students --partition=background --qos=background --nodes=1 --ntasks=1 --exclusive --gres=gpu:a100:8 --nodelist=deep-chungus-7 --cpus-per-task=128 --mem=0 --time=45-00:00:00 --no-requeue --job-name=qwen25-3b-exact256-full --chdir=/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/launches/qwen25-3b-full-20260927 --output=/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/launches/qwen25-3b-full-20260927/slurm-%j.log /mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/launches/qwen25-3b-full-20260927/full_run_job.sh /mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/launches/qwen25-3b-full-20260927",
+      "test_only_returncode": 0,
+      "test_only_stdout": "",
+      "test_only_stderr": "sbatch: Job 2145031 to start at 2026-09-26T22:20:25 using 128 processors on nodes deep-chungus-7 in partition background\n",
+      "prepared_utc": "2026-09-27T02:20:25.712332+00:00",
+      "job_id": 2145034,
+      "submitted_utc": "2026-09-27T02:20:50.511268+00:00",
+      "scheduler_fields": "JobId=2145034 JobName=qwen25-3b-exact256-full UserId=mohamadzbib(29562) GroupId=mohamadzbib(29562) MCS_label=N/A Priority=70 Nice=0 Account=grad-students QOS=background JobState=PENDING Reason=None Dependency=(null) Requeue=0 Restarts=0 BatchFlag=1 Reboot=0 ExitCode=0:0 RunTime=00:00:00 TimeLimit=45-00:00:00 TimeMin=N/A SubmitTime=2026-09-26T22:20:50 EligibleTime=2026-09-26T22:20:50 AccrueTime=Unknown StartTime=Unknown EndTime=Unknown Deadline=N/A SuspendTime=None SecsPreSuspend=0 LastSchedEval=2026-09-26T22:20:50 Scheduler=Main Partition=background AllocNode:Sid=mslurm:3797671 ReqNodeList=deep-chungus-7 ExcNodeList=(null) NodeList=(null) NumNodes=1-1 NumCPUs=128 NumTasks=1 CPUs/Task=128 ReqB:S:C:T=0:0:*:* TRES=cpu=128,mem=500000M,node=1,billing=128,gres/gpu=8,gres/gpu:a100=8 Socks/Node=* NtasksPerN:B:S:C=0:0:*:* CoreSpec=* MinCPUsNode=128 MinMemoryNode=0 MinTmpDiskNode=0 Features=(null) DelayBoot=00:00:00 OverSubscribe=NO Contiguous=0 Licenses=(null) Network=(null) Command=/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/launches/qwen25-3b-full-20260927/full_run_job.sh /mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/launches/qwen25-3b-full-20260927 WorkDir=/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/launches/qwen25-3b-full-20260927 StdErr=/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/launches/qwen25-3b-full-20260927/slurm-2145034.log StdIn=/dev/null StdOut=/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/launches/qwen25-3b-full-20260927/slurm-2145034.log Power= TresPerNode=gres:gpu:a100:8",
+      "full_run": {
+        "mode": "full_training",
+        "model_id": "Qwen/Qwen2.5-3B",
+        "model_revision": "3aab1f1954e9cc14eb9509a215f9e5ca08227a9b",
+        "profile": "/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/profiling/20260927-qwen3b-node7-v2/work",
+        "release": "/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/profiling/20260927-qwen3b-node7-v2/work/release",
+        "node": "deep-chungus-7",
+        "allocated_gpus": 8,
+        "minimum_gpu_bytes": 79000000000,
+        "identity_sha256": "2369f98c9689997ca43b041db8a51148b4b3bc678c7b325c5f95d0bca7d00960",
+        "config_sha256": "2311bf3560cffe58da8916056482c8f33c4bb9e0b3ddd9a035218cbd8355044d",
+        "study_sha256": "4c5598ce32e29d1112e826821295bebfa63bdde5eb8f59e254bc4cc9efbb9358",
+        "config_changes": {
+          "output_dir": {
+            "before": "/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/profiling/20260927-qwen3b-node7-v2/work/qwen25-3b-exact256-timing-2145026",
+            "after": "/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/outputs/qwen25-3b-exact256-seed42-v1"
+          }
+        },
+        "scripts_sha256": {
+          "launch_full_run.py": "a1fcadba16ec5d1e13e1a7ab3a93db85022db14b8d9541738d5c7f9d167d7d84",
+          "full_run_job.sh": "43d88f87e0f4ecf2ff63d03594daabb87d10bf38b7b3b327aed42d4e874b3a56",
+          "probe_allocated_gpus.py": "c668475882ceed0ddb8b2035a5a8d6a8a07f944988b4d16c549a455bf4e1f63d"
+        },
+        "starts_from_initial_model": true,
+        "profile_updates_reused": 0,
+        "checkpoint_interval": 100,
+        "maximum_updates": 1000,
+        "lag": 256,
+        "bounded_profile_supervisor": false
+      }
+    },
+    {
+      "source_commit": "34bed0f",
+      "command": "sbatch --parsable --account=grad-students --partition=background --qos=background --nodes=1 --ntasks=1 --exclusive --gres=gpu:a100:9 --nodelist=deep-chungus-4 --cpus-per-task=96 --mem=0 --time=45-00:00:00 --no-requeue --job-name=qwen3-1p7b-exact256-full --chdir=/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/launches/qwen3-1p7b-full-20260927 --output=/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/launches/qwen3-1p7b-full-20260927/slurm-%j.log /mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/launches/qwen3-1p7b-full-20260927/full_run_job.sh /mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/launches/qwen3-1p7b-full-20260927",
+      "test_only_returncode": 0,
+      "test_only_stdout": "",
+      "test_only_stderr": "sbatch: Job 2145030 to start at 2026-09-26T22:20:25 using 96 processors on nodes deep-chungus-4 in partition background\n",
+      "prepared_utc": "2026-09-27T02:20:25.647763+00:00",
+      "job_id": 2145033,
+      "submitted_utc": "2026-09-27T02:20:50.428910+00:00",
+      "scheduler_fields": "JobId=2145033 JobName=qwen3-1p7b-exact256-full UserId=mohamadzbib(29562) GroupId=mohamadzbib(29562) MCS_label=N/A Priority=70 Nice=0 Account=grad-students QOS=background JobState=PENDING Reason=None Dependency=(null) Requeue=0 Restarts=0 BatchFlag=1 Reboot=0 ExitCode=0:0 RunTime=00:00:00 TimeLimit=45-00:00:00 TimeMin=N/A SubmitTime=2026-09-26T22:20:50 EligibleTime=2026-09-26T22:20:50 AccrueTime=Unknown StartTime=Unknown EndTime=Unknown Deadline=N/A SuspendTime=None SecsPreSuspend=0 LastSchedEval=2026-09-26T22:20:50 Scheduler=Main Partition=background AllocNode:Sid=mslurm:3797671 ReqNodeList=deep-chungus-4 ExcNodeList=(null) NodeList=(null) NumNodes=1-1 NumCPUs=96 NumTasks=1 CPUs/Task=96 ReqB:S:C:T=0:0:*:* TRES=cpu=96,mem=500000M,node=1,billing=96,gres/gpu=9,gres/gpu:a100=9 Socks/Node=* NtasksPerN:B:S:C=0:0:*:* CoreSpec=* MinCPUsNode=96 MinMemoryNode=0 MinTmpDiskNode=0 Features=(null) DelayBoot=00:00:00 OverSubscribe=NO Contiguous=0 Licenses=(null) Network=(null) Command=/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/launches/qwen3-1p7b-full-20260927/full_run_job.sh /mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/launches/qwen3-1p7b-full-20260927 WorkDir=/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/launches/qwen3-1p7b-full-20260927 StdErr=/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/launches/qwen3-1p7b-full-20260927/slurm-2145033.log StdIn=/dev/null StdOut=/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/launches/qwen3-1p7b-full-20260927/slurm-2145033.log Power= TresPerNode=gres:gpu:a100:9",
+      "full_run": {
+        "mode": "full_training",
+        "model_id": "Qwen/Qwen3-1.7B",
+        "model_revision": "70d244cc86ccca08cf5af4e1e306ecf908b1ad5e",
+        "profile": "/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/profiling/20260927-qwen3-1p7b-node4/work",
+        "release": "/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/profiling/20260927-qwen3-1p7b-node4/work/release",
+        "node": "deep-chungus-4",
+        "allocated_gpus": 9,
+        "minimum_gpu_bytes": 39000000000,
+        "identity_sha256": "9a23b22a1df8b8f168a3e6835e5a15f6c70b915a240b320effff001351e3fc9d",
+        "config_sha256": "8c1f734caa1398283cb4b8fdb7a8e32c6cfb51c0174882dc531be5326ecd48a8",
+        "study_sha256": "3c6b1d6f6ef2adcc470a3f87b5b95a4fa36798ec1d0b0f1ce14cdb394ae06b17",
+        "config_changes": {
+          "output_dir": {
+            "before": "/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/profiling/20260927-qwen3-1p7b-node4/work/qwen3-1p7b-exact256-timing-2145018",
+            "after": "/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/outputs/qwen3-1p7b-exact256-seed42-v1"
+          }
+        },
+        "scripts_sha256": {
+          "launch_full_run.py": "a1fcadba16ec5d1e13e1a7ab3a93db85022db14b8d9541738d5c7f9d167d7d84",
+          "full_run_job.sh": "43d88f87e0f4ecf2ff63d03594daabb87d10bf38b7b3b327aed42d4e874b3a56",
+          "probe_allocated_gpus.py": "c668475882ceed0ddb8b2035a5a8d6a8a07f944988b4d16c549a455bf4e1f63d"
+        },
+        "starts_from_initial_model": true,
+        "profile_updates_reused": 0,
+        "checkpoint_interval": 100,
+        "maximum_updates": 1000,
+        "lag": 256,
+        "bounded_profile_supervisor": false
+      }
+    }
+  ]
+}

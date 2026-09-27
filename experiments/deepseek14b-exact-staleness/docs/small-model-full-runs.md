@@ -21,3 +21,25 @@ Use account `grad-students`, background partition/QoS, full-node exclusive alloc
 The 1.5B job is submitted with `afterany:2145014` so its current bounded timing profile can finish before full training starts on node 5. The other two nodes were idle at preparation time. Scheduler admission, submitted IDs and live startup evidence are recorded in the launch receipt after submission.
 
 The base Qwen2.5-3B profile completed all four updates but every consumed response received zero reward and every advantage was zero. The user explicitly requested the full run after this was reported. Keep the requested base model and reward protocol; a running process is not proof of learning. Monitor reward diversity and noncontributing-token fraction. Timing from these short, zero-advantage responses cannot establish a useful full-training ETA.
+
+## Submitted full runs
+
+All three jobs were accepted at **2026-09-27 02:20:50 UTC**, using launch code from commit `34bed0f`. Effective scheduler fields were verified: background partition/QoS, account `grad-students`, exclusive single-node allocation, all node memory, 45-day limit and no automatic requeue.
+
+| Model | Full-run job | Initial scheduler state | Output below the cluster root |
+| --- | --- | --- | --- |
+| DeepSeek 1.5B | 2145032 | Pending `afterany:2145014`; starts after its profile | `outputs/deepseek15b-exact256-seed42-v1` |
+| Qwen3-1.7B | 2145033 | Running on deep-chungus-4 | `outputs/qwen3-1p7b-exact256-seed42-v1` |
+| Qwen2.5-3B | 2145034 | Running on deep-chungus-7 | `outputs/qwen25-3b-exact256-seed42-v1` |
+
+Control folders under `launches/` are `deepseek15b-full-20260927`, `qwen3-1p7b-full-20260927` and `qwen25-3b-full-20260927`. Each records `study.json`, `full-run.json`, `submission.json` and per-job health/launch receipts. The [combined submission receipt](../diagnostics/full-runs-20260927.json) contains exact commands, config changes, identities and file hashes. Twenty-two local full-run, profiling and recovery tests passed, along with Ruff and shell syntax.
+
+The existing 30-minute monitor now follows these full jobs and the 14B production/continuation jobs. It must not treat update 4 as a stopping condition for any full run. The old 1.5B profile remains bounded at four updates and retains its original source and outputs.
+
+## Startup checks at 02:26 UTC
+
+Qwen3-1.7B job 2145033 passed all nine free-memory/BF16 probes and the collective sum 45, Flash Attention backward and vLLM RMSNorm checks. Its resolved configuration has 1,000 updates and lag 256; its inference servers were serving generation requests. Runboard ID: `b0c2d25f0bfe4ff2bbc37219a4537b98`.
+
+Qwen2.5-3B job 2145034 passed the corresponding seven-GPU checks with collective sum 28. Device 7 again could not initialize and was excluded. Its resolved configuration also has 1,000 updates and lag 256; worker initialization was still in progress at this observation. Runboard ID: `4dbd88e541aa46639d6fd087b9d59b78`.
+
+DeepSeek 1.5B job 2145032 was pending its profile dependency, so its full nine-GPU runtime validation remains pending. No completed optimizer update is claimed for the new full runs at this startup observation. See the [startup receipt](../diagnostics/full-runs-startup-20260927.json) for configuration, source identities, scheduler state and hardware results.
