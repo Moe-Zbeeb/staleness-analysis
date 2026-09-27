@@ -1,0 +1,526 @@
+{
+  "job_id": 2145018,
+  "recorded_utc": "2026-09-27T00:45:11.294481+00:00",
+  "command": "sbatch --parsable --account=grad-students --partition=background --qos=background --nodes=1 --ntasks=1 --exclusive --gres=gpu:a100:9 --nodelist=deep-chungus-4 --cpus-per-task=96 --mem=0 --time=06:00:00 --no-requeue --job-name=qwen3-1p7b-timing --chdir=/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/profiling/20260927-qwen3-1p7b-node4 --output=/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/profiling/20260927-qwen3-1p7b-node4/slurm-%j.log /mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/profiling/20260927-qwen3-1p7b-node4/profile_qwen3_1p7b_job.sh /mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/profiling/20260927-qwen3-1p7b-node4",
+  "scheduler": {
+    "JobId": "2145018",
+    "JobName": "qwen3-1p7b-timing",
+    "UserId": "mohamadzbib(29562)",
+    "GroupId": "mohamadzbib(29562)",
+    "MCS_label": "N/A",
+    "Priority": "70",
+    "Nice": "0",
+    "Account": "grad-students",
+    "QOS": "background",
+    "JobState": "PENDING",
+    "Reason": "None",
+    "Dependency": "(null)",
+    "Requeue": "0",
+    "Restarts": "0",
+    "BatchFlag": "1",
+    "Reboot": "0",
+    "ExitCode": "0:0",
+    "RunTime": "00:00:00",
+    "TimeLimit": "06:00:00",
+    "TimeMin": "N/A",
+    "SubmitTime": "2026-09-26T20:45:11",
+    "EligibleTime": "2026-09-26T20:45:11",
+    "AccrueTime": "Unknown",
+    "StartTime": "Unknown",
+    "EndTime": "Unknown",
+    "Deadline": "N/A",
+    "SuspendTime": "None",
+    "SecsPreSuspend": "0",
+    "LastSchedEval": "2026-09-26T20:45:11",
+    "Scheduler": "Main",
+    "Partition": "background",
+    "Sid": "mslurm:3766243",
+    "ReqNodeList": "deep-chungus-4",
+    "ExcNodeList": "(null)",
+    "NodeList": "(null)",
+    "NumNodes": "1-1",
+    "NumCPUs": "96",
+    "NumTasks": "1",
+    "Task": "96",
+    "T": "0:0:*:*",
+    "TRES": "cpu=96,mem=500000M,node=1,billing=96,gres/gpu=9,gres/gpu:a100=9",
+    "Node": "*",
+    "C": "0:0:*:*",
+    "CoreSpec": "*",
+    "MinCPUsNode": "96",
+    "MinMemoryNode": "0",
+    "MinTmpDiskNode": "0",
+    "Features": "(null)",
+    "DelayBoot": "00:00:00",
+    "OverSubscribe": "NO",
+    "Contiguous": "0",
+    "Licenses": "(null)",
+    "Network": "(null)",
+    "Command": "/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/profiling/20260927-qwen3-1p7b-node4/profile_qwen3_1p7b_job.sh",
+    "WorkDir": "/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/profiling/20260927-qwen3-1p7b-node4",
+    "StdErr": "/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/profiling/20260927-qwen3-1p7b-node4/slurm-2145018.log",
+    "StdIn": "/dev/null",
+    "StdOut": "/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/profiling/20260927-qwen3-1p7b-node4/slurm-2145018.log",
+    "TresPerNode": "gres:gpu:a100:9"
+  },
+  "source_commit": "7dc3786",
+  "model_id": "Qwen/Qwen3-1.7B",
+  "model_revision": "70d244cc86ccca08cf5af4e1e306ecf908b1ad5e",
+  "requested_updates": 4,
+  "time_bound_seconds": 18000,
+  "trainer_gpus": 4,
+  "inference_gpus": 5,
+  "existing_jobs_modified": false,
+  "validation": {
+    "tests_passed": 6,
+    "ruff": "passed",
+    "shell_syntax": "passed",
+    "nine_rank_collective_bf16_flash_attention_vllm": "passed",
+    "native_tokenizer_parity_probes_passed": 5
+  },
+  "scripts_sha256": {
+    "prepare_small_model_profile.py": "03319e06413271e051d8dff76b0f9afe367864b7e5a09a4a3558171cce60f771",
+    "probe_allocated_gpus.py": "460a0d994e1a2e8178ca31a959a3605e6aaf573285a9d223461a0d267051c505",
+    "run_bounded_profile.py": "0dde216f307965d351f91e028d8561a3aac7f6014eb1a081cbd820e827a655e6",
+    "profile_qwen3_1p7b_job.sh": "497ee87f75462a2a48a021bbde93e4611bd65e75a8d75903bb9bcdea0dc73de4"
+  },
+  "previous_attempts": [
+    {
+      "job_id": 2145017,
+      "state": "CANCELLED",
+      "training_started": false,
+      "elapsed_seconds": 0,
+      "reason": "Submission guard rejected equivalent pending NumNodes=1-1; guard now accepts 1 or 1-1"
+    }
+  ],
+  "hardware": {
+    "job_id": "2145018",
+    "node": "deep-chungus-4",
+    "slurm_job_gpus": "0,1,2,3,4,5,6,7,8",
+    "world_size": 9,
+    "expected_all_reduce": 45.0,
+    "torch": "2.11.0+cu128",
+    "cuda_runtime": "12.8",
+    "devices": [
+      {
+        "rank": 0,
+        "visible_device": "0",
+        "name": "NVIDIA A100-PCIE-40GB",
+        "bytes": 42409000960,
+        "capability": [
+          8,
+          0
+        ],
+        "all_reduce": 45.0,
+        "bf16_backward": true,
+        "flash_attention_backward": true,
+        "vllm_rms_norm": true
+      },
+      {
+        "rank": 1,
+        "visible_device": "1",
+        "name": "NVIDIA A100-PCIE-40GB",
+        "bytes": 42409000960,
+        "capability": [
+          8,
+          0
+        ],
+        "all_reduce": 45.0,
+        "bf16_backward": true,
+        "flash_attention_backward": true,
+        "vllm_rms_norm": true
+      },
+      {
+        "rank": 2,
+        "visible_device": "2",
+        "name": "NVIDIA A100-PCIE-40GB",
+        "bytes": 42409000960,
+        "capability": [
+          8,
+          0
+        ],
+        "all_reduce": 45.0,
+        "bf16_backward": true,
+        "flash_attention_backward": true,
+        "vllm_rms_norm": true
+      },
+      {
+        "rank": 3,
+        "visible_device": "3",
+        "name": "NVIDIA A100-PCIE-40GB",
+        "bytes": 42409000960,
+        "capability": [
+          8,
+          0
+        ],
+        "all_reduce": 45.0,
+        "bf16_backward": true,
+        "flash_attention_backward": true,
+        "vllm_rms_norm": true
+      },
+      {
+        "rank": 4,
+        "visible_device": "4",
+        "name": "NVIDIA A100-PCIE-40GB",
+        "bytes": 42409000960,
+        "capability": [
+          8,
+          0
+        ],
+        "all_reduce": 45.0,
+        "bf16_backward": true,
+        "flash_attention_backward": true,
+        "vllm_rms_norm": true
+      },
+      {
+        "rank": 5,
+        "visible_device": "5",
+        "name": "NVIDIA A100-PCIE-40GB",
+        "bytes": 42409000960,
+        "capability": [
+          8,
+          0
+        ],
+        "all_reduce": 45.0,
+        "bf16_backward": true,
+        "flash_attention_backward": true,
+        "vllm_rms_norm": true
+      },
+      {
+        "rank": 6,
+        "visible_device": "6",
+        "name": "NVIDIA A100-PCIE-40GB",
+        "bytes": 42409000960,
+        "capability": [
+          8,
+          0
+        ],
+        "all_reduce": 45.0,
+        "bf16_backward": true,
+        "flash_attention_backward": true,
+        "vllm_rms_norm": true
+      },
+      {
+        "rank": 7,
+        "visible_device": "7",
+        "name": "NVIDIA A100-PCIE-40GB",
+        "bytes": 42409000960,
+        "capability": [
+          8,
+          0
+        ],
+        "all_reduce": 45.0,
+        "bf16_backward": true,
+        "flash_attention_backward": true,
+        "vllm_rms_norm": true
+      },
+      {
+        "rank": 8,
+        "visible_device": "8",
+        "name": "NVIDIA A100-PCIE-40GB",
+        "bytes": 42409000960,
+        "capability": [
+          8,
+          0
+        ],
+        "all_reduce": 45.0,
+        "bf16_backward": true,
+        "flash_attention_backward": true,
+        "vllm_rms_norm": true
+      }
+    ]
+  },
+  "allocation": {
+    "job_id": "2145018",
+    "node": "deep-chungus-4",
+    "allocated_devices": [
+      "0",
+      "1",
+      "2",
+      "3",
+      "4",
+      "5",
+      "6",
+      "7",
+      "8"
+    ],
+    "visible_devices": [
+      "0",
+      "1",
+      "2",
+      "3",
+      "4",
+      "5",
+      "6",
+      "7",
+      "8"
+    ],
+    "unused_devices": [],
+    "inference_devices": [
+      "0",
+      "1",
+      "2",
+      "3",
+      "4"
+    ],
+    "trainer_devices": [
+      "5",
+      "6",
+      "7",
+      "8"
+    ]
+  },
+  "individual_device_probes": {
+    "job_id": "2145018",
+    "node": "deep-chungus-4",
+    "allocated_devices": [
+      "0",
+      "1",
+      "2",
+      "3",
+      "4",
+      "5",
+      "6",
+      "7",
+      "8"
+    ],
+    "healthy_devices": [
+      "0",
+      "1",
+      "2",
+      "3",
+      "4",
+      "5",
+      "6",
+      "7",
+      "8"
+    ],
+    "results": [
+      {
+        "device": "0",
+        "healthy": true,
+        "name": "NVIDIA A100-PCIE-40GB",
+        "bytes": 42409000960,
+        "uuid": "cfb78548-78e7-b74f-de8a-8664c3ca363f",
+        "bf16_backward": true
+      },
+      {
+        "device": "1",
+        "healthy": true,
+        "name": "NVIDIA A100-PCIE-40GB",
+        "bytes": 42409000960,
+        "uuid": "3a253b32-5e6b-0771-66e1-3cd4ff8718a2",
+        "bf16_backward": true
+      },
+      {
+        "device": "2",
+        "healthy": true,
+        "name": "NVIDIA A100-PCIE-40GB",
+        "bytes": 42409000960,
+        "uuid": "707ea776-2199-b876-c062-ee0483a6d392",
+        "bf16_backward": true
+      },
+      {
+        "device": "3",
+        "healthy": true,
+        "name": "NVIDIA A100-PCIE-40GB",
+        "bytes": 42409000960,
+        "uuid": "6ce12f34-91e5-1105-aa89-a384e2f2e104",
+        "bf16_backward": true
+      },
+      {
+        "device": "4",
+        "healthy": true,
+        "name": "NVIDIA A100-PCIE-40GB",
+        "bytes": 42409000960,
+        "uuid": "45df50da-cdce-add4-61d3-49b2cb82b8c8",
+        "bf16_backward": true
+      },
+      {
+        "device": "5",
+        "healthy": true,
+        "name": "NVIDIA A100-PCIE-40GB",
+        "bytes": 42409000960,
+        "uuid": "c16fff9c-7d20-8a20-bf47-35292bee3abe",
+        "bf16_backward": true
+      },
+      {
+        "device": "6",
+        "healthy": true,
+        "name": "NVIDIA A100-PCIE-40GB",
+        "bytes": 42409000960,
+        "uuid": "2e4f4b00-ae91-9cf3-d50c-5f677fc02d54",
+        "bf16_backward": true
+      },
+      {
+        "device": "7",
+        "healthy": true,
+        "name": "NVIDIA A100-PCIE-40GB",
+        "bytes": 42409000960,
+        "uuid": "7a63e6c9-8b99-b8cc-6d88-78ca133f54f1",
+        "bf16_backward": true
+      },
+      {
+        "device": "8",
+        "healthy": true,
+        "name": "NVIDIA A100-PCIE-40GB",
+        "bytes": 42409000960,
+        "uuid": "d1549c70-821f-dd85-67cd-14ca344b61a1",
+        "bf16_backward": true
+      }
+    ],
+    "collective_health_verified": false
+  },
+  "startup_observed_utc": "2026-09-27T00:48:11.824469+00:00",
+  "last_observed_stage": "Four-rank learner initialized and waiting for startup weight broadcast; five-worker inference starting; Runboard registered",
+  "completed_updates_at_observation": 0,
+  "run_identity": {
+    "run_uuid": "87bc7cbe822448249edd973813b90c41",
+    "starting_step": 0,
+    "resume_from": null,
+    "config_sha256": "8c1f734caa1398283cb4b8fdb7a8e32c6cfb51c0174882dc531be5326ecd48a8",
+    "identity_sha256": "9a23b22a1df8b8f168a3e6835e5a15f6c70b915a240b320effff001351e3fc9d",
+    "hardware": [
+      {
+        "index": 0,
+        "name": "NVIDIA A100-PCIE-40GB",
+        "total_memory": 42409000960,
+        "capability": [
+          8,
+          0
+        ]
+      },
+      {
+        "index": 1,
+        "name": "NVIDIA A100-PCIE-40GB",
+        "total_memory": 42409000960,
+        "capability": [
+          8,
+          0
+        ]
+      },
+      {
+        "index": 2,
+        "name": "NVIDIA A100-PCIE-40GB",
+        "total_memory": 42409000960,
+        "capability": [
+          8,
+          0
+        ]
+      },
+      {
+        "index": 3,
+        "name": "NVIDIA A100-PCIE-40GB",
+        "total_memory": 42409000960,
+        "capability": [
+          8,
+          0
+        ]
+      },
+      {
+        "index": 4,
+        "name": "NVIDIA A100-PCIE-40GB",
+        "total_memory": 42409000960,
+        "capability": [
+          8,
+          0
+        ]
+      },
+      {
+        "index": 5,
+        "name": "NVIDIA A100-PCIE-40GB",
+        "total_memory": 42409000960,
+        "capability": [
+          8,
+          0
+        ]
+      },
+      {
+        "index": 6,
+        "name": "NVIDIA A100-PCIE-40GB",
+        "total_memory": 42409000960,
+        "capability": [
+          8,
+          0
+        ]
+      },
+      {
+        "index": 7,
+        "name": "NVIDIA A100-PCIE-40GB",
+        "total_memory": 42409000960,
+        "capability": [
+          8,
+          0
+        ]
+      },
+      {
+        "index": 8,
+        "name": "NVIDIA A100-PCIE-40GB",
+        "total_memory": 42409000960,
+        "capability": [
+          8,
+          0
+        ]
+      }
+    ],
+    "nccl_transport": {
+      "NCCL_P2P_DISABLE": "1",
+      "NCCL_SHM_DISABLE": "1"
+    }
+  },
+  "preparation": {
+    "model_id": "Qwen/Qwen3-1.7B",
+    "model_revision": "70d244cc86ccca08cf5af4e1e306ecf908b1ad5e",
+    "baseline": "/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/launches/exact256-v2-seed42-20260926T173508Z/study.json",
+    "baseline_sha256": "0a19f699172d050a73dd0078dbd0a23daf5029545b498743d277cece36d5ab59",
+    "baseline_source": "/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/releases/correctness-v2-20260926",
+    "baseline_package_sha256": "213ce411ff2f86f5347a151e21a978378f965b82a1c5bfc7b113c5ec86468171",
+    "changed_runtime_files": [
+      "src/deepseek_study/__init__.py",
+      "src/deepseek_study/dataset/assets.py"
+    ],
+    "changed_runtime_values": [
+      "MODEL_ID",
+      "MODEL_REVISION"
+    ],
+    "native_tokenizer_parity_adapted": true,
+    "config_changes": {
+      "model_path": {
+        "before": "/mnt/nfs/home/mohamadzbib/projects/models/exact-age-14b/deepseek-r1-distill-qwen-14b",
+        "after": "/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/profiling/20260927-qwen3-1p7b-node4/work/assets/model"
+      },
+      "data_manifest": {
+        "before": "/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/assets/train-manifest-v2.json",
+        "after": "/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/profiling/20260927-qwen3-1p7b-node4/work/assets/train-manifest.json"
+      },
+      "prepared_model_path": {
+        "before": "/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/assets/native-model",
+        "after": "/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/profiling/20260927-qwen3-1p7b-node4/work/assets/native-model"
+      },
+      "output_dir": {
+        "before": "/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/outputs/exact256-80gb-seed42-v2",
+        "after": "/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/profiling/20260927-qwen3-1p7b-node4/work/qwen3-1p7b-exact256-timing-2145018"
+      },
+      "inference_gpus": {
+        "before": 4,
+        "after": 5
+      }
+    },
+    "same_question_membership_and_order": true,
+    "included_questions": 37703,
+    "prime_rl_modified": false,
+    "timing_only": true
+  },
+  "runboard": {
+    "project": "staleness-analysis",
+    "run_id": "f2ee3b9b7ae64ec09c960ded2bbfd112",
+    "mode": "http",
+    "url": "https://runboard-cloudflare.mbz02.workers.dev",
+    "name": "qwen3-1p7b-exact256-timing-2145018"
+  },
+  "timing_limits": {
+    "measures_exact256_phase": false,
+    "checkpoint_timing_measured": false,
+    "model_family_native_prompt_and_inference_gpu_count_differ": true
+  }
+}
