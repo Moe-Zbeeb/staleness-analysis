@@ -1,0 +1,34 @@
+{
+  "submission.json": {
+    "source_commit": "7613375",
+    "command": "sbatch --parsable --account=grad-students --partition=high-priority --qos=high-priority --nodes=1 --ntasks=1 --exclusive --gres=gpu:a100:8 --nodelist=deep-chungus-11 --cpus-per-task=128 --mem=0 --time=45-00:00:00 --no-requeue --dependency=afterany:2144963 --job-name=deepseek14b-exact256-resume --chdir=/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/launches/exact256-v2-continuation-20260927 --output=/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/launches/exact256-v2-continuation-20260927/slurm-%j.log /mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/launches/exact256-v2-continuation-20260927/continue_14b_job.sh /mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/launches/exact256-v2-continuation-20260927",
+    "test_only_returncode": 0,
+    "test_only_stdout": "",
+    "test_only_stderr": "sbatch: Job 2145027 to start at 2026-10-10T13:35:51 using 128 processors on nodes deep-chungus-11 in partition high-priority\n",
+    "script_sha256": {
+      "continue_existing_run.py": "4028a5b880e2908396e180595fb3d4e9f988c17e32dab830f17541db501acc1c",
+      "continue_14b_job.sh": "e9d4e4380d88dffb42e90211aff2d2086f30bcaf2214bd1043f2100d590f01f3",
+      "probe_allocated_gpus.py": "c668475882ceed0ddb8b2035a5a8d6a8a07f944988b4d16c549a455bf4e1f63d"
+    },
+    "created_utc": "2026-09-27T01:22:30.370232+00:00",
+    "job_id": 2145028,
+    "submitted_utc": "2026-09-27T01:22:50.751653+00:00"
+  },
+  "identity-preflight.json": {
+    "identity_matches": true,
+    "identity_sha256": "37a783d0688a010649dc6414860b5d39ca71ea086c6ef11f509923ea0fe222a4",
+    "config_sha256": "cdea779e98127f8a1ded93c8f8d7e61ac1b0b2ea876ac98af929a7ecbd20a60d",
+    "checkpoint_interval": 100,
+    "max_steps": 1000,
+    "lag": 256,
+    "test_scope": "Read-only identity check; no checkpoint yet and no training launched"
+  },
+  "verified_scheduler": "JobId=2145028 JobName=deepseek14b-exact256-resume UserId=mohamadzbib(29562) GroupId=mohamadzbib(29562) MCS_label=N/A Priority=71 Nice=0 Account=grad-students QOS=high-priority JobState=PENDING Reason=Resources Dependency=afterany:2144963(unfulfilled) Requeue=0 Restarts=0 BatchFlag=1 Reboot=0 ExitCode=0:0 RunTime=00:00:00 TimeLimit=45-00:00:00 TimeMin=N/A SubmitTime=2026-09-26T21:22:50 EligibleTime=Unknown AccrueTime=Unknown StartTime=Unknown EndTime=Unknown Deadline=N/A SuspendTime=None SecsPreSuspend=0 LastSchedEval=2026-09-26T21:22:50 Scheduler=Main Partition=high-priority AllocNode:Sid=mslurm:3778682 ReqNodeList=deep-chungus-11 ExcNodeList=(null) NodeList=(null) NumNodes=1-1 NumCPUs=128 NumTasks=1 CPUs/Task=128 ReqB:S:C:T=0:0:*:* TRES=cpu=128,mem=500000M,node=1,billing=128,gres/gpu=8,gres/gpu:a100=8 Socks/Node=* NtasksPerN:B:S:C=0:0:*:* CoreSpec=* MinCPUsNode=128 MinMemoryNode=0 MinTmpDiskNode=0 Features=(null) DelayBoot=00:00:00 OverSubscribe=NO Contiguous=0 Licenses=(null) Network=(null) Command=/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/launches/exact256-v2-continuation-20260927/continue_14b_job.sh /mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/launches/exact256-v2-continuation-20260927 WorkDir=/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/launches/exact256-v2-continuation-20260927 StdErr=/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/launches/exact256-v2-continuation-20260927/slurm-2145028.log StdIn=/dev/null StdOut=/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/launches/exact256-v2-continuation-20260927/slurm-2145028.log Power= TresPerNode=gres:gpu:a100:8",
+  "validation": {
+    "pytest_passed": 20,
+    "ruff": "passed",
+    "shell_syntax": "passed",
+    "live_source_identity": "passed",
+    "live_resume": "not yet: no completed production checkpoint exists"
+  }
+}
