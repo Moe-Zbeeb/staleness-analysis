@@ -714,5 +714,24 @@
     "ruff": "passed",
     "diff_check": "passed",
     "scientific_recipe_changed": false
+  },
+  "latest_status": {
+    "job_id": "2145148",
+    "scheduler_state": "RUNNING",
+    "node": "deep-chungus-7",
+    "job_elapsed_seconds": 951,
+    "phase": "collective_health",
+    "healthy_gpu_probes": 7,
+    "trainer_gpus": 4,
+    "inference_gpus": 3,
+    "preparation_complete": true,
+    "same_ordered_included_questions": 37696,
+    "committed_updates": 0,
+    "training_output_created": false,
+    "tensorboard_events_created": false,
+    "health_receipt_created": false,
+    "stderr_empty": true,
+    "observed_wait": "Seven health workers showed D state / rpc_wait_bit_killable; read counters increased between snapshots. Exact file and root cause not established.",
+    "job_left_running_under_health_deadline": true
   }
 }
