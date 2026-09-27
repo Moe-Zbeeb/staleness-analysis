@@ -1,6 +1,6 @@
 # Bounded 1.5B optimization benchmarks
 
-This work follows the [live timing measurements](live-timing-1p5b-20260927.md). Production job `2145184` continues with its frozen configuration while corrected benchmark job `2145240` tests candidates on `deep-chungus-1`. The benchmark has an exclusive eight-A100 allocation, 96 CPUs and a three-hour limit. It uses the normal-priority fallback because an additional full node would exceed the available high-priority GPU quota. These diagnostics are not another study run.
+This work follows the [live timing measurements](live-timing-1p5b-20260927.md). Production job `2145184` continues with its frozen configuration while corrected benchmark job `2145240` completed the candidate matrix on `deep-chungus-1` in 23 minutes 51 seconds (exit 0). The matrix records individual candidate failures; its successful scheduler exit does not mean every candidate passed. The benchmark has an exclusive eight-A100 allocation, 96 CPUs and a three-hour limit. It uses the normal-priority fallback because an additional full node would exceed the available high-priority GPU quota. These diagnostics are not another study run.
 
 Initial job `2145232` staged the runtime and passed health checks on all eight A100 PCIe 40 GB GPUs. It was deliberately cancelled when an environment mismatch was found: inference inherited the trainer allocator setting. The corrected harness imports PrimeRL's separate inference defaults, including `expandable_segments:False` and multiprocessing `spawn`, and records the effective inference environment. Job `2145240` reuses the staged files but creates fresh job-specific result directories and repeats the health check and complete matrix. No timing from the cancelled attempt is accepted as an optimization result. The intervening launch `2145239` exited before GPU work because the system Python lacked `hashlib.file_digest`; the cache-reuse wrapper now uses the existing streaming hash helper.
 
@@ -35,17 +35,38 @@ CUDA synchronization used for phase measurements adds overhead. The bounded repl
 
 ## Collected results
 
-The [partial results receipt](../diagnostics/optimization-1p5b-20260927-partial.json) records measurements collected before the SSH control connection closed. The benchmark's remaining completion state has not been verified.
+The [complete results receipt](../diagnostics/optimization-1p5b-20260927.json) includes all four inference cases, all completed learner comparisons, source artifact hashes and the rejected out-of-memory case. The earlier [partial receipt](../diagnostics/optimization-1p5b-20260927-partial.json) is retained as a historical snapshot.
 
-| Candidate | Measured result | Decision |
-| --- | --- | --- |
-| 32 active inference sequences | Median per-GPU throughput increased from 2,561 to 3,820 output tokens/s, about 49%; both cases completed 512 responses and about 3.12 million output tokens | Promising; dispatcher concurrency and full-pipeline performance still require validation |
-| Disable activation checkpointing | Median learner replay speedup 1.023×; peak memory rose from approximately 11.2 to 38.0 GiB | Keep activation checkpointing enabled |
-| Disable forward resharding | Median learner replay speedup 1.258×; all three updates completed | Candidate for full-size and full-pipeline validation |
-| Disable both | CUDA out of memory on the 40 GB diagnostic GPUs | Not accepted |
-| 64 sequences, repeated inference baseline and compilation | Results not yet collected | No decision |
+| Inference case | Median per-GPU output tokens/s | Slowest shard generation time | Output tokens | Truncated responses |
+| --- | ---: | ---: | ---: | ---: |
+| 16 sequences | 2,561 | 309.23 s | 3,122,423 | 42.97% |
+| 32 sequences | 3,820 | 205.50 s | 3,125,491 | 41.60% |
+| 64 sequences | 5,344 | 150.60 s | 3,143,382 | 45.31% |
+| 16 sequences repeated | 2,561 | 309.07 s | 3,122,423 | 42.97% |
 
-The identical learner baseline repeat had speedup 1.003× but was not bitwise identical: 21 clipping/no-signal decisions differed across the three updates. The no-checkpointing and no-resharding cases had 15 and 18 differences respectively, with archived inputs equal. These counts do not define an equivalence tolerance or prove identical learning trajectories. No candidate is deployed, and the measured component speedups are not a revised production ETA.
+Every case completed all 512 responses with finite behavior log-probabilities. The 32- and 64-sequence cases delivered 1.49× and 2.09× the baseline median per-GPU throughput. Repeating the baseline reproduced all response token hashes. Increasing batching changed 509 and 510 of the 512 responses respectively, despite fixed request seeds. These are execution settings with observable numerical/sampling effects; they do not guarantee identical sampled trajectories.
+
+| Learner candidate | Median replay speedup | Peak allocated GPU memory | Decision |
+| --- | ---: | ---: | --- |
+| Repeated baseline | 1.003× | 11.24 GiB | Timing and numerical reference |
+| Disable activation checkpointing | 1.023× | Approximately 38 GiB | Keep activation checkpointing enabled |
+| Disable forward resharding | 1.258× | 14.15 GiB | Candidate for full-size validation |
+| Disable both | Not available | Out of memory on 40 GB GPUs | Rejected |
+| Enable compilation | 0.984× | 11.24 GiB | Keep compilation disabled |
+
+The identical learner baseline repeat was not bitwise identical: 21 clipping/no-signal decisions differed across the three updates. The no-checkpointing, no-resharding and compilation cases had 15, 18 and 14 differences respectively, with archived inputs equal. These counts do not define an equivalence tolerance or prove identical learning trajectories. Complete gradient tensors were not compared. The promising resharding change reduced the replay's backward phase; the activation-checkpointing and compilation alternatives showed no useful gain.
+
+These component speedups cannot be multiplied into a production speedup or converted directly into a new completion estimate. Generation overlaps learner work, the matrix has a different inference topology and GPU memory class, and the later exact-lag and draining phases remain unmeasured.
+
+## Full-pipeline validation
+
+[`benchmark_pipeline.py`](../scripts/benchmark_pipeline.py) prepares two isolated cases using the actual dispatcher, grader, learner and weight handoff. Each case has four trainer GPUs, four inference GPUs and exactly two committed bootstrap updates, with a 2,400-second supervisor limit. The production configuration still specifies 1,000 updates and lag 256; a bounded supervisor stops the diagnostic before it can become a full study.
+
+The baseline uses 16 active sequences, dispatcher concurrency 64 and forward resharding enabled. The candidate uses 64 active sequences, concurrency 256 and forward resharding disabled. Both retain activation checkpointing and leave compilation disabled. Scientific settings, archived matrix input checks and dependency integrity checks are preserved. The script rejects adapter changes beyond the two explicitly checked resharding-option edits, verifies staged assets and runs the eight-GPU health probe before training.
+
+Job `2145250` is submitted with an exclusive eight-GPU A100 allocation, normal QoS, a two-hour wall limit and no automatic requeue. At the last check on September 27 it was **pending for resources** on node 1, which holds the verified local diagnostic runtime. Another allocation occupies that node. The full-pipeline candidate therefore remains unvalidated. Scheduler start estimates can change and are not a promised start time.
+
+Controls and results are under `/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/profiling/optimize-pipeline-1p5b-20260927/`. Each case writes locally and copies results to its separate shared diagnostic directory. The comparison excludes startup from update timing and must distinguish deliberate bounded shutdown from a crash. This test does not measure recovery-checkpoint cost or the exact-age phase, and its four-inference-GPU topology differs from production's three.
 
 The adapter now exposes `trainer_reshard_after_forward`, defaulting to `true`, and passes it through to the existing official PrimeRL option. Setting it to `false` keeps gathered parameters after forward computation and was the tested resharding candidate. It changes the configuration fingerprint; existing runs must continue with their frozen release until an explicit compatible transition is validated. Tests verify that this switch changes only the corresponding official execution setting. Imported library source is unchanged.
 
@@ -53,4 +74,4 @@ The adapter now exposes `trainer_reshard_after_forward`, defaulting to `true`, a
 
 The production inference GPU with UUID `GPU-b03bc3ba-472c-8081-1374-cfb54402f3ac` showed active software thermal throttling. Application batching cannot repair cooling. Moving the job requires healthy replacement hardware and a complete, verified recovery checkpoint containing learner/optimizer state, RNG state, orchestrator progress and the pending exact-staleness queue.
 
-At update 8, no complete checkpoint existed; the first is due at update 100. A restart before that checkpoint would discard completed work. The current recovery contract also rejects changed configuration/source fingerprints. A performance transition must record and validate compatibility explicitly, rather than bypassing these guards or rewriting a checkpoint's provenance. Neither a migration nor a faster production configuration has been applied by these benchmarks.
+At the last verified production update, 11, no complete checkpoint existed; the first is due at update 100. A restart before that checkpoint would discard completed work. The current recovery contract also rejects changed configuration/source fingerprints. A performance transition must record and validate compatibility explicitly, rather than bypassing these guards or rewriting a checkpoint's provenance. Neither a migration nor a faster production configuration has been applied by these benchmarks.
