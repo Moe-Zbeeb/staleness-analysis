@@ -1,6 +1,8 @@
 # Qwen2.5-3B: node-local exact-256 study
 
-Job **2145176** replaces the shared-storage startup **2145148**, which was cancelled without a committed optimizer update. The original output and controls are preserved. The replacement passed input/runtime verification, seven-GPU collective and backward checks, and launched the model workers. TensorBoard and the separate backup process are running. Initial NFS and XFS copies were independently checksum-checked; no completed update or full-size checkpoint is claimed yet.
+**Historical attempt: job 2145176 failed before producing rollouts or completing updates.** Its long temporary path exceeded the Unix-domain socket limit during vLLM startup. All outputs and verified shared copies are preserved. See the [replacement launch](qwen25-3b-local-v5.md).
+
+Job **2145176** replaced the shared-storage startup **2145148**, which was cancelled without a committed optimizer update. The original output and controls are preserved. The replacement passed input/runtime verification, seven-GPU collective and backward checks, and launched the model workers. TensorBoard and the separate backup process are running. Initial NFS and XFS copies were independently checksum-checked; no completed update or full-size checkpoint is claimed yet.
 
 The model remains `Qwen/Qwen2.5-3B` at `3aab1f1954e9cc14eb9509a215f9e5ca08227a9b`. The configuration remains 1,000 total updates, lag 256 after 256 bootstrap updates, 64 prompts × 8 responses, 2,048 prompt tokens, 8,192 response tokens, seed 42 and zero weight decay. The same 37,696 questions, 17 exclusions, grader, tokenizer and delayed-cohort algorithm are retained. There are no intermediate evaluations. Checkpoints remain every **100** updates, as requested; the teammate's 25-update checkpoint schedule and historical-policy-generation algorithm were not adopted.
 
@@ -27,4 +29,4 @@ The [storage guide](../node-local-storage.md) explains background copying, check
 
 Validation: **34 focused tests passed**, Ruff and diff checks passed, all staged input checks passed, and local runtime imports passed. The tests include restoring exact queued cohorts from a verified shared checkpoint and ensuring interrupted transfers never publish a complete checkpoint. The live seven-GPU test returned all-reduce 28 on every rank; BF16 backward, FlashAttention backward and vLLM RMSNorm passed on all seven cards. Initial backup inventories contain 81 NFS files and 71 XFS files, including matching run identity and TensorBoard event checksums. Available storage was approximately 1,461 GiB local, 13,400 GiB NFS and 2,617 GiB XFS. Actual first-update throughput and the first 100-update recovery checkpoint remain unverified.
 
-Machine-readable submission, configuration hashes and validation evidence are in [the migration record](../../diagnostics/node-local-migration-20260927.json).
+Machine-readable submission, configuration hashes and validation evidence are in [the archived migration record](../../diagnostics/node-local-v4-20260927.json).

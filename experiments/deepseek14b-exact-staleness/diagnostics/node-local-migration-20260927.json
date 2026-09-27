@@ -1,6 +1,6 @@
 {
-  "job_id": "2145176",
-  "submitted_at": "2026-09-27T15:51:20.231581+00:00",
+  "job_id": "2145184",
+  "submitted_at": "2026-09-27T16:17:19.787920+00:00",
   "command": [
     "sbatch",
     "--parsable",
@@ -17,42 +17,42 @@
     "--time=45-00:00:00",
     "--no-requeue",
     "--signal=B:TERM@120",
-    "--job-name=q25-3b-k256-local",
-    "--chdir=/tmp/staleness-storage-v2/mohamadzbib/qwen25-3b-exact256-80gb-seed42-v4-local",
-    "--output=/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/launches/qwen25-3b-full-hp-local-20260927-logs-r3/slurm-%j.out",
-    "--error=/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/launches/qwen25-3b-full-hp-local-20260927-logs-r3/slurm-%j.err",
-    "/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/launches/qwen25-3b-full-hp-local-20260927/node_local_job.sh",
-    "/tmp/staleness-storage-v2/mohamadzbib/qwen25-3b-exact256-80gb-seed42-v4-local"
+    "--job-name=ds15b-k256-local",
+    "--chdir=/tmp/staleness-storage-v2/mohamadzbib/deepseek15b-exact256-80gb-seed42-v2-local",
+    "--output=/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/launches/deepseek15b-full-hp-local-20260927-logs/slurm-%j.out",
+    "--error=/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/launches/deepseek15b-full-hp-local-20260927-logs/slurm-%j.err",
+    "/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/launches/deepseek15b-full-hp-local-20260927/node_local_job.sh",
+    "/tmp/staleness-storage-v2/mohamadzbib/deepseek15b-exact256-80gb-seed42-v2-local"
   ],
-  "source_commit": "fd6486c",
-  "replaces_job_id": "2145169",
-  "local_workspace": "/tmp/staleness-storage-v2/mohamadzbib/qwen25-3b-exact256-80gb-seed42-v4-local",
-  "shared_output": "/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/outputs/qwen25-3b-exact256-80gb-seed42-v4-local",
-  "metrics": "/mnt/xfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/metrics/qwen25-3b-exact256-80gb-seed42-v4-local",
+  "source_commit": "28d1afe",
+  "replaces_job_id": "2145180",
+  "local_workspace": "/tmp/staleness-storage-v2/mohamadzbib/deepseek15b-exact256-80gb-seed42-v2-local",
+  "shared_output": "/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/outputs/deepseek15b-exact256-80gb-seed42-v2-local",
+  "metrics": "/mnt/xfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/metrics/deepseek15b-exact256-80gb-seed42-v2-local",
   "readiness": {
     "node": "deep-chungus-7",
     "python": "/tmp/staleness-runtime/mohamadzbib/qwen25-3b-local-v1/prime-rl/.venv/bin/python",
-    "source": "/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/launches/qwen25-3b-full-hp-tb-warm-20260927/work/release",
-    "release": "/tmp/staleness-storage-v2/mohamadzbib/qwen25-3b-exact256-80gb-seed42-v4-local/release",
-    "study_sha256": "6e57883ca18f4c5aa7d379ddbf005269cefd56dea890c36c1cf6eb62ba7fc438",
+    "source": "/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/launches/deepseek15b-full-hp-local-20260927/release",
+    "release": "/tmp/staleness-storage-v2/mohamadzbib/deepseek15b-exact256-80gb-seed42-v2-local/release",
+    "study_sha256": "e8f0fe5ab0c75730be321f60c938c8fc684c2f3a3ba7773e61f01c8cecf894d1",
     "dataset_sha256": "ebaf012ab811d4569e1409438daedac04bb671569d52a47bfb2d512ea784b0ff",
-    "baseline_study_sha256": "e03f549ada98d7f03d22a1021448d9a79f7efb09eb9cb3c87c9ed7afc683b0a0",
-    "data_manifest_sha256": "4d49df463b67e0383ef31be5ab625c99b6fd04cd0d4e899f40874c3c660768df",
+    "baseline_study_sha256": "c2ba4fd573025c1e830c2c26c50c577e755094c93d0dd882ee4e0bc725e23905",
+    "data_manifest_sha256": "2e02e8f9fa093b8d33ff835cd43ee5f145bc1a55f09dc55d7a0b8914e57cce9a",
     "scientific_configuration_unchanged": true,
-    "prepared_tokenizer_sha256": "84b77f96c1368a25b9483db92df36121fe30ced547dfeae032e3d741fc6b81a2",
-    "package_sha256": "e234340835080f985ccef355c9c8a0121c0683a98ba8bd0eeec6f7fef3bb198c",
+    "prepared_tokenizer_sha256": "644f562916ea9c7006c2a3455be90b193aa87cb7751d15fab99f4b5e0f5de1f9",
+    "package_sha256": "b06eea85aef848c54ffaf2e165de83e9cd8a47375ae4407b14e92049c693ae9c",
     "control_sha256": {
       "local_backup.py": "99b289cd9e08bc560a8047f707679ee16f84c83c94634720d0209a6ed7170ac4",
-      "node_local_run.py": "e41295ef3d0f7627ea85b4b1881b594efc5c697e35895e4d7c7851ccad1c9fa1",
+      "node_local_run.py": "3263267979907e77eef25b231fc34abc8ec2f5bca6fd7c628fba096b7de5816a",
       "launch_full_run.py": "5e8745b182fb198b600a693f12308938975171d3fb3993c4bdf3920bd2ea9cd1",
       "probe_allocated_gpus.py": "dad15c823f0395c2e0f10cbdfaf5f52e9c9c1f0b04128a880065622f5ddfb3fb",
-      "storage-spec.json": "beb9a53dc67a22f558adeed78de1a68d542eeb1f11371a15879573202bbd7479"
+      "storage-spec.json": "77f1fc500c35b6e0d2d7711e80ba054068c52536228d2c4b7d5d8616bd425640"
     }
   },
   "training_started": false,
   "scheduler_verified": {
-    "JobId": "2145176",
-    "JobName": "q25-3b-k256-local",
+    "JobId": "2145184",
+    "JobName": "ds15b-k256-local",
     "UserId": "mohamadzbib(29562)",
     "GroupId": "mohamadzbib(29562)",
     "MCS_label": "N/A",
@@ -60,7 +60,7 @@
     "Nice": "0",
     "Account": "grad-students",
     "QOS": "high-priority",
-    "JobState": "RUNNING",
+    "JobState": "PENDING",
     "Reason": "None",
     "Dependency": "(null)",
     "Requeue": "0",
@@ -71,30 +71,27 @@
     "RunTime": "00:00:00",
     "TimeLimit": "45-00:00:00",
     "TimeMin": "N/A",
-    "SubmitTime": "2026-09-27T11:51:20",
-    "EligibleTime": "2026-09-27T11:51:20",
-    "AccrueTime": "2026-09-27T11:51:20",
-    "StartTime": "2026-09-27T11:51:20",
-    "EndTime": "2026-11-11T10:51:20",
+    "SubmitTime": "2026-09-27T12:17:19",
+    "EligibleTime": "2026-09-27T12:17:19",
+    "AccrueTime": "Unknown",
+    "StartTime": "Unknown",
+    "EndTime": "Unknown",
     "Deadline": "N/A",
-    "PreemptEligibleTime": "2026-09-27T11:51:20",
-    "PreemptTime": "None",
     "SuspendTime": "None",
     "SecsPreSuspend": "0",
-    "LastSchedEval": "2026-09-27T11:51:20",
+    "LastSchedEval": "2026-09-27T12:17:19",
     "Scheduler": "Main",
     "Partition": "high-priority",
-    "AllocNode:Sid": "mslurm:4097984",
+    "AllocNode:Sid": "mslurm:4111490",
     "ReqNodeList": "deep-chungus-7",
     "ExcNodeList": "(null)",
-    "NodeList": "deep-chungus-7",
-    "BatchHost": "deep-chungus-7",
-    "NumNodes": "1",
+    "NodeList": "(null)",
+    "NumNodes": "1-1",
     "NumCPUs": "128",
     "NumTasks": "1",
     "CPUs/Task": "128",
     "ReqB:S:C:T": "0:0:*:*",
-    "TRES": "cpu=128,node=1,billing=128,gres/gpu=8,gres/gpu:a100=8",
+    "TRES": "cpu=128,mem=500000M,node=1,billing=128,gres/gpu=8,gres/gpu:a100=8",
     "Socks/Node": "*",
     "NtasksPerN:B:S:C": "0:0:*:*",
     "CoreSpec": "*",
@@ -107,183 +104,28 @@
     "Contiguous": "0",
     "Licenses": "(null)",
     "Network": "(null)",
-    "Command": "/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/launches/qwen25-3b-full-hp-local-20260927/node_local_job.sh",
-    "WorkDir": "/tmp/staleness-storage-v2/mohamadzbib/qwen25-3b-exact256-80gb-seed42-v4-local",
-    "StdErr": "/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/launches/qwen25-3b-full-hp-local-20260927-logs-r3/slurm-2145176.err",
+    "Command": "/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/launches/deepseek15b-full-hp-local-20260927/node_local_job.sh",
+    "WorkDir": "/tmp/staleness-storage-v2/mohamadzbib/deepseek15b-exact256-80gb-seed42-v2-local",
+    "StdErr": "/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/launches/deepseek15b-full-hp-local-20260927-logs/slurm-2145184.err",
     "StdIn": "/dev/null",
-    "StdOut": "/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/launches/qwen25-3b-full-hp-local-20260927-logs-r3/slurm-2145176.out",
+    "StdOut": "/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/launches/deepseek15b-full-hp-local-20260927-logs/slurm-2145184.out",
     "Power": "",
     "TresPerNode": "gres:gpu:a100:8"
   },
+  "model_id": "deepseek-ai/DeepSeek-R1-Distill-Qwen-1.5B",
+  "model_revision": "ad9f0ae0864d7fbcd1cd905e3c6c5b069cc8b562",
   "validation": {
-    "focused_tests_passed": 34,
+    "focused_tests_passed": 35,
     "ruff": "passed",
-    "official_checkout_and_submodules": "verified clean before submission",
-    "model_dataset_tokenizer": "hash verified",
-    "runtime_import_paths": "verified local",
-    "prior_attempt": {
-      "job_id": "2145169",
-      "state": "FAILED",
-      "committed_updates": 0,
-      "output_created": false,
-      "reason": "copy exclusions and missing local Git LFS filters",
-      "gpu_health": "all seven passed"
-    }
-  },
-  "gpu_health": {
-    "job_id": "2145176",
-    "node": "deep-chungus-7",
-    "slurm_job_gpus": "0,1,2,3,4,5,6,7",
-    "world_size": 7,
-    "expected_all_reduce": 28.0,
-    "torch": "2.11.0+cu128",
-    "cuda_runtime": "12.8",
-    "devices": [
-      {
-        "rank": 0,
-        "visible_device": "0",
-        "name": "NVIDIA A100 80GB PCIe",
-        "bytes": 85097971712,
-        "capability": [
-          8,
-          0
-        ],
-        "all_reduce": 28.0,
-        "bf16_backward": true,
-        "flash_attention_backward": true,
-        "vllm_rms_norm": true
-      },
-      {
-        "rank": 1,
-        "visible_device": "1",
-        "name": "NVIDIA A100 80GB PCIe",
-        "bytes": 85097971712,
-        "capability": [
-          8,
-          0
-        ],
-        "all_reduce": 28.0,
-        "bf16_backward": true,
-        "flash_attention_backward": true,
-        "vllm_rms_norm": true
-      },
-      {
-        "rank": 2,
-        "visible_device": "2",
-        "name": "NVIDIA A100 80GB PCIe",
-        "bytes": 85097971712,
-        "capability": [
-          8,
-          0
-        ],
-        "all_reduce": 28.0,
-        "bf16_backward": true,
-        "flash_attention_backward": true,
-        "vllm_rms_norm": true
-      },
-      {
-        "rank": 3,
-        "visible_device": "3",
-        "name": "NVIDIA A100 80GB PCIe",
-        "bytes": 85097971712,
-        "capability": [
-          8,
-          0
-        ],
-        "all_reduce": 28.0,
-        "bf16_backward": true,
-        "flash_attention_backward": true,
-        "vllm_rms_norm": true
-      },
-      {
-        "rank": 4,
-        "visible_device": "4",
-        "name": "NVIDIA A100 80GB PCIe",
-        "bytes": 85097971712,
-        "capability": [
-          8,
-          0
-        ],
-        "all_reduce": 28.0,
-        "bf16_backward": true,
-        "flash_attention_backward": true,
-        "vllm_rms_norm": true
-      },
-      {
-        "rank": 5,
-        "visible_device": "5",
-        "name": "NVIDIA A100 80GB PCIe",
-        "bytes": 85097971712,
-        "capability": [
-          8,
-          0
-        ],
-        "all_reduce": 28.0,
-        "bf16_backward": true,
-        "flash_attention_backward": true,
-        "vllm_rms_norm": true
-      },
-      {
-        "rank": 6,
-        "visible_device": "6",
-        "name": "NVIDIA A100 80GB PCIe",
-        "bytes": 85097971712,
-        "capability": [
-          8,
-          0
-        ],
-        "all_reduce": 28.0,
-        "bf16_backward": true,
-        "flash_attention_backward": true,
-        "vllm_rms_norm": true
-      }
-    ]
-  },
-  "selected_gpu_ids": [
-    "0",
-    "1",
-    "2",
-    "3",
-    "4",
-    "5",
-    "6"
-  ],
-  "local_free_gib_at_startup": 1460.9,
-  "startup_supervisor": {
-    "job_id": "2145176",
-    "node": "deep-chungus-7",
-    "training_pid": 3406227,
-    "backup_pid": 3406226,
-    "local_output": "/tmp/staleness-storage-v2/mohamadzbib/qwen25-3b-exact256-80gb-seed42-v4-local/runs/qwen25-3b-exact256-80gb-seed42-v4-local",
-    "shared_backup": "/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/outputs/qwen25-3b-exact256-80gb-seed42-v4-local",
-    "devices": [
-      "0",
-      "1",
-      "2",
-      "3",
-      "4",
-      "5",
-      "6"
-    ],
-    "threads_per_worker": 1,
-    "attempt": "/tmp/staleness-storage-v2/mohamadzbib/qwen25-3b-exact256-80gb-seed42-v4-local/attempts/2145176"
-  },
-  "startup_status": "GPU checks passed; model workers initializing; TensorBoard active; initial background copies verified",
-  "run_uuid": "bea23b499d27416cb5ffff6f0c21a05a",
-  "backup_status": {
-    "status": "verified",
-    "verified_at": 1790524625.2528734,
-    "new_checkpoints": [],
-    "final": false
-  },
-  "shared_copy_validation": {
-    "nfs_inventory_files": 81,
-    "xfs_inventory_files": 71,
-    "independently_checked": [
-      "run.json",
-      "tensorboard event file",
-      "tensorboard/study-owner.json"
-    ],
-    "full_checkpoint_verified": false
+    "cluster_zmq_ipc_bind": "passed",
+    "native_think_prefix": "verified in all 5 tokenizer parity probes",
+    "reasoning_required": true,
+    "retained_questions": 37696,
+    "excluded_questions": 17,
+    "question_membership_order": "matches corrected v3 baseline",
+    "longest_prompt_tokens": 834,
+    "data_manifest_content_sha256": "482d936173ef35799594751331a701e4f581402c09c51dbfb8d2185e0c0d12cd",
+    "runtime_imports": "verified node-local",
+    "prime_rl_changes": false
   }
 }
