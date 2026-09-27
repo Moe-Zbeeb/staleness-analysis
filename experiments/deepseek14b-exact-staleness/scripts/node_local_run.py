@@ -3,15 +3,21 @@ import hashlib
 import json
 import os
 import shutil
+import shlex
 import signal
 import subprocess
 import sys
 import time
+import tarfile
 import urllib.request
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
 
 from local_backup import atomic_json, digest
+
+REPOSITORY_EXCLUDES = ("/.venv", "/.cache", "/outputs", "/wandb", "__pycache__")
+GIT_LFS_SHA256 = "1c0b6ee5200ca708c5cebebb18fdeb0e1c98f1af5c1a9cba205a4c0ab5a5ec08"
+GIT_LFS_URL = "https://github.com/git-lfs/git-lfs/releases/download/v3.7.1/git-lfs-linux-amd64-v3.7.1.tar.gz"
 
 
 PATH_FIELDS = {
@@ -167,6 +173,49 @@ def secure_local(path):
     return path
 
 
+def configure_local_git(runtime):
+    archive = runtime / "git-lfs-3.7.1.tar.gz"
+    if not archive.exists():
+        with urllib.request.urlopen(GIT_LFS_URL, timeout=60) as incoming, archive.open("xb") as outgoing:
+            shutil.copyfileobj(incoming, outgoing)
+    if digest(archive) != GIT_LFS_SHA256:
+        raise ValueError("Pinned Git LFS archive failed checksum verification")
+    binary = runtime / "prime-rl/.venv/bin/git-lfs"
+    with tarfile.open(archive, "r:gz") as bundle:
+        entry = bundle.getmember("git-lfs-3.7.1/git-lfs")
+        if not entry.isfile():
+            raise ValueError("Git LFS executable is not a regular archive member")
+        with bundle.extractfile(entry) as incoming, binary.open("wb") as outgoing:
+            shutil.copyfileobj(incoming, outgoing)
+    binary.chmod(0o755)
+    prime = runtime / "prime-rl"
+    output = subprocess.check_output(
+        ["git", "-C", str(prime), "submodule", "foreach", "--quiet", "--recursive", "pwd"], text=True
+    )
+    repos = [prime, *[Path(line) for line in output.splitlines() if line]]
+    executable = shlex.quote(str(binary))
+    for repo in repos:
+        if not repo.resolve().is_relative_to(prime):
+            raise ValueError("Submodule escaped the local checkout")
+        settings = {
+            "clean": f"{executable} clean -- %f",
+            "smudge": f"{executable} smudge --skip -- %f",
+            "process": f"{executable} filter-process --skip",
+            "required": "true",
+        }
+        for key, value in settings.items():
+            subprocess.run(["git", "-C", str(repo), "config", "--local", f"filter.lfs.{key}", value], check=True)
+    atomic_json(
+        runtime / "git-lfs.json",
+        {
+            "version": "3.7.1",
+            "archive_sha256": GIT_LFS_SHA256,
+            "binary_sha256": digest(binary),
+            "local_repositories": [str(p) for p in repos],
+        },
+    )
+
+
 def relocate_runtime(runtime, shared_prime, release):
     local_prime = runtime / "prime-rl"
     venv = local_prime / ".venv"
@@ -176,7 +225,7 @@ def relocate_runtime(runtime, shared_prime, release):
         if json.loads(prestaged.read_text())["source"] != str(shared_prime):
             raise ValueError("Pre-staged runtime has a different source")
     else:
-        copy_tree(shared_prime, local_prime, (".venv", ".cache", "outputs", "wandb", "__pycache__"))
+        copy_tree(shared_prime, local_prime, REPOSITORY_EXCLUDES)
         copy_tree(shared_python, runtime / "python")
         copy_environment(shared_prime / ".venv", venv)
     changed = {}
@@ -313,6 +362,20 @@ def seal_staging(spec, control):
         raise ValueError("Staged question manifest differs from the baseline")
     python = runtime / "prime-rl/.venv/bin/python"
     env = local_environment(runtime, workspace, release)
+    configure_local_git(runtime)
+    command(
+        [
+            python,
+            "-c",
+            "from pathlib import Path; import sys; "
+            "from deepseek_study.runtime.launcher import verify_upstream; verify_upstream(Path(sys.argv[1])); "
+            "print('Official checkout and submodules verified clean')",
+            release,
+        ],
+        env=env,
+        cwd=release,
+        timeout=180,
+    )
     command([python, "-m", "deepseek_study.cli", "check", workspace / "study.json"], env=env, cwd=release, timeout=900)
     command(
         [
@@ -385,6 +448,18 @@ def run(spec):
         raise FileExistsError("Refusing to restart over existing local run output")
     python, release = Path(receipt["python"]), Path(receipt["release"])
     environment = local_environment(runtime, workspace, release)
+    command(
+        [
+            python,
+            "-c",
+            "from pathlib import Path; import sys; "
+            "from deepseek_study.runtime.launcher import verify_upstream; verify_upstream(Path(sys.argv[1]))",
+            release,
+        ],
+        env=environment,
+        cwd=release,
+        timeout=180,
+    )
     sys.path.insert(0, str(workspace))
     from launch_full_run import select_devices
 
@@ -424,10 +499,12 @@ def run(spec):
     result = json.loads((hardware / "collective.json").read_text())
     if result["world_size"] != len(devices) or len(result["devices"]) != len(devices):
         raise ValueError("Collective verification did not cover the prepared topology")
-    stop = workspace / "backup.stop"
-    status = workspace / "backup-status.json"
-    backup_log = (workspace / "backup.log").open("a")
-    training_log = (workspace / "training.log").open("x")
+    attempt = workspace / "attempts" / os.environ["SLURM_JOB_ID"]
+    attempt.mkdir(parents=True, exist_ok=False)
+    stop = attempt / "backup.stop"
+    status = attempt / "backup-status.json"
+    backup_log = (attempt / "backup.log").open("x")
+    training_log = (attempt / "training.log").open("x")
     backup = subprocess.Popen(
         [
             str(python),
@@ -477,6 +554,7 @@ def run(spec):
             "shared_backup": spec["backup"],
             "devices": devices,
             "threads_per_worker": 1,
+            "attempt": str(attempt),
         },
     )
     started = time.monotonic()
@@ -527,7 +605,7 @@ def run(spec):
             failure = failure or "Final backup exceeded one hour; local files retained"
             os.killpg(backup.pid, signal.SIGTERM)
         atomic_json(
-            workspace / "supervisor-complete.json",
+            attempt / "supervisor-complete.json",
             {
                 "training_exit": training.poll(),
                 "backup_exit": backup.poll(),

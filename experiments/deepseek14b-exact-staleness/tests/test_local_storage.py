@@ -234,3 +234,22 @@ def test_runtime_audit_supports_namespace_packages_and_rejects_remote_paths(tmp_
             exec(LOCAL.RUNTIME_AUDIT, {})
     else:
         exec(LOCAL.RUNTIME_AUDIT, {})
+
+
+def test_repository_copy_preserves_tracked_nested_monitor(tmp_path):
+    source, destination = tmp_path / "source", tmp_path / "destination"
+    monitor = source / "src/prime_rl/monitors/wandb/monitor.py"
+    monitor.parent.mkdir(parents=True)
+    monitor.write_text("official-monitor")
+    (source / "wandb").mkdir()
+    (source / "wandb/runtime-log").write_text("runtime")
+    LOCAL.copy_tree(source, destination, LOCAL.REPOSITORY_EXCLUDES)
+    assert (destination / "src/prime_rl/monitors/wandb/monitor.py").read_text() == "official-monitor"
+    assert not (destination / "wandb").exists()
+
+
+def test_local_git_rejects_wrong_archive_before_extracting(tmp_path):
+    (tmp_path / "git-lfs-3.7.1.tar.gz").write_bytes(b"invalid")
+    with pytest.raises(ValueError, match="checksum"):
+        LOCAL.configure_local_git(tmp_path)
+    assert not (tmp_path / "prime-rl/.venv/bin/git-lfs").exists()
