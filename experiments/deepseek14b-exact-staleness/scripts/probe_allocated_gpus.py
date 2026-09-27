@@ -14,6 +14,9 @@ import torch
 if torch.cuda.device_count() != 1:
     raise RuntimeError(f"Expected one visible CUDA device, got {torch.cuda.device_count()}")
 torch.cuda.set_device(0)
+free_bytes, total_bytes = torch.cuda.mem_get_info()
+if free_bytes < 0.9 * total_bytes:
+    raise RuntimeError(f"GPU is already occupied: {free_bytes} of {total_bytes} bytes free; need at least 90% free before profiling")
 layer = torch.nn.Linear(128, 128, dtype=torch.bfloat16, device="cuda")
 value = torch.randn(32, 128, dtype=torch.bfloat16, device="cuda")
 layer(value).float().square().mean().backward()
@@ -21,7 +24,7 @@ torch.cuda.synchronize()
 if not torch.isfinite(layer.weight.grad).all().item():
     raise RuntimeError("Nonfinite BF16 gradient")
 device = torch.cuda.get_device_properties(0)
-print(json.dumps({"name": device.name, "bytes": device.total_memory, "uuid": str(getattr(device, "uuid", "unavailable")), "bf16_backward": True}))
+print(json.dumps({"name": device.name, "bytes": device.total_memory, "uuid": str(getattr(device, "uuid", "unavailable")), "initial_free_bytes": free_bytes, "initial_total_bytes": total_bytes, "bf16_backward": True}))
 """
 
 
@@ -60,6 +63,9 @@ def main():
     with args.output.open("x") as stream:
         stream.write(json.dumps(receipt, indent=2) + "\n")
     print(json.dumps(receipt, indent=2), flush=True)
+    occupied = [record["device"] for record in results if "GPU is already occupied:" in record.get("error", "")]
+    if occupied:
+        raise SystemExit(f"Allocated GPUs are occupied by existing work: {occupied}; refusing to start profiling")
 
 
 if __name__ == "__main__":

@@ -1,0 +1,86 @@
+{
+  "job_id": 2145015,
+  "scheduler_state": "FAILED",
+  "exit_code": "1:0",
+  "elapsed_seconds": 1091,
+  "completed_updates": 0,
+  "failure": "CUDA out of memory during first backward pass on trainer rank 2",
+  "allocation_request_mib": 136,
+  "free_at_failure_mib": 121.19,
+  "trainer_memory_gib": 8.01,
+  "other_process_pid": 2423437,
+  "other_process_memory_gib": 71.11,
+  "other_process_in_current_run_logs": false,
+  "first_cohort": {
+    "responses": 512,
+    "output_tokens": 360188,
+    "generation_wall_seconds": 98.58561306679621
+  },
+  "bounded_summary": {
+    "status": "incomplete",
+    "reason": "launcher_exited",
+    "completed_updates": 0,
+    "requested_updates": 4,
+    "wall_seconds": 738.2889471279923,
+    "launcher_returncode": 1,
+    "job_id": "2145015",
+    "node": "deep-chungus-7",
+    "updates": [],
+    "generations": [],
+    "trainer": [],
+    "measures_exact256_phase": false,
+    "checkpoint_timing_measured": false
+  },
+  "postfailure_gpu_state": {
+    "observed_utc": "2026-09-27T00:53:17.044664+00:00",
+    "diagnostic_job": "2145020",
+    "node": "deep-chungus-7",
+    "gpus": {
+      "stdout": "0, GPU-903e8a7b-ff3e-02cb-6a4d-0b7ab16b5027, 81920 MiB, 1 MiB, 81156 MiB\n1, GPU-b03bc3ba-472c-8081-1374-cfb54402f3ac, 81920 MiB, 1 MiB, 81156 MiB\n2, GPU-f12c8a0e-d339-efb5-a82a-3da130030298, 81920 MiB, 1 MiB, 81156 MiB\n3, GPU-1a580dec-5dbf-b233-37d0-ad28d7816c96, 81920 MiB, 1 MiB, 81156 MiB\n4, GPU-ba431598-b47d-7149-ba8a-09d754f3ed55, 81920 MiB, 1 MiB, 81156 MiB\n5, GPU-6773861d-51c4-ced0-1784-de4d08064ea9, 81920 MiB, 1 MiB, 81156 MiB\n6, GPU-99e6d841-8f03-96c4-7573-c45c3e4026cc, 81920 MiB, 72825 MiB, 8331 MiB\n7, GPU-21dae0b4-8feb-1aeb-a298-58e0f7cd24d5, 81920 MiB, 1 MiB, 81156 MiB\n",
+      "stderr": "",
+      "returncode": 0
+    },
+    "processes": {
+      "stdout": "GPU-99e6d841-8f03-96c4-7573-c45c3e4026cc, 2423437, VLLM::EngineCore, 72816 MiB\n",
+      "stderr": "",
+      "returncode": 0
+    },
+    "owners": "    PID    PPID USER                      STARTED COMMAND\n2423437       1 mohamad+ Thu Sep 24 05:35:30 2026 VLLM::EngineCor\n",
+    "cgroups": {
+      "2423437": "0::/system.slice/slurmd.service\n"
+    }
+  },
+  "process_owner": {
+    "diagnostic_job": "2145021",
+    "pid": 2423437,
+    "uid": 29562,
+    "caller_uid": 29562,
+    "cwd": "/mnt/nfs/home/mohamadzbib/projects/rl-infra/repos/prime-rl",
+    "exe": "/mnt/nfs/home/mohamadzbib/projects/rl-infra/python/cpython-3.12.14-linux-x86_64-gnu/bin/python3.12",
+    "process": "    PID    PPID USER                               UID                  STARTED COMMAND\n2423437       1 mohamadzbib                      29562 Thu Sep 24 05:35:30 2026 VLLM::EngineCor\n",
+    "job_environment": {}
+  },
+  "other_process_terminated": false,
+  "relaunch_submitted": false,
+  "validation": {
+    "profile_tests_passed": 6,
+    "ruff": "passed",
+    "shell_syntax": "passed",
+    "embedded_probe_syntax": "passed",
+    "occupied_gpu_guard": {
+      "job_id": 2145023,
+      "device": "5",
+      "returncode": 1,
+      "blocked_occupied_gpu": true,
+      "free_bytes": 8295481344,
+      "total_bytes": 85097971712
+    },
+    "earlier_guard_probe": {
+      "job_id": 2145022,
+      "cpu_slots": 8,
+      "memory_gib": 8,
+      "child_timeout_seconds": 60,
+      "result": "All eight child probes timed out; did not validate GPU readiness or memory guard"
+    }
+  }
+}

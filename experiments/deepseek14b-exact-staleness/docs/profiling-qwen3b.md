@@ -38,3 +38,15 @@ Cluster paths:
 - Bounded timing result: `work/timing-summary.json`, written when the profile exits.
 - XFS mirror: `/mnt/xfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/metrics/qwen25-3b-exact256-timing-2145015`.
 - [Runboard](https://runboard-cloudflare.mbz02.workers.dev): project `staleness-analysis`, name `qwen25-3b-exact256-timing-2145015`, run ID `f52d563535754063b5afcbe07f26e30a`.
+
+## Failure after the first generated cohort
+
+Job **2145015** failed after 18 minutes 11 seconds, before completing any optimizer update. It generated one 512-response bootstrap cohort containing 360,188 output tokens in 98.59 seconds. During the first backward pass, trainer rank 2 could not allocate another 136 MiB: only 121.19 MiB was free. The trainer held about 8.01 GiB while another process held 71.11 GiB. This was not the intended four-update termination and was not reported by Slurm as preemption.
+
+A subsequent short allocated diagnostic found PID **2423437**, `VLLM::EngineCore`, still occupying 72,816 MiB on GPU UUID `GPU-99e6d841-8f03-96c4-7573-c45c3e4026cc`. It belongs to `mohamadzbib`, started on September 24 at 05:35:30 in the cluster's local time, has parent PID 1, and uses the older `/mnt/nfs/home/mohamadzbib/projects/rl-infra/repos/prime-rl` directory and environment. No Slurm job environment was present. It is separate from this profile's recorded trainer and inference worker PIDs. GPU UUIDs distinguish CUDA-visible numbering from NVML indices. The [failure and ownership receipt](../diagnostics/profiling-20260927-qwen3b-failure.json) preserves the evidence.
+
+The earlier tiny BF16 health check passed despite insufficient memory for training. New profiling preflight requires at least 90% free CUDA memory before its backward probe, records free/total bytes, and stops on an occupied GPU instead of silently treating it as a faulty device eligible for the seven-GPU fallback. New Qwen wrappers also set `CUDA_DEVICE_ORDER=PCI_BUS_ID` before both health checks and model launch, matching the PrimeRL worker setting. The loss, optimizer, cohort size and staleness schedule are unchanged. Running jobs and frozen releases are unchanged.
+
+A fresh retry directory is prepared at `/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/profiling/20260927-qwen3b-node7-v2`. The old server has not been stopped and the retry has not been submitted; ownership of this separate experiment's inference service requires confirmation before terminating it.
+
+The occupied-device guard was verified on the cluster in diagnostic job **2145023**: it rejected CUDA device 5 with 8,295,481,344 of 85,097,971,712 bytes free before running backward. An earlier eight-process diagnostic with eight CPU slots, 8 GiB host memory and a 60-second child timeout timed out on all probes; it did not validate readiness. A clean full-node health check remains required for the retry. Six local profile tests, Ruff, wrapper shell syntax and embedded probe syntax passed.

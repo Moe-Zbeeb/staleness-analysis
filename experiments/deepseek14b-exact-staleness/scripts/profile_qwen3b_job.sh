@@ -5,6 +5,7 @@ STUDY_ROOT=/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study
 PROFILE_DIR="$PROFILE_CONTROL/work"
 PROFILE_PYTHON="$STUDY_ROOT/vendor/prime-rl/.venv/bin/python"
 export PYTHONUNBUFFERED=1
+export CUDA_DEVICE_ORDER=PCI_BUS_ID
 export OMP_NUM_THREADS=4
 export RUNBOARD_HOME=/mnt/xfs/home/mohamadzbib/.runboard
 export RUNBOARD_PROJECT=staleness-analysis
