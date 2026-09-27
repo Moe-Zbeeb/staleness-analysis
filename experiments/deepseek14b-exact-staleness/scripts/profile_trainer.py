@@ -21,6 +21,7 @@ def main():
     parser.add_argument("--micro-batches", type=int, default=2)
     parser.add_argument("--steps", type=int, default=3)
     parser.add_argument("--trace", action="store_true")
+    parser.add_argument("--model-overrides", type=Path)
     args = parser.parse_args()
     if args.micro_batches < 1 or not 1 <= args.steps <= 10:
         raise ValueError("Profiling requires positive micro-batches and at most ten updates")
@@ -115,6 +116,11 @@ def main():
         return optimizer, manager
 
     config_data = json.loads(args.config.read_text())
+    if args.model_overrides is not None:
+        overrides = json.loads(args.model_overrides.read_text())
+        if set(overrides) - {"ac", "reshard_after_forward", "compile"}:
+            raise ValueError("Replay overrides must only change recomputation, resharding or compilation")
+        config_data["model"].update(overrides)
     config_data.update(
         output_dir=str(args.output / "trainer"),
         max_steps=args.steps,

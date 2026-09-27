@@ -1,4 +1,5 @@
 import argparse
+import copy
 import json
 import statistics
 from pathlib import Path
@@ -6,12 +7,30 @@ from pathlib import Path
 import numpy as np
 
 
-def compare(baseline, candidate, ranks, steps):
+def compare_configs(baseline, candidate, allowed_model_changes=()):
+    allowed = set(allowed_model_changes)
+    if allowed - {"ac", "reshard_after_forward", "compile"}:
+        raise ValueError("Only documented model performance settings may differ")
+    left, right = copy.deepcopy(baseline), copy.deepcopy(candidate)
+    left.pop("output_dir")
+    right.pop("output_dir")
+    changes = {}
+    for key in allowed:
+        values = [left["model"].pop(key, None), right["model"].pop(key, None)]
+        if values[0] != values[1]:
+            changes[key] = values
+    if left != right:
+        raise ValueError("Trainer configurations differ beyond explicitly allowed performance settings")
+    return changes
+
+
+def compare(baseline, candidate, ranks, steps, allowed_model_changes=()):
     static_columns = ("token_id", "position", "behavior_logp", "advantage", "response_lengths")
     float_columns = ("current_logp", "entropy")
     mask_columns = ("surrogate_clipped", "zero_policy_signal")
     records = []
     environment_changes = []
+    model_changes = []
     for rank in range(ranks):
         receipts = [json.loads((root / f"rank-{rank}" / "timings.json").read_text()) for root in (baseline, candidate)]
         if receipts[0]["grid_sha256"] != receipts[1]["grid_sha256"]:
@@ -32,10 +51,7 @@ def compare(baseline, candidate, ranks, steps):
         }
         environment_changes.append({"rank": rank, "changes": changes})
         configs = [json.loads((root / f"rank-{rank}" / "config.json").read_text()) for root in (baseline, candidate)]
-        for config in configs:
-            config.pop("output_dir")
-        if configs[0] != configs[1]:
-            raise ValueError("Trainer configurations differ beyond their output directories")
+        model_changes.append({"rank": rank, "changes": compare_configs(configs[0], configs[1], allowed_model_changes)})
         for step in range(1, steps + 1):
             relative = Path("trainer/paper/tokens") / f"step_{step}" / f"rank_{rank}.npz"
             with (
@@ -99,6 +115,7 @@ def compare(baseline, candidate, ranks, steps):
         "outputs_bitwise_equal": all(value["bitwise_equal"] for row in records for value in row["numerical"].values()),
         "mask_differences": {key: sum(row["mask_differences"][key] for row in records) for key in mask_columns},
         "environment_changes": environment_changes,
+        "model_changes": model_changes,
         "median_step_speedup": statistics.median(row["speedup"] for row in timing_rows),
         "timings": timing_rows,
         "token_comparisons": records,
@@ -113,10 +130,13 @@ def main():
     parser.add_argument("--ranks", type=int, required=True)
     parser.add_argument("--steps", type=int, default=3)
     parser.add_argument("--output", type=Path, required=True)
+    parser.add_argument(
+        "--allow-model-change", action="append", choices=("ac", "reshard_after_forward", "compile"), default=[]
+    )
     args = parser.parse_args()
     if args.ranks < 2 or not 1 <= args.steps <= 10:
         raise ValueError("Expected a bounded distributed replay")
-    result = compare(args.baseline, args.candidate, args.ranks, args.steps)
+    result = compare(args.baseline, args.candidate, args.ranks, args.steps, args.allow_model_change)
     with args.output.open("x") as stream:
         stream.write(json.dumps(result, indent=2, allow_nan=False) + "\n")
     print(
