@@ -1,6 +1,7 @@
 import importlib.util
 import json
 import sys
+import types
 from pathlib import Path
 
 import pytest
@@ -214,3 +215,22 @@ def test_runtime_relocation_rewrites_entrypoints_and_fails_on_external_dependenc
         assert str(venv / "bin/python") in (venv / "bin/ninja").read_text()
         assert (site / "prime.pth").read_text() == str(runtime / "prime-rl/src") + "\n"
         assert (site / "_editable_impl_deepseek_staleness_study.pth").read_text() == str(release / "src") + "\n"
+
+
+@pytest.mark.parametrize("external_namespace", [False, True])
+def test_runtime_audit_supports_namespace_packages_and_rejects_remote_paths(tmp_path, monkeypatch, external_namespace):
+    monkeypatch.setattr(sys, "base_prefix", str(tmp_path / "python"))
+    monkeypatch.setattr(sys, "argv", ["audit", str(tmp_path)])
+    for name in ("prime_rl", "torch", "vllm", "verifiers"):
+        module = types.ModuleType(name)
+        if name == "prime_rl":
+            module.__file__ = None
+            module.__path__ = ["/mnt/nfs/prime-rl/src/prime_rl" if external_namespace else str(tmp_path / name)]
+        else:
+            module.__file__ = str(tmp_path / name / "__init__.py")
+        monkeypatch.setitem(sys.modules, name, module)
+    if external_namespace:
+        with pytest.raises(RuntimeError, match="outside local storage"):
+            exec(LOCAL.RUNTIME_AUDIT, {})
+    else:
+        exec(LOCAL.RUNTIME_AUDIT, {})

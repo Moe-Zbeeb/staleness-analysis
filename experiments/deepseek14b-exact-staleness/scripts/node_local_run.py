@@ -23,6 +23,25 @@ PATH_FIELDS = {
     "metrics_mirror_root",
 }
 
+RUNTIME_AUDIT = """
+import json
+import sys
+from pathlib import Path
+import prime_rl, torch, vllm, verifiers
+
+root = Path(sys.argv[1]).resolve()
+if not Path(sys.base_prefix).resolve().is_relative_to(root):
+    raise RuntimeError('CPython base is outside local storage')
+locations = {}
+for module in (prime_rl, torch, vllm, verifiers):
+    filename = getattr(module, '__file__', None)
+    paths = [filename] if filename else list(getattr(module, '__path__', ()))
+    if not paths or any(not Path(path).resolve().is_relative_to(root) for path in paths):
+        raise RuntimeError('Runtime module is outside local storage: ' + module.__name__)
+    locations[module.__name__] = paths
+print(json.dumps({'node_local_runtime': True, 'python_base': sys.base_prefix, 'modules': locations}))
+"""
+
 
 def relocate_study(baseline, workspace, name):
     workspace = Path(workspace)
@@ -266,16 +285,40 @@ def stage(spec, control):
         cwd=release,
         timeout=1800,
     )
+    return seal_staging(spec, control)
+
+
+def seal_staging(spec, control):
+    workspace, runtime = secure_local(spec["workspace"]), secure_local(spec["runtime"])
+    release, assets = workspace / "release", workspace / "assets"
+    source = Path(spec["release"])
+    if (workspace / "ready.json").exists():
+        raise FileExistsError("Local staging was already verified")
+    baseline = json.loads(Path(spec["baseline_study"]).read_text())
+    expected = relocate_study(baseline, workspace, spec["run_name"])
+    if json.loads((workspace / "study.json").read_text()) != expected:
+        raise ValueError("Staged configuration differs from the unchanged baseline")
+    if Path(expected["output_dir"]).exists():
+        raise FileExistsError("Refusing to reverify an existing training run")
+    if digest(release / "PACKAGE_SHA256.json") != digest(source / "PACKAGE_SHA256.json"):
+        raise ValueError("Staged package manifest changed")
+    for name, checksum in json.loads((release / "PACKAGE_SHA256.json").read_text()).items():
+        if digest(release / name) != checksum:
+            raise ValueError(f"Staged release file changed: {name}")
+    for item in json.loads((release / "manifests/model.json").read_text())["files"]:
+        path = assets / "model" / item["name"]
+        if path.stat().st_size != item["size"] or digest(path) != item["sha256"]:
+            raise ValueError(f"Staged model hash differs: {item['name']}")
+    if digest(assets / "train-manifest.json") != digest(baseline["data_manifest"]):
+        raise ValueError("Staged question manifest differs from the baseline")
+    python = runtime / "prime-rl/.venv/bin/python"
+    env = local_environment(runtime, workspace, release)
     command([python, "-m", "deepseek_study.cli", "check", workspace / "study.json"], env=env, cwd=release, timeout=900)
     command(
         [
             python,
             "-c",
-            "import sys, pathlib, prime_rl, torch, vllm, verifiers; "
-            "root=pathlib.Path(sys.argv[1]); "
-            "assert pathlib.Path(sys.base_prefix).is_relative_to(root); "
-            "assert all(pathlib.Path(m.__file__).resolve().is_relative_to(root) for m in (prime_rl,torch,vllm,verifiers)); "
-            "print('Runtime imports and CPython base are node-local')",
+            RUNTIME_AUDIT,
             runtime,
         ],
         env=env,
@@ -499,16 +542,19 @@ def run(spec):
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("mode", choices=("stage", "run"))
+    parser.add_argument("mode", choices=("stage", "verify", "run"))
     parser.add_argument("--control", type=Path, required=True)
     args = parser.parse_args()
     control = args.control.resolve()
     specification = json.loads((control / "storage-spec.json").read_text())
-    if args.mode == "stage":
+    if args.mode in {"stage", "verify"}:
         for name, expected in json.loads((control / "CONTROL_SHA256.json").read_text()).items():
             if digest(control / name) != expected:
                 raise ValueError(f"Staging control changed: {name}")
-        stage(specification, control)
+        if args.mode == "stage":
+            stage(specification, control)
+        else:
+            seal_staging(specification, control)
     else:
         run(specification)
 
