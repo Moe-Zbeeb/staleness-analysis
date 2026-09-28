@@ -1,0 +1,7 @@
+PRIME_COMMIT = "ab5de8fff44b2c4a5c85e24b6e6e3f7d57eee7b1"
+MODEL_ID = "deepseek-ai/DeepSeek-R1-Distill-Qwen-7B"
+MODEL_REVISION = "916b56a44061fd5cd7d6a8fb632557ed4f724f60"
+DATASET_ID = "zbeeb/DeepScaleR-Verifiable-Dedup"
+DATASET_REVISION = "debec4f6cc837fce13351c6c5bfddfdda1027549"
+DATASET_SHA256 = "ebaf012ab811d4569e1409438daedac04bb671569d52a47bfb2d512ea784b0ff"
+DATASET_ROWS = 37713
