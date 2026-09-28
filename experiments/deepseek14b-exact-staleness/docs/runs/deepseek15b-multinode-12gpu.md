@@ -1,6 +1,6 @@
 # DeepSeek 1.5B exact k=256 on twelve GPUs
 
-The user requested stopping the on-policy baseline and using the full twelve-A100 high-priority quota for one exact-k256 study. Replacement job **2145304** was admitted on `deep-chungus-3` and `deep-chungus-5`, with both partition and QoS `high-priority`, account `grad-students`, 96 CPUs, six GPUs and 200 GiB requested per node, a 45-day limit, and automatic requeue disabled. The preceding allocation passed all twelve GPU checks and the cross-node collective. The corrected full launch is repeating these checks; the first committed training update is not yet verified.
+The user requested stopping the on-policy baseline and using the full twelve-A100 high-priority quota for one exact-k256 study. Replacement job **2145304** was admitted on `deep-chungus-3` and `deep-chungus-5`, with both partition and QoS `high-priority`, account `grad-students`, 96 CPUs, six GPUs and 200 GiB requested per node, a 45-day limit, and automatic requeue disabled. This allocation passed all twelve GPU checks, the cross-node collective, eight-engine routing and the first complete optimizer update. Update 1 and its metrics are present on both NFS and XFS.
 
 | Node | Trainer GPUs | Inference GPUs |
 | --- | ---: | ---: |
@@ -28,7 +28,7 @@ The custom launcher accepts an explicit `RemoteInference` deployment manifest. I
 
 Official PrimeRL v0.9.0 at `ab5de8fff44b2c4a5c85e24b6e6e3f7d57eee7b1` and vLLM source are unchanged. We added the official **vllm-router 0.2.0** wheel already pinned in PrimeRL's lockfile to each isolated local runtime. Its SHA256 is `bac193bedf10f9a0265fe4fdaae0f0418574cd1f15c45f27da1b4a2bae8c10b8`. The adapter records the router version in run identity; no shared environment is upgraded. P2P/SHM are disabled for the initial mixed-node PCIe-compatible NCCL setup, matching the earlier component benchmark environment; cross-node communication is measured at startup.
 
-91 local tests passed covering configuration wiring, distinct engine seeds, invalid endpoint/device rejection, exact-age queue behavior, storage and recovery. A cluster config dry-run also resolved. Twelve GPUs and cross-node NCCL passed the runtime diagnostic: sum 78 and five 32 MiB broadcasts in 0.193373 seconds. The real model weight broadcast and full-size training remain separate runtime gates. No speedup multiplier or completion ETA is established yet.
+91 local tests passed covering configuration wiring, distinct engine seeds, invalid endpoint/device rejection, exact-age queue behavior, storage and recovery. A cluster config dry-run also resolved. Twelve GPUs and cross-node NCCL passed the runtime diagnostic: sum 78 and five 32 MiB broadcasts in 0.193373 seconds. The replacement subsequently completed a full-size update and policy broadcast. No speedup multiplier or completion ETA is established from this single update.
 
 ## Storage and recovery
 
@@ -55,3 +55,11 @@ Job **2145296** passed the production network preflight and started the router, 
 Job **2145301** passed GPU/network checks and synchronized the startup model to all eight engines, but the router initially registered six still-starting engines under `unknown` and sent generation only to the two ready engines. It was intentionally stopped with zero committed updates. The adapter now waits for every engine to serve the expected model, then requires all eight router entries to be healthy and correctly identified before starting training. The router uses `round_robin`: the previous load-based policy polled `/get_load`, which returns 404 in this vLLM version. This change distributes a 512-request cohort evenly without changing its prompts, sample count, or loss. See the [upstream readiness behavior](https://github.com/PrimeIntellect-ai/router/blob/v0.2.0/src/routers/http/router.rs) and [round-robin implementation](https://github.com/PrimeIntellect-ai/router/blob/v0.2.0/src/policies/round_robin.rs).
 
 The corrected replacement is **2145304**, on the same twelve-GPU high-priority layout, with fresh outputs ending in `v6`.
+
+## First completed update
+
+Job **2145304** committed update 1 with 512 responses, bootstrap age 0, mean reward 0.4160, finite learner loss 0.00007294, entropy 0.8144, and mismatch KL 0.0004234. The deferred cohort generated at policy version 0 is scheduled for update 257. All eight inference engines served generation requests, and the updated policy was acknowledged before commit. NFS and XFS both contain the committed update and TensorBoard files; the backup process reports verified status.
+
+The controller measured 883.02 seconds for the first bootstrap update: generation cohorts 134.12 and 133.61 seconds, learner wait 604.47 seconds, and weight transfer 9.78 seconds. These are first-update measurements, not steady-state estimates or a controlled comparison. Training is the dominant cost, so twelve allocated GPUs alone do not establish a speedup. The four trainer GPUs peaked around 11 GiB.
+
+Two transient cross-node HTTP model-call errors were logged during the first cohort. The complete cohort subsequently passed the controller validation and update 1 completed, but this is not proof of an error-free transport or absence of internal SDK retries. Whole-episode and whole-agent retries remain disabled; the router allows one attempt. The attempt-level transport audit is a remaining limitation. No frozen library or scientific settings were changed to hide the errors.
