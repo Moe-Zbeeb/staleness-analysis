@@ -14,7 +14,8 @@ def test_cli_creates_one_requested_run_and_builds_real_official_configs(tmp_path
     value = json.loads(config.read_text())
     assert value["lag"] == 7
     assert value["prompts_per_update"] * value["responses_per_prompt"] == 512
-    assert not any(item is None for key, item in value.items() if key != "metrics_mirror_root")
+    assert not any(item is None for key, item in value.items() if key not in {"metrics_mirror_root", "historical_rollouts"})
+    assert value["historical_rollouts"] is None
     destination = tmp_path / "resolved"
     subprocess.run(command + ["build", str(config), str(destination)], check=True, capture_output=True)
     protocol = json.loads((destination / "protocol.json").read_text())

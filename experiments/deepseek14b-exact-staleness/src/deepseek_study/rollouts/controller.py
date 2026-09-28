@@ -340,20 +340,31 @@ async def control(study, orchestrator_path, resume=None):
     identity = read_identity(study.output_dir / "source" / "identity.json")
     if resume:
         checkpoints.verify_components(Path(resume))
+    from deepseek_study.rollouts.async_queue import AsyncQueueState, run_async
+
     state = (
         checkpoints.load(Path(resume) / "study", study.fingerprint(), identity["sha256"])
         if resume
-        else QueueState(study.lag)
+        else (AsyncQueueState(study.lag) if study.historical_rollouts else QueueState(study.lag))
     )
+    if bool(study.historical_rollouts) != isinstance(state, AsyncQueueState):
+        raise ValueError("Checkpoint queue mode differs from the configured rollout scheduler")
     orch = Orchestrator(config)
     await orch.setup()
     try:
         if orch.policy.version != state.completed_steps or orch.progress.step != state.completed_steps + 1:
             raise RuntimeError("Restored trainer/orchestrator state does not match the rollout queue")
-        backend = PrimeBackend(study, orch)
+        if study.historical_rollouts:
+            from deepseek_study.rollouts.historical import HistoricalBackend
+
+            backend = HistoricalBackend(study, orch)
+            await backend.restore_jobs(state, Path(resume) if resume else None)
+        else:
+            backend = PrimeBackend(study, orch)
         async with asyncio.TaskGroup() as tasks:
             dispatcher = tasks.create_task(orch.dispatcher.start())
-            await run(backend, state, study.max_steps, study.response_batch_size)
+            runner = run_async if study.historical_rollouts else run
+            await runner(backend, state, study.max_steps, study.response_batch_size)
             await orch.dispatcher.stop()
             await dispatcher
         await monitors.finalize()
@@ -364,4 +375,8 @@ async def control(study, orchestrator_path, resume=None):
             ).encode(),
         )
     finally:
-        await orch.stop()
+        try:
+            if study.historical_rollouts and "backend" in locals():
+                await backend.close()
+        finally:
+            await orch.stop()

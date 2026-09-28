@@ -1,5 +1,6 @@
 import argparse
 import hashlib
+import importlib.util
 import json
 import os
 import shutil
@@ -286,6 +287,22 @@ def relocate_runtime(runtime, shared_prime, release):
     return venv / "bin/python"
 
 
+def install_stage_router(spec, control, runtime, release):
+    enabled = spec.get("install_router", False)
+    if type(enabled) is not bool:
+        raise ValueError("install_router must be an explicit boolean")
+    if not enabled:
+        return
+    path = release / "scripts/multinode_run.py"
+    expected = json.loads((release / "PACKAGE_SHA256.json").read_text()).get("scripts/multinode_run.py")
+    if not expected or digest(path) != expected:
+        raise ValueError("Router installer differs from the frozen release")
+    module_spec = importlib.util.spec_from_file_location("study_staging_router", path)
+    module = importlib.util.module_from_spec(module_spec)
+    module_spec.loader.exec_module(module)
+    module.install_router(Path(control), Path(runtime))
+
+
 def stage(spec, control):
     workspace = secure_local(spec["workspace"])
     runtime = secure_local(spec["runtime"])
@@ -305,6 +322,7 @@ def stage(spec, control):
     (release / "vendor").mkdir()
     (release / "vendor/prime-rl").symlink_to(runtime / "prime-rl")
     python = relocate_runtime(runtime, Path(spec["shared_prime"]), release)
+    install_stage_router(spec, control, runtime, release)
     env = local_environment(runtime, workspace, release)
     assets = workspace / "assets"
     assets.mkdir()
@@ -415,10 +433,11 @@ def seal_staging(spec, control):
     old_tokenizer = Path(baseline["prepared_model_path"]) / "tokenizer_config.json"
     if digest(old_tokenizer) != digest(assets / "native-model/tokenizer_config.json"):
         raise ValueError("Storage migration changed the prepared tokenizer")
-    old_receipt = json.loads((Path(baseline["prepared_model_path"]) / "study-assets.json").read_text())
     new_receipt = json.loads((assets / "native-model/study-assets.json").read_text())
-    if new_receipt["dataset_sha256"] != old_receipt["dataset_sha256"]:
-        raise ValueError("Storage migration changed the dataset")
+    if new_receipt["dataset_sha256"] != digest(baseline["dataset_path"]) or new_receipt["dataset_sha256"] != digest(
+        assets / "train.parquet"
+    ):
+        raise ValueError("Staged dataset or prepared receipt differs from the baseline dataset")
     for name in ("local_backup.py", "node_local_run.py", "launch_full_run.py", "probe_allocated_gpus.py"):
         shutil.copy2(control / name, workspace / name)
     atomic_json(workspace / "storage-spec.json", spec)
@@ -448,6 +467,31 @@ def seal_staging(spec, control):
     atomic_json(workspace / "ready.json", receipt)
     atomic_json(control / "local-ready.json", receipt)
     return receipt
+
+
+def select_local_devices(spec, values, probes, environment):
+    from launch_full_run import select_devices
+
+    if any(type(values.get(key)) is not int or values[key] < 1 for key in ("trainer_gpus", "inference_gpus")):
+        raise ValueError("Local run requires positive trainer and inference GPU counts")
+    count = values["trainer_gpus"] + values["inference_gpus"]
+    if spec.get("allocated_gpus", count) != count:
+        raise ValueError("Local allocation size differs from the prepared topology")
+    if (
+        probes.get("allocated_devices") != environment.get("CUDA_VISIBLE_DEVICES", "").split(",")
+        or str(probes.get("job_id")) != str(environment.get("SLURM_JOB_ID"))
+        or probes.get("node") != environment.get("SLURMD_NODENAME")
+    ):
+        raise ValueError("Local GPU probes belong to another allocation")
+    minimum = spec.get("minimum_gpu_bytes", 79_000_000_000)
+    if type(minimum) is not int or minimum < 39_000_000_000:
+        raise ValueError("Local GPU memory minimum must be at least 39 billion bytes")
+    devices = select_devices(probes, count, count)
+    if any(
+        "A100" not in row["name"] or row["bytes"] < minimum for row in probes["results"] if row["device"] in devices
+    ):
+        raise ValueError("Local run requires A100 GPUs meeting the configured memory minimum")
+    return devices
 
 
 def run(spec):
@@ -485,8 +529,6 @@ def run(spec):
         timeout=180,
     )
     sys.path.insert(0, str(workspace))
-    from launch_full_run import select_devices
-
     hardware = workspace / ("hardware-" + os.environ["SLURM_JOB_ID"])
     hardware.mkdir()
     command(
@@ -495,13 +537,7 @@ def run(spec):
         timeout=360,
     )
     probes = json.loads((hardware / "probes.json").read_text())
-    devices = select_devices(probes, 8, values["trainer_gpus"] + values["inference_gpus"])
-    if any(
-        "A100" not in row["name"] or row["bytes"] < 79_000_000_000
-        for row in probes["results"]
-        if row["device"] in devices
-    ):
-        raise ValueError("Local run requires A100 80GB GPUs")
+    devices = select_local_devices(spec, values, probes, os.environ)
     environment["CUDA_VISIBLE_DEVICES"] = ",".join(devices)
     command(
         [

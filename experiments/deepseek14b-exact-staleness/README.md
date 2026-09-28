@@ -1,6 +1,10 @@
-## September 28 resilient relaunch
+## September 28 asynchronous DAPO run
 
-Replacement job **2145376** uses 12 GPUs on high-priority nodes 5 and 7. See [the run record](docs/runs/deepseek15b-resilient-12gpu.md) for validation, paths and recovery limits.
+The user stopped job **2145376**. Its replacement uses the pinned DeepSeek 1.5B model, all 17,005 prepared DAPO questions and a **6,144-token response cap**. One complete HP learner node keeps its trainers together; separate historical workers receive immutable exports without cross-node NCCL. The first 256 updates remain on-policy and updates 257–1,000 consume exact-age-256 cohorts. This is a new experiment, not a resume of the old dataset/cap. See the [settings, algorithm, storage and integration guide](docs/asynchronous-historical-rollouts.md).
+
+## Historical September 28 resilient relaunch
+
+The now-cancelled replacement job **2145376** used 12 GPUs on high-priority nodes 5 and 7. See [the run record](docs/runs/deepseek15b-resilient-12gpu.md) for validation, paths and recovery limits.
 
 Job 2145304 failed after 15 committed bootstrap updates when `math-verify` repeatedly timed out comparing a generated large-exponent answer. No complete checkpoint existed; its logs and failed response are preserved. The replacement starts from the pinned initial model in a new output directory.
 
@@ -14,7 +18,7 @@ No official PrimeRL or vLLM source is edited. The existing checkpoint adapter no
 
 One run at a time, with the exact nonnegative integer `k` you request. This package composes official PrimeRL v0.9.0 at `ab5de8fff44b2c4a5c85e24b6e6e3f7d57eee7b1`; it does not import the teammate fork or edit upstream files.
 
-The active launch is **DeepSeek-R1-Distill-Qwen-1.5B, exact k=256, job 2145304**, using all twelve A100 GPUs in the high-priority quota across nodes 3 and 5: four trainer GPUs and eight inference GPUs. The user stopped the k=0 baseline and replaced the old eight-GPU k256 job. All twelve GPUs passed health checks, all eight inference engines received work, and update 1 completed with finite learner metrics. Its first bootstrap update took 883 seconds; this does not establish a throughput speedup. It retains 1,000 updates, local active storage, verified NFS backups, XFS metrics and TensorBoard only. See the [twelve-GPU launch record](docs/runs/deepseek15b-multinode-12gpu.md).
+The earlier launch was **DeepSeek-R1-Distill-Qwen-1.5B, exact k=256, job 2145304**, using all twelve A100 GPUs in the high-priority quota across nodes 3 and 5: four trainer GPUs and eight inference GPUs. The user stopped the k=0 baseline and replaced the old eight-GPU k256 job. All twelve GPUs passed health checks, all eight inference engines received work, and update 1 completed with finite learner metrics. Its first bootstrap update took 883 seconds; this does not establish a throughput speedup. It retains 1,000 updates, local active storage, verified NFS backups, XFS metrics and TensorBoard only. See the [twelve-GPU launch record](docs/runs/deepseek15b-multinode-12gpu.md).
 
 The preceding bounded readiness job `2144960` passed (exit `0:0`, 54m 45s), including all 129 cluster tests. The real 14B model completed three updates with ages 0, 1, 1, then resumed checkpoint 2 and reexecuted update 3 using the original queued data. Responses reached 8,192 tokens; trainer peak memory reached about 72 GiB after restart. Checkpoints are on NFS and metric evidence is mirrored to XFS. See the [readiness report](docs/readiness-test.md) and [validation evidence](diagnostics/cluster-validation.json).
 

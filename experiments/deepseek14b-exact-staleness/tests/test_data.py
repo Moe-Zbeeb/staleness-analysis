@@ -94,6 +94,7 @@ async def test_preparation_never_commits_results_with_a_changed_grader_contract(
     monkeypatch.setattr(data, "GraderPool", Pool)
     monkeypatch.setattr(data, "reward_identity", lambda: {"source_sha256": grader_identity[0]})
     monkeypatch.setattr(data, "read_rows", lambda path: [row])
+    monkeypatch.setattr(data, "dataset_source", lambda path: data.source_for_sha256(data.DATASET_SHA256))
     monkeypatch.setattr(data, "tokenizer", lambda path: SimpleNamespace(apply_chat_template=lambda *args, **kw: [1]))
     if changed:
         with pytest.raises(ValueError, match="contract changed while grading references"):

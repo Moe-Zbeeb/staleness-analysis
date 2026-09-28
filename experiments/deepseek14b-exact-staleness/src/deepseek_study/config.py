@@ -15,6 +15,7 @@ class StudyConfig(BaseModel):
     prepared_model_path: Path
     output_dir: Path
     metrics_mirror_root: Path | None = None
+    historical_rollouts: Path | None = None
     prompts_per_update: int = Field(ge=1)
     responses_per_prompt: int = Field(ge=2)
     prompt_max_tokens: int = Field(ge=1)
@@ -73,6 +74,8 @@ class StudyConfig(BaseModel):
 
     @model_validator(mode="after")
     def validate_layout(self):
+        if self.historical_rollouts is not None and (not self.historical_rollouts.is_absolute() or self.lag == 0):
+            raise ValueError("Historical rollout storage requires an absolute path and positive lag")
         if self.max_steps <= self.lag:
             raise ValueError(
                 "The total update budget must include at least one exact-staleness update after bootstrap"
@@ -96,12 +99,23 @@ class StudyConfig(BaseModel):
         if self.sequence_length > 131072:
             raise ValueError("Sequence length exceeds the pinned model context")
         inputs = (self.model_path, self.dataset_path, self.prepared_model_path, self.data_manifest)
+        if self.historical_rollouts is not None:
+            history = self.historical_rollouts.resolve()
+            if any(history.is_relative_to(path.resolve()) or path.resolve().is_relative_to(history) for path in inputs):
+                raise ValueError("Historical rollout storage must not overlap input assets")
+            output = self.output_dir.resolve()
+            if history.is_relative_to(output) or output.is_relative_to(history):
+                raise ValueError("Historical rollout storage and active run directory must be separate")
         if self.metrics_mirror_root is not None:
             mirror = self.metrics_mirror_root.resolve() / self.output_dir.name
             if mirror.is_relative_to(self.output_dir.resolve()) or self.output_dir.resolve().is_relative_to(mirror):
                 raise ValueError("Metric mirror and run directory must be separate")
             if any(mirror.is_relative_to(path.resolve()) or path.resolve().is_relative_to(mirror) for path in inputs):
                 raise ValueError("Metric mirror must not overlap input assets")
+            if self.historical_rollouts is not None and (
+                history.is_relative_to(mirror) or mirror.is_relative_to(history)
+            ):
+                raise ValueError("Historical rollout storage and metric mirror must be separate")
         if any(
             self.output_dir.resolve().is_relative_to(path.resolve())
             for path in (self.model_path, self.prepared_model_path)
@@ -131,6 +145,8 @@ class StudyConfig(BaseModel):
 
     def fingerprint(self):
         content = self.model_dump(mode="json", exclude={"output_dir", "metrics_mirror_root"})
+        if self.historical_rollouts is None:
+            content.pop("historical_rollouts")
         return hashlib.sha256(json.dumps(content, sort_keys=True).encode()).hexdigest()
 
     @classmethod

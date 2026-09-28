@@ -17,6 +17,17 @@ def resolve(study, resume=None, remote=None):
             "decay_steps": study.lr_decay_steps,
             "min_lr": study.min_learning_rate,
         }
+    weight_broadcast = {
+        "type": "filesystem" if study.historical_rollouts else "nccl",
+        "timeout": max(
+            study.generation_timeout_seconds,
+            study.training_timeout_seconds,
+            study.weight_transfer_timeout_seconds,
+            study.checkpoint_timeout_seconds,
+        ),
+    }
+    if not study.historical_rollouts:
+        weight_broadcast["port"] = study.inference_port + 10
     config = RLConfig.model_validate(
         {
             "model": {"name": model},
@@ -35,16 +46,7 @@ def resolve(study, resume=None, remote=None):
                 "num_train_gpus": study.trainer_gpus,
                 "num_infer_gpus": study.inference_gpus,
             },
-            "weight_broadcast": {
-                "type": "nccl",
-                "port": study.inference_port + 10,
-                "timeout": max(
-                    study.generation_timeout_seconds,
-                    study.training_timeout_seconds,
-                    study.weight_transfer_timeout_seconds,
-                    study.checkpoint_timeout_seconds,
-                ),
-            },
+            "weight_broadcast": weight_broadcast,
             "rollout_transport": {"type": "zmq", "port": study.inference_port + 20},
             "trainer": {
                 "dist_timeout_seconds": max(
@@ -163,6 +165,8 @@ def resolve(study, resume=None, remote=None):
         }
     )
     if remote is not None:
+        if study.historical_rollouts:
+            raise ValueError("Historical workers must not join the current-policy inference deployment")
         remote.validate_study(study)
         config.trainer.weight_broadcast.host = remote.trainer_host
         config.orchestrator.weight_broadcast.host = remote.trainer_host
@@ -193,7 +197,9 @@ def build(study, destination, resume=None, remote=None):
                 "filter_zero_advantages": False,
                 "reasoning_required": study.reasoning_required,
                 "all_zero_cohort": "optimizer_step_with_zero_policy_gradient",
-                "generation_method": "version_indexed_delayed_cohorts",
+                "generation_method": (
+                    "asynchronous_historical_weights" if study.historical_rollouts else "version_indexed_delayed_cohorts"
+                ),
                 "warmup_age": 0,
                 "steady_state_age": study.lag,
                 "loss": "clipped GRPO using original behavior log-probabilities",

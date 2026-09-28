@@ -81,7 +81,10 @@ def load(directory: Path, config_hash: str, identity_hash: str):
 
 def seal(checkpoint, trainer_gpus):
     files = []
-    for relative in ("trainer", "orchestrator", "rng"):
+    components = ["trainer", "orchestrator", "rng"]
+    if (checkpoint / "historical").exists():
+        components.append("historical")
+    for relative in components:
         directory = checkpoint / relative
         paths = sorted(path for path in directory.rglob("*") if path.is_file())
         if not paths:

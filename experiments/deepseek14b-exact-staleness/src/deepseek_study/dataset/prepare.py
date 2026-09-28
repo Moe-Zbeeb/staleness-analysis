@@ -4,19 +4,27 @@ import json
 from pathlib import Path
 
 from deepseek_study import DATASET_SHA256, MODEL_REVISION
-from deepseek_study.dataset.assets import read_rows, validate_grading_format
-from deepseek_study.runtime.checkpoints import atomic_write
+from deepseek_study.dataset.assets import dataset_source, read_rows, validate_grading_format
 from deepseek_study.dataset.grading import GraderPool
 from deepseek_study.dataset.rewards import reward_identity, tokenizer
+from deepseek_study.dataset.sources import source_for_sha256
+from deepseek_study.runtime.checkpoints import atomic_write
 
 
 def digest(value):
     return hashlib.sha256(json.dumps(value, sort_keys=True, separators=(",", ":")).encode()).hexdigest()
 
 
-def data_contract(prompt_instruction, prompt_max_tokens, reward_timeout_seconds, reasoning_required=True):
-    return {
-        "source_sha256": DATASET_SHA256,
+def data_contract(
+    prompt_instruction,
+    prompt_max_tokens,
+    reward_timeout_seconds,
+    reasoning_required=True,
+    source_sha256=DATASET_SHA256,
+):
+    source = source_for_sha256(source_sha256)
+    contract = {
+        "source_sha256": source.sha256,
         "model_revision": MODEL_REVISION,
         "prompt_instruction": prompt_instruction,
         "prompt_max_tokens": prompt_max_tokens,
@@ -28,14 +36,22 @@ def data_contract(prompt_instruction, prompt_max_tokens, reward_timeout_seconds,
         "reference_normalization": "outer_math_delimiters_and_contextual_clock_times",
         "reference_validation": "finite_parse_and_self_verification",
     }
+    if source.sha256 != DATASET_SHA256:
+        contract["source"] = source.identity()
+    return contract
 
 
 async def prepare_data(study):
     validate_grading_format(study)
     if study.data_manifest.exists():
         raise FileExistsError("Data manifest already exists; choose a new path to preserve its identity")
+    source = dataset_source(study.dataset_path)
     contract = data_contract(
-        study.prompt_instruction, study.prompt_max_tokens, study.reward_timeout_seconds, study.reasoning_required
+        study.prompt_instruction,
+        study.prompt_max_tokens,
+        study.reward_timeout_seconds,
+        study.reasoning_required,
+        source.sha256,
     )
     rows = read_rows(study.dataset_path)
     tok = tokenizer(str(study.prepared_model_path))
@@ -78,7 +94,11 @@ async def prepare_data(study):
         raise ValueError("No trainable questions remain after deterministic preparation")
     if (
         data_contract(
-            study.prompt_instruction, study.prompt_max_tokens, study.reward_timeout_seconds, study.reasoning_required
+            study.prompt_instruction,
+            study.prompt_max_tokens,
+            study.reward_timeout_seconds,
+            study.reasoning_required,
+            dataset_source(study.dataset_path).sha256,
         )
         != contract
     ):
@@ -103,8 +123,12 @@ def load_manifest(path):
     body = {key: value for key, value in manifest.items() if key != "sha256"}
     if manifest.get("format") != 1 or manifest.get("sha256") != digest(body):
         raise ValueError("Prepared data manifest failed integrity validation")
-    if manifest["contract"]["source_sha256"] != DATASET_SHA256 or manifest["contract"]["reward"] != reward_identity():
+    contract = manifest["contract"]
+    source = source_for_sha256(contract["source_sha256"])
+    if contract["reward"] != reward_identity():
         raise ValueError("Prepared data belongs to a different source or grader; prepare it again")
+    if source.sha256 != DATASET_SHA256 and contract.get("source") != source.identity():
+        raise ValueError("Prepared data source metadata differs from its locked training release")
     return manifest
 
 
@@ -123,10 +147,11 @@ def prepared_rows(
         contract["prompt_max_tokens"] if prompt_max_tokens is None else prompt_max_tokens,
         reward_timeout_seconds,
         reasoning_required,
+        contract["source_sha256"],
     )
     if contract != expected:
         raise ValueError("Data preparation and run protocol disagree")
-    rows = read_rows(dataset_path)
+    rows = read_rows(dataset_path, expected_sha256=contract["source_sha256"])
     records = manifest["records"]
     if len(records) != len(rows) or any(row["id"] != record["id"] for row, record in zip(rows, records, strict=True)):
         raise ValueError("Data preparation changed the source question identity/order")
