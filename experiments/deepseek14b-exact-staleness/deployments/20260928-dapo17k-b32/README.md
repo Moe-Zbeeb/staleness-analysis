@@ -9,7 +9,7 @@ The user requested a smaller optimizer batch while preserving all other settings
 | Learner and current inference | 2145464 | deep-chungus-5 | 9 A100 40GB: 4 trainer + 5 inference | High |
 | Bootstrap historical inference | 2145465 | deep-chungus-3 | 3 A100 40GB | High |
 
-Both allocations started. Startup validation and the first completed optimizer update must be checked before drawing throughput conclusions. The historical job depends on the learner starting, not finishing. The main allocation remains exclusive, with 96 CPUs and a 45-day limit; the worker has 48 CPUs, 160 GiB requested memory and a 14-day limit. Automatic requeue remains disabled.
+At 12:10 UTC both allocations were running at high priority. All nine main GPUs passed the collective sum-45, BF16 backward, Flash Attention backward and vLLM normalization checks; all three historical-worker GPUs passed their allocated-device and BF16 backward checks. See [startup health](startup-health.json). Services were still starting, with no completed optimizer update verified yet. The historical job depends on the learner starting, not finishing. The main allocation remains exclusive, with 96 CPUs and a 45-day limit; the worker has 48 CPUs, 160 GiB requested memory and a 14-day limit. Automatic requeue remains disabled.
 
 The [submission receipt](submission.json) contains the exact commands and initial Slurm verification. Its initial pending states are submission-time snapshots. [The configuration diff](batch-change.json) records every changed field against the previous frozen deployment.
 

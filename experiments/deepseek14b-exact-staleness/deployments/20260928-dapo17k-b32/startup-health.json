@@ -1,0 +1,50 @@
+{
+  "checked_at_utc": "2026-09-28T12:10:03Z",
+  "learner_job": 2145464,
+  "worker_job": 2145465,
+  "both_running_high_priority": true,
+  "main_node": "deep-chungus-5",
+  "main_gpu_count": 9,
+  "main_collective_world_size": 9,
+  "main_all_reduce_expected_and_observed": 45,
+  "all_main_devices_passed": [
+    "bf16_backward",
+    "flash_attention_backward",
+    "vllm_rms_norm"
+  ],
+  "worker_node": "deep-chungus-3",
+  "worker_probe_allocated_devices": [
+    "0",
+    "1",
+    "2"
+  ],
+  "worker_probe_healthy_devices": [
+    "0",
+    "1",
+    "2"
+  ],
+  "all_worker_devices_bf16_backward": true,
+  "study_validation": {
+    "prompts_per_update": 4,
+    "responses_per_prompt": 8,
+    "lag": 256,
+    "max_steps": 1000,
+    "response_max_tokens": 6144
+  },
+  "local_tensorboard": "http://127.0.0.1:6006",
+  "local_tensorboard_run": "deepseek15b-dapo17k-6k-exact256-b32-seed42-v1",
+  "status": "GPU health passed; services starting; first completed update not yet verified",
+  "prior_jobs_cancelled": [
+    2145435,
+    2145436
+  ],
+  "prior_step1_shared_backup_verified": true,
+  "effective_orchestrator": {
+    "batch_size": 32,
+    "group_size": 8,
+    "num_train_workers": 4,
+    "seq_len": 8192
+  },
+  "effective_config_checked_at_utc": "2026-09-28T12:10:20Z",
+  "committed_updates_at_check": 0
+}
