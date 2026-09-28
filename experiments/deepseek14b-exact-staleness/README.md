@@ -34,6 +34,8 @@ The [node-local storage guide](docs/node-local-storage.md) describes local runti
 
 The [throughput profiling record](docs/profiling.md) documents the measured production bottlenecks, bounded diagnostic jobs, reusable profilers and their validation limits. Profiling tools do not modify the production run or imported library files.
 
+The [DAPO 1.5B live profile](docs/dapo-live-profile-20260928.md) separates startup, generation, archive packing and the unfinished learner phase for jobs 2145435/2145436, with measured local TCP traffic and explicit limits on operator attribution.
+
 The [1.5B optimization matrix](docs/optimization-1p5b-20260927.md) documents the isolated batching, activation-checkpointing, resharding and compilation benchmarks, their correctness gates and the requirements for preserving production recovery state. The adapter exposes `trainer_reshard_after_forward` (default `true`) through PrimeRL’s existing configuration field; imported PrimeRL and vLLM source remain unchanged. The new twelve-GPU launch uses the measured component settings; its combined throughput remains to be measured.
 
 The historical [1.5B timing profile](docs/profiling-small-model.md) uses an isolated copy of the frozen 14B adapter with only its model pin changed. It preserves the training settings and stops after four bootstrap updates. Official PrimeRL and the frozen 14B source remain unchanged.

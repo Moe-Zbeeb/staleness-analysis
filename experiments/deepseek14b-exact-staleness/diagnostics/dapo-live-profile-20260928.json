@@ -1,0 +1,209 @@
+{
+  "study": "deepseek15b-dapo17k-6k-exact256-seed42-v2",
+  "learner_job": 2145435,
+  "historical_job": 2145436,
+  "frozen_source_commit": "cb27c5b",
+  "profile_type": "passive live inspection plus CPU-only archive repacking",
+  "as_of_utc": "2026-09-28T11:43:54Z",
+  "committed_updates": 0,
+  "startup_seconds_approx": 631.48,
+  "generation_seconds": 208.7983067999594,
+  "post_generation_elapsed_seconds": 1656.4208788871765,
+  "initial_weight_export_seconds": 12.05593204498291,
+  "historical_generation_seconds": 187.7766651227139,
+  "batch": {
+    "samples": 512,
+    "input_tokens": 2948316,
+    "response_tokens": 2883220,
+    "rank_microbatches": [
+      115,
+      115,
+      115,
+      115
+    ],
+    "rank_tokens": [
+      736949,
+      738291,
+      736081,
+      736995
+    ],
+    "cpu_repacking_seconds": 5.636178856017068,
+    "reward_mean": 0.248046875,
+    "truncated_responses": 370
+  },
+  "communication_environment": {
+    "NCCL_P2P_DISABLE": "1",
+    "NCCL_SHM_DISABLE": "1"
+  },
+  "passive_sample": {
+    "seconds": 31.231561183929443,
+    "start_unix": 1790595453.0905983,
+    "end_unix": 1790595484.3221595,
+    "interface_MiB_per_second": {
+      "lo": {
+        "rx": 1604.8203302513198,
+        "tx": 1604.8203302513198
+      },
+      "eth0": {
+        "rx": 0.0,
+        "tx": 0.0
+      },
+      "eth1": {
+        "rx": 0.0,
+        "tx": 0.0
+      },
+      "eth2": {
+        "rx": 0.0,
+        "tx": 0.0
+      },
+      "eth3": {
+        "rx": 0.09809767668242848,
+        "tx": 0.5686281170754882
+      },
+      "eth4": {
+        "rx": 0.0,
+        "tx": 0.0
+      },
+      "docker0": {
+        "rx": 0.0,
+        "tx": 0.0
+      }
+    },
+    "ib_counters_unchanged": true,
+    "trainer_io_counters_unchanged": true,
+    "gpu_csv_columns": [
+      "index",
+      "power_watts",
+      "gpu_util_percent",
+      "memory_util_percent",
+      "sm_clock_mhz",
+      "allocated_memory_mib",
+      "temperature_c"
+    ],
+    "gpu_samples": [
+      "0, 39.43, 0, 0, 765, 37387, 44\n1, 39.45, 0, 0, 765, 37387, 45\n2, 39.57, 0, 0, 765, 37387, 44\n3, 37.77, 0, 0, 765, 37387, 41\n4, 38.00, 0, 0, 765, 37387, 40\n5, 81.15, 100, 3, 1410, 11643, 55\n6, 82.64, 100, 0, 1410, 10981, 56\n7, 100.89, 100, 3, 1410, 11281, 55\n8, 122.93, 100, 0, 1410, 11741, 54\n",
+      "0, 39.23, 0, 0, 765, 37387, 44\n1, 39.36, 0, 0, 765, 37387, 45\n2, 40.08, 0, 0, 765, 37387, 44\n3, 37.88, 0, 0, 765, 37387, 41\n4, 38.00, 0, 0, 765, 37387, 40\n5, 78.03, 100, 1, 1410, 11643, 55\n6, 88.81, 99, 1, 1410, 10981, 56\n7, 103.26, 100, 1, 1410, 11281, 55\n8, 127.68, 100, 1, 1410, 11741, 54\n",
+      "0, 39.32, 0, 0, 765, 37387, 44\n1, 39.35, 0, 0, 765, 37387, 45\n2, 39.67, 0, 0, 765, 37387, 44\n3, 37.87, 0, 0, 765, 37387, 41\n4, 38.09, 0, 0, 765, 37387, 40\n5, 77.51, 100, 0, 1410, 11643, 55\n6, 82.07, 100, 0, 1410, 10981, 55\n7, 234.70, 100, 0, 1410, 11281, 55\n8, 78.66, 100, 2, 1410, 11741, 54\n",
+      "0, 39.22, 0, 0, 765, 37387, 44\n1, 39.35, 0, 0, 765, 37387, 45\n2, 39.88, 0, 0, 765, 37387, 44\n3, 37.67, 0, 0, 765, 37387, 41\n4, 38.49, 0, 0, 765, 37387, 40\n5, 77.22, 100, 0, 1410, 11643, 55\n6, 81.97, 100, 0, 1410, 10981, 55\n7, 71.10, 100, 0, 1410, 11281, 54\n8, 78.66, 100, 0, 1410, 11741, 53\n"
+    ]
+  },
+  "trainer_socket_bytes_sent_cumulative": 2920971432752,
+  "socket_sample_unix": 1790595700.770964,
+  "trainer_sockets": [
+    {
+      "socket": "ESTAB      0       0      [fe80::1270:fdff:fee5:9b60]%eth3:48314 [fe80::1270:fdff:fee5:9b60]:35307 users:((\"PRL::Trainer\",pid=2354241,fd=100))",
+      "bytes": {
+        "bytes_sent": 365158372669,
+        "bytes_acked": 365157469470
+      }
+    },
+    {
+      "socket": "ESTAB      0       0      [fe80::1270:fdff:fee5:9b60]%eth3:48979 [fe80::1270:fdff:fee5:9b60]:33094 users:((\"PRL::Trainer\",pid=2354241,fd=105))",
+      "bytes": {
+        "bytes_received": 365156420717
+      }
+    },
+    {
+      "socket": "ESTAB      1507980 0      [fe80::1270:fdff:fee5:9b60]%eth3:35307 [fe80::1270:fdff:fee5:9b60]:48314 users:((\"PRL::Trainer\",pid=2354242,fd=101))",
+      "bytes": {
+        "bytes_received": 365158518049
+      }
+    },
+    {
+      "socket": "ESTAB      0       523716 [fe80::1270:fdff:fee5:9b60]%eth3:45982 [fe80::1270:fdff:fee5:9b60]:41761 users:((\"PRL::Trainer\",pid=2354238,fd=99))",
+      "bytes": {
+        "bytes_sent": 365084154825,
+        "bytes_acked": 365083279554
+      }
+    },
+    {
+      "socket": "ESTAB      0       197544 [fe80::1270:fdff:fee5:9b60]%eth3:42282 [fe80::1270:fdff:fee5:9b60]:43757 users:((\"PRL::Trainer\",pid=2354241,fd=101))",
+      "bytes": {
+        "bytes_sent": 365085525253,
+        "bytes_acked": 365084328134
+      }
+    },
+    {
+      "socket": "ESTAB      65464   0      [fe80::1270:fdff:fee5:9b60]%eth3:60683 [fe80::1270:fdff:fee5:9b60]:60182 users:((\"PRL::Trainer\",pid=2354243,fd=103))",
+      "bytes": {
+        "bytes_received": 365082559449
+      }
+    },
+    {
+      "socket": "ESTAB      0       0      [fe80::1270:fdff:fee5:9b60]%eth3:52886 [fe80::1270:fdff:fee5:9b60]:35567 users:((\"PRL::Trainer\",pid=2354243,fd=102))",
+      "bytes": {
+        "bytes_sent": 365084850757,
+        "bytes_acked": 365084525678
+      }
+    },
+    {
+      "socket": "ESTAB      197544  0      [fe80::1270:fdff:fee5:9b60]%eth3:43757 [fe80::1270:fdff:fee5:9b60]:42282 users:((\"PRL::Trainer\",pid=2354242,fd=96))",
+      "bytes": {
+        "bytes_received": 365084525677
+      }
+    },
+    {
+      "socket": "ESTAB      0       0      [fe80::1270:fdff:fee5:9b60]%eth3:47605 [fe80::1270:fdff:fee5:9b60]:34336 users:((\"PRL::Trainer\",pid=2354238,fd=104))",
+      "bytes": {
+        "bytes_received": 365157469277
+      }
+    },
+    {
+      "socket": "ESTAB      0       0      [fe80::1270:fdff:fee5:9b60]%eth3:34336 [fe80::1270:fdff:fee5:9b60]:47605 users:((\"PRL::Trainer\",pid=2354243,fd=101))",
+      "bytes": {
+        "bytes_sent": 365157925669,
+        "bytes_acked": 365157469278
+      }
+    },
+    {
+      "socket": "ESTAB      196392  0      [fe80::1270:fdff:fee5:9b60]%eth3:41761 [fe80::1270:fdff:fee5:9b60]:45982 users:((\"PRL::Trainer\",pid=2354241,fd=102))",
+      "bytes": {
+        "bytes_received": 365083935349
+      }
+    },
+    {
+      "socket": "ESTAB      0       0      [fe80::1270:fdff:fee5:9b60]%eth3:34234 [fe80::1270:fdff:fee5:9b60]:53471 users:((\"PRL::Trainer\",pid=2354242,fd=100))",
+      "bytes": {
+        "bytes_sent": 365155845749,
+        "bytes_acked": 365155372310
+      }
+    },
+    {
+      "socket": "ESTAB      0       0      [fe80::1270:fdff:fee5:9b60]%eth3:35567 [fe80::1270:fdff:fee5:9b60]:52886 users:((\"PRL::Trainer\",pid=2354238,fd=98))",
+      "bytes": {
+        "bytes_received": 365084525677
+      }
+    },
+    {
+      "socket": "ESTAB      0       0      [fe80::1270:fdff:fee5:9b60]%eth3:33094 [fe80::1270:fdff:fee5:9b60]:48979 users:((\"PRL::Trainer\",pid=2354238,fd=103))",
+      "bytes": {
+        "bytes_sent": 365159648369,
+        "bytes_acked": 365158517878
+      }
+    },
+    {
+      "socket": "ESTAB      0       950844 [fe80::1270:fdff:fee5:9b60]%eth3:60182 [fe80::1270:fdff:fee5:9b60]:60683 users:((\"PRL::Trainer\",pid=2354242,fd=104))",
+      "bytes": {
+        "bytes_sent": 365085109461,
+        "bytes_acked": 365084066278
+      }
+    },
+    {
+      "socket": "ESTAB      654644  0      [fe80::1270:fdff:fee5:9b60]%eth3:53471 [fe80::1270:fdff:fee5:9b60]:34234 users:((\"PRL::Trainer\",pid=2354243,fd=98))",
+      "bytes": {
+        "bytes_received": 365156026953
+      }
+    }
+  ],
+  "raw_local_sha256": {
+    "samples.json": "f1c729e548e8c8859553413ad14c54a84317e8dd90e1f497a71d2f313ed0135a",
+    "live.json": "ea7dc03f7e3389a3b8cd668c6aa39a3a4d5e96ddf10a32fa918cfa2dd7aae836"
+  },
+  "limits": [
+    "No exclusive CUDA operator trace collected.",
+    "No completed full update or checkpoint timing yet.",
+    "CPU repacking is a separate read-only measurement, not the original packing duration.",
+    "Traffic counters are cumulative process observations, not exclusive phase timers.",
+    "No live source, configuration, optimizer or job allocation changed."
+  ]
+}
