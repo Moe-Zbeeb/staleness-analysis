@@ -1,0 +1,32 @@
+........................................................................ [ 88%]
+.........                                                                [100%]
+=============================== warnings summary ===============================
+../../../../../../../../../tmp/mohamadzbib-staleness-runtime/deepseek15b-dapo17k-v1/prime-rl/.venv/lib/python3.12/site-packages/torch/jit/_script.py:365: 14 warnings
+  /tmp/mohamadzbib-staleness-runtime/deepseek15b-dapo17k-v1/prime-rl/.venv/lib/python3.12/site-packages/torch/jit/_script.py:365: DeprecationWarning: `torch.jit.script_method` is deprecated. Please switch to `torch.compile` or `torch.export`.
+    warnings.warn(
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+81 passed, 14 warnings in 21.59s
+{
+  "learner": {
+    "lag": 256,
+    "allocated_gpus": 8,
+    "trainer_gpus": 4,
+    "inference_gpus": 4,
+    "gpu_execution_verified": false
+  },
+  "worker": {
+    "lag": 256,
+    "allocated_gpus": 4,
+    "trainer_gpus": 0,
+    "inference_gpus": 4,
+    "gpu_execution_verified": false
+  },
+  "onpolicy": {
+    "lag": 0,
+    "allocated_gpus": 6,
+    "trainer_gpus": 3,
+    "inference_gpus": 3,
+    "gpu_execution_verified": false
+  }
+}

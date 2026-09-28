@@ -1,0 +1,9 @@
+{
+  "model_id": "deepseek-ai/DeepSeek-R1-Distill-Qwen-7B",
+  "revision": "916b56a44061fd5cd7d6a8fb632557ed4f724f60",
+  "model_bytes": 15238352590,
+  "included_rows": 17005,
+  "excluded_rows": 0,
+  "question_order_matches_15b": true,
+  "gpu_execution_verified": false
+}

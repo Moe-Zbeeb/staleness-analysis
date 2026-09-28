@@ -1,0 +1,13 @@
+{
+  "baseline_study": "/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/launches/deepseek7b-dapo17k-b32-hp-20260929-v1/learner/study.json",
+  "release": "/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/launches/deepseek7b-dapo17k-b32-hp-20260929-v1/release",
+  "shared_prime": "/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/vendor/prime-rl",
+  "workspace": "/tmp/mohamadzbib-staleness-storage-v2/deepseek7b-dapo17k-6k-exact256-b32-seed42-v1",
+  "runtime": "/tmp/mohamadzbib-staleness-runtime/deepseek7b-dapo-b32-v1-learner",
+  "run_name": "deepseek7b-dapo17k-6k-exact256-b32-seed42-v1",
+  "backup": "/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/outputs/deepseek7b-dapo17k-6k-exact256-b32-seed42-v1",
+  "metrics": "/mnt/xfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/metrics/deepseek7b-dapo17k-6k-exact256-b32-seed42-v1",
+  "minimum_gpu_bytes": 79000000000,
+  "allocated_gpus": 8,
+  "install_router": true
+}
