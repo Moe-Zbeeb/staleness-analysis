@@ -2,6 +2,8 @@
 
 The September 28 DAPO run is a new experiment using DeepSeek-R1-Distill-Qwen-1.5B, the locked `zbeeb/Staleness-GRPO-DAPO-Math-17k` dataset and a 6,144-token response cap. It must not resume a DeepScaleR/8,192-token checkpoint. The old twelve-GPU job 2145376 was cancelled by the user.
 
+The September 28 batch-32 replacement changes only `prompts_per_update` from 64 to 4, producing 32 responses per optimizer update. The table below records the preceding 512-response run; see the [batch-32 deployment](../deployments/20260928-dapo17k-b32/README.md) for the active settings and job IDs. The scheduler, model, dataset, loss, token caps, precision and GPU topology are unchanged.
+
 ## Scientific settings
 
 | Setting | Value |

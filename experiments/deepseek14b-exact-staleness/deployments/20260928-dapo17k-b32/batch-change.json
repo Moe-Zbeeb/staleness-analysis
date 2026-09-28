@@ -1,0 +1,56 @@
+{
+  "parent_control": "/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/launches/deepseek15b-dapo17k-async-hp-20260928-v2",
+  "control": "/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/launches/deepseek15b-dapo17k-async-b32-hp-20260928-v1",
+  "frozen_source_commit": "cb27c5b",
+  "reason": "User requested 32 responses per optimizer update, preserving all other settings and exact lag logic. Fresh run; no mixed-batch resume.",
+  "changes": {
+    "learner": {
+      "dataset_path": {
+        "before": "/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/launches/deepseek15b-dapo17k-async-hp-20260928-v2/assets/train.jsonl",
+        "after": "/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/launches/deepseek15b-dapo17k-async-b32-hp-20260928-v1/assets/train.jsonl"
+      },
+      "data_manifest": {
+        "before": "/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/launches/deepseek15b-dapo17k-async-hp-20260928-v2/assets/train-manifest-deepseek15b.json",
+        "after": "/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/launches/deepseek15b-dapo17k-async-b32-hp-20260928-v1/assets/train-manifest-deepseek15b.json"
+      },
+      "output_dir": {
+        "before": "/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/outputs/deepseek15b-dapo17k-6k-exact256-seed42-v2",
+        "after": "/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/outputs/deepseek15b-dapo17k-6k-exact256-b32-seed42-v1"
+      },
+      "prompts_per_update": {
+        "before": 64,
+        "after": 4
+      },
+      "historical_rollouts": {
+        "before": "/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/historical-rollouts/deepseek15b-dapo17k-6k-exact256-seed42-v2",
+        "after": "/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/historical-rollouts/deepseek15b-dapo17k-6k-exact256-b32-seed42-v1"
+      }
+    },
+    "worker": {
+      "dataset_path": {
+        "before": "/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/launches/deepseek15b-dapo17k-async-hp-20260928-v2/assets/train.jsonl",
+        "after": "/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/launches/deepseek15b-dapo17k-async-b32-hp-20260928-v1/assets/train.jsonl"
+      },
+      "data_manifest": {
+        "before": "/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/launches/deepseek15b-dapo17k-async-hp-20260928-v2/assets/train-manifest-deepseek15b.json",
+        "after": "/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/launches/deepseek15b-dapo17k-async-b32-hp-20260928-v1/assets/train-manifest-deepseek15b.json"
+      },
+      "output_dir": {
+        "before": "/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/outputs/deepseek15b-dapo17k-6k-exact256-seed42-v2-historical",
+        "after": "/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/outputs/deepseek15b-dapo17k-6k-exact256-b32-seed42-v1-historical"
+      },
+      "prompts_per_update": {
+        "before": 64,
+        "after": 4
+      },
+      "historical_rollouts": {
+        "before": "/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/historical-rollouts/deepseek15b-dapo17k-6k-exact256-seed42-v2",
+        "after": "/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/historical-rollouts/deepseek15b-dapo17k-6k-exact256-b32-seed42-v1"
+      }
+    }
+  },
+  "replaces_jobs": [
+    2145435,
+    2145436
+  ]
+}
