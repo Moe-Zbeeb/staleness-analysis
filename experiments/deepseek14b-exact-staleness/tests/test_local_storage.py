@@ -261,3 +261,44 @@ def test_socket_paths_fit_linux_unix_domain_limit():
     address = path / "4af5fcfb-7ecd-4e1f-b72a-863e7c9a295d"
     assert len(str(address).encode()) <= 107
     assert path != LOCAL.socket_directory("/tmp/another-workspace")
+
+
+def test_shared_retention_only_removes_verified_owned_checkpoints(tmp_path):
+    owner = {"run_uuid": "run", "identity_sha256": "identity", "config_sha256": "config"}
+    for step in (1, 5, 10, 100, 105, 110):
+        source = tmp_path / "local" / f"step_{step}"
+        target = tmp_path / "shared" / f"step_{step}"
+        fixture_checkpoint(source, owner)
+        marker = json.loads((source / "study/complete.json").read_text())
+        marker["step"] = step
+        BACKUP.atomic_json(source / "study/complete.json", marker)
+        assert BACKUP.backup_checkpoint(source, target, owner)
+    (tmp_path / "shared/step_115").mkdir()
+    assert BACKUP.prune_verified_checkpoints(tmp_path / "shared", owner) == [1, 5, 10]
+    assert sorted(p.name for p in (tmp_path / "shared").iterdir()) == ["step_100", "step_105", "step_110", "step_115"]
+    with pytest.raises(ValueError, match="owners"):
+        BACKUP.prune_verified_checkpoints(tmp_path / "shared", {**owner, "run_uuid": "other"})
+
+
+def test_backup_does_not_recopy_pruned_local_checkpoints(tmp_path, monkeypatch):
+    owner = {"run_uuid": "run", "identity_sha256": "identity", "config_sha256": "config"}
+    source, shared = tmp_path / "local", tmp_path / "shared"
+    source.mkdir()
+    BACKUP.atomic_json(source / "run.json", owner)
+    for step in (1, 5, 10, 15):
+        path = source / "checkpoints" / f"step_{step}"
+        fixture_checkpoint(path, owner)
+        marker = json.loads((path / "study/complete.json").read_text())
+        marker["step"] = step
+        BACKUP.atomic_json(path / "study/complete.json", marker)
+    backup = BACKUP.Backup(source, shared)
+    backup.poll()
+    assert sorted(p.name for p in (shared / "checkpoints").iterdir()) == ["step_10", "step_15"]
+    original = BACKUP.backup_checkpoint
+
+    def guarded(path, *args):
+        assert path.name in {"step_10", "step_15"}
+        return original(path, *args)
+
+    monkeypatch.setattr(BACKUP, "backup_checkpoint", guarded)
+    assert backup.poll()["new_checkpoints"] == []

@@ -10,7 +10,7 @@ from deepseek_study.recipe import baseline
 
 def test_prepared_full_dataset_has_explicit_accounted_exclusions():
     root = Path(__file__).resolve().parents[1]
-    path = root / "assets/train-manifest-v3.json"
+    path = root / "assets/train-manifest-v4.json"
     if not path.is_file():
         pytest.skip("Full local data preparation has not been run")
     study = baseline(32)

@@ -134,6 +134,7 @@ def launch(study, root, resume=None):
         "PRL_RUN_ID": uuid.uuid4().hex,
         "PRL_RUN_NAME": output.name,
         "DEEPSEEK_STUDY_SEED": str(study.seed),
+        "DEEPSEEK_STUDY_CONFIG": str(config_dir / "study.json"),
         "DEEPSEEK_STUDY_RUNBOARD": "0",
         "PYTHONHASHSEED": str(study.seed),
         "WANDB_MODE": "disabled",

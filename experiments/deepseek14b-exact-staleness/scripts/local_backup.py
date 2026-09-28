@@ -162,6 +162,35 @@ def backup_checkpoint(source, destination, owner):
             shutil.rmtree(staging)
 
 
+def prune_verified_checkpoints(root, owner, keep_last=2, keep_interval=100):
+    completed = []
+    for path in Path(root).glob("step_*"):
+        receipt_path = path / "backup-verified.json"
+        if path.is_symlink() or not path.is_dir() or not receipt_path.is_file():
+            continue
+        receipt = json.loads(receipt_path.read_text())
+        marker = json.loads((path / "study/complete.json").read_text())
+        if (
+            receipt["run_uuid"] != owner["run_uuid"]
+            or receipt["checkpoint"] != marker
+            or marker["identity_sha256"] != owner["identity_sha256"]
+            or marker["config_sha256"] != owner["config_sha256"]
+            or path.name != f"step_{marker['step']}"
+        ):
+            raise ValueError("Refusing retention across checkpoint owners")
+        completed.append((marker["step"], path))
+    completed.sort()
+    retained = {step for step, _ in completed[-keep_last:]}
+    removed = []
+    for step, path in completed:
+        if step not in retained and step % keep_interval:
+            shutil.rmtree(path)
+            removed.append(step)
+    if removed:
+        sync_directory(root)
+    return removed
+
+
 class Backup:
     def __init__(self, source, destination, metrics=None):
         self.source, self.destination = Path(source).resolve(), Path(destination).resolve()
@@ -193,11 +222,19 @@ class Backup:
             self.reserve(self.metrics)
         checkpoints = self.source / "checkpoints"
         completed = []
-        for path in sorted(checkpoints.glob("step_*"), key=lambda p: int(p.name.removeprefix("step_"))):
+        candidates = sorted(
+            (p for p in checkpoints.glob("step_*") if (p / "study/complete.json").is_file()),
+            key=lambda p: int(p.name.removeprefix("step_")),
+        )
+        selected = set(candidates[-2:])
+        for path in candidates:
+            if path not in selected and int(path.name.removeprefix("step_")) % 100:
+                continue
             if path.is_symlink():
                 raise ValueError("Checkpoint directory must not be a symlink")
             if backup_checkpoint(path, self.destination / "checkpoints" / path.name, self.owner):
                 completed.append(path.name)
+        removed = prune_verified_checkpoints(self.destination / "checkpoints", self.owner) if completed else []
         for path in sorted(self.source.rglob("*")):
             relative = path.relative_to(self.source)
             if relative.parts[0] in {"checkpoints", ".backup"} or "__pycache__" in relative.parts:
@@ -232,7 +269,12 @@ class Backup:
                     },
                 },
             )
-        return {"status": "verified", "verified_at": time.time(), "new_checkpoints": completed}
+        return {
+            "status": "verified",
+            "verified_at": time.time(),
+            "new_checkpoints": completed,
+            "pruned_checkpoints": removed,
+        }
 
 
 def main():

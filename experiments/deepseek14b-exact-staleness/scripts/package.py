@@ -29,7 +29,7 @@ def main():
         "hardening-20260927.json",
     ):
         selected.append(root / "diagnostics" / name)
-    prepared = root / "assets/train-manifest-v3.json"
+    prepared = root / "assets/train-manifest-v4.json"
     if prepared.is_file():
         selected.append(prepared)
     selected = sorted(set(selected))

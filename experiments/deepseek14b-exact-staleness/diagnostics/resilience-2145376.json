@@ -1,0 +1,71 @@
+{
+  "job_id": 2145376,
+  "submission_command": [
+    "sbatch",
+    "--parsable",
+    "--account=grad-students",
+    "--partition=high-priority",
+    "--qos=high-priority",
+    "--nodes=2",
+    "--ntasks=2",
+    "--ntasks-per-node=1",
+    "--cpus-per-task=48",
+    "--mem=200G",
+    "--gres=gpu:a100:6",
+    "--nodelist=deep-chungus-5,deep-chungus-7",
+    "--time=45-00:00:00",
+    "--no-requeue",
+    "--job-name=ds15b-k256-resilient",
+    "--chdir=/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/launches/deepseek15b-k256-12gpu-hp-20260928-v7",
+    "--output=/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/launches/deepseek15b-k256-12gpu-hp-20260928-v7/slurm-%j.out",
+    "--error=/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/launches/deepseek15b-k256-12gpu-hp-20260928-v7/slurm-%j.err",
+    "/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/launches/deepseek15b-k256-12gpu-hp-20260928-v7/job.sh"
+  ],
+  "verified_slurm": "JobId=2145376 JobName=ds15b-k256-resilient UserId=mohamadzbib(29562) GroupId=mohamadzbib(29562) MCS_label=N/A Priority=53 Nice=0 Account=grad-students QOS=high-priority JobState=PENDING Reason=None Dependency=(null) Requeue=0 Restarts=0 BatchFlag=1 Reboot=0 ExitCode=0:0 RunTime=00:00:00 TimeLimit=45-00:00:00 TimeMin=N/A SubmitTime=2026-09-28T03:42:36 EligibleTime=2026-09-28T03:42:36 AccrueTime=Unknown StartTime=Unknown EndTime=Unknown Deadline=N/A SuspendTime=None SecsPreSuspend=0 LastSchedEval=2026-09-28T03:42:36 Scheduler=Main Partition=high-priority AllocNode:Sid=mslurm:457480 ReqNodeList=deep-chungus-[5,7] ExcNodeList=(null) NodeList=(null) NumNodes=2-2 NumCPUs=96 NumTasks=2 CPUs/Task=48 ReqB:S:C:T=0:0:*:* TRES=cpu=96,mem=400G,node=2,billing=96,gres/gpu=12,gres/gpu:a100=12 Socks/Node=* NtasksPerN:B:S:C=1:0:*:* CoreSpec=* MinCPUsNode=48 MinMemoryNode=200G MinTmpDiskNode=0 Features=(null) DelayBoot=00:00:00 OverSubscribe=OK Contiguous=0 Licenses=(null) Network=(null) Command=/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/launches/deepseek15b-k256-12gpu-hp-20260928-v7/job.sh WorkDir=/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/launches/deepseek15b-k256-12gpu-hp-20260928-v7 StdErr=/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/launches/deepseek15b-k256-12gpu-hp-20260928-v7/slurm-2145376.err StdIn=/dev/null StdOut=/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/launches/deepseek15b-k256-12gpu-hp-20260928-v7/slurm-2145376.out Power= TresPerNode=gres:gpu:a100:6",
+  "verified_at": 1790581356.9948442,
+  "previous_failed_job": 2145304,
+  "restart_from_initial_weights": true,
+  "validation": {
+    "failed_response_replay": {
+      "id": "7400496ae3b444f8af85f1bba905e29a",
+      "status": "ok",
+      "result": {
+        "reward": 0.0,
+        "reason": "prediction_verification_timeout",
+        "extracted": "2^{2019} - \\left(1 + e^{-\\frac{1}{e}}\\right)^{2019}",
+        "policy": "strict-final-box-v4-bounded-prediction-verification",
+        "verification_status": "unverified",
+        "verification_timeouts": [
+          {
+            "timeout_seconds": 8,
+            "message": "Timeout during comparison"
+          },
+          {
+            "timeout_seconds": 32,
+            "message": "Timeout during comparison"
+          }
+        ]
+      },
+      "attempts": 1,
+      "errors": [],
+      "seconds": 42.729983039200306
+    },
+    "replay_seconds": 42.75459383893758,
+    "prepared": {
+      "sha256": "5c44498de8860ad7863bd18dd7af3ebd18d0fca10d2e2fa453d59d37dbc008a9",
+      "source_rows": 37713,
+      "included_rows": 37696,
+      "excluded_rows": 17
+    },
+    "same_question_selection": true,
+    "validated_at": 1790581227.6211245
+  },
+  "local_tests": {
+    "passed": 401,
+    "skipped": 1
+  },
+  "upstream_source_modified": false,
+  "startup_health": "pending",
+  "first_checkpoint": "pending",
+  "unattended_resume": "disabled"
+}

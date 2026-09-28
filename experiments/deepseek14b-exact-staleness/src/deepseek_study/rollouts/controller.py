@@ -33,6 +33,7 @@ class Payload:
     task_keys: tuple[str, ...]
     sample_response_ids: tuple[str, ...]
     sample_task_keys: tuple[str, ...]
+    verification_timeouts: int = 0
 
 
 def payload_digest(payload):
@@ -159,6 +160,11 @@ class PrimeBackend:
                     raise RuntimeError("Nonfinite behavior log-probabilities")
             payload = Payload(
                 samples=msgspec.msgpack.encode(batch.samples),
+                verification_timeouts=sum(
+                    e.traces[0].info.get("study_grading", {}).get("result", {}).get("reason")
+                    == "prediction_verification_timeout"
+                    for e in episodes
+                ),
                 policy_spans=tuple((train_work(e).policy.start, train_work(e).policy.end) for e in episodes),
                 rewards=tuple(e.traces[0].reward for e in episodes),
                 truncated=tuple(e.traces[0].is_truncated for e in episodes),
@@ -278,6 +284,7 @@ class PrimeBackend:
         receipt.update(
             {
                 "mean_reward": sum(payload.rewards) / len(payload.rewards),
+                "grading_unverified_timeout_fraction": payload.verification_timeouts / len(payload.rewards),
                 "truncation_fraction": sum(payload.truncated) / len(payload.truncated),
                 "response_ids": self.shipped.response_ids,
                 "question_ids": payload.task_keys,
@@ -299,10 +306,7 @@ class PrimeBackend:
             json.dumps({key: receipt[key] for key in ("step", "age_min", "age_max", "warmup", "mean_reward")}),
             flush=True,
         )
-        if (
-            state.completed_steps % self.study.checkpoint_interval == 0
-            or state.completed_steps == self.study.max_steps
-        ):
+        if self.study.checkpoint_due(state.completed_steps):
             directory = self.study.output_dir / "checkpoints" / f"step_{state.completed_steps}"
             async with asyncio.timeout(self.study.checkpoint_timeout_seconds):
                 while not (directory / "trainer" / ".metadata").is_file() or any(

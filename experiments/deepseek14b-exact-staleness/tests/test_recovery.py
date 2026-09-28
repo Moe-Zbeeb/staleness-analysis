@@ -131,3 +131,18 @@ def test_queue_checkpoint_uses_streaming_pickle(tmp_path, monkeypatch):
     monkeypatch.setattr(checkpoints.pickle, "loads", forbidden)
     checkpoints.save(tmp_path, QueueState(0), "config", "source")
     assert checkpoints.load(tmp_path, "config", "source").completed_steps == 0
+
+
+def test_early_checkpoint_schedule_matches_controller_and_trainer(study):
+    study.checkpoint_first_step = True
+    study.checkpoint_interval = 5
+    study.max_steps = 71
+    expected = [1, *range(5, 71, 5), 71]
+    assert [step for step in range(1, 72) if study.checkpoint_due(step)] == expected
+
+    class Manager:
+        def save(self, *args, **kwargs):
+            raise AssertionError("Off-schedule save reached the trainer")
+
+    manager = CheckpointWithRNG(Manager(), study.checkpoint_due)
+    manager.save(2)

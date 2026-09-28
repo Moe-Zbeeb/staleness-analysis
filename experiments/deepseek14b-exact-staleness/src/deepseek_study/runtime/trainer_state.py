@@ -29,8 +29,9 @@ def restore_rng(state):
 
 
 class CheckpointWithRNG:
-    def __init__(self, manager):
+    def __init__(self, manager, schedule=None):
         self.manager = manager
+        self.schedule = schedule
 
     def __getattr__(self, name):
         return getattr(self.manager, name)
@@ -39,6 +40,8 @@ class CheckpointWithRNG:
         return None
 
     def save(self, step, *args, **kwargs):
+        if self.schedule is not None and not self.schedule(step):
+            return
         self.manager.save(step, *args, **kwargs)
         rank = self.manager.world.rank
         state = {"rank": rank, "world_size": torch.distributed.get_world_size(), "rng": capture_rng()}

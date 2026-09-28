@@ -27,7 +27,7 @@ def resolve(study, resume=None, remote=None):
             "max_steps": study.max_steps,
             "dashboard": False,
             "monitors": {"file": {}},
-            "ckpt": {"interval": study.checkpoint_interval},
+            "ckpt": {"interval": 1 if study.checkpoint_first_step else study.checkpoint_interval},
             "resume": {"dir": str(Path(resume).resolve())} if resume else None,
             "deployment": {
                 "type": "single_node",

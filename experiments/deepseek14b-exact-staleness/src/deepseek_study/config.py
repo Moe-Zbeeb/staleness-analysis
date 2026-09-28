@@ -41,6 +41,7 @@ class StudyConfig(BaseModel):
     reasoning_required: bool = True
     seed: int = Field(ge=0)
     checkpoint_interval: int = Field(ge=1)
+    checkpoint_first_step: bool = False
     checkpoint_keep_last: int = Field(default=4, ge=1)
     checkpoint_keep_interval: int = Field(default=100, ge=1)
     trainer_gpus: int = Field(ge=1)
@@ -65,7 +66,7 @@ class StudyConfig(BaseModel):
     checkpoint_timeout_seconds: int = Field(default=7200, ge=1)
     generation_timeout_seconds: int = Field(default=86400, ge=1)
     reward_timeout_seconds: int = Field(default=8, ge=1)
-    reward_outer_timeout_seconds: int = Field(default=10, ge=1)
+    reward_outer_timeout_seconds: int = Field(default=240, ge=1)
     reward_workers: int = Field(default=4, ge=1)
     reward_retries: int = Field(default=1, ge=0, le=3)
     inference_port: int = Field(default=8000, ge=1024, le=44000)
@@ -76,8 +77,8 @@ class StudyConfig(BaseModel):
             raise ValueError(
                 "The total update budget must include at least one exact-staleness update after bootstrap"
             )
-        if self.reward_outer_timeout_seconds <= self.reward_timeout_seconds:
-            raise ValueError("The outer grading deadline must exceed the internal timeout")
+        if self.reward_outer_timeout_seconds <= 5 * self.reward_timeout_seconds:
+            raise ValueError("The outer grading deadline must exceed both bounded prediction attempts")
         if self.activation_cpu_offload and not self.activation_checkpointing:
             raise ValueError("Activation CPU offload requires activation checkpointing")
         if self.inference_gpus % self.inference_tensor_parallel:
@@ -112,6 +113,13 @@ class StudyConfig(BaseModel):
         ):
             raise ValueError("The run directory must not overwrite an input asset")
         return self
+
+    def checkpoint_due(self, step):
+        return (
+            step == self.max_steps
+            or step % self.checkpoint_interval == 0
+            or (self.checkpoint_first_step and step == 1)
+        )
 
     @property
     def response_batch_size(self):

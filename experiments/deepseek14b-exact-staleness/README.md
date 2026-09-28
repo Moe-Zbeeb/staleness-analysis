@@ -1,3 +1,15 @@
+## September 28 resilient relaunch
+
+Replacement job **2145376** uses 12 GPUs on high-priority nodes 5 and 7. See [the run record](docs/runs/deepseek15b-resilient-12gpu.md) for validation, paths and recovery limits.
+
+Job 2145304 failed after 15 committed bootstrap updates when `math-verify` repeatedly timed out comparing a generated large-exponent answer. No complete checkpoint existed; its logs and failed response are preserved. The replacement starts from the pinned initial model in a new output directory.
+
+The version 4 reward contract retries prediction verification with the same saved answer at the original symbolic timeout and then four times that limit. A persistent **prediction** timeout receives zero reward with reason `prediction_verification_timeout` and status `unverified`; this is not a proven incorrect answer. It is never discarded or resampled. Both timeouts and the extracted answer are saved in `grading.jsonl`; TensorBoard logs `grading/consumed_unverified_timeout_fraction`. Reference errors and infrastructure failures still fail closed. The replacement uses a 240-second outer worker deadline so the bounded symbolic retry can finish. This reward-policy change is recorded in a newly prepared manifest and must also be used for comparable baseline runs.
+
+The replacement requests recovery checkpoints after update 1, every 5 updates, and update 1,000. The trainer adapter and controller share the same schedule. Local retention keeps four recent checkpoints plus every 100-update milestone; verified NFS retention keeps two recent checkpoints plus those milestones. NFS publication verifies trainer, optimizer, scheduler, RNG, sampler and delayed-queue files before publishing. Metrics and TensorBoard events also go to XFS. A checkpoint is usable only after its completion marker is written. Automatic multi-node requeue remains disabled; recovery deployment compatibility must be verified before a resume, and failures never silently restart from initial weights.
+
+No official PrimeRL or vLLM source is edited. The existing checkpoint adapter now filters save calls according to the explicit first-step/periodic schedule. Model, optimizer, GRPO loss, exact lag256, 1,000-update budget, 512 responses per update, response length and four-trainer/eight-inference layout remain fixed. The new reference manifest is revalidated before launch; launch is blocked if its included-question selection differs.
+
 # DeepSeek 14B / cleaned DeepScaleR / exact staleness
 
 One run at a time, with the exact nonnegative integer `k` you request. This package composes official PrimeRL v0.9.0 at `ab5de8fff44b2c4a5c85e24b6e6e3f7d57eee7b1`; it does not import the teammate fork or edit upstream files.

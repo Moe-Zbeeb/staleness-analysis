@@ -15,11 +15,14 @@ def main():
     from deepseek_study.runtime.trainer_state import CheckpointWithRNG
     from deepseek_study.tracking.tokens import setup_paper_exporter
 
+    from deepseek_study.config import StudyConfig
+
+    study = StudyConfig.read(os.environ["DEEPSEEK_STUDY_CONFIG"])
     setup = train.setup_ckpt_manager
     token_setup = train.setup_token_exporter
 
     def setup_with_rng(*args, **kwargs):
-        return CheckpointWithRNG(setup(*args, **kwargs))
+        return CheckpointWithRNG(setup(*args, **kwargs), study.checkpoint_due)
 
     train.setup_ckpt_manager = setup_with_rng
     train.setup_token_exporter = setup_paper_exporter

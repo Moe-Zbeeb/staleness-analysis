@@ -7,11 +7,12 @@ from pathlib import Path
 
 from math_verify import LatexExtractionConfig, parse, verify
 from math_verify.utils import timeout as bounded
+from math_verify.errors import TimeoutException
 from latex2sympy2_extended.latex2sympy2 import ConversionConfig, latex2sympy
 from sympy import FiniteSet, Interval, S, Symbol, Tuple
 
 EXTRACTION = LatexExtractionConfig(try_extract_without_anchor=False, boxed_match_priority=0)
-POLICY = "strict-final-box-v3-context-clock-native-reasoning"
+POLICY = "strict-final-box-v4-bounded-prediction-verification"
 
 
 class ReferenceRejected(ValueError):
@@ -249,6 +250,25 @@ def grade_result(raw_completion, answer, truncated, truncated_reward, timeout, q
             return result(0, "unsupported_clock_prediction", boxed)
         correct = clock_matches_reference(gold[0], predicted_clock)
         return result(correct, "correct" if correct else "not_verified_correct", boxed)
+    attempts = []
+    for budget in (timeout, 4 * timeout):
+        try:
+            outcome = verify_prediction(gold, boxed, answer, budget)
+            outcome["verification_timeouts"] = attempts
+            return outcome
+        except TimeoutException as error:
+            attempts.append({"timeout_seconds": budget, "message": str(error)[:256]})
+    return {
+        **result(0, "prediction_verification_timeout", boxed),
+        "verification_status": "unverified",
+        "verification_timeouts": attempts,
+    }
+
+
+def verify_prediction(gold, boxed, answer, timeout):
+    def result(reward, reason, extracted=""):
+        return {"reward": float(reward), "reason": reason, "extracted": extracted, "policy": POLICY}
+
     try:
         predicted = parse_math(boxed, timeout)
         if not predicted:

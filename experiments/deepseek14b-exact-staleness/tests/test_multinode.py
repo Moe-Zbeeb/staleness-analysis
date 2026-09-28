@@ -150,3 +150,14 @@ def test_router_rejects_early_unknown_or_missing_workers(monkeypatch):
     assert not multinode.router_ready(deployment.router_url, deployment.worker_urls, "expected")
     rows.pop()
     assert not multinode.router_ready(deployment.router_url, deployment.worker_urls, "expected")
+
+
+def test_first_checkpoint_dispatch_preserves_periodic_schedule(study):
+    study = distributed(study)
+    study.checkpoint_first_step = True
+    study.checkpoint_interval = 5
+    config = resolve(study, remote=remote())
+    assert config.trainer.ckpt.interval == 1
+    assert study.checkpoint_due(1)
+    assert not study.checkpoint_due(2)
+    assert study.checkpoint_due(5)

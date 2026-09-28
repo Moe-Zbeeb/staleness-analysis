@@ -150,7 +150,7 @@ def test_infrastructure_failures_never_become_incorrect_rewards(monkeypatch, sta
         rewards.grade("</think>\\boxed{A}", "4", False, "zero", 5)
 
 
-def test_math_timeout_is_worker_failure_not_incorrect_reward(monkeypatch):
+def test_prediction_timeout_is_retried_and_explicitly_unverified(monkeypatch):
     import deepseek_study.dataset.rewards as rewards
     from math_verify.errors import TimeoutException
 
@@ -160,8 +160,11 @@ def test_math_timeout_is_worker_failure_not_incorrect_reward(monkeypatch):
         raise TimeoutException("comparison timeout")
 
     monkeypatch.setattr(rewards, "verify", fail)
-    with pytest.raises(TimeoutException):
-        rewards.grade("</think>\\boxed{4}", "4", False, "zero", 5)
+    result = rewards.grade_result("</think>\\boxed{4}", "4", False, "zero", 5)
+    assert result["reward"] == 0
+    assert result["reason"] == "prediction_verification_timeout"
+    assert result["verification_status"] == "unverified"
+    assert [item["timeout_seconds"] for item in result["verification_timeouts"]] == [5, 20]
 
 
 def test_signal_thread_configuration_failure_is_not_misclassified(monkeypatch):
@@ -189,3 +192,48 @@ def test_content_comparison_failure_is_explicit_incorrect_prediction(monkeypatch
     result = rewards.grade_result("</think>\\boxed{4}", "4", False, "zero", 5)
     assert result["reward"] == 0
     assert result["reason"] == "unsupported_prediction"
+
+
+def test_reference_timeout_still_fails_closed(monkeypatch):
+    import deepseek_study.dataset.rewards as rewards
+    from math_verify.errors import TimeoutException
+
+    def fail(*args, **kwargs):
+        raise TimeoutException("reference timeout")
+
+    monkeypatch.setattr(rewards, "parse_gold", fail)
+    with pytest.raises(TimeoutException):
+        rewards.grade_result("</think>\\boxed{4}", "4", False, "zero", 5)
+
+
+def test_prediction_retry_can_recover_without_regeneration(monkeypatch):
+    import deepseek_study.dataset.rewards as rewards
+    from math_verify.errors import TimeoutException
+
+    calls = []
+
+    def verify(gold, boxed, answer, timeout):
+        calls.append((boxed, answer, timeout))
+        if len(calls) == 1:
+            raise TimeoutException("comparison timeout")
+        return {"reward": 1.0, "reason": "correct", "extracted": boxed, "policy": rewards.POLICY}
+
+    monkeypatch.setattr(rewards, "verify_prediction", verify)
+    result = rewards.grade_result("</think>\\boxed{4}", "4", False, "zero", 5)
+    assert result["reward"] == 1
+    assert calls == [("4", "4", 5), ("4", "4", 20)]
+    assert len(result["verification_timeouts"]) == 1
+
+
+def test_production_large_exponent_answer_is_bounded():
+    from deepseek_study.dataset.rewards import grade_result
+
+    result = grade_result(
+        r"</think>\boxed{2^{2019} - \left(1 + e^{-\frac{1}{e}}\right)^{2019}}",
+        "-1",
+        False,
+        "grade_final",
+        1,
+    )
+    assert result["reward"] == 0
+    assert result["reason"] in {"not_verified_correct", "prediction_verification_timeout"}

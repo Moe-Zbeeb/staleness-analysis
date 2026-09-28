@@ -12,6 +12,7 @@ from deepseek_study.tracking.readers import JsonlTail, read_json, scalar, termin
 
 
 UPDATE_METRICS = {
+    "grading_unverified_timeout_fraction": "grading/consumed_unverified_timeout_fraction",
     "learner_version": "staleness/learner_version",
     "behavior_version": "staleness/behavior_version",
     "age_min": "staleness/age_min",
