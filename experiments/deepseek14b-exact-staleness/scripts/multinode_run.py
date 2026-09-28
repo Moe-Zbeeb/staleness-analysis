@@ -36,10 +36,22 @@ def network_environment(hosts, rank):
     if not routes or not routes[0].get("dev") or not routes[0].get("prefsrc"):
         raise ValueError("No explicit IPv4 route to the other allocated node")
     route = routes[0]
+    devices = json.loads(subprocess.check_output(["ip", "-j", "addr", "show", "dev", route["dev"]], text=True))
+    labels = {
+        address.get("label", device["ifname"])
+        for device in devices
+        for address in device.get("addr_info", [])
+        if address.get("family") == "inet" and address.get("local") == route["prefsrc"]
+    }
+    if len(labels) != 1:
+        raise ValueError("The routed IPv4 source must have exactly one address label")
+    label = labels.pop()
     return {
+        "NCCL_NET": "Socket",
+        "NCCL_IB_DISABLE": "1",
         "NCCL_SOCKET_FAMILY": "AF_INET",
-        "NCCL_SOCKET_IFNAME": "=" + route["dev"],
-        "GLOO_SOCKET_IFNAME": route["dev"],
+        "NCCL_SOCKET_IFNAME": "=" + label,
+        "GLOO_SOCKET_IFNAME": label,
         "VLLM_HOST_IP": route["prefsrc"],
     }
 

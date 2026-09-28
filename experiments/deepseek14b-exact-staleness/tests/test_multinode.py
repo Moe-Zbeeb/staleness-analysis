@@ -83,15 +83,22 @@ def test_inference_engines_use_distinct_reproducible_rng_streams():
         multinode.worker_seed(42, 0, 2)
 
 
-def test_network_pins_the_routed_ipv4_interface(monkeypatch):
+@pytest.mark.parametrize("label", ["eth0", "enx1234"])
+def test_network_pins_the_routed_ipv4_address_label(monkeypatch, label):
     monkeypatch.setattr(multinode.socket, "gethostbyname", lambda _: "10.0.0.2")
-    monkeypatch.setattr(
-        multinode.subprocess, "check_output", lambda *args, **kwargs: '[{"dev":"eth0","prefsrc":"10.0.0.1"}]'
-    )
+
+    def output(command, **kwargs):
+        if "route" in command:
+            return '[{"dev":"eth0","prefsrc":"10.0.0.1"}]'
+        return json.dumps([{"ifname": "eth0", "addr_info": [{"family": "inet", "local": "10.0.0.1", "label": label}]}])
+
+    monkeypatch.setattr(multinode.subprocess, "check_output", output)
     assert multinode.network_environment(["a", "b"], 0) == {
+        "NCCL_NET": "Socket",
+        "NCCL_IB_DISABLE": "1",
         "NCCL_SOCKET_FAMILY": "AF_INET",
-        "NCCL_SOCKET_IFNAME": "=eth0",
-        "GLOO_SOCKET_IFNAME": "eth0",
+        "NCCL_SOCKET_IFNAME": "=" + label,
+        "GLOO_SOCKET_IFNAME": label,
         "VLLM_HOST_IP": "10.0.0.1",
     }
     monkeypatch.setattr(multinode.subprocess, "check_output", lambda *args, **kwargs: "[]")

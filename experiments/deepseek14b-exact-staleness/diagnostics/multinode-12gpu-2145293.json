@@ -102,8 +102,9 @@
   "validation": {
     "local_tests_passed": 87,
     "gpu_health": "pending",
-    "cross_node_nccl": "pending",
-    "first_training_update": "pending"
+    "cross_node_nccl": "not reached: local collective could not find IPv4 under kernel name eth0; actual IPv4 address label differs",
+    "first_training_update": "not started"
   },
-  "upstream_source_modified": false
+  "upstream_source_modified": false,
+  "replacement_job": 2145296
 }
