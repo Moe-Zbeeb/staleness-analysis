@@ -1,0 +1,44 @@
+{
+  "checked_at": "2026-09-28T17:02:39.340378+00:00",
+  "handoff": {
+    "original_backup_pid": 2687936,
+    "original_start_time": "167207632",
+    "training_pid": 2687937,
+    "job_id": "2145464",
+    "replacement_script": "/tmp/mohamadzbib-staleness-storage-v2/deepseek15b-dapo17k-6k-exact256-b32-seed42-v1/backup-fix-20260928/local_backup.py",
+    "replacement_sha256": "8d8bd31a22421bd8dfea00a3a7876a2a56d5eb230da58d59ea98c665afed3932",
+    "status": "active",
+    "replacement_pid": 967603,
+    "started_at": 1790614586.8949986
+  },
+  "backup_status": {
+    "status": "verified",
+    "verified_at": 1790614902.6316447,
+    "new_checkpoints": [],
+    "pruned_checkpoints": [],
+    "final": false
+  },
+  "completed_training_update": 74,
+  "training_pid": 2687937,
+  "training_process_exists": true,
+  "mirrors": {
+    "nfs": {
+      "verified_at": 1790614902.1152728,
+      "run_uuid": "d835a34fcdcc42dd98f08f052af9a771",
+      "updates_sha256": "755d83ecefc1a670a27b8e72b9b72e9cdf0db7781eb6d662a4ce3b34bfcc5f3b",
+      "last_mirrored_update": 73,
+      "files": 981
+    },
+    "xfs": {
+      "verified_at": 1790614902.4683535,
+      "run_uuid": "d835a34fcdcc42dd98f08f052af9a771",
+      "updates_sha256": "755d83ecefc1a670a27b8e72b9b72e9cdf0db7781eb6d662a4ce3b34bfcc5f3b",
+      "last_mirrored_update": 73,
+      "files": 92
+    }
+  },
+  "verified_checkpoints": [
+    25,
+    50
+  ]
+}

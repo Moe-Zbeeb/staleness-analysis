@@ -21,3 +21,7 @@ The deployment uses a CPU-only overlapping Slurm step within the existing alloca
 Eleven focused storage tests passed locally, covering atomic replacement, truncation, checksum failures, checkpoint publication and retention, run ownership, and exclusion of transient trees. Two Linux integration tests passed in the existing cluster allocation: normal finalization and recovery after forcibly killing the handoff controller. Tests used isolated temporary fixtures, not training outputs.
 
 Cluster deployment: `/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/hotfixes/backup-20260928`.
+
+## Verified live result
+
+At 17:02:39 UTC the replacement had completed a verified cycle after the handoff. NFS and XFS both held the same checksum-verified update journal through update 73; training had advanced to update 74 with its original PID 2687937. The inventories contained 981 NFS files and 92 XFS files, excluded redundant transient policy exports, and preserved verified recovery checkpoints 25 and 50. The one-update journal lag reflects asynchronous copying during ongoing training. See [the live verification receipt](verified.json). No training restart or optimizer-state change occurred.
