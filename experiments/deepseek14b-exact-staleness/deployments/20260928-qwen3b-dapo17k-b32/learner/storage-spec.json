@@ -1,0 +1,13 @@
+{
+  "baseline_study": "/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/launches/qwen25-3b-dapo17k-async-b32-normal-20260928-v1/learner/study.json",
+  "release": "/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/launches/qwen25-3b-dapo17k-async-b32-normal-20260928-v1/release",
+  "shared_prime": "/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/vendor/prime-rl",
+  "workspace": "/tmp/mohamadzbib-staleness-storage-v2/qwen25-3b-dapo17k-6k-exact256-b32-seed42-v1",
+  "runtime": "/tmp/mohamadzbib-staleness-runtime/qwen25-3b-dapo-b32-v1",
+  "run_name": "qwen25-3b-dapo17k-6k-exact256-b32-seed42-v1",
+  "backup": "/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/outputs/qwen25-3b-dapo17k-6k-exact256-b32-seed42-v1",
+  "metrics": "/mnt/xfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/metrics/qwen25-3b-dapo17k-6k-exact256-b32-seed42-v1",
+  "minimum_gpu_bytes": 39000000000,
+  "allocated_gpus": 7,
+  "install_router": true
+}

@@ -1,0 +1,55 @@
+{
+  "source_commit": "cb27c5b",
+  "jobs": {
+    "learner": "2145486",
+    "worker": "2145487"
+  },
+  "commands": {
+    "learner": [
+      "sbatch",
+      "--parsable",
+      "--account=grad-students",
+      "--partition=low-priority",
+      "--qos=normal",
+      "--nodes=1",
+      "--ntasks=1",
+      "--no-requeue",
+      "--job-name=qwen3b-dapo-b32-k256",
+      "--nodelist=deep-chungus-7",
+      "--exclusive",
+      "--gres=gpu:a100:7",
+      "--cpus-per-task=128",
+      "--mem=0",
+      "--time=45-00:00:00",
+      "--output=/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/launches/qwen25-3b-dapo17k-async-b32-normal-20260928-v1/learner/slurm-%j.out",
+      "--error=/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/launches/qwen25-3b-dapo17k-async-b32-normal-20260928-v1/learner/slurm-%j.err",
+      "/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/launches/qwen25-3b-dapo17k-async-b32-normal-20260928-v1/learner/job.sh"
+    ],
+    "worker": [
+      "sbatch",
+      "--parsable",
+      "--account=grad-students",
+      "--partition=low-priority",
+      "--qos=normal",
+      "--nodes=1",
+      "--ntasks=1",
+      "--no-requeue",
+      "--job-name=qwen3b-dapo-b32-history",
+      "--nodelist=deep-chungus-1",
+      "--gres=gpu:a100:3",
+      "--cpus-per-task=48",
+      "--mem=160G",
+      "--time=14-00:00:00",
+      "--dependency=after:2145486",
+      "--kill-on-invalid-dep=yes",
+      "--output=/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/launches/qwen25-3b-dapo17k-async-b32-normal-20260928-v1/worker/slurm-%j.out",
+      "--error=/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/launches/qwen25-3b-dapo17k-async-b32-normal-20260928-v1/worker/slurm-%j.err",
+      "/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/launches/qwen25-3b-dapo17k-async-b32-normal-20260928-v1/worker/job.sh",
+      "2145486"
+    ]
+  },
+  "fields": {
+    "learner": "JobId=2145486 JobName=qwen3b-dapo-b32-k256 UserId=mohamadzbib(29562) GroupId=mohamadzbib(29562) MCS_label=N/A Priority=70 Nice=0 Account=grad-students QOS=normal JobState=PENDING Reason=None Dependency=(null) Requeue=0 Restarts=0 BatchFlag=1 Reboot=0 ExitCode=0:0 RunTime=00:00:00 TimeLimit=45-00:00:00 TimeMin=N/A SubmitTime=2026-09-28T09:13:26 EligibleTime=2026-09-28T09:13:26 AccrueTime=Unknown StartTime=Unknown EndTime=Unknown Deadline=N/A SuspendTime=None SecsPreSuspend=0 LastSchedEval=2026-09-28T09:13:26 Scheduler=Main Partition=low-priority AllocNode:Sid=mslurm:667512 ReqNodeList=deep-chungus-7 ExcNodeList=(null) NodeList=(null) NumNodes=1-1 NumCPUs=128 NumTasks=1 CPUs/Task=128 ReqB:S:C:T=0:0:*:* TRES=cpu=128,mem=500000M,node=1,billing=128,gres/gpu=7,gres/gpu:a100=7 Socks/Node=* NtasksPerN:B:S:C=0:0:*:* CoreSpec=* MinCPUsNode=128 MinMemoryNode=0 MinTmpDiskNode=0 Features=(null) DelayBoot=00:00:00 OverSubscribe=NO Contiguous=0 Licenses=(null) Network=(null) Command=/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/launches/qwen25-3b-dapo17k-async-b32-normal-20260928-v1/learner/job.sh WorkDir=/afs/csail.mit.edu/u/m/mohamadzbib StdErr=/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/launches/qwen25-3b-dapo17k-async-b32-normal-20260928-v1/learner/slurm-2145486.err StdIn=/dev/null StdOut=/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/launches/qwen25-3b-dapo17k-async-b32-normal-20260928-v1/learner/slurm-2145486.out Power= TresPerNode=gres:gpu:a100:7",
+    "worker": "JobId=2145487 JobName=qwen3b-dapo-b32-history UserId=mohamadzbib(29562) GroupId=mohamadzbib(29562) MCS_label=N/A Priority=70 Nice=0 Account=grad-students QOS=normal JobState=PENDING Reason=Dependency Dependency=after:2145486(unfulfilled) Requeue=0 Restarts=0 BatchFlag=1 Reboot=0 ExitCode=0:0 RunTime=00:00:00 TimeLimit=14-00:00:00 TimeMin=N/A SubmitTime=2026-09-28T09:13:26 EligibleTime=Unknown AccrueTime=Unknown StartTime=Unknown EndTime=Unknown Deadline=N/A SuspendTime=None SecsPreSuspend=0 LastSchedEval=2026-09-28T09:13:26 Scheduler=Main Partition=low-priority AllocNode:Sid=mslurm:667512 ReqNodeList=deep-chungus-1 ExcNodeList=(null) NodeList=(null) NumNodes=1-1 NumCPUs=48 NumTasks=1 CPUs/Task=48 ReqB:S:C:T=0:0:*:* TRES=cpu=48,mem=160G,node=1,billing=48,gres/gpu=3,gres/gpu:a100=3 Socks/Node=* NtasksPerN:B:S:C=0:0:*:* CoreSpec=* MinCPUsNode=48 MinMemoryNode=160G MinTmpDiskNode=0 Features=(null) DelayBoot=00:00:00 OverSubscribe=OK Contiguous=0 Licenses=(null) Network=(null) Command=/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/launches/qwen25-3b-dapo17k-async-b32-normal-20260928-v1/worker/job.sh 2145486 WorkDir=/afs/csail.mit.edu/u/m/mohamadzbib StdErr=/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/launches/qwen25-3b-dapo17k-async-b32-normal-20260928-v1/worker/slurm-2145487.err StdIn=/dev/null StdOut=/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/launches/qwen25-3b-dapo17k-async-b32-normal-20260928-v1/worker/slurm-2145487.out Power= KillOInInvalidDependent=Yes TresPerNode=gres:gpu:a100:3"
+  }
+}

@@ -1,0 +1,38 @@
+{
+  "data_manifest": {
+    "deepseek15b": "/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/launches/deepseek15b-dapo17k-async-b32-hp-20260928-v1/assets/train-manifest-deepseek15b.json",
+    "qwen3b": "/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/launches/qwen25-3b-dapo17k-async-b32-normal-20260928-v1/assets/train-manifest-qwen3b.json"
+  },
+  "dataset_path": {
+    "deepseek15b": "/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/launches/deepseek15b-dapo17k-async-b32-hp-20260928-v1/assets/train.jsonl",
+    "qwen3b": "/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/launches/qwen25-3b-dapo17k-async-b32-normal-20260928-v1/assets/train.jsonl"
+  },
+  "historical_rollouts": {
+    "deepseek15b": "/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/historical-rollouts/deepseek15b-dapo17k-6k-exact256-b32-seed42-v1",
+    "qwen3b": "/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/historical-rollouts/qwen25-3b-dapo17k-6k-exact256-b32-seed42-v1"
+  },
+  "inference_gpus": {
+    "deepseek15b": 5,
+    "qwen3b": 3
+  },
+  "inference_port": {
+    "deepseek15b": 18000,
+    "qwen3b": 19000
+  },
+  "model_path": {
+    "deepseek15b": "/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/profiling/20260927-deepseek15b-node5-v2/work/assets/model",
+    "qwen3b": "/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/profiling/20260927-qwen3b-node7-v2/work/assets/model"
+  },
+  "output_dir": {
+    "deepseek15b": "/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/outputs/deepseek15b-dapo17k-6k-exact256-b32-seed42-v1",
+    "qwen3b": "/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/outputs/qwen25-3b-dapo17k-6k-exact256-b32-seed42-v1"
+  },
+  "prepared_model_path": {
+    "deepseek15b": "/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/profiling/20260927-deepseek15b-node5-v2/work/assets/native-model",
+    "qwen3b": "/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/launches/qwen25-3b-dapo17k-async-b32-normal-20260928-v1/assets/native-model"
+  },
+  "reasoning_required": {
+    "deepseek15b": true,
+    "qwen3b": false
+  }
+}

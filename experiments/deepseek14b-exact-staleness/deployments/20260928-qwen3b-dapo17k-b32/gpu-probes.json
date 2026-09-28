@@ -1,0 +1,553 @@
+{
+  "job_id": "2145485",
+  "node": "deep-chungus-7",
+  "allocated_devices": [
+    "0",
+    "1",
+    "2",
+    "3",
+    "4",
+    "5",
+    "6",
+    "7"
+  ],
+  "healthy_devices": [
+    "0",
+    "1",
+    "2",
+    "3",
+    "4",
+    "5",
+    "6"
+  ],
+  "results": [
+    {
+      "device": "0",
+      "healthy": true,
+      "name": "NVIDIA A100 80GB PCIe",
+      "bytes": 85097971712,
+      "uuid": "903e8a7b-ff3e-02cb-6a4d-0b7ab16b5027",
+      "initial_free_bytes": 84654424064,
+      "initial_total_bytes": 85097971712,
+      "bf16_backward": true,
+      "stdout_tail": "{\"name\": \"NVIDIA A100 80GB PCIe\", \"bytes\": 85097971712, \"uuid\": \"903e8a7b-ff3e-02cb-6a4d-0b7ab16b5027\", \"initial_free_bytes\": 84654424064, \"initial_total_bytes\": 85097971712, \"bf16_backward\": true}\n",
+      "stderr_tail": "[gpu-probe-stage]{\"stage\": \"before_torch_import\", \"seconds\": 4.0780287235975266e-06}\n[gpu-probe-stage]{\"stage\": \"after_torch_import\", \"seconds\": 56.544069865951315}\n[gpu-probe-stage]{\"stage\": \"before_device_count\", \"seconds\": 56.54413652187213}\n[gpu-probe-stage]{\"stage\": \"after_device_count\", \"seconds\": 80.77402263390832}\n[gpu-probe-stage]{\"stage\": \"before_set_device\", \"seconds\": 80.7740533829201}\n[gpu-probe-stage]{\"stage\": \"after_set_device\", \"seconds\": 157.26457230304368}\n[gpu-probe-stage]{\"stage\": \"before_mem_info\", \"seconds\": 157.2646396199707}\n[gpu-probe-stage]{\"stage\": \"after_mem_info\", \"seconds\": 157.26474204403348}\n[gpu-probe-stage]{\"stage\": \"before_bf16_allocation\", \"seconds\": 157.264752473915}\n[gpu-probe-stage]{\"stage\": \"before_bf16_backward\", \"seconds\": 157.26832193508744}\n[gpu-probe-stage]{\"stage\": \"before_cuda_synchronize\", \"seconds\": 157.46409616200253}\n[gpu-probe-stage]{\"stage\": \"after_cuda_synchronize\", \"seconds\": 157.46429560007527}\n[gpu-probe-stage]{\"stage\": \"before_device_properties\", \"seconds\": 157.48704741196707}\n[gpu-probe-stage]{\"stage\": \"complete\", \"seconds\": 157.48721501906402}\n",
+      "last_stage": "complete",
+      "stages": [
+        {
+          "stage": "before_torch_import",
+          "seconds": 4.0780287235975266e-06
+        },
+        {
+          "stage": "after_torch_import",
+          "seconds": 56.544069865951315
+        },
+        {
+          "stage": "before_device_count",
+          "seconds": 56.54413652187213
+        },
+        {
+          "stage": "after_device_count",
+          "seconds": 80.77402263390832
+        },
+        {
+          "stage": "before_set_device",
+          "seconds": 80.7740533829201
+        },
+        {
+          "stage": "after_set_device",
+          "seconds": 157.26457230304368
+        },
+        {
+          "stage": "before_mem_info",
+          "seconds": 157.2646396199707
+        },
+        {
+          "stage": "after_mem_info",
+          "seconds": 157.26474204403348
+        },
+        {
+          "stage": "before_bf16_allocation",
+          "seconds": 157.264752473915
+        },
+        {
+          "stage": "before_bf16_backward",
+          "seconds": 157.26832193508744
+        },
+        {
+          "stage": "before_cuda_synchronize",
+          "seconds": 157.46409616200253
+        },
+        {
+          "stage": "after_cuda_synchronize",
+          "seconds": 157.46429560007527
+        },
+        {
+          "stage": "before_device_properties",
+          "seconds": 157.48704741196707
+        },
+        {
+          "stage": "complete",
+          "seconds": 157.48721501906402
+        }
+      ]
+    },
+    {
+      "device": "1",
+      "healthy": true,
+      "name": "NVIDIA A100 80GB PCIe",
+      "bytes": 85097971712,
+      "uuid": "b03bc3ba-472c-8081-1374-cfb54402f3ac",
+      "initial_free_bytes": 84654424064,
+      "initial_total_bytes": 85097971712,
+      "bf16_backward": true,
+      "stdout_tail": "{\"name\": \"NVIDIA A100 80GB PCIe\", \"bytes\": 85097971712, \"uuid\": \"b03bc3ba-472c-8081-1374-cfb54402f3ac\", \"initial_free_bytes\": 84654424064, \"initial_total_bytes\": 85097971712, \"bf16_backward\": true}\n",
+      "stderr_tail": "[gpu-probe-stage]{\"stage\": \"before_torch_import\", \"seconds\": 3.1660310924053192e-06}\n[gpu-probe-stage]{\"stage\": \"after_torch_import\", \"seconds\": 56.536405900958925}\n[gpu-probe-stage]{\"stage\": \"before_device_count\", \"seconds\": 56.53647825703956}\n[gpu-probe-stage]{\"stage\": \"after_device_count\", \"seconds\": 80.76559317088686}\n[gpu-probe-stage]{\"stage\": \"before_set_device\", \"seconds\": 80.76562600303441}\n[gpu-probe-stage]{\"stage\": \"after_set_device\", \"seconds\": 157.26450112788007}\n[gpu-probe-stage]{\"stage\": \"before_mem_info\", \"seconds\": 157.26462043402717}\n[gpu-probe-stage]{\"stage\": \"after_mem_info\", \"seconds\": 157.26477790204808}\n[gpu-probe-stage]{\"stage\": \"before_bf16_allocation\", \"seconds\": 157.26479063602164}\n[gpu-probe-stage]{\"stage\": \"before_bf16_backward\", \"seconds\": 157.26907653198577}\n[gpu-probe-stage]{\"stage\": \"before_cuda_synchronize\", \"seconds\": 157.470919146901}\n[gpu-probe-stage]{\"stage\": \"after_cuda_synchronize\", \"seconds\": 157.47114017489366}\n[gpu-probe-stage]{\"stage\": \"before_device_properties\", \"seconds\": 157.49425899190828}\n[gpu-probe-stage]{\"stage\": \"complete\", \"seconds\": 157.49454228789546}\n",
+      "last_stage": "complete",
+      "stages": [
+        {
+          "stage": "before_torch_import",
+          "seconds": 3.1660310924053192e-06
+        },
+        {
+          "stage": "after_torch_import",
+          "seconds": 56.536405900958925
+        },
+        {
+          "stage": "before_device_count",
+          "seconds": 56.53647825703956
+        },
+        {
+          "stage": "after_device_count",
+          "seconds": 80.76559317088686
+        },
+        {
+          "stage": "before_set_device",
+          "seconds": 80.76562600303441
+        },
+        {
+          "stage": "after_set_device",
+          "seconds": 157.26450112788007
+        },
+        {
+          "stage": "before_mem_info",
+          "seconds": 157.26462043402717
+        },
+        {
+          "stage": "after_mem_info",
+          "seconds": 157.26477790204808
+        },
+        {
+          "stage": "before_bf16_allocation",
+          "seconds": 157.26479063602164
+        },
+        {
+          "stage": "before_bf16_backward",
+          "seconds": 157.26907653198577
+        },
+        {
+          "stage": "before_cuda_synchronize",
+          "seconds": 157.470919146901
+        },
+        {
+          "stage": "after_cuda_synchronize",
+          "seconds": 157.47114017489366
+        },
+        {
+          "stage": "before_device_properties",
+          "seconds": 157.49425899190828
+        },
+        {
+          "stage": "complete",
+          "seconds": 157.49454228789546
+        }
+      ]
+    },
+    {
+      "device": "2",
+      "healthy": true,
+      "name": "NVIDIA A100 80GB PCIe",
+      "bytes": 85097971712,
+      "uuid": "f12c8a0e-d339-efb5-a82a-3da130030298",
+      "initial_free_bytes": 84654424064,
+      "initial_total_bytes": 85097971712,
+      "bf16_backward": true,
+      "stdout_tail": "{\"name\": \"NVIDIA A100 80GB PCIe\", \"bytes\": 85097971712, \"uuid\": \"f12c8a0e-d339-efb5-a82a-3da130030298\", \"initial_free_bytes\": 84654424064, \"initial_total_bytes\": 85097971712, \"bf16_backward\": true}\n",
+      "stderr_tail": "[gpu-probe-stage]{\"stage\": \"before_torch_import\", \"seconds\": 3.4368131309747696e-06}\n[gpu-probe-stage]{\"stage\": \"after_torch_import\", \"seconds\": 56.53763266094029}\n[gpu-probe-stage]{\"stage\": \"before_device_count\", \"seconds\": 56.53768617194146}\n[gpu-probe-stage]{\"stage\": \"after_device_count\", \"seconds\": 80.7654231688939}\n[gpu-probe-stage]{\"stage\": \"before_set_device\", \"seconds\": 80.76549857179634}\n[gpu-probe-stage]{\"stage\": \"after_set_device\", \"seconds\": 157.2673397869803}\n[gpu-probe-stage]{\"stage\": \"before_mem_info\", \"seconds\": 157.2674166529905}\n[gpu-probe-stage]{\"stage\": \"after_mem_info\", \"seconds\": 157.26778082200326}\n[gpu-probe-stage]{\"stage\": \"before_bf16_allocation\", \"seconds\": 157.267796901986}\n[gpu-probe-stage]{\"stage\": \"before_bf16_backward\", \"seconds\": 157.27175948699005}\n[gpu-probe-stage]{\"stage\": \"before_cuda_synchronize\", \"seconds\": 157.47600892395712}\n[gpu-probe-stage]{\"stage\": \"after_cuda_synchronize\", \"seconds\": 157.47620685887523}\n[gpu-probe-stage]{\"stage\": \"before_device_properties\", \"seconds\": 157.49939322285354}\n[gpu-probe-stage]{\"stage\": \"complete\", \"seconds\": 157.49954980891198}\n",
+      "last_stage": "complete",
+      "stages": [
+        {
+          "stage": "before_torch_import",
+          "seconds": 3.4368131309747696e-06
+        },
+        {
+          "stage": "after_torch_import",
+          "seconds": 56.53763266094029
+        },
+        {
+          "stage": "before_device_count",
+          "seconds": 56.53768617194146
+        },
+        {
+          "stage": "after_device_count",
+          "seconds": 80.7654231688939
+        },
+        {
+          "stage": "before_set_device",
+          "seconds": 80.76549857179634
+        },
+        {
+          "stage": "after_set_device",
+          "seconds": 157.2673397869803
+        },
+        {
+          "stage": "before_mem_info",
+          "seconds": 157.2674166529905
+        },
+        {
+          "stage": "after_mem_info",
+          "seconds": 157.26778082200326
+        },
+        {
+          "stage": "before_bf16_allocation",
+          "seconds": 157.267796901986
+        },
+        {
+          "stage": "before_bf16_backward",
+          "seconds": 157.27175948699005
+        },
+        {
+          "stage": "before_cuda_synchronize",
+          "seconds": 157.47600892395712
+        },
+        {
+          "stage": "after_cuda_synchronize",
+          "seconds": 157.47620685887523
+        },
+        {
+          "stage": "before_device_properties",
+          "seconds": 157.49939322285354
+        },
+        {
+          "stage": "complete",
+          "seconds": 157.49954980891198
+        }
+      ]
+    },
+    {
+      "device": "3",
+      "healthy": true,
+      "name": "NVIDIA A100 80GB PCIe",
+      "bytes": 85097971712,
+      "uuid": "1a580dec-5dbf-b233-37d0-ad28d7816c96",
+      "initial_free_bytes": 84654424064,
+      "initial_total_bytes": 85097971712,
+      "bf16_backward": true,
+      "stdout_tail": "{\"name\": \"NVIDIA A100 80GB PCIe\", \"bytes\": 85097971712, \"uuid\": \"1a580dec-5dbf-b233-37d0-ad28d7816c96\", \"initial_free_bytes\": 84654424064, \"initial_total_bytes\": 85097971712, \"bf16_backward\": true}\n",
+      "stderr_tail": "[gpu-probe-stage]{\"stage\": \"before_torch_import\", \"seconds\": 4.599103704094887e-06}\n[gpu-probe-stage]{\"stage\": \"after_torch_import\", \"seconds\": 56.52525407797657}\n[gpu-probe-stage]{\"stage\": \"before_device_count\", \"seconds\": 56.52531290007755}\n[gpu-probe-stage]{\"stage\": \"after_device_count\", \"seconds\": 80.74861395708285}\n[gpu-probe-stage]{\"stage\": \"before_set_device\", \"seconds\": 80.74868304701522}\n[gpu-probe-stage]{\"stage\": \"after_set_device\", \"seconds\": 157.23815868492238}\n[gpu-probe-stage]{\"stage\": \"before_mem_info\", \"seconds\": 157.2383580619935}\n[gpu-probe-stage]{\"stage\": \"after_mem_info\", \"seconds\": 157.23855402204208}\n[gpu-probe-stage]{\"stage\": \"before_bf16_allocation\", \"seconds\": 157.23856955207884}\n[gpu-probe-stage]{\"stage\": \"before_bf16_backward\", \"seconds\": 157.24236059188843}\n[gpu-probe-stage]{\"stage\": \"before_cuda_synchronize\", \"seconds\": 157.43739614193328}\n[gpu-probe-stage]{\"stage\": \"after_cuda_synchronize\", \"seconds\": 157.43769596889615}\n[gpu-probe-stage]{\"stage\": \"before_device_properties\", \"seconds\": 157.461236594012}\n[gpu-probe-stage]{\"stage\": \"complete\", \"seconds\": 157.46163770300336}\n",
+      "last_stage": "complete",
+      "stages": [
+        {
+          "stage": "before_torch_import",
+          "seconds": 4.599103704094887e-06
+        },
+        {
+          "stage": "after_torch_import",
+          "seconds": 56.52525407797657
+        },
+        {
+          "stage": "before_device_count",
+          "seconds": 56.52531290007755
+        },
+        {
+          "stage": "after_device_count",
+          "seconds": 80.74861395708285
+        },
+        {
+          "stage": "before_set_device",
+          "seconds": 80.74868304701522
+        },
+        {
+          "stage": "after_set_device",
+          "seconds": 157.23815868492238
+        },
+        {
+          "stage": "before_mem_info",
+          "seconds": 157.2383580619935
+        },
+        {
+          "stage": "after_mem_info",
+          "seconds": 157.23855402204208
+        },
+        {
+          "stage": "before_bf16_allocation",
+          "seconds": 157.23856955207884
+        },
+        {
+          "stage": "before_bf16_backward",
+          "seconds": 157.24236059188843
+        },
+        {
+          "stage": "before_cuda_synchronize",
+          "seconds": 157.43739614193328
+        },
+        {
+          "stage": "after_cuda_synchronize",
+          "seconds": 157.43769596889615
+        },
+        {
+          "stage": "before_device_properties",
+          "seconds": 157.461236594012
+        },
+        {
+          "stage": "complete",
+          "seconds": 157.46163770300336
+        }
+      ]
+    },
+    {
+      "device": "4",
+      "healthy": true,
+      "name": "NVIDIA A100 80GB PCIe",
+      "bytes": 85097971712,
+      "uuid": "ba431598-b47d-7149-ba8a-09d754f3ed55",
+      "initial_free_bytes": 84654424064,
+      "initial_total_bytes": 85097971712,
+      "bf16_backward": true,
+      "stdout_tail": "{\"name\": \"NVIDIA A100 80GB PCIe\", \"bytes\": 85097971712, \"uuid\": \"ba431598-b47d-7149-ba8a-09d754f3ed55\", \"initial_free_bytes\": 84654424064, \"initial_total_bytes\": 85097971712, \"bf16_backward\": true}\n",
+      "stderr_tail": "[gpu-probe-stage]{\"stage\": \"before_torch_import\", \"seconds\": 3.1760428100824356e-06}\n[gpu-probe-stage]{\"stage\": \"after_torch_import\", \"seconds\": 56.505869834916666}\n[gpu-probe-stage]{\"stage\": \"before_device_count\", \"seconds\": 56.50592208397575}\n[gpu-probe-stage]{\"stage\": \"after_device_count\", \"seconds\": 80.73388223303482}\n[gpu-probe-stage]{\"stage\": \"before_set_device\", \"seconds\": 80.73392469389364}\n[gpu-probe-stage]{\"stage\": \"after_set_device\", \"seconds\": 157.24290368985385}\n[gpu-probe-stage]{\"stage\": \"before_mem_info\", \"seconds\": 157.24297172785737}\n[gpu-probe-stage]{\"stage\": \"after_mem_info\", \"seconds\": 157.24308953084983}\n[gpu-probe-stage]{\"stage\": \"before_bf16_allocation\", \"seconds\": 157.2431011130102}\n[gpu-probe-stage]{\"stage\": \"before_bf16_backward\", \"seconds\": 157.24749132688157}\n[gpu-probe-stage]{\"stage\": \"before_cuda_synchronize\", \"seconds\": 157.44601211883128}\n[gpu-probe-stage]{\"stage\": \"after_cuda_synchronize\", \"seconds\": 157.446359755937}\n[gpu-probe-stage]{\"stage\": \"before_device_properties\", \"seconds\": 157.47480132989585}\n[gpu-probe-stage]{\"stage\": \"complete\", \"seconds\": 157.4750954869669}\n",
+      "last_stage": "complete",
+      "stages": [
+        {
+          "stage": "before_torch_import",
+          "seconds": 3.1760428100824356e-06
+        },
+        {
+          "stage": "after_torch_import",
+          "seconds": 56.505869834916666
+        },
+        {
+          "stage": "before_device_count",
+          "seconds": 56.50592208397575
+        },
+        {
+          "stage": "after_device_count",
+          "seconds": 80.73388223303482
+        },
+        {
+          "stage": "before_set_device",
+          "seconds": 80.73392469389364
+        },
+        {
+          "stage": "after_set_device",
+          "seconds": 157.24290368985385
+        },
+        {
+          "stage": "before_mem_info",
+          "seconds": 157.24297172785737
+        },
+        {
+          "stage": "after_mem_info",
+          "seconds": 157.24308953084983
+        },
+        {
+          "stage": "before_bf16_allocation",
+          "seconds": 157.2431011130102
+        },
+        {
+          "stage": "before_bf16_backward",
+          "seconds": 157.24749132688157
+        },
+        {
+          "stage": "before_cuda_synchronize",
+          "seconds": 157.44601211883128
+        },
+        {
+          "stage": "after_cuda_synchronize",
+          "seconds": 157.446359755937
+        },
+        {
+          "stage": "before_device_properties",
+          "seconds": 157.47480132989585
+        },
+        {
+          "stage": "complete",
+          "seconds": 157.4750954869669
+        }
+      ]
+    },
+    {
+      "device": "5",
+      "healthy": true,
+      "name": "NVIDIA A100 80GB PCIe",
+      "bytes": 85097971712,
+      "uuid": "99e6d841-8f03-96c4-7573-c45c3e4026cc",
+      "initial_free_bytes": 84654424064,
+      "initial_total_bytes": 85097971712,
+      "bf16_backward": true,
+      "stdout_tail": "{\"name\": \"NVIDIA A100 80GB PCIe\", \"bytes\": 85097971712, \"uuid\": \"99e6d841-8f03-96c4-7573-c45c3e4026cc\", \"initial_free_bytes\": 84654424064, \"initial_total_bytes\": 85097971712, \"bf16_backward\": true}\n",
+      "stderr_tail": "[gpu-probe-stage]{\"stage\": \"before_torch_import\", \"seconds\": 3.206077963113785e-06}\n[gpu-probe-stage]{\"stage\": \"after_torch_import\", \"seconds\": 56.54475662508048}\n[gpu-probe-stage]{\"stage\": \"before_device_count\", \"seconds\": 56.54482968314551}\n[gpu-probe-stage]{\"stage\": \"after_device_count\", \"seconds\": 80.76279868511483}\n[gpu-probe-stage]{\"stage\": \"before_set_device\", \"seconds\": 80.76287299604155}\n[gpu-probe-stage]{\"stage\": \"after_set_device\", \"seconds\": 157.2277802741155}\n[gpu-probe-stage]{\"stage\": \"before_mem_info\", \"seconds\": 157.22789045306854}\n[gpu-probe-stage]{\"stage\": \"after_mem_info\", \"seconds\": 157.2296231801156}\n[gpu-probe-stage]{\"stage\": \"before_bf16_allocation\", \"seconds\": 157.22963932109997}\n[gpu-probe-stage]{\"stage\": \"before_bf16_backward\", \"seconds\": 157.23626109515317}\n[gpu-probe-stage]{\"stage\": \"before_cuda_synchronize\", \"seconds\": 157.43633104721084}\n[gpu-probe-stage]{\"stage\": \"after_cuda_synchronize\", \"seconds\": 157.4365498709958}\n[gpu-probe-stage]{\"stage\": \"before_device_properties\", \"seconds\": 157.45980674913153}\n[gpu-probe-stage]{\"stage\": \"complete\", \"seconds\": 157.46007613814436}\n",
+      "last_stage": "complete",
+      "stages": [
+        {
+          "stage": "before_torch_import",
+          "seconds": 3.206077963113785e-06
+        },
+        {
+          "stage": "after_torch_import",
+          "seconds": 56.54475662508048
+        },
+        {
+          "stage": "before_device_count",
+          "seconds": 56.54482968314551
+        },
+        {
+          "stage": "after_device_count",
+          "seconds": 80.76279868511483
+        },
+        {
+          "stage": "before_set_device",
+          "seconds": 80.76287299604155
+        },
+        {
+          "stage": "after_set_device",
+          "seconds": 157.2277802741155
+        },
+        {
+          "stage": "before_mem_info",
+          "seconds": 157.22789045306854
+        },
+        {
+          "stage": "after_mem_info",
+          "seconds": 157.2296231801156
+        },
+        {
+          "stage": "before_bf16_allocation",
+          "seconds": 157.22963932109997
+        },
+        {
+          "stage": "before_bf16_backward",
+          "seconds": 157.23626109515317
+        },
+        {
+          "stage": "before_cuda_synchronize",
+          "seconds": 157.43633104721084
+        },
+        {
+          "stage": "after_cuda_synchronize",
+          "seconds": 157.4365498709958
+        },
+        {
+          "stage": "before_device_properties",
+          "seconds": 157.45980674913153
+        },
+        {
+          "stage": "complete",
+          "seconds": 157.46007613814436
+        }
+      ]
+    },
+    {
+      "device": "6",
+      "healthy": true,
+      "name": "NVIDIA A100 80GB PCIe",
+      "bytes": 85097971712,
+      "uuid": "21dae0b4-8feb-1aeb-a298-58e0f7cd24d5",
+      "initial_free_bytes": 84654424064,
+      "initial_total_bytes": 85097971712,
+      "bf16_backward": true,
+      "stdout_tail": "{\"name\": \"NVIDIA A100 80GB PCIe\", \"bytes\": 85097971712, \"uuid\": \"21dae0b4-8feb-1aeb-a298-58e0f7cd24d5\", \"initial_free_bytes\": 84654424064, \"initial_total_bytes\": 85097971712, \"bf16_backward\": true}\n",
+      "stderr_tail": "[gpu-probe-stage]{\"stage\": \"before_torch_import\", \"seconds\": 3.627035766839981e-06}\n[gpu-probe-stage]{\"stage\": \"after_torch_import\", \"seconds\": 56.5164217420388}\n[gpu-probe-stage]{\"stage\": \"before_device_count\", \"seconds\": 56.516496955184266}\n[gpu-probe-stage]{\"stage\": \"after_device_count\", \"seconds\": 80.74937668908387}\n[gpu-probe-stage]{\"stage\": \"before_set_device\", \"seconds\": 80.749416815117}\n[gpu-probe-stage]{\"stage\": \"after_set_device\", \"seconds\": 157.24214273015969}\n[gpu-probe-stage]{\"stage\": \"before_mem_info\", \"seconds\": 157.24228796409443}\n[gpu-probe-stage]{\"stage\": \"after_mem_info\", \"seconds\": 157.2424735550303}\n[gpu-probe-stage]{\"stage\": \"before_bf16_allocation\", \"seconds\": 157.2424949160777}\n[gpu-probe-stage]{\"stage\": \"before_bf16_backward\", \"seconds\": 157.2471824621316}\n[gpu-probe-stage]{\"stage\": \"before_cuda_synchronize\", \"seconds\": 157.44500477216206}\n[gpu-probe-stage]{\"stage\": \"after_cuda_synchronize\", \"seconds\": 157.44525423413143}\n[gpu-probe-stage]{\"stage\": \"before_device_properties\", \"seconds\": 157.47181557212025}\n[gpu-probe-stage]{\"stage\": \"complete\", \"seconds\": 157.47212199214846}\n",
+      "last_stage": "complete",
+      "stages": [
+        {
+          "stage": "before_torch_import",
+          "seconds": 3.627035766839981e-06
+        },
+        {
+          "stage": "after_torch_import",
+          "seconds": 56.5164217420388
+        },
+        {
+          "stage": "before_device_count",
+          "seconds": 56.516496955184266
+        },
+        {
+          "stage": "after_device_count",
+          "seconds": 80.74937668908387
+        },
+        {
+          "stage": "before_set_device",
+          "seconds": 80.749416815117
+        },
+        {
+          "stage": "after_set_device",
+          "seconds": 157.24214273015969
+        },
+        {
+          "stage": "before_mem_info",
+          "seconds": 157.24228796409443
+        },
+        {
+          "stage": "after_mem_info",
+          "seconds": 157.2424735550303
+        },
+        {
+          "stage": "before_bf16_allocation",
+          "seconds": 157.2424949160777
+        },
+        {
+          "stage": "before_bf16_backward",
+          "seconds": 157.2471824621316
+        },
+        {
+          "stage": "before_cuda_synchronize",
+          "seconds": 157.44500477216206
+        },
+        {
+          "stage": "after_cuda_synchronize",
+          "seconds": 157.44525423413143
+        },
+        {
+          "stage": "before_device_properties",
+          "seconds": 157.47181557212025
+        },
+        {
+          "stage": "complete",
+          "seconds": 157.47212199214846
+        }
+      ]
+    },
+    {
+      "device": "7",
+      "healthy": false,
+      "error": "[gpu-probe-stage]{\"stage\": \"before_torch_import\", \"seconds\": 3.376975655555725e-06}\n[gpu-probe-stage]{\"stage\": \"after_torch_import\", \"seconds\": 56.528422120027244}\n[gpu-probe-stage]{\"stage\": \"before_device_count\", \"seconds\": 56.52849740209058}\n[gpu-probe-stage]{\"stage\": \"after_device_count\", \"seconds\": 80.759561101906}\n[gpu-probe-stage]{\"stage\": \"before_set_device\", \"seconds\": 80.75959201995283}\nTraceback (most recent call last):\n  File \"<string>\", line 26, in <module>\n  File \"/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/vendor/prime-rl/.venv/lib/python3.12/site-packages/torch/cuda/__init__.py\", line 638, in set_device\n    torch._C._cuda_setDevice(device)\n  File \"/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/vendor/prime-rl/.venv/lib/python3.12/site-packages/torch/cuda/__init__.py\", line 478, in _lazy_init\n    torch._C._cuda_init()\nRuntimeError: No CUDA GPUs are available\n",
+      "stdout_tail": "",
+      "stderr_tail": "[gpu-probe-stage]{\"stage\": \"before_torch_import\", \"seconds\": 3.376975655555725e-06}\n[gpu-probe-stage]{\"stage\": \"after_torch_import\", \"seconds\": 56.528422120027244}\n[gpu-probe-stage]{\"stage\": \"before_device_count\", \"seconds\": 56.52849740209058}\n[gpu-probe-stage]{\"stage\": \"after_device_count\", \"seconds\": 80.759561101906}\n[gpu-probe-stage]{\"stage\": \"before_set_device\", \"seconds\": 80.75959201995283}\nTraceback (most recent call last):\n  File \"<string>\", line 26, in <module>\n  File \"/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/vendor/prime-rl/.venv/lib/python3.12/site-packages/torch/cuda/__init__.py\", line 638, in set_device\n    torch._C._cuda_setDevice(device)\n  File \"/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/vendor/prime-rl/.venv/lib/python3.12/site-packages/torch/cuda/__init__.py\", line 478, in _lazy_init\n    torch._C._cuda_init()\nRuntimeError: No CUDA GPUs are available\n",
+      "last_stage": "before_set_device",
+      "stages": [
+        {
+          "stage": "before_torch_import",
+          "seconds": 3.376975655555725e-06
+        },
+        {
+          "stage": "after_torch_import",
+          "seconds": 56.528422120027244
+        },
+        {
+          "stage": "before_device_count",
+          "seconds": 56.52849740209058
+        },
+        {
+          "stage": "after_device_count",
+          "seconds": 80.759561101906
+        },
+        {
+          "stage": "before_set_device",
+          "seconds": 80.75959201995283
+        }
+      ]
+    }
+  ],
+  "collective_health_verified": false
+}

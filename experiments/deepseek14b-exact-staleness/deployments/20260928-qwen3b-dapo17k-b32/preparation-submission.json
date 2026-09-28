@@ -1,0 +1,32 @@
+{
+  "job": "2145485",
+  "command": [
+    "sbatch",
+    "--parsable",
+    "--account=grad-students",
+    "--partition=low-priority",
+    "--qos=normal",
+    "--nodelist=deep-chungus-7",
+    "--nodes=1",
+    "--ntasks=1",
+    "--exclusive",
+    "--gres=gpu:a100:8",
+    "--cpus-per-task=128",
+    "--mem=0",
+    "--time=01:00:00",
+    "--no-requeue",
+    "--job-name=qwen3b-b32-prepare",
+    "--chdir=/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/launches/qwen25-3b-dapo17k-async-b32-normal-20260928-v1/release",
+    "--output=/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/launches/qwen25-3b-dapo17k-async-b32-normal-20260928-v1/prepare-%j.out",
+    "--error=/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/launches/qwen25-3b-dapo17k-async-b32-normal-20260928-v1/prepare-%j.err",
+    "/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/launches/qwen25-3b-dapo17k-async-b32-normal-20260928-v1/prepare.sh"
+  ],
+  "control": "/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/launches/qwen25-3b-dapo17k-async-b32-normal-20260928-v1",
+  "parent": "/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/launches/deepseek15b-dapo17k-async-b32-hp-20260928-v1",
+  "model_manifest_source": "/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/launches/qwen25-3b-full-hp-v3r2-20260927/work/release/manifests/model.json",
+  "changed_source_files": [
+    "src/deepseek_study/__init__.py",
+    "src/deepseek_study/dataset/assets.py",
+    "manifests/model.json"
+  ]
+}
