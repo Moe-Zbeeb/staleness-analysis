@@ -1,6 +1,6 @@
 # DeepSeek 1.5B exact k=256 on twelve GPUs
 
-The user requested stopping the on-policy baseline and using the full twelve-A100 high-priority quota for one exact-k256 study. Replacement job **2145301** was admitted on `deep-chungus-3` and `deep-chungus-5`, with both partition and QoS `high-priority`, account `grad-students`, 96 CPUs, six GPUs and 200 GiB requested per node, a 45-day limit, and automatic requeue disabled. The preceding allocation passed all twelve GPU checks and the cross-node collective. The corrected full launch is repeating these checks; the first committed training update is not yet verified.
+The user requested stopping the on-policy baseline and using the full twelve-A100 high-priority quota for one exact-k256 study. Replacement job **2145304** was admitted on `deep-chungus-3` and `deep-chungus-5`, with both partition and QoS `high-priority`, account `grad-students`, 96 CPUs, six GPUs and 200 GiB requested per node, a 45-day limit, and automatic requeue disabled. The preceding allocation passed all twelve GPU checks and the cross-node collective. The corrected full launch is repeating these checks; the first committed training update is not yet verified.
 
 | Node | Trainer GPUs | Inference GPUs |
 | --- | ---: | ---: |
@@ -16,7 +16,7 @@ The model remains `deepseek-ai/DeepSeek-R1-Distill-Qwen-1.5B` on the pinned clea
 
 Updates 1–256 build history using on-policy updates and additional deferred cohorts. Updates 257–1,000 consume data exactly 256 optimizer updates old. The final queue-draining phase does not generate unused future cohorts. We did not reduce the lag, shorten responses, remove tokens, or skip optimizer updates.
 
-The four trainer ranks stay together on one node. Inference uses eight independent TP=1 engines, 64 active sequences per engine and aggregate dispatcher concurrency 512. The load-aware `power_of_two` router fronts all engines; admin requests bypass the router so every engine joins each policy broadcast. Request retry count is one attempt, avoiding hidden replacement sampling. The run seed remains 42; independent engine seeds are 42–49 in endpoint order. Larger parallelism and routing change random-number consumption and floating-point execution; outputs are not promised to match the earlier topology bit for bit.
+The four trainer ranks stay together on one node. Inference uses eight independent TP=1 engines, 64 active sequences per engine and aggregate dispatcher concurrency 512. The `round_robin` router distributes requests across all eight engines; admin requests bypass the router so every engine joins each policy broadcast. Request retry count is one attempt, avoiding hidden replacement sampling. The run seed remains 42; independent engine seeds are 42–49 in endpoint order. Larger parallelism and routing change random-number consumption and floating-point execution; outputs are not promised to match the earlier topology bit for bit.
 
 Training keeps activation checkpointing enabled, forward resharding disabled, FP32 optimizer/reductions, BF16 computation and learner compilation disabled. vLLM still performs its normal compilation and graph preparation. These choices use earlier component measurements; the combined twelve-GPU throughput has not yet been measured and is not claimed globally optimal.
 
@@ -28,15 +28,15 @@ The custom launcher accepts an explicit `RemoteInference` deployment manifest. I
 
 Official PrimeRL v0.9.0 at `ab5de8fff44b2c4a5c85e24b6e6e3f7d57eee7b1` and vLLM source are unchanged. We added the official **vllm-router 0.2.0** wheel already pinned in PrimeRL's lockfile to each isolated local runtime. Its SHA256 is `bac193bedf10f9a0265fe4fdaae0f0418574cd1f15c45f27da1b4a2bae8c10b8`. The adapter records the router version in run identity; no shared environment is upgraded. P2P/SHM are disabled for the initial mixed-node PCIe-compatible NCCL setup, matching the earlier component benchmark environment; cross-node communication is measured at startup.
 
-89 local tests passed covering configuration wiring, distinct engine seeds, invalid endpoint/device rejection, exact-age queue behavior, storage and recovery. A cluster config dry-run also resolved. Twelve GPUs and cross-node NCCL passed the runtime diagnostic: sum 78 and five 32 MiB broadcasts in 0.193373 seconds. The real model weight broadcast and full-size training remain separate runtime gates. No speedup multiplier or completion ETA is established yet.
+91 local tests passed covering configuration wiring, distinct engine seeds, invalid endpoint/device rejection, exact-age queue behavior, storage and recovery. A cluster config dry-run also resolved. Twelve GPUs and cross-node NCCL passed the runtime diagnostic: sum 78 and five 32 MiB broadcasts in 0.193373 seconds. The real model weight broadcast and full-size training remain separate runtime gates. No speedup multiplier or completion ETA is established yet.
 
 ## Storage and recovery
 
-Control: `/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/launches/deepseek15b-k256-12gpu-hp-20260928-v5`.
+Control: `/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/launches/deepseek15b-k256-12gpu-hp-20260928-v6`.
 
-Local workspace on both nodes: `/tmp/staleness-storage-v2/mohamadzbib/deepseek15b-exact256-12gpu-seed42-v5`. Runtime: `/tmp/staleness-runtime/mohamadzbib/deepseek15b-12gpu-v2`.
+Local workspace on both nodes: `/tmp/staleness-storage-v2/mohamadzbib/deepseek15b-exact256-12gpu-seed42-v6`. Runtime: `/tmp/staleness-runtime/mohamadzbib/deepseek15b-12gpu-v2`.
 
-Full checkpoints remain every 100 updates. Verified background backups go to `outputs/deepseek15b-exact256-12gpu-seed42-v5` under the NFS project root; metrics and TensorBoard events also go to the matching XFS `metrics/` directory. Per-node health receipts, inference configs and termination logs are retained in the control directory. The deployment manifest is included in both shared metadata copies.
+Full checkpoints remain every 100 updates. Verified background backups go to `outputs/deepseek15b-exact256-12gpu-seed42-v6` under the NFS project root; metrics and TensorBoard events also go to the matching XFS `metrics/` directory. Per-node health receipts, inference configs and termination logs are retained in the control directory. The deployment manifest is included in both shared metadata copies.
 
 This initial multi-node launcher deliberately rejects `--resume`: a recovery launch must first validate deployment and checkpoint compatibility and stage the complete checkpoint on the trainer node. Checkpoint production is retained; unattended recovery has not been validated. Failed jobs are not automatically restarted from initial weights.
 
@@ -44,10 +44,14 @@ This initial multi-node launcher deliberately rejects `--resume`: a recovery lau
 
 On-policy job **2145261** was intentionally stopped through its supervisor; its saved run status records SIGTERM and no cleanup errors. Slurm labels this nonzero termination `FAILED`. Old queued eight-GPU k256 job **2145258** was cancelled. Twelve-GPU attempt **2145289** was cancelled during staging, before training, to give independent inference engines distinct RNG streams. All old outputs are retained.
 
-See [submission evidence](../../diagnostics/multinode-12gpu-2145301.json) for the resolved study, storage specification, launch hashes and verified Slurm fields.
+See [submission evidence](../../diagnostics/multinode-12gpu-2145304.json) for the resolved study, storage specification, launch hashes and verified Slurm fields.
 
 Network preflight in job **2145292** failed before inference/training because NCCL selected an unreachable IPv6 link-local address on `eth3`. The replacement derives the outbound IPv4 interface with `ip -j route get` for the peer node, sets `NCCL_SOCKET_FAMILY=AF_INET`, selects that exact interface, and records it per node. These are [documented NCCL settings](https://docs.nvidia.com/deeplearning/nccl/user-guide/docs/env.html). The prior runtime is reused after its source checks; new source, assets, outputs and launch receipts have separate paths. No training update was lost in that failed preflight.
 
 A second preflight, **2145293**, identified a Linux address-label mismatch: route devices are `eth0`/`eth3`, but their IPv4 labels exposed to `getifaddrs` are `enx1070fde5feb8`/`enx1070fde59b60`. The launcher now resolves the address label matching the outbound IPv4 source. A subsequent bounded diagnostic showed node3 selecting IB/RoCE and node5 selecting Socket, producing an incompatible NCCL handshake. Both sides now explicitly use `NCCL_NET=Socket` and `NCCL_IB_DISABLE=1`. The corrected twelve-rank diagnostic passed in **2145296**, which then released its gate into the same full-run allocation. There is no checkpoint or optimizer state to recover from the preceding attempts: they never entered training.
 
 Job **2145296** passed the production network preflight and started the router, then stopped before training when the new backup command omitted `--destination`. The corrected command is exercised against the real backup CLI in a regression test. Job **2145301** uses a fresh output directory and the corrected immutable release. No committed optimizer update from the earlier attempts is discarded.
+
+Job **2145301** passed GPU/network checks and synchronized the startup model to all eight engines, but the router initially registered six still-starting engines under `unknown` and sent generation only to the two ready engines. It was intentionally stopped with zero committed updates. The adapter now waits for every engine to serve the expected model, then requires all eight router entries to be healthy and correctly identified before starting training. The router uses `round_robin`: the previous load-based policy polled `/get_load`, which returns 404 in this vLLM version. This change distributes a 512-request cohort evenly without changing its prompts, sample count, or loss. See the [upstream readiness behavior](https://github.com/PrimeIntellect-ai/router/blob/v0.2.0/src/routers/http/router.rs) and [round-robin implementation](https://github.com/PrimeIntellect-ai/router/blob/v0.2.0/src/policies/round_robin.rs).
+
+The corrected replacement is **2145304**, on the same twelve-GPU high-priority layout, with fresh outputs ending in `v6`.

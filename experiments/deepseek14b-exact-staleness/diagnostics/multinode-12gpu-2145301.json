@@ -101,9 +101,10 @@
   },
   "validation": {
     "local_tests_passed": 89,
-    "gpu_health": "previous allocation passed; current allocation pending",
-    "cross_node_nccl": "previous allocation passed; current allocation pending",
-    "first_training_update": "pending"
+    "gpu_health": "12 passed",
+    "cross_node_nccl": "passed: sum78, 160MiB in 0.207350s",
+    "first_training_update": "not completed",
+    "initial_model_broadcast": "all eight engines joined; generation started"
   },
   "upstream_source_modified": false,
   "network_diagnostic": {
@@ -137,5 +138,12 @@
     "--output=/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/launches/deepseek15b-k256-12gpu-hp-20260928-v5/slurm-%j.out",
     "--error=/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/launches/deepseek15b-k256-12gpu-hp-20260928-v5/slurm-%j.err",
     "/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/launches/deepseek15b-k256-12gpu-hp-20260928-v5/job.sh"
-  ]
+  ],
+  "final_status": {
+    "state": "intentionally_stopped",
+    "committed_updates": 0,
+    "cause": "Router registered six not-yet-ready workers under unknown model, routing generation to two workers",
+    "upstream_startup_behavior": "Router v0.2.0 accepts one healthy worker at startup and discovers models only during registration",
+    "fix": "Wait for all eight model endpoints and validate router worker identities before training; round_robin avoids unavailable /get_load endpoint"
+  }
 }

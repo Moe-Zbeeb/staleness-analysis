@@ -123,3 +123,30 @@ def test_backup_command_runs_the_actual_cli_before_training(tmp_path):
     result = subprocess.run(command, capture_output=True, text=True, timeout=15)
     assert result.returncode == 0, result.stderr
     assert json.loads((workspace / "backup-status.json").read_text()) == {"status": "waiting_for_run", "final": True}
+
+
+def test_workers_must_all_serve_the_expected_model(monkeypatch):
+    urls = remote().worker_urls
+    states = {url + "/models": {"data": [{"id": "expected"}]} for url in urls}
+    monkeypatch.setattr(multinode, "fetch_json", lambda url: states[url])
+    assert multinode.workers_ready(urls, "expected")
+    states[urls[-1] + "/models"] = {"data": [{"id": "wrong-model"}]}
+    assert not multinode.workers_ready(urls, "expected")
+    del states[urls[-1] + "/models"]
+    assert not multinode.workers_ready(urls, "expected")
+
+
+def test_router_rejects_early_unknown_or_missing_workers(monkeypatch):
+    deployment = remote()
+    rows = [
+        {"url": url.removesuffix("/v1"), "is_healthy": True, "model_id": "expected"} for url in deployment.worker_urls
+    ]
+    monkeypatch.setattr(multinode, "fetch_json", lambda url: {"workers": rows})
+    assert multinode.router_ready(deployment.router_url, deployment.worker_urls, "expected")
+    rows[-1]["model_id"] = "unknown"
+    assert not multinode.router_ready(deployment.router_url, deployment.worker_urls, "expected")
+    rows[-1]["model_id"] = "expected"
+    rows[-1]["is_healthy"] = False
+    assert not multinode.router_ready(deployment.router_url, deployment.worker_urls, "expected")
+    rows.pop()
+    assert not multinode.router_ready(deployment.router_url, deployment.worker_urls, "expected")

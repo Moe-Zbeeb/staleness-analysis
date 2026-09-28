@@ -6,7 +6,9 @@ import signal
 import socket
 import subprocess
 import time
+import urllib.request
 import zipfile
+from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
 from local_backup import atomic_json, digest
@@ -14,6 +16,34 @@ from node_local_run import command, local_environment, stage
 
 
 ROUTER_SHA256 = "bac193bedf10f9a0265fe4fdaae0f0418574cd1f15c45f27da1b4a2bae8c10b8"
+
+
+def fetch_json(url):
+    with urllib.request.urlopen(url, timeout=3) as response:
+        return json.load(response)
+
+
+def workers_ready(urls, model):
+    def ready(url):
+        try:
+            return model in {item["id"] for item in fetch_json(url + "/models")["data"]}
+        except (OSError, ValueError, KeyError, TypeError):
+            return False
+
+    with ThreadPoolExecutor(max_workers=len(urls)) as executor:
+        return all(list(executor.map(ready, urls)))
+
+
+def router_ready(url, workers, model):
+    try:
+        rows = fetch_json(url.removesuffix("/v1") + "/workers")["workers"]
+        return (
+            len(rows) == len(workers)
+            and {row["url"] for row in rows} == {worker.removesuffix("/v1") for worker in workers}
+            and all(row["is_healthy"] and row["model_id"] == model for row in rows)
+        )
+    except (OSError, ValueError, KeyError, TypeError):
+        return False
 
 
 def layout(hosts, port):
@@ -317,6 +347,8 @@ def main():
                 Path(worker_env[key]).mkdir(parents=True, exist_ok=True)
             start(f"inference-{index}", [python, "-m", "prime_rl.entrypoints.inference", "@", config_path], worker_env)
         if rank == 0:
+            model = base["vllm"]["model"]
+            wait_until(lambda: workers_ready(allocation["worker_urls"], model), 1800)
             start(
                 "router",
                 [
@@ -328,7 +360,7 @@ def main():
                     "--port",
                     str(baseline["inference_port"]),
                     "--policy",
-                    "power_of_two",
+                    "round_robin",
                     "--worker-urls",
                     *[url.removesuffix("/v1") for url in allocation["worker_urls"]],
                     "--worker-startup-timeout-secs",
@@ -341,6 +373,11 @@ def main():
                     "x-session-id",
                 ],
                 {**environment, "CUDA_VISIBLE_DEVICES": ""},
+            )
+            wait_until(lambda: router_ready(allocation["router_url"], allocation["worker_urls"], model), 180)
+            atomic_json(
+                node_control / "router-ready.json",
+                {"workers": allocation["worker_urls"], "model": model, "policy": "round_robin"},
             )
             backup_log = (workspace / "backup.log").open("x")
             streams.append(backup_log)
