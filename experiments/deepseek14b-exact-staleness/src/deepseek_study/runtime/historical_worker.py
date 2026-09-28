@@ -311,7 +311,7 @@ def launch(study, root, learner_job):
     from deepseek_study.dataset.assets import validate_prepared
     from deepseek_study.runtime.build import build
     from deepseek_study.runtime.identity import capture, snapshot
-    from deepseek_study.runtime.launcher import verify_upstream
+    from deepseek_study.runtime.launcher import inference_command, verify_upstream
     from deepseek_study.runtime.processes import stop_process_groups
 
     if study.historical_rollouts is None:
@@ -361,7 +361,7 @@ def launch(study, root, learner_job):
     try:
         start(
             "inference",
-            [sys.executable, "-m", "prime_rl.entrypoints.inference", "@", str(output / "configs/inference.json")],
+            inference_command(study, output / "configs/inference.json"),
             DEFAULT_INFERENCE_ENV_VARS,
         )
         for split, source, _ in env_servers(config):

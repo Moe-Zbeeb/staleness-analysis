@@ -7,6 +7,8 @@ from prime_rl.entrypoints.rl import write_subconfigs
 
 
 def resolve(study, resume=None, remote=None):
+    if study.historical_rollouts and study.inference_tensor_parallel != 1:
+        raise ValueError("Historical inference pools require tensor parallel size 1")
     directory = study.output_dir.resolve()
     model = str(study.prepared_model_path.resolve())
     scheduler = {"type": "constant"}
@@ -164,6 +166,10 @@ def resolve(study, resume=None, remote=None):
             },
         }
     )
+    if study.historical_rollouts:
+        config.orchestrator.model.client.admin_base_url = [
+            f"http://127.0.0.1:{study.inference_port + 100 + index}/v1" for index in range(study.inference_gpus)
+        ]
     if remote is not None:
         if study.historical_rollouts:
             raise ValueError("Historical workers must not join the current-policy inference deployment")

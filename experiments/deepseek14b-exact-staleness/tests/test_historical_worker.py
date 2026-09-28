@@ -278,7 +278,9 @@ async def test_remote_controller_releases_its_pool_after_assigned_cohorts(study,
     from deepseek_study.runtime import identity
     from deepseek_study.runtime.build import resolve
 
-    study = study.model_copy(update={"lag": 2, "max_steps": 5, "historical_rollouts": tmp_path / "shared"})
+    study = study.model_copy(
+        update={"lag": 2, "max_steps": 5, "historical_rollouts": tmp_path / "shared", "inference_tensor_parallel": 1}
+    )
     study.output_dir.mkdir()
     study.dataset_path.write_bytes(b"dataset")
     study.data_manifest.write_bytes(b"manifest")

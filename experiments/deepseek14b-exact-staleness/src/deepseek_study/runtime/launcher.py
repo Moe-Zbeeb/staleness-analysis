@@ -58,6 +58,12 @@ def resume_step(directory, study, identity_hash):
     return state.completed_steps
 
 
+def inference_command(study, configuration):
+    if study.historical_rollouts:
+        return [sys.executable, "-m", "deepseek_study.runtime.inference_pool", str(configuration)]
+    return [sys.executable, "-m", "prime_rl.entrypoints.inference", "@", str(configuration)]
+
+
 def launch(study, root, resume=None):
     from deepseek_study.runtime.deployment import RemoteInference
 
@@ -204,7 +210,7 @@ def launch(study, root, resume=None):
         if remote is None:
             start(
                 "inference",
-                [sys.executable, "-m", "prime_rl.entrypoints.inference", "@", str(config_dir / "inference.json")],
+                inference_command(study, config_dir / "inference.json"),
                 {**DEFAULT_INFERENCE_ENV_VARS, "CUDA_VISIBLE_DEVICES": ",".join(gpu_ids[: study.inference_gpus])},
             )
         for split, source, _ in env_servers(config):

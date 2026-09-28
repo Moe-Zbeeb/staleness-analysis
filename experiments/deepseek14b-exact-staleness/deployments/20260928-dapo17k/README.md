@@ -1,4 +1,6 @@
-# DAPO 17k / DeepSeek 1.5B / exact k256
+# Superseded startup attempt: DAPO 17k / DeepSeek 1.5B / exact k256
+
+Jobs 2145416 and 2145429 were stopped during startup validation with zero committed optimizer updates. Native inference startup eventually reached partial rollouts; the delay was not a confirmed deadlock. Its grading journal and logs are preserved. The next release uses independent one-GPU inference servers.
 
 These are the effective submission controls for source commit `abf3a1e` and the new DAPO/6,144-token experiment. They are an audit record, not a command to overwrite or resubmit an existing run.
 

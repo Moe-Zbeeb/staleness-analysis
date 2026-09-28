@@ -18,7 +18,9 @@ from deepseek_study.runtime.deployment import RemoteInference
 
 
 def historical_study(study, tmp_path):
-    return StudyConfig.model_validate(study.model_dump() | {"historical_rollouts": tmp_path / "historical"})
+    return StudyConfig.model_validate(
+        study.model_dump() | {"historical_rollouts": tmp_path / "historical", "inference_tensor_parallel": 1}
+    )
 
 
 def test_historical_config_uses_filesystem_transport_for_every_component(study, tmp_path):
@@ -44,6 +46,7 @@ def test_historical_config_uses_filesystem_transport_for_every_component(study, 
 
 
 def test_historical_transport_preserves_learner_and_scientific_settings(study, tmp_path):
+    study = study.model_copy(update={"inference_tensor_parallel": 1})
     original = resolve(study).model_dump()
     changed = resolve(historical_study(study, tmp_path)).model_dump()
     original.pop("weight_broadcast")
@@ -51,13 +54,20 @@ def test_historical_transport_preserves_learner_and_scientific_settings(study, t
     for name in ("trainer", "orchestrator", "inference"):
         original[name].pop("weight_broadcast")
         changed[name].pop("weight_broadcast")
+    original["orchestrator"]["model"]["client"].pop("admin_base_url")
+    changed["orchestrator"]["model"]["client"].pop("admin_base_url")
     assert original == changed
 
 
 def test_historical_response_cap_propagates_to_training_and_inference(study, tmp_path):
     configured = StudyConfig.model_validate(
         study.model_dump()
-        | {"historical_rollouts": tmp_path / "historical", "prompt_max_tokens": 2048, "response_max_tokens": 6144}
+        | {
+            "historical_rollouts": tmp_path / "historical",
+            "inference_tensor_parallel": 1,
+            "prompt_max_tokens": 2048,
+            "response_max_tokens": 6144,
+        }
     )
     configuration = resolve(configured)
     assert configuration.trainer.model.seq_len == 8192
