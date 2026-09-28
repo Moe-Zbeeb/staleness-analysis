@@ -104,3 +104,22 @@ def test_network_pins_the_routed_ipv4_address_label(monkeypatch, label):
     monkeypatch.setattr(multinode.subprocess, "check_output", lambda *args, **kwargs: "[]")
     with pytest.raises(ValueError, match="IPv4 route"):
         multinode.network_environment(["a", "b"], 0)
+
+
+def test_backup_command_runs_the_actual_cli_before_training(tmp_path):
+    import subprocess
+
+    workspace = tmp_path / "local"
+    workspace.mkdir()
+    (workspace / "backup.stop").touch()
+    command = multinode.backup_command(
+        sys.executable,
+        SCRIPTS,
+        workspace / "run",
+        {"backup": str(tmp_path / "shared"), "metrics": str(tmp_path / "metrics")},
+        workspace,
+        tmp_path / "runtime",
+    )
+    result = subprocess.run(command, capture_output=True, text=True, timeout=15)
+    assert result.returncode == 0, result.stderr
+    assert json.loads((workspace / "backup-status.json").read_text()) == {"status": "waiting_for_run", "final": True}

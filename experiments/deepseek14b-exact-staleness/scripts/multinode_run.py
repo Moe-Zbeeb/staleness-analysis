@@ -76,6 +76,25 @@ def install_router(control, runtime):
     atomic_json(runtime / "router-install.json", {"sha256": ROUTER_SHA256, "version": "0.2.0"})
 
 
+def backup_command(python, control, output, spec, workspace, runtime):
+    return [
+        str(python),
+        str(control / "local_backup.py"),
+        "--source",
+        str(output),
+        "--destination",
+        spec["backup"],
+        "--metrics",
+        spec["metrics"],
+        "--stop-file",
+        str(workspace / "backup.stop"),
+        "--status",
+        str(workspace / "backup-status.json"),
+        "--lock",
+        str(runtime.parent / "backup-transfer.lock"),
+    ]
+
+
 def stop_process(process, seconds=120):
     if process is None or process.poll() is not None:
         return
@@ -326,21 +345,7 @@ def main():
             backup_log = (workspace / "backup.log").open("x")
             streams.append(backup_log)
             backup = subprocess.Popen(
-                [
-                    str(python),
-                    str(control / "local_backup.py"),
-                    "--source",
-                    str(output),
-                    spec["backup"],
-                    "--metrics",
-                    spec["metrics"],
-                    "--stop-file",
-                    str(workspace / "backup.stop"),
-                    "--status",
-                    str(workspace / "backup-status.json"),
-                    "--lock",
-                    str(runtime.parent / "backup-transfer.lock"),
-                ],
+                backup_command(python, control, output, spec, workspace, runtime),
                 env=environment,
                 stdout=backup_log,
                 stderr=subprocess.STDOUT,
