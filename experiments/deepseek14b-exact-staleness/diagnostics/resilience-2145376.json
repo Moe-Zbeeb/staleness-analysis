@@ -65,7 +65,61 @@
     "skipped": 1
   },
   "upstream_source_modified": false,
-  "startup_health": "pending",
+  "startup_health": {
+    "checked_at": 1790582171.2218697,
+    "scheduler": "RUNNING 13:34 deep-chungus-[5,7]",
+    "nodes": {
+      "deep-chungus-5": {
+        "healthy_devices": [
+          "0",
+          "1",
+          "2",
+          "3",
+          "4",
+          "5"
+        ],
+        "models": [
+          "NVIDIA A100-PCIE-40GB",
+          "NVIDIA A100-PCIE-40GB",
+          "NVIDIA A100-PCIE-40GB",
+          "NVIDIA A100-PCIE-40GB",
+          "NVIDIA A100-PCIE-40GB",
+          "NVIDIA A100-PCIE-40GB"
+        ],
+        "collective_world_size": 6,
+        "all_reduce": 21.0
+      },
+      "deep-chungus-7": {
+        "healthy_devices": [
+          "0",
+          "1",
+          "2",
+          "3",
+          "4",
+          "5"
+        ],
+        "models": [
+          "NVIDIA A100 80GB PCIe",
+          "NVIDIA A100 80GB PCIe",
+          "NVIDIA A100 80GB PCIe",
+          "NVIDIA A100 80GB PCIe",
+          "NVIDIA A100 80GB PCIe",
+          "NVIDIA A100 80GB PCIe"
+        ],
+        "collective_world_size": 6,
+        "all_reduce": 21.0
+      }
+    },
+    "first_update": "not_yet_verified",
+    "first_checkpoint": "not_yet_verified",
+    "network": {
+      "world_size": 12,
+      "all_reduce": 78.0,
+      "broadcast_bytes": 167772160,
+      "broadcast_seconds": 0.4441152918152511
+    },
+    "router_ready": false
+  },
   "first_checkpoint": "pending",
   "unattended_resume": "disabled"
 }
