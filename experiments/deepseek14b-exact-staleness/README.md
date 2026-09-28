@@ -2,6 +2,8 @@
 
 The user stopped job **2145376**. Its replacement uses the pinned DeepSeek 1.5B model, all 17,005 prepared DAPO questions and a **6,144-token response cap**. One complete HP learner node keeps its trainers together; separate historical workers receive immutable exports without cross-node NCCL. The first 256 updates remain on-policy and updates 257–1,000 consume exact-age-256 cohorts. This is a new experiment, not a resume of the old dataset/cap. See the [settings, algorithm, storage and integration guide](docs/asynchronous-historical-rollouts.md).
 
+The active submission is **2145435** on node 5 (four trainers plus five independent inference servers) and **2145436** on node 3 (three historical inference servers), using all twelve HP GPUs. Both started; startup validation was interrupted by SSH disconnection before a first update could be confirmed. See the [deployment record](deployments/20260928-dapo17k-v2/README.md) for commands, frozen source and verification status. The preceding zero-update startup attempt was stopped and its logs preserved.
+
 ## Historical September 28 resilient relaunch
 
 The now-cancelled replacement job **2145376** used 12 GPUs on high-priority nodes 5 and 7. See [the run record](docs/runs/deepseek15b-resilient-12gpu.md) for validation, paths and recovery limits.
