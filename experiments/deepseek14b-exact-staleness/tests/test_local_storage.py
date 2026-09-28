@@ -302,3 +302,67 @@ def test_backup_does_not_recopy_pruned_local_checkpoints(tmp_path, monkeypatch):
 
     monkeypatch.setattr(BACKUP, "backup_checkpoint", guarded)
     assert backup.poll()["new_checkpoints"] == []
+
+
+@pytest.mark.parametrize("snapshot", [False, True])
+def test_atomic_replacement_keeps_live_snapshot_but_rejects_checkpoint_change(tmp_path, monkeypatch, snapshot):
+    source, target = tmp_path / "source", tmp_path / "target"
+    source.write_bytes(b"original")
+    original_fsync = BACKUP.os.fsync
+    replaced = False
+
+    def replace_after_copy(fd):
+        nonlocal replaced
+        original_fsync(fd)
+        if not replaced:
+            replacement = tmp_path / "replacement"
+            replacement.write_bytes(b"new version")
+            replacement.replace(source)
+            replaced = True
+
+    monkeypatch.setattr(BACKUP.os, "fsync", replace_after_copy)
+    if snapshot:
+        BACKUP.verified_copy(source, target, snapshot=True)
+        assert target.read_bytes() == b"original"
+        BACKUP.verified_copy(source, target, snapshot=True)
+        assert target.read_bytes() == b"new version"
+    else:
+        with pytest.raises(ValueError, match="replaced"):
+            BACKUP.verified_copy(source, target)
+        assert not target.exists()
+
+
+def test_live_snapshot_rejects_in_place_truncation(tmp_path, monkeypatch):
+    source, target = tmp_path / "source", tmp_path / "target"
+    source.write_bytes(b"original")
+    original_fsync = BACKUP.os.fsync
+
+    def truncate_after_copy(fd):
+        original_fsync(fd)
+        source.write_bytes(b"short")
+
+    monkeypatch.setattr(BACKUP.os, "fsync", truncate_after_copy)
+    with pytest.raises(ValueError, match="truncated"):
+        BACKUP.verified_copy(source, target, snapshot=True)
+    assert not target.exists()
+
+
+def test_active_backup_never_traverses_transient_policy_or_checkpoint_trees(tmp_path, monkeypatch):
+    source, destination = tmp_path / "local", tmp_path / "nfs"
+    source.mkdir()
+    BACKUP.atomic_json(source / "run.json", {"run_uuid": "run", "identity_sha256": "identity", "config_sha256": "config"})
+    for folder in ("historical-exports", "broadcasts", "checkpoints"):
+        (source / folder / "disappearing").mkdir(parents=True)
+    (source / "updates.jsonl").write_text('{"step":1}\n')
+    original = BACKUP.os.scandir
+
+    def guarded(path):
+        if any(part in ("historical-exports", "broadcasts") for part in Path(path).parts):
+            raise FileNotFoundError("Transient tree was traversed")
+        return original(path)
+
+    monkeypatch.setattr(BACKUP.os, "scandir", guarded)
+    result = BACKUP.Backup(source, destination).poll()
+    assert result["status"] == "verified"
+    assert (destination / "updates.jsonl").is_file()
+    assert not (destination / "historical-exports").exists()

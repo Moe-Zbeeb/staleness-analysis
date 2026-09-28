@@ -5,6 +5,8 @@ import json
 import os
 import shutil
 import signal
+import stat
+import traceback
 import time
 import uuid
 from pathlib import Path
@@ -57,40 +59,61 @@ def sync_directory(path):
         os.close(fd)
 
 
-def verified_copy(source, destination):
+def verified_copy(source, destination, *, snapshot=False):
     source, destination = Path(source), Path(destination)
     if source.is_symlink() or not source.is_file():
         raise ValueError(f"Backup input must be a regular file: {source}")
     destination.parent.mkdir(parents=True, exist_ok=True)
     if destination.is_symlink():
         raise ValueError("Refusing a symlink backup destination")
-    initial = source.stat()
     temporary = destination.with_name(destination.name + "." + uuid.uuid4().hex + ".tmp")
     expected = hashlib.sha256()
-    remaining = initial.st_size
     try:
-        with source.open("rb") as incoming, temporary.open("xb") as outgoing:
+        descriptor = os.open(source, os.O_RDONLY | os.O_NOFOLLOW)
+        with os.fdopen(descriptor, "rb") as incoming, temporary.open("xb") as outgoing:
+            initial = os.fstat(incoming.fileno())
+            if not stat.S_ISREG(initial.st_mode):
+                raise ValueError(f"Backup input must be a regular file: {source}")
+            remaining = initial.st_size
             while remaining:
                 block = incoming.read(min(8 * 1024 * 1024, remaining))
                 if not block:
-                    raise ValueError("Backup input shrank during copying")
+                    raise ValueError(f"Backup input shrank during copying: {source}")
                 expected.update(block)
                 outgoing.write(block)
                 remaining -= len(block)
             outgoing.flush()
             os.fsync(outgoing.fileno())
-        final = source.stat()
-        if final.st_ino != initial.st_ino or final.st_size < initial.st_size:
-            raise ValueError("Backup input was replaced or truncated")
-        if final.st_size == initial.st_size and final.st_mtime_ns != initial.st_mtime_ns:
-            raise ValueError("Backup input changed in place")
+            final = os.fstat(incoming.fileno()) if snapshot else source.stat()
+            if final.st_ino != initial.st_ino or final.st_size < initial.st_size:
+                raise ValueError(f"Backup input was replaced or truncated: {source}")
+            if final.st_size == initial.st_size and final.st_mtime_ns != initial.st_mtime_ns:
+                raise ValueError(f"Backup input changed in place: {source}")
         if digest(temporary) != expected.hexdigest():
             raise ValueError("Shared backup checksum mismatch")
         os.replace(temporary, destination)
         sync_directory(destination.parent)
-        return {"bytes": initial.st_size, "sha256": expected.hexdigest(), "mtime_ns": initial.st_mtime_ns}
+        return {"bytes": initial.st_size, "sha256": expected.hexdigest(), "mtime_ns": initial.st_mtime_ns, "inode": initial.st_ino}
     finally:
         temporary.unlink(missing_ok=True)
+
+
+def active_files(source):
+    def fail(error):
+        raise error
+
+    for root, directories, files in os.walk(source, onerror=fail):
+        directory = Path(root)
+        excluded = {"__pycache__"}
+        if directory == source:
+            excluded.update({"checkpoints", ".backup", "broadcasts", "historical-exports"})
+        directories[:] = sorted(name for name in directories if name not in excluded)
+        for name in directories:
+            if (directory / name).is_symlink():
+                raise ValueError(f"Active run contains an unexpected symlink: {directory / name}")
+        for name in sorted(files):
+            if not name.endswith((".tmp", ".lock")):
+                yield directory / name
 
 
 def checkpoint_files(source):
@@ -235,7 +258,7 @@ class Backup:
             if backup_checkpoint(path, self.destination / "checkpoints" / path.name, self.owner):
                 completed.append(path.name)
         removed = prune_verified_checkpoints(self.destination / "checkpoints", self.owner) if completed else []
-        for path in sorted(self.source.rglob("*")):
+        for path in active_files(self.source):
             relative = path.relative_to(self.source)
             if relative.parts[0] in {"checkpoints", ".backup"} or "__pycache__" in relative.parts:
                 continue
@@ -243,8 +266,8 @@ class Backup:
                 raise ValueError(f"Active run contains an unexpected symlink: {relative}")
             if not path.is_file() or path.name.endswith((".tmp", ".lock")):
                 continue
-            stat = path.stat()
-            version = (stat.st_size, stat.st_mtime_ns)
+            metadata = path.stat()
+            version = (metadata.st_ino, metadata.st_size, metadata.st_mtime_ns)
             targets = [self.destination]
             if self.metrics and (
                 relative.parts[0] in {"tensorboard", "tracking", "configs", "source"} or str(relative) in METRIC_NAMES
@@ -254,8 +277,8 @@ class Backup:
                 key = str(target / relative)
                 if self.copied.get(key, {}).get("version") == version:
                     continue
-                record = verified_copy(path, target / relative)
-                self.copied[key] = {**record, "version": (record["bytes"], record["mtime_ns"])}
+                record = verified_copy(path, target / relative, snapshot=True)
+                self.copied[key] = {**record, "version": (record["inode"], record["bytes"], record["mtime_ns"])}
         for target in [self.destination, *([self.metrics] if self.metrics else [])]:
             atomic_json(
                 target / "backup-inventory.json",
@@ -300,7 +323,7 @@ def main():
                 atomic_json(args.status, status)
             except Exception as error:
                 atomic_json(args.status, {"status": "error", "at": time.time(), "error": repr(error), "final": final})
-                print(repr(error), flush=True)
+                traceback.print_exc()
                 if final:
                     raise
             finally:
