@@ -303,6 +303,165 @@ def install_stage_router(spec, control, runtime, release):
     module.install_router(Path(control), Path(runtime))
 
 
+def resume_request(spec):
+    fields = ("resume_checkpoint", "resume_receipt", "resume_expected_receipt_sha256")
+    present = [bool(spec.get(name)) for name in fields]
+    if any(present) and not all(present):
+        raise ValueError("Resume requires a checkpoint, an audited receipt, and its expected checksum")
+    return all(present)
+
+
+def verify_resume_tree(directory, records):
+    directory = Path(directory)
+    if directory.is_symlink() or not directory.is_dir() or not isinstance(records, dict) or not records:
+        raise ValueError("Resume checkpoint requires a regular directory and a complete file manifest")
+    paths = {}
+    for path in directory.rglob("*"):
+        if path.is_symlink() or not (path.is_dir() or path.is_file()):
+            raise ValueError("Resume checkpoint contains a symlink or a nonregular entry")
+        if path.is_file():
+            paths[str(path.relative_to(directory))] = path
+    if set(paths) != set(records):
+        raise ValueError("Resume checkpoint file inventory differs from its audited receipt")
+    for name, path in paths.items():
+        record = records[name]
+        if path.stat().st_size != record["size"] or digest(path) != record["sha256"]:
+            raise ValueError(f"Resume checkpoint file checksum differs: {name}")
+
+
+def read_resume_receipt(path, expected_hash, workspace):
+    path = Path(path)
+    if path.is_symlink() or not path.is_file() or digest(path) != expected_hash:
+        raise ValueError("Resume migration receipt checksum differs")
+    audit = json.loads(path.read_text())
+    step = audit.get("checkpoint_step")
+    if audit.get("format") != 1 or audit.get("status") != "verified" or type(step) is not int or step < 1:
+        raise ValueError("Resume requires a verified migration receipt with committed progress")
+    target = Path(workspace).resolve() / "resume" / f"step_{step}"
+    if audit.get("target_checkpoint") != str(target):
+        raise ValueError("Resume receipt names another local checkpoint destination")
+    for name in ("config_sha256", "identity_sha256", "complete_sha256", "components_sha256", "queue_sha256"):
+        value = audit.get(name)
+        if not isinstance(value, str) or len(value) != 64 or any(c not in "0123456789abcdef" for c in value):
+            raise ValueError(f"Resume receipt has an invalid checksum: {name}")
+    return audit, target
+
+
+def stage_resume(spec, workspace):
+    if not resume_request(spec):
+        return None
+    audit, target = read_resume_receipt(
+        spec["resume_receipt"], spec["resume_expected_receipt_sha256"], workspace
+    )
+    source = Path(spec["resume_checkpoint"])
+    verify_resume_tree(source, audit["files"])
+    if target.exists() or target.is_symlink():
+        raise FileExistsError("Refusing to replace an existing local resume checkpoint")
+    target.parent.mkdir(parents=True, exist_ok=True)
+    if target.parent.is_symlink():
+        raise ValueError("Resume checkpoint parent must not be a symlink")
+    shutil.copytree(source, target, symlinks=True)
+    verify_resume_tree(target, audit["files"])
+    verify_resume_tree(source, audit["files"])
+    receipt = target.parent / "migration-receipt.json"
+    if receipt.exists() or receipt.is_symlink():
+        raise FileExistsError("Refusing to replace an existing local migration receipt")
+    shutil.copyfile(spec["resume_receipt"], receipt)
+    read_resume_receipt(receipt, spec["resume_expected_receipt_sha256"], workspace)
+    return {"checkpoint": str(target), "receipt": str(receipt), "receipt_sha256": digest(receipt)}
+
+
+def validate_resume_files(spec, workspace, ready):
+    requested = resume_request(spec)
+    sealed = ready.get("resume")
+    if not requested:
+        if sealed is not None:
+            raise ValueError("A sealed resume checkpoint cannot be silently discarded")
+        return None
+    if not isinstance(sealed, dict) or sealed.get("receipt_sha256") != spec["resume_expected_receipt_sha256"]:
+        raise ValueError("Resume receipt was not sealed with the local staging configuration")
+    if sealed.get("receipt") != str(Path(workspace).resolve() / "resume/migration-receipt.json"):
+        raise ValueError("Resume receipt is outside the prepared local workspace")
+    audit, target = read_resume_receipt(sealed["receipt"], sealed["receipt_sha256"], workspace)
+    if sealed.get("checkpoint") != str(target):
+        raise ValueError("The sealed resume checkpoint differs from the migration receipt")
+    verify_resume_tree(target, audit["files"])
+    for name, field in (("complete.json", "complete_sha256"), ("components.json", "components_sha256"), ("queue.pkl", "queue_sha256")):
+        if digest(target / "study" / name) != audit[field]:
+            raise ValueError(f"Resume checkpoint commit differs from the migration receipt: {name}")
+    return target
+
+
+def validate_resume_runtime(spec):
+    from deepseek_study.config import StudyConfig
+    from deepseek_study.runtime import checkpoints
+    from deepseek_study.runtime.identity import capture
+
+    workspace = Path(spec["workspace"])
+    ready = json.loads((workspace / "ready.json").read_text())
+    target = validate_resume_files(spec, workspace, ready)
+    if target is None:
+        raise ValueError("Runtime resume validation requires a prepared checkpoint")
+    study = StudyConfig.read(workspace / "study.json")
+    identity = capture(Path(ready["release"]), study)
+    audit = json.loads(Path(ready["resume"]["receipt"]).read_text())
+    if study.fingerprint() != audit["config_sha256"] or identity["sha256"] != audit["identity_sha256"]:
+        raise ValueError("Prepared resume configuration or frozen runtime identity differs from the audit")
+    checkpoints.verify_components(target)
+    state = checkpoints.load(target / "study", study.fingerprint(), identity["sha256"])
+    if state.completed_steps != audit["checkpoint_step"] or not 0 < state.completed_steps < study.max_steps:
+        raise ValueError("Resume checkpoint has no remaining training budget or differs from audited progress")
+    if state.lag != study.lag:
+        raise ValueError("Resume checkpoint changes the exact-staleness schedule")
+    if not (target / "trainer/.metadata").is_file() or not (target / "orchestrator/progress.pt").is_file():
+        raise ValueError("Resume checkpoint is missing trainer or sampler state")
+    return target
+
+
+def prepare_resume(spec, control):
+    workspace = Path(spec["workspace"])
+    ready = json.loads((workspace / "ready.json").read_text())
+    previous = json.loads((workspace / "storage-spec.json").read_text())
+    fields = {"resume_checkpoint", "resume_receipt", "resume_expected_receipt_sha256"}
+    if {k: v for k, v in spec.items() if k not in fields} != previous:
+        raise ValueError("Adding a resume checkpoint must preserve every staged storage setting")
+    if not resume_request(spec) or resume_request(previous) or ready.get("resume") is not None:
+        raise ValueError("Only a fresh prepared workspace can receive its first resume checkpoint")
+    if os.environ.get("SLURMD_NODENAME") != ready["node"]:
+        raise ValueError("Resume checkpoint must be prepared on the staged node")
+    study_path = workspace / "study.json"
+    if digest(study_path) != ready["study_sha256"]:
+        raise ValueError("The prepared local study changed before resume staging")
+    values = json.loads(study_path.read_text())
+    if Path(values["output_dir"]).exists():
+        raise FileExistsError("Cannot attach a resume checkpoint after training has started")
+    for name, expected in ready["control_sha256"].items():
+        if digest(workspace / name) != expected:
+            raise ValueError(f"Prepared launch file changed before resume staging: {name}")
+    release = Path(ready["release"])
+    if digest(release / "PACKAGE_SHA256.json") != ready["package_sha256"]:
+        raise ValueError("Prepared release manifest changed before resume staging")
+    for name, expected in json.loads((release / "PACKAGE_SHA256.json").read_text()).items():
+        if digest(release / name) != expected:
+            raise ValueError(f"Prepared release changed before resume staging: {name}")
+    for item in json.loads((release / "manifests/model.json").read_text())["files"]:
+        path = Path(values["model_path"]) / item["name"]
+        if path.stat().st_size != item["size"] or digest(path) != item["sha256"]:
+            raise ValueError("Prepared model changed before resume staging")
+    if (
+        digest(values["dataset_path"]) != ready["dataset_sha256"]
+        or digest(values["data_manifest"]) != ready["data_manifest_sha256"]
+        or digest(Path(values["prepared_model_path"]) / "tokenizer_config.json") != ready["prepared_tokenizer_sha256"]
+    ):
+        raise ValueError("Prepared dataset or tokenizer changed before resume staging")
+    ready["resume"] = stage_resume(spec, workspace)
+    atomic_json(workspace / "storage-spec.json", spec)
+    ready["control_sha256"]["storage-spec.json"] = digest(workspace / "storage-spec.json")
+    atomic_json(workspace / "ready.json", ready)
+    atomic_json(control / "local-ready.json", ready)
+    return ready
+
+
 def stage(spec, control):
     workspace = secure_local(spec["workspace"])
     runtime = secure_local(spec["runtime"])
@@ -310,6 +469,7 @@ def stage(spec, control):
         raise RuntimeError("At least 150 GiB free local space is required before staging")
     if (workspace / "ready.json").exists():
         raise FileExistsError("Local run is already prepared")
+    resume_request(spec)
     baseline = json.loads(Path(spec["baseline_study"]).read_text())
     release = workspace / "release"
     source = Path(spec["release"])
@@ -464,6 +624,9 @@ def seal_staging(spec, control):
             )
         },
     }
+    resumed = stage_resume(spec, workspace)
+    if resumed is not None:
+        receipt["resume"] = resumed
     atomic_json(workspace / "ready.json", receipt)
     atomic_json(control / "local-ready.json", receipt)
     return receipt
@@ -516,6 +679,14 @@ def run(spec):
         raise FileExistsError("Refusing to restart over existing local run output")
     python, release = Path(receipt["python"]), Path(receipt["release"])
     environment = local_environment(runtime, workspace, release)
+    resumed = validate_resume_files(spec, workspace, receipt)
+    if resumed is not None:
+        command(
+            [python, workspace / "node_local_run.py", "resume-check", "--control", workspace],
+            env=environment,
+            cwd=release,
+            timeout=1800,
+        )
     command(
         [
             python,
@@ -587,8 +758,11 @@ def run(spec):
         stderr=subprocess.STDOUT,
         start_new_session=True,
     )
+    training_command = [str(python), "-m", "deepseek_study.cli", "run", str(workspace / "study.json")]
+    if resumed is not None:
+        training_command.extend(["--resume", str(resumed)])
     training = subprocess.Popen(
-        [str(python), "-m", "deepseek_study.cli", "run", str(workspace / "study.json")],
+        training_command,
         env=environment,
         cwd=release,
         stdout=training_log,
@@ -615,6 +789,7 @@ def run(spec):
             "devices": devices,
             "threads_per_worker": 1,
             "attempt": str(attempt),
+            "resume_from": str(resumed) if resumed is not None else None,
         },
     )
     started = time.monotonic()
@@ -680,19 +855,23 @@ def run(spec):
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("mode", choices=("stage", "verify", "run"))
+    parser.add_argument("mode", choices=("stage", "verify", "prepare-resume", "run", "resume-check"))
     parser.add_argument("--control", type=Path, required=True)
     args = parser.parse_args()
     control = args.control.resolve()
     specification = json.loads((control / "storage-spec.json").read_text())
-    if args.mode in {"stage", "verify"}:
+    if args.mode in {"stage", "verify", "prepare-resume"}:
         for name, expected in json.loads((control / "CONTROL_SHA256.json").read_text()).items():
             if digest(control / name) != expected:
                 raise ValueError(f"Staging control changed: {name}")
         if args.mode == "stage":
             stage(specification, control)
+        elif args.mode == "prepare-resume":
+            prepare_resume(specification, control)
         else:
             seal_staging(specification, control)
+    elif args.mode == "resume-check":
+        print(json.dumps({"resume_checkpoint": str(validate_resume_runtime(specification)), "status": "verified"}))
     else:
         run(specification)
 
