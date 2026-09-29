@@ -1,0 +1,109 @@
+{
+  "job_id": "2145805",
+  "node": "deep-chungus-3",
+  "slurm_job_gpus": null,
+  "world_size": 7,
+  "expected_all_reduce": 28.0,
+  "torch": "2.11.0+cu128",
+  "cuda_runtime": "12.8",
+  "devices": [
+    {
+      "rank": 0,
+      "visible_device": "0",
+      "name": "NVIDIA A100-PCIE-40GB",
+      "bytes": 42409000960,
+      "capability": [
+        8,
+        0
+      ],
+      "all_reduce": 28.0,
+      "bf16_backward": true,
+      "flash_attention_backward": true,
+      "vllm_rms_norm": true
+    },
+    {
+      "rank": 1,
+      "visible_device": "1",
+      "name": "NVIDIA A100-PCIE-40GB",
+      "bytes": 42409000960,
+      "capability": [
+        8,
+        0
+      ],
+      "all_reduce": 28.0,
+      "bf16_backward": true,
+      "flash_attention_backward": true,
+      "vllm_rms_norm": true
+    },
+    {
+      "rank": 2,
+      "visible_device": "2",
+      "name": "NVIDIA A100-PCIE-40GB",
+      "bytes": 42409000960,
+      "capability": [
+        8,
+        0
+      ],
+      "all_reduce": 28.0,
+      "bf16_backward": true,
+      "flash_attention_backward": true,
+      "vllm_rms_norm": true
+    },
+    {
+      "rank": 3,
+      "visible_device": "3",
+      "name": "NVIDIA A100-PCIE-40GB",
+      "bytes": 42409000960,
+      "capability": [
+        8,
+        0
+      ],
+      "all_reduce": 28.0,
+      "bf16_backward": true,
+      "flash_attention_backward": true,
+      "vllm_rms_norm": true
+    },
+    {
+      "rank": 4,
+      "visible_device": "4",
+      "name": "NVIDIA A100-PCIE-40GB",
+      "bytes": 42409000960,
+      "capability": [
+        8,
+        0
+      ],
+      "all_reduce": 28.0,
+      "bf16_backward": true,
+      "flash_attention_backward": true,
+      "vllm_rms_norm": true
+    },
+    {
+      "rank": 5,
+      "visible_device": "5",
+      "name": "NVIDIA A100-PCIE-40GB",
+      "bytes": 42409000960,
+      "capability": [
+        8,
+        0
+      ],
+      "all_reduce": 28.0,
+      "bf16_backward": true,
+      "flash_attention_backward": true,
+      "vllm_rms_norm": true
+    },
+    {
+      "rank": 6,
+      "visible_device": "6",
+      "name": "NVIDIA A100-PCIE-40GB",
+      "bytes": 42409000960,
+      "capability": [
+        8,
+        0
+      ],
+      "all_reduce": 28.0,
+      "bf16_backward": true,
+      "flash_attention_backward": true,
+      "vllm_rms_norm": true
+    }
+  ]
+}
