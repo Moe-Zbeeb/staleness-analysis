@@ -81,6 +81,7 @@ def migration(tmp_path, study):
             "inference_tensor_parallel": 1,
             "lag": 256,
             "max_steps": 1000,
+            "checkpoint_interval": 25,
             "historical_rollouts": tmp_path / "source-history",
         }
     )
@@ -320,3 +321,96 @@ def test_migration_receipt_stages_and_validates_with_node_local_runner(migration
     monkeypatch.setattr(identity, "capture", lambda *args: {"sha256": "changed-runtime"})
     with pytest.raises(ValueError, match="frozen runtime identity differs"):
         local.validate_resume_runtime(spec)
+
+
+def change_local_retention(migration):
+    for name in ("target_study", "target_baseline"):
+        value = json.loads(migration[name].read_text())
+        value.update(checkpoint_keep_interval=1000, checkpoint_keep_last=3)
+        write_json(migration[name], value)
+
+
+def test_local_retention_change_requires_explicit_opt_in(migration):
+    change_local_retention(migration)
+    with pytest.raises(ValueError, match="forbidden scientific fields"):
+        MIGRATION.migrate(**migration)
+    assert not migration["destination_checkpoint"].exists()
+
+
+def test_opt_in_retention_preserves_checkpoint_payload_and_source_identity(migration):
+    change_local_retention(migration)
+    before = MIGRATION.inventory(migration["source_checkpoint"])
+    receipt = MIGRATION.migrate(**migration, allow_local_retention_change=True)
+    assert MIGRATION.inventory(migration["source_checkpoint"]) == before
+    after = MIGRATION.inventory(migration["destination_checkpoint"])
+    assert {name for name in before if before[name] != after[name]} == {"study/complete.json"}
+    assert receipt["identity_sha256"] == receipt["source_complete"]["identity_sha256"]
+    assert receipt["queue_sha256"] == receipt["source_complete"]["queue_sha256"]
+    assert receipt["local_retention_change"] == {
+        "explicitly_enabled": True,
+        "before_keep_interval": 100,
+        "after_keep_interval": 1000,
+        "checkpoint_interval": 25,
+        "before_keep_last": 4,
+        "after_keep_last": 3,
+        "shared_retention_modified": False,
+        "requires_shared_milestone_verification_before_local_pruning": True,
+    }
+    target = MIGRATION.StudyConfig.read(migration["target_study"])
+    restored = checkpoints.load(
+        migration["destination_checkpoint"] / "study", target.fingerprint(), receipt["identity_sha256"]
+    )
+    assert restored.completed_steps == 400 and len(restored.pending) == 256
+
+
+@pytest.mark.parametrize(
+    "side,field,value",
+    [
+        ("target", "checkpoint_keep_interval", 500),
+        ("target", "checkpoint_keep_last", 4),
+        ("target", "checkpoint_keep_last", 2),
+        ("target", "checkpoint_interval", 50),
+        ("target", "max_steps", 999),
+        ("target", "learning_rate", 2e-6),
+        ("source", "checkpoint_keep_interval", 50),
+        ("source", "checkpoint_keep_last", 3),
+        ("source", "checkpoint_interval", 50),
+    ],
+)
+def test_retention_opt_in_rejects_other_changes(migration, side, field, value):
+    change_local_retention(migration)
+    source = MIGRATION.StudyConfig.read(migration["source_study"])
+    target = MIGRATION.StudyConfig.read(migration["target_study"])
+    if side == "source":
+        source = source.model_copy(update={field: value})
+    else:
+        target = target.model_copy(update={field: value})
+    with pytest.raises(ValueError):
+        MIGRATION.validate_config_change(source, target, allow_local_retention_change=True)
+
+
+def test_local_retention_override_does_not_change_shared_milestone_retention(tmp_path):
+    path = Path(__file__).resolve().parents[1] / "scripts/local_backup.py"
+    module_spec = importlib.util.spec_from_file_location("retention_backup", path)
+    backup = importlib.util.module_from_spec(module_spec)
+    module_spec.loader.exec_module(backup)
+    owner = {"run_uuid": "run", "identity_sha256": "identity", "config_sha256": "config"}
+    for step in range(500, 1001, 25):
+        marker = {"step": step, "identity_sha256": "identity", "config_sha256": "config"}
+        write_json(tmp_path / "local" / f"step_{step}" / "study/complete.json", marker)
+        write_json(tmp_path / "shared" / f"step_{step}" / "study/complete.json", marker)
+        write_json(
+            tmp_path / "shared" / f"step_{step}" / "backup-verified.json", {"run_uuid": "run", "checkpoint": marker}
+        )
+    checkpoints.prune_complete(tmp_path / "local", 3, 1000, "identity")
+    backup.prune_verified_checkpoints(tmp_path / "shared", owner)
+    assert sorted(int(path.name[5:]) for path in (tmp_path / "local").iterdir()) == [950, 975, 1000]
+    assert sorted(int(path.name[5:]) for path in (tmp_path / "shared").iterdir()) == [
+        500,
+        600,
+        700,
+        800,
+        900,
+        975,
+        1000,
+    ]

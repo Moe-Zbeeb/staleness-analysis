@@ -1,0 +1,15 @@
+{
+  "status": "preparing_source_still_running",
+  "as_of": "2026-09-29T13:39:15.768917+00:00",
+  "source_job": "2145464",
+  "source_node": "deep-chungus-5",
+  "prepare_job": "2145806",
+  "destination_job": "2145809",
+  "destination_node": "deep-chungus-10",
+  "destination_state": "held",
+  "stop_armed": false,
+  "control": "/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/launches/deepseek15b-k256-node10-migration-20260929-v2",
+  "frozen_source_changed": false,
+  "full_tests_passed": 735,
+  "full_tests_skipped": 4
+}

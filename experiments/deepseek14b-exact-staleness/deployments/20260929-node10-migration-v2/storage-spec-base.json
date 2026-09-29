@@ -1,0 +1,14 @@
+{
+  "baseline_study": "/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/launches/deepseek15b-k256-node10-migration-20260929-v2/study.json",
+  "release": "/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/launches/deepseek15b-dapo17k-async-b32-hp-20260928-v1/release",
+  "shared_prime": "/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/vendor/prime-rl",
+  "workspace": "/tmp/mohamadzbib-staleness-storage-v2/deepseek15b-dapo17k-6k-exact256-b32-seed42-node10-v1",
+  "runtime": "/tmp/mohamadzbib-staleness-runtime/deepseek15b-k256-node10-v1",
+  "run_name": "deepseek15b-dapo17k-6k-exact256-b32-seed42-node10-v1",
+  "backup": "/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/outputs/deepseek15b-dapo17k-6k-exact256-b32-seed42-node10-v1",
+  "metrics": "/mnt/xfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/metrics/deepseek15b-dapo17k-6k-exact256-b32-seed42-node10-v1",
+  "minimum_gpu_bytes": 79000000000,
+  "allocated_gpus": 8,
+  "install_router": true,
+  "require_verified_shared_milestones": true
+}

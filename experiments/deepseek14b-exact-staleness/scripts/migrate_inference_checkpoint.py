@@ -70,7 +70,7 @@ def safe_relative(name):
     return path
 
 
-def validate_config_change(source, target):
+def validate_config_change(source, target, *, allow_local_retention_change=False):
     before = source.model_dump(mode="json")
     after = target.model_dump(mode="json")
     changes = {key: {"before": before[key], "after": after[key]} for key in before if before[key] != after[key]}
@@ -80,7 +80,26 @@ def validate_config_change(source, target):
         raise ValueError("Only the authorized inference GPU change from five to four is supported")
     if source.lag != 256 or source.historical_rollouts is None or target.historical_rollouts is None:
         raise ValueError("Migration requires the historical exact-lag256 study")
-    forbidden = set(changes) - PATH_FIELDS - {"inference_gpus"}
+    if type(allow_local_retention_change) is not bool:
+        raise ValueError("Local milestone retention override must be an explicit boolean")
+    allowed = PATH_FIELDS | {"inference_gpus"}
+    if allow_local_retention_change:
+        if (
+            source.checkpoint_keep_interval != 100
+            or target.checkpoint_keep_interval != 1000
+            or source.max_steps != 1000
+            or target.max_steps != 1000
+            or source.checkpoint_interval != 25
+            or target.checkpoint_interval != 25
+            or source.checkpoint_keep_last != 4
+            or target.checkpoint_keep_last != 3
+        ):
+            raise ValueError(
+                "Local milestone retention override only permits interval 100 to 1000 for a 1000-update run "
+                "with checkpoints every 25 updates and local keep-last reduced from four to three"
+            )
+        allowed.update({"checkpoint_keep_interval", "checkpoint_keep_last"})
+    forbidden = set(changes) - allowed
     if forbidden:
         raise ValueError(f"Migration changes forbidden scientific fields: {sorted(forbidden)}")
     for config in (before, after):
@@ -261,6 +280,7 @@ def migrate(
     source_data_manifest,
     receipt_path,
     target_checkpoint,
+    allow_local_retention_change=False,
 ):
     source, destination = Path(source_checkpoint), Path(destination_checkpoint)
     receipt_path, local_target = Path(receipt_path), Path(target_checkpoint)
@@ -290,7 +310,11 @@ def migrate(
         for key, value in expected_paths.items()
     ):
         raise ValueError("Target study differs from the planned node-local storage relocation")
-    changes = validate_config_change(source_config, target_config)
+    changes = validate_config_change(
+        source_config,
+        target_config,
+        allow_local_retention_change=allow_local_retention_change,
+    )
     identity = validate_source_identity(source_identity, target_release)
     assets = validate_assets(
         target_config, baseline, identity, target_release, source_assets_receipt, source_data_manifest
@@ -343,6 +367,16 @@ def migrate(
             "before_config": source_config.model_dump(mode="json"),
             "after_config": target_config.model_dump(mode="json"),
             "config_diff": changes,
+            "local_retention_change": {
+                "explicitly_enabled": allow_local_retention_change,
+                "before_keep_interval": source_config.checkpoint_keep_interval,
+                "after_keep_interval": target_config.checkpoint_keep_interval,
+                "checkpoint_interval": target_config.checkpoint_interval,
+                "before_keep_last": source_config.checkpoint_keep_last,
+                "after_keep_last": target_config.checkpoint_keep_last,
+                "shared_retention_modified": False,
+                "requires_shared_milestone_verification_before_local_pruning": allow_local_retention_change,
+            },
             "queue": queue,
             "assets": assets,
             "runtime_identity_required_at_launch": True,
@@ -370,6 +404,7 @@ def migrate(
 
 def main():
     parser = argparse.ArgumentParser()
+    parser.add_argument("--allow-local-retention-change", action="store_true")
     for name in (
         "source-checkpoint",
         "destination-checkpoint",

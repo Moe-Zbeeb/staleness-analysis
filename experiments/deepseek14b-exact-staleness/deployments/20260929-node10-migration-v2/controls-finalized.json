@@ -1,0 +1,22 @@
+{
+  "status": "validated_before_staging",
+  "changed_files": {
+    "migrate_inference_checkpoint.py": "53937813158d4aaae3ca096652e9b6a5bf5dae6285b136c13f30b181409d16e6",
+    "study.json": "7e95cd74c3d330f743e57f588469c7a84376cd6b04984882ceec3418b48e3a30",
+    "prepare_migration.py": "26afff4db326bc32dea343de13cdae79d504a1066582c396e78bc20a9b2aaf67",
+    "storage-spec.json": "4b4081c1075d8d363f2f609b468c546f240ca4cd7a7472cb748c3bc192061877",
+    "target-study.json": "24ad1c34e9aa6778bd567e704a8bc6aa2b6c06f369b886d7b016da0388ee1b50",
+    "storage-spec-base.json": "4b4081c1075d8d363f2f609b468c546f240ca4cd7a7472cb748c3bc192061877",
+    "node_local_run.py": "59594925dda378de1fc0d44af67b7ae67b92dcb84dfb66fbda60c81fc201f823",
+    "cpu-preflight.py": "09b91037549c1e4a2539325abd3e4219b313bdd8124410996fb849e05db461c5",
+    "archive_old_model_caches.py": "9fbc183863879a1824b7e7bb0b12778e2bb3693ff5bee204ec05bb325c0105e1"
+  },
+  "time": 1790689108.7067633,
+  "local_retention": {
+    "keep_last": 3,
+    "keep_interval": 1000
+  },
+  "shared_milestone_interval": 100,
+  "shared_verification_guard": true,
+  "frozen_release_changed": false
+}

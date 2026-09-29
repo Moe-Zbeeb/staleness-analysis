@@ -353,6 +353,7 @@ def stage_resume(spec, workspace):
     audit, target = read_resume_receipt(
         spec["resume_receipt"], spec["resume_expected_receipt_sha256"], workspace
     )
+    validate_resume_retention_guard(spec, audit)
     source = Path(spec["resume_checkpoint"])
     verify_resume_tree(source, audit["files"])
     if target.exists() or target.is_symlink():
@@ -371,6 +372,14 @@ def stage_resume(spec, workspace):
     return {"checkpoint": str(target), "receipt": str(receipt), "receipt_sha256": digest(receipt)}
 
 
+def validate_resume_retention_guard(spec, audit):
+    required = audit.get("local_retention_change", {}).get(
+        "requires_shared_milestone_verification_before_local_pruning", False
+    )
+    if required and spec.get("require_verified_shared_milestones") is not True:
+        raise ValueError("The checkpoint migration requires verified shared milestone protection")
+
+
 def validate_resume_files(spec, workspace, ready):
     requested = resume_request(spec)
     sealed = ready.get("resume")
@@ -383,6 +392,7 @@ def validate_resume_files(spec, workspace, ready):
     if sealed.get("receipt") != str(Path(workspace).resolve() / "resume/migration-receipt.json"):
         raise ValueError("Resume receipt is outside the prepared local workspace")
     audit, target = read_resume_receipt(sealed["receipt"], sealed["receipt_sha256"], workspace)
+    validate_resume_retention_guard(spec, audit)
     if sealed.get("checkpoint") != str(target):
         raise ValueError("The sealed resume checkpoint differs from the migration receipt")
     verify_resume_tree(target, audit["files"])
@@ -460,6 +470,204 @@ def prepare_resume(spec, control):
     atomic_json(workspace / "ready.json", ready)
     atomic_json(control / "local-ready.json", ready)
     return ready
+
+
+def validate_shared_milestone_policy(spec, values):
+    enabled = spec.get("require_verified_shared_milestones", False)
+    if type(enabled) is not bool:
+        raise ValueError("Shared milestone verification must be explicitly enabled or disabled")
+    if enabled and (
+        values.get("checkpoint_keep_last") != 3
+        or values.get("checkpoint_interval") != 25
+        or values.get("checkpoint_keep_interval") != 1000
+        or values.get("max_steps") != 1000
+    ):
+        raise ValueError("Shared milestone verification requires three local checkpoints, interval 25 and horizon 1000")
+    return enabled
+
+
+class SharedMilestoneGuard:
+    def __init__(self, spec, values):
+        self.enabled = validate_shared_milestone_policy(spec, values)
+        self.workspace = Path(spec["workspace"])
+        self.output = Path(values["output_dir"])
+        self.shared = Path(spec["backup"])
+        self.max_steps = values["max_steps"]
+        self.lag = values["lag"]
+        self.owner = None
+        self.verified = {}
+        self.latest_seen = None
+        self.cancelled = lambda: False
+
+    def check(self):
+        if not self.enabled:
+            return []
+        run_path = self.output / "run.json"
+        if run_path.is_symlink():
+            raise ValueError("Shared milestone guard refuses a symlink run identity")
+        if not run_path.is_file():
+            return []
+        run = json.loads(run_path.read_text())
+        owner = {key: run[key] for key in ("run_uuid", "config_sha256", "identity_sha256", "starting_step")}
+        if type(owner["starting_step"]) is not int or not 0 <= owner["starting_step"] < self.max_steps:
+            raise ValueError("Shared milestone guard found an invalid starting policy version")
+        if self.owner is not None and owner != self.owner:
+            raise ValueError("Shared milestone guard detected a changed run identity")
+        self.owner = owner
+        committed = {}
+        checkpoint_root = self.output / "checkpoints"
+        if checkpoint_root.is_symlink():
+            raise ValueError("Shared milestone guard refuses a symlink local checkpoint root")
+        for directory in checkpoint_root.glob("step_*"):
+            if directory.is_symlink():
+                raise ValueError("Shared milestone guard refuses a symlink local checkpoint")
+            marker_path = directory / "study/complete.json"
+            if marker_path.is_symlink():
+                raise ValueError("Shared milestone guard refuses a symlink completion marker")
+            if not marker_path.is_file():
+                continue
+            try:
+                marker = json.loads(marker_path.read_text())
+            except FileNotFoundError:
+                continue
+            step = marker.get("step")
+            if (
+                marker.get("format") != 2
+                or type(step) is not int
+                or not owner["starting_step"] < step <= self.max_steps
+                or directory.name != f"step_{step}"
+                or marker.get("config_sha256") != owner["config_sha256"]
+                or marker.get("identity_sha256") != owner["identity_sha256"]
+                or marker.get("lag") != self.lag
+            ):
+                raise ValueError("Shared milestone guard found a foreign or invalid completed local checkpoint")
+            committed[step] = marker
+        latest = max(committed, default=owner["starting_step"])
+        if self.latest_seen is not None and latest < self.latest_seen:
+            raise ValueError("Shared milestone guard detected disappearing committed progress")
+        self.latest_seen = latest
+        first = (owner["starting_step"] // 100 + 1) * 100
+        newly_verified = []
+        for step in range(first, latest - 50 + 1, 100):
+            if step in self.verified:
+                continue
+            marker = committed.get(step)
+            if marker is None:
+                raise ValueError(f"Milestone {step} disappeared locally before its shared backup was verified")
+            self.verified[step] = self.verify_bounded(marker)
+            newly_verified.append(step)
+        return newly_verified
+
+    def verify_bounded(self, marker, timeout_seconds=300):
+        process = subprocess.Popen(
+            [sys.executable, str(Path(__file__).resolve()), "milestone-check", "--control", str(self.workspace)],
+            stdin=subprocess.PIPE,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT,
+        )
+        try:
+            process.stdin.write(json.dumps({"owner": self.owner, "marker": marker}).encode())
+            process.stdin.close()
+            deadline = time.monotonic() + timeout_seconds
+            while process.poll() is None:
+                if self.cancelled():
+                    try:
+                        process.kill()
+                    except ProcessLookupError:
+                        pass
+                    raise RuntimeError("Shared milestone verification interrupted by supervisor termination")
+                if time.monotonic() >= deadline:
+                    try:
+                        process.kill()
+                    except ProcessLookupError:
+                        pass
+                    raise RuntimeError(
+                        f"Milestone {marker['step']} shared verification exceeded {timeout_seconds}s; "
+                        f"verification child {process.pid} was sent SIGKILL without waiting"
+                    )
+                time.sleep(0.1)
+            result = process.stdout.read().decode(errors="replace")
+            if process.returncode:
+                raise ValueError(f"Milestone {marker['step']} shared verification failed: {result[-3000:]}")
+            receipt_hash = json.loads(result)["receipt_sha256"]
+            if not isinstance(receipt_hash, str) or len(receipt_hash) != 64 or any(
+                value not in "0123456789abcdef" for value in receipt_hash
+            ):
+                raise ValueError("Shared milestone verification returned an invalid receipt checksum")
+            return receipt_hash
+        finally:
+            process.stdin.close()
+            process.stdout.close()
+
+    def verify_request(self, request):
+        if not self.enabled:
+            raise ValueError("Shared milestone verification is not enabled")
+        run = json.loads((self.output / "run.json").read_text())
+        self.owner = {key: run[key] for key in ("run_uuid", "config_sha256", "identity_sha256", "starting_step")}
+        if request["owner"] != self.owner:
+            raise ValueError("Shared milestone verification request belongs to another run")
+        marker = request["marker"]
+        step = marker["step"]
+        if type(step) is not int or step % 100 or not self.owner["starting_step"] < step <= self.max_steps:
+            raise ValueError("Shared milestone verification request has an invalid policy version")
+        local_marker = self.output / "checkpoints" / f"step_{step}" / "study/complete.json"
+        if json.loads(local_marker.read_text()) != marker:
+            raise ValueError("Shared milestone verification request differs from the local checkpoint")
+        directory = self.shared / "checkpoints" / f"step_{step}"
+        receipt_path = directory / "backup-verified.json"
+        if directory.is_symlink() or receipt_path.is_symlink() or not receipt_path.is_file():
+            raise ValueError(f"Milestone {step} has no verified shared backup before its local retention deadline")
+        raw = receipt_path.read_bytes()
+        receipt_hash = hashlib.sha256(raw).hexdigest()
+        self.verify_backup(directory, json.loads(raw), marker, receipt_hash)
+        return receipt_hash
+
+    def verify_backup(self, directory, receipt, marker, receipt_hash):
+        step = marker["step"]
+        owner_path = self.shared / "backup-owner.json"
+        if owner_path.is_symlink() or not owner_path.is_file():
+            raise ValueError(f"Milestone {step} shared backup owner is missing")
+        shared_owner = json.loads(owner_path.read_text())
+        expected_owner = {key: self.owner[key] for key in ("run_uuid", "config_sha256", "identity_sha256")}
+        expected_owner["source"] = str(self.output.resolve())
+        if shared_owner != expected_owner:
+            raise ValueError(f"Milestone {step} shared backup belongs to another run")
+        if receipt.get("run_uuid") != self.owner["run_uuid"] or receipt.get("checkpoint") != marker:
+            raise ValueError(f"Milestone {step} shared receipt differs from the local checkpoint")
+        records = receipt.get("files")
+        if not isinstance(records, dict) or not records:
+            raise ValueError(f"Milestone {step} shared receipt has no complete file manifest")
+        paths = {}
+        for path in directory.rglob("*"):
+            if path.is_symlink() or not (path.is_dir() or path.is_file()):
+                raise ValueError(f"Milestone {step} shared checkpoint contains a symlink or nonregular entry")
+            if path.is_file() and path != directory / "backup-verified.json":
+                paths[str(path.relative_to(directory))] = path
+        if set(paths) != set(records):
+            raise ValueError(f"Milestone {step} shared checkpoint inventory differs from its verified receipt")
+        for name, path in paths.items():
+            record = records[name]
+            before = path.stat()
+            if before.st_size != record["bytes"] or digest(path) != record["sha256"]:
+                raise ValueError(f"Milestone {step} shared checkpoint checksum differs: {name}")
+            after = path.stat()
+            if path.is_symlink() or (before.st_ino, before.st_size, before.st_mtime_ns) != (
+                after.st_ino, after.st_size, after.st_mtime_ns
+            ):
+                raise ValueError(f"Milestone {step} shared checkpoint changed during verification: {name}")
+        if json.loads((directory / "study/complete.json").read_text()) != marker:
+            raise ValueError(f"Milestone {step} shared completion marker differs")
+        for name, key in (("study/components.json", "components_sha256"), ("study/queue.pkl", "queue_sha256")):
+            if records[name]["sha256"] != marker[key]:
+                raise ValueError(f"Milestone {step} shared checkpoint manifest differs: {name}")
+        for component in json.loads((directory / "study/components.json").read_text()):
+            record = records[component["path"]]
+            if record["bytes"] != component["size"] or (
+                "sha256" in component and record["sha256"] != component["sha256"]
+            ):
+                raise ValueError(f"Milestone {step} shared checkpoint component manifest differs")
+        if digest(directory / "backup-verified.json") != receipt_hash:
+            raise ValueError(f"Milestone {step} shared receipt changed during verification")
 
 
 def stage(spec, control):
@@ -674,6 +882,7 @@ def run(spec):
         if digest(release / name) != expected:
             raise ValueError(f"Prepared release file changed: {name}")
     values = json.loads((workspace / "study.json").read_text())
+    milestone_guard = SharedMilestoneGuard(spec, values)
     output = Path(values["output_dir"])
     if output.exists():
         raise FileExistsError("Refusing to restart over existing local run output")
@@ -770,6 +979,7 @@ def run(spec):
         start_new_session=True,
     )
     interrupted = False
+    milestone_guard.cancelled = lambda: interrupted
 
     def interrupt(*_):
         nonlocal interrupted
@@ -801,6 +1011,9 @@ def run(spec):
                 raise RuntimeError("Local supervisor received termination")
             if backup.poll() is not None:
                 raise RuntimeError("Background backup process exited; refusing unprotected training")
+            verified_milestones = milestone_guard.check()
+            if verified_milestones:
+                print(json.dumps({"verified_shared_milestones": verified_milestones}), flush=True)
             if shutil.disk_usage(workspace).free < 50 * 1024**3:
                 raise RuntimeError("Local disk reserve fell below 50 GiB")
             if output.is_dir() and not (output / "storage/ready.json").exists():
@@ -855,7 +1068,7 @@ def run(spec):
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("mode", choices=("stage", "verify", "prepare-resume", "run", "resume-check"))
+    parser.add_argument("mode", choices=("stage", "verify", "prepare-resume", "run", "resume-check", "milestone-check"))
     parser.add_argument("--control", type=Path, required=True)
     args = parser.parse_args()
     control = args.control.resolve()
@@ -872,6 +1085,10 @@ def main():
             seal_staging(specification, control)
     elif args.mode == "resume-check":
         print(json.dumps({"resume_checkpoint": str(validate_resume_runtime(specification)), "status": "verified"}))
+    elif args.mode == "milestone-check":
+        values = json.loads((Path(specification["workspace"]) / "study.json").read_text())
+        guard = SharedMilestoneGuard(specification, values)
+        print(json.dumps({"receipt_sha256": guard.verify_request(json.load(sys.stdin))}))
     else:
         run(specification)
 
