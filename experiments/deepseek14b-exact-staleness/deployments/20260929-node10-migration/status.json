@@ -1,0 +1,32 @@
+{
+  "status": "blocked_before_source_stop",
+  "time": 1790684049.2829323,
+  "source_job": "2145464",
+  "source_node": "deep-chungus-5",
+  "source_stopped": false,
+  "cancelled_migration_jobs": [
+    "2145795",
+    "2145794",
+    "2145793",
+    "2145791"
+  ],
+  "target_runtime_staging": "partial_unsealed",
+  "migration_code_commit": "803c134",
+  "reason": "Node10 was allocated to another user's higher-priority queued job before a safe GPU handoff was available.",
+  "destination_job": "2145792",
+  "destination_user": "bazzim",
+  "destination_qos": "spec-priority",
+  "destination_gpus": 8,
+  "destination_state": "RUNNING",
+  "source_last_verified_update": 421,
+  "source_age_min": 256,
+  "source_age_max": 256,
+  "source_checkpoint_modified": false,
+  "stop_watcher_armed": false,
+  "tests": {
+    "local_suite_passed": 703,
+    "local_suite_skipped": 4,
+    "linux_stop_tests_passed": 29
+  },
+  "control": "/mnt/nfs/home/mohamadzbib/projects/deepseek14b-deepscaler-study/launches/deepseek15b-k256-node10-migration-20260929-v1"
+}
